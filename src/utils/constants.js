@@ -12,7 +12,7 @@ const COLORS = {
     second: '#F68C2D',
     success: '#00B967',
     error: '#FF554B'
-}
+};
 
 const TEXT_STYLE = {
     h1: {
@@ -70,11 +70,18 @@ const TEXT_STYLE = {
         lineHeight: '15px',
         fontWeight: 500
     }
+};
+const SCREEN_BREAKPOINTS = {
+    xs: 0,
+    sm: 600,
+    md: 900,
+    lg: 1200,
+    xl: 1536
 }
-
-const FONT_FAMILY = 'SF UI Display'
-const FONT_COLOR = '#000000'
-
+const FONT_FAMILY = 'SF UI Display';
+const FONT_COLOR = '#ACACAC';
+const DRAWER_WIDTH = 240;
+const HEADER_HEIGHT = '104px';
 export {
-    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR
+    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS
 }

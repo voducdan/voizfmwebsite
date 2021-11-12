@@ -1,11 +1,17 @@
-import logo from "../../images/logo.png"
 
+import { HEADER_HEIGHT } from "../../utils/constants"
 
 export default function Logo() {
     return (
-        <div>
+        <div style={{
+            height: HEADER_HEIGHT,
+            display: 'flex',
+            justifyContent: 'center',
+            alignItems: 'center'
+        }}>
             <img
-                src={logo}
+                style={{ height: '40px' }}
+                src="/images/logo.png"
                 alt="voizfm logo"
                 loading="lazy"
             />

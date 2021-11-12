@@ -1,23 +1,20 @@
-import { useState } from 'react';
-import Box from '@mui/material/Box';
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
-import Toolbar from '@mui/material/Toolbar';
 import SvgIcon from '@mui/material/SvgIcon';
 
-import Squircle from '../../images/icons/Squircle'
-import UpVip from '../../images/icons/UpVip'
-import Discover from '../../images/icons/Discover'
+
+import Squircle from '../Icons/Squircle'
+import UpVip from '../Icons/UpVip'
+import Discover from '../Icons/Discover'
 
 import Logo from '../Logo/Logo'
 
-import { COLORS, TEXT_STYLE, FONT_COLOR } from '../../utils/constants'
+import { COLORS, TEXT_STYLE, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH } from '../../utils/constants'
 
-const drawerWidth = 240;
 
 const HomeIcon = () => {
     return (
@@ -28,9 +25,9 @@ const HomeIcon = () => {
 }
 const UpVipIcon = () => {
     return (
-        <SvgIcon >
+        <SvgIcon sx={{ color: FONT_COLOR }}>
             {UpVip()}
-        </SvgIcon>
+        </SvgIcon >
     )
 }
 const DiscoverIcon = () => {
@@ -42,8 +39,6 @@ const DiscoverIcon = () => {
 }
 
 export default function SidebarMenu(props) {
-    const { window } = props;
-
 
     const navigatorLink = [
         {
@@ -68,8 +63,28 @@ export default function SidebarMenu(props) {
     ]
 
 
-    const drawer = (
-        <div>
+
+    return (
+        <Drawer
+            sx={{
+                width: DRAWER_WIDTH,
+                flexShrink: 0,
+                '& .MuiDrawer-paper': {
+                    width: { sm: DRAWER_WIDTH, xs: '100vw' },
+                    marginTop: { xs: HEADER_HEIGHT, sm: 0 },
+                    boxSizing: 'border-box',
+                    backgroundColor: COLORS.bg1,
+                    color: FONT_COLOR,
+                    ...TEXT_STYLE.content1
+                },
+                ...(props.open && { backgroundColor: COLORS.bg1 }),
+                height: '100vh'
+            }}
+            variant="persistent"
+            anchor="left"
+            open={props.open}
+        >
+            <Divider />
             <Logo />
             <Divider />
             <List>
@@ -82,7 +97,7 @@ export default function SidebarMenu(props) {
                     </ListItem>
                 ))}
             </List>
-            <Divider />
+            <Divider style={{ borderColor: COLORS.blackStroker, width: '80%', alignSelf: 'center' }} />
             <List>
                 {categories.map((icon) => (
                     <ListItem button key={icon.text}>
@@ -93,39 +108,6 @@ export default function SidebarMenu(props) {
                     </ListItem>
                 ))}
             </List>
-        </div>
-    );
-
-
-    const container = window !== undefined ? () => window().document.body : undefined;
-
-    return (
-        <Box component="nav" aria-label="mailbox folders" sx={{ flexGrow: 1, backgroundColor: COLORS.bg1, width: { sm: drawerWidth }, flexShrink: { sm: 0 } }} >
-            <Drawer
-                container={container}
-                variant="temporary"
-                open={props.mobileOpen}
-                onClose={props.handleDrawerToggle}
-                ModalProps={{
-                    keepMounted: true, // Better open performance on mobile.
-                }}
-                sx={{
-                    display: { xs: 'block', sm: 'none' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                }}
-            >
-                {drawer}
-            </Drawer>
-            <Drawer
-                variant="permanent"
-                sx={{
-                    display: { xs: 'none', sm: 'block' },
-                    '& .MuiDrawer-paper': { boxSizing: 'border-box', width: drawerWidth },
-                }}
-                open
-            >
-                {drawer}
-            </Drawer>
-        </Box>
+        </Drawer >
     )
 }
