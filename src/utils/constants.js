@@ -74,3 +74,7 @@ const TEXT_STYLE = {
 
 const FONT_FAMILY = 'SF UI Display'
 const FONT_COLOR = '#000000'
+
+export {
+    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR
+}

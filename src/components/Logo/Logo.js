@@ -1,9 +1,14 @@
-import * as React from 'react';
+import logo from "../../images/logo.png"
 
-import Avatar from '@mui/material/Avatar';
-import logo from '../../images/logo.svg'
 
 export default function Logo() {
-    return (<Avatar alt='voizfm logo' variant="square"
-        src={logo}></Avatar>)
+    return (
+        <div>
+            <img
+                src={logo}
+                alt="voizfm logo"
+                loading="lazy"
+            />
+        </div>
+    )
 }
