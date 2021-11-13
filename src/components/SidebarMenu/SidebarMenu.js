@@ -4,16 +4,15 @@ import List from '@mui/material/List';
 import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
+import Typography from '@mui/material/Typography';
 import SvgIcon from '@mui/material/SvgIcon';
 
 
-import Squircle from '../Icons/Squircle'
-import UpVip from '../Icons/UpVip'
-import Discover from '../Icons/Discover'
+import { Squircle, UpVip, Discover, Library, Adward } from '../Icons/index'
 
 import Logo from '../Logo/Logo'
 
-import { COLORS, TEXT_STYLE, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH } from '../../utils/constants'
+import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, HEADER_HEIGHT, DRAWER_WIDTH } from '../../utils/constants'
 
 
 const HomeIcon = () => {
@@ -37,6 +36,20 @@ const DiscoverIcon = () => {
         </SvgIcon>
     )
 }
+const LibraryIcon = () => {
+    return (
+        <SvgIcon >
+            {Library()}
+        </SvgIcon>
+    )
+}
+const AdwardIcon = () => {
+    return (
+        <SvgIcon >
+            {Adward()}
+        </SvgIcon>
+    )
+}
 
 export default function SidebarMenu(props) {
 
@@ -52,6 +65,14 @@ export default function SidebarMenu(props) {
         {
             icon: DiscoverIcon,
             text: 'Khám phá'
+        },
+        {
+            icon: LibraryIcon,
+            text: 'Thư viện'
+        },
+        {
+            icon: AdwardIcon,
+            text: 'Bảng xếp hạng'
         }
     ]
 
@@ -73,9 +94,7 @@ export default function SidebarMenu(props) {
                     width: { sm: DRAWER_WIDTH, xs: '100vw' },
                     marginTop: { xs: HEADER_HEIGHT, sm: 0 },
                     boxSizing: 'border-box',
-                    backgroundColor: COLORS.bg1,
-                    color: FONT_COLOR,
-                    ...TEXT_STYLE.content1
+                    backgroundColor: COLORS.bg1
                 },
                 ...(props.open && { backgroundColor: COLORS.bg1 }),
                 height: '100vh'
@@ -89,11 +108,19 @@ export default function SidebarMenu(props) {
             <Divider />
             <List>
                 {navigatorLink.map(icon => (
-                    <ListItem button key={icon.text}>
-                        <ListItemIcon>
+                    <ListItem button key={icon.text} >
+                        <ListItemIcon sx={{
+                            color: FONT_COLOR,
+                            fontFamily: FONT_FAMILY,
+                            ...TEXT_STYLE.content1
+                        }}>
                             {icon.icon()}
                         </ListItemIcon>
-                        <ListItemText primary={icon.text} />
+                        <ListItemText disableTypography primary={<Typography style={{
+                            color: FONT_COLOR,
+                            fontFamily: FONT_FAMILY,
+                            ...TEXT_STYLE.content1
+                        }}>{icon.text}</Typography>} />
                     </ListItem>
                 ))}
             </List>

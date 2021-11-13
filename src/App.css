@@ -1,6 +1,9 @@
+body, html {
+  font-family: 'SF UI Display';
+}
+
 .App {
   text-align: center;
-  font-family: 'SF UI Display';
 }
 
 .App-logo {
