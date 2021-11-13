@@ -50,7 +50,7 @@ export default function Home() {
 
         <Box sx={{ display: 'flex' }}>
             <Header open={open} setOpen={setOpen} windowSize={windowSize}></Header>
-            <SidebarMenu open={open} theme={theme}></SidebarMenu>
+            <SidebarMenu open={open} theme={theme} windowSize={windowSize}></SidebarMenu>
             <Main open={open}>
                 <DrawerHeader />
                 <Typography paragraph>

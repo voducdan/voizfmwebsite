@@ -24,7 +24,7 @@ import {
 
 import Logo from '../Logo/Logo'
 
-import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, HEADER_HEIGHT, DRAWER_WIDTH } from '../../utils/constants'
+import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT } from '../../utils/constants'
 
 
 const RequestsBook = () => (
@@ -95,27 +95,30 @@ export default function SidebarMenu(props) {
     return (
         <Drawer
             sx={{
-                width: DRAWER_WIDTH,
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
-                    width: { sm: DRAWER_WIDTH, xs: '100vw' },
-                    marginTop: { xs: HEADER_HEIGHT, sm: 0 },
+                    width: 'inherit',
+                    height: '100vh',
                     boxSizing: 'border-box',
-                    backgroundColor: COLORS.bg1
+                    backgroundColor: COLORS.bg1,
+                    marginTop: { sm: 0, xs: HEADER_HEIGHT },
+                    overflowX: 'hidden'
                 },
                 ...(props.open && { backgroundColor: COLORS.bg1 }),
+                width: { sm: DRAWER_WIDTH, xs: '100vw' },
                 height: '100vh'
             }}
             variant="persistent"
             anchor="left"
             open={props.open}
         >
-            <Divider />
-            <Logo />
+            <div style={{ display: 'block' }}>
+                <Logo windowWidth={props.windowSize.width} />
+            </div>
             <Divider />
             <List>
                 {navigatorLink.map(icon => (
-                    <ListItem button key={icon.text} sx={{ height: '45px', padding: '0 16px', margin: '8px 0' }}>
+                    <ListItem button key={icon.text} sx={{ height: '45px', padding: '0 16px', margin: '8px 0 8px 33px', width: 'auto' }}>
                         <ListItemIcon sx={{
                             color: FONT_COLOR,
                             fontFamily: FONT_FAMILY,
@@ -134,7 +137,7 @@ export default function SidebarMenu(props) {
             <Divider style={{ borderColor: COLORS.blackStroker, width: '80%', alignSelf: 'center', margin: '17px 0' }} />
             <List>
                 {categories.map((icon) => (
-                    <ListItem button key={icon.text} sx={{ height: '45px', padding: '0 16px', margin: '8px 0' }}>
+                    <ListItem button key={icon.text} sx={{ height: '45px', padding: '0 16px', margin: '8px 0 8px 33px', width: 'auto' }}>
                         <ListItemIcon sx={{
                             color: FONT_COLOR,
                             fontFamily: FONT_FAMILY,

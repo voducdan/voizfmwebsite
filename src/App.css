@@ -1,5 +1,6 @@
 body, html {
   font-family: 'SF UI Display';
+  overflow: hidden;
 }
 
 .App {
