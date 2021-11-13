@@ -5,82 +5,89 @@ import ListItem from '@mui/material/ListItem';
 import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
-import SvgIcon from '@mui/material/SvgIcon';
+import Button from '@mui/material/Button';
 
 
-import { Squircle, UpVip, Discover, Library, Adward } from '../Icons/index'
+import {
+    Squircle,
+    UpVip,
+    Discover,
+    Library,
+    Adward,
+    AudioBook,
+    AudioStory,
+    Podcast,
+    SummaryBook,
+    ChildrenBook,
+    Book
+} from '../Icons/index'
 
 import Logo from '../Logo/Logo'
 
 import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, HEADER_HEIGHT, DRAWER_WIDTH } from '../../utils/constants'
 
 
-const HomeIcon = () => {
-    return (
-        <SvgIcon >
-            {Squircle()}
-        </SvgIcon>
-    )
-}
-const UpVipIcon = () => {
-    return (
-        <SvgIcon sx={{ color: FONT_COLOR }}>
-            {UpVip()}
-        </SvgIcon >
-    )
-}
-const DiscoverIcon = () => {
-    return (
-        <SvgIcon >
-            {Discover()}
-        </SvgIcon>
-    )
-}
-const LibraryIcon = () => {
-    return (
-        <SvgIcon >
-            {Library()}
-        </SvgIcon>
-    )
-}
-const AdwardIcon = () => {
-    return (
-        <SvgIcon >
-            {Adward()}
-        </SvgIcon>
-    )
-}
+const RequestsBook = () => (
+    <Button sx={{
+        backgroundColor: COLORS.main,
+        borderRadius: '33px',
+        margin: '13.5px 37px 0 25px',
+        height: '48px',
+        width: '188px',
+        textTransform: 'inherit',
+        ...TEXT_STYLE.content1
+    }} variant="contained" startIcon={Book()}>
+        Đề nghị sách
+    </Button>
+)
 
 export default function SidebarMenu(props) {
 
     const navigatorLink = [
         {
-            icon: HomeIcon,
+            icon: Squircle,
             text: 'Trang chủ'
         },
         {
-            icon: UpVipIcon,
+            icon: UpVip,
             text: 'Up VIP'
         },
         {
-            icon: DiscoverIcon,
+            icon: Discover,
             text: 'Khám phá'
         },
         {
-            icon: LibraryIcon,
+            icon: Library,
             text: 'Thư viện'
         },
         {
-            icon: AdwardIcon,
+            icon: Adward,
             text: 'Bảng xếp hạng'
         }
     ]
 
     const categories = [
         {
-            icon: HomeIcon,
-            text: 'Trang chủ'
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioStory,
+            text: 'Truyện nói'
+        },
+        {
+            icon: Podcast,
+            text: 'Podcast'
+        },
+        {
+            icon: SummaryBook,
+            text: 'Tóm tắt sách'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
         }
+
     ]
 
 
@@ -108,7 +115,7 @@ export default function SidebarMenu(props) {
             <Divider />
             <List>
                 {navigatorLink.map(icon => (
-                    <ListItem button key={icon.text} >
+                    <ListItem button key={icon.text} sx={{ height: '45px', padding: '0 16px', margin: '8px 0' }}>
                         <ListItemIcon sx={{
                             color: FONT_COLOR,
                             fontFamily: FONT_FAMILY,
@@ -124,17 +131,26 @@ export default function SidebarMenu(props) {
                     </ListItem>
                 ))}
             </List>
-            <Divider style={{ borderColor: COLORS.blackStroker, width: '80%', alignSelf: 'center' }} />
+            <Divider style={{ borderColor: COLORS.blackStroker, width: '80%', alignSelf: 'center', margin: '17px 0' }} />
             <List>
                 {categories.map((icon) => (
-                    <ListItem button key={icon.text}>
-                        <ListItemIcon>
+                    <ListItem button key={icon.text} sx={{ height: '45px', padding: '0 16px', margin: '8px 0' }}>
+                        <ListItemIcon sx={{
+                            color: FONT_COLOR,
+                            fontFamily: FONT_FAMILY,
+                            ...TEXT_STYLE.content1
+                        }}>
                             {icon.icon()}
                         </ListItemIcon>
-                        <ListItemText primary={icon.text} />
+                        <ListItemText disableTypography primary={<Typography style={{
+                            color: FONT_COLOR,
+                            fontFamily: FONT_FAMILY,
+                            ...TEXT_STYLE.content1
+                        }}>{icon.text}</Typography>} />
                     </ListItem>
                 ))}
             </List>
+            {RequestsBook()}
         </Drawer >
     )
 }

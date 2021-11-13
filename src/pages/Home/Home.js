@@ -8,6 +8,7 @@ import SidebarMenu from "../../components/SidebarMenu/SidebarMenu"
 import Header from "../../components/Header/Header"
 
 import { DRAWER_WIDTH } from '../../utils/constants'
+import useWindowSize from '../../utils/useWindowSize'
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ theme, open }) => ({
@@ -41,13 +42,14 @@ const DrawerHeader = styled('div')(({ theme }) => ({
 
 export default function Home() {
 
+    let windowSize = useWindowSize()
+
     const theme = useTheme();
     const [open, setOpen] = useState(true);
-
     return (
 
         <Box sx={{ display: 'flex' }}>
-            <Header open={open} setOpen={setOpen}></Header>
+            <Header open={open} setOpen={setOpen} windowSize={windowSize}></Header>
             <SidebarMenu open={open} theme={theme}></SidebarMenu>
             <Main open={open}>
                 <DrawerHeader />

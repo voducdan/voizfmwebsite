@@ -10,7 +10,6 @@ import FormControl from '@mui/material/FormControl';
 import Avatar from '@mui/material/Avatar';
 
 import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS } from '../../utils/constants'
-import useWindowSize from '../../utils/useWindowSize'
 import { Search, Bookmark, Cart } from '../Icons/index'
 
 const SearchIcon = (idx) => {
@@ -61,7 +60,6 @@ const AppBar = styled(MuiAppBar, {
 
 export default function Header(props) {
 
-    let windowSize = useWindowSize()
 
     // This url will be fetched from API later
     let avtSrc = '/images/avt.png'
@@ -75,10 +73,10 @@ export default function Header(props) {
     };
 
     const showToogleIcon = (open) => {
-        if (open && windowSize.width > SCREEN_BREAKPOINTS.sm) {
+        if (open && props.windowSize.width > SCREEN_BREAKPOINTS.sm) {
             return false
         }
-        else if (open && windowSize.width <= SCREEN_BREAKPOINTS.sm) {
+        else if (open && props.windowSize.width <= SCREEN_BREAKPOINTS.sm) {
             return true
         }
         else if (!open) {
@@ -87,7 +85,7 @@ export default function Header(props) {
     }
 
     return (
-        <AppBar position="fixed" open={props.open} windowwidth={windowSize.width}>
+        <AppBar position="fixed" open={props.open} windowwidth={props.windowSize.width}>
             <Toolbar>
                 <IconButton
                     color="inherit"
@@ -103,14 +101,14 @@ export default function Header(props) {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     width: '100%',
-                    ...(windowSize.width <= SCREEN_BREAKPOINTS.sm && { justifyContent: 'flex-end' })
+                    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { justifyContent: 'flex-end' })
                 }}>
                     <FormControl variant="standard" sx={{
                         marginLeft: {
                             sm: '25px'
                         }
                     }}>
-                        {windowSize.width > SCREEN_BREAKPOINTS.sm && <Input
+                        {props.windowSize.width > SCREEN_BREAKPOINTS.sm && <Input
                             id="input-search"
                             placeholder="Tìm kiếm"
                             sx={{ color: COLORS.placeHolder }}
@@ -121,7 +119,7 @@ export default function Header(props) {
                                 </InputAdornment>
                             }
                         />}
-                        {windowSize.width <= SCREEN_BREAKPOINTS.sm && <div style={{ marginRight: '41px', marginTop: '12px' }}>{SearchIcon()}</div>}
+                        {props.windowSize.width <= SCREEN_BREAKPOINTS.sm && <div style={{ marginRight: '41px', marginTop: '12px' }}>{SearchIcon()}</div>}
                     </FormControl>
                     <div
                         style={{
@@ -129,7 +127,7 @@ export default function Header(props) {
                             justifyContent: 'center',
                             alignItems: 'center',
                             marginRight: '13px',
-                            ...(windowSize.width <= SCREEN_BREAKPOINTS.sm && { marginRight: '6px' })
+                            ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { marginRight: '6px' })
                         }}
                     >
                         {headerItems.map((item, idx) => (
