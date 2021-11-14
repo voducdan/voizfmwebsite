@@ -12,6 +12,8 @@ import Podcast from './Podcast';
 import SummaryBook from './SummaryBook';
 import ChildrenBook from './ChildrenBook';
 import Book from './Book';
+import CarouselPrev from './CarouselPrev';
+import CarouselNext from './CarouselNext';
 
 
 export {
@@ -28,5 +30,7 @@ export {
     Podcast,
     SummaryBook,
     ChildrenBook,
-    Book
+    Book,
+    CarouselPrev,
+    CarouselNext
 }

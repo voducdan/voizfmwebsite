@@ -24,7 +24,7 @@ import {
 
 import Logo from '../Logo/Logo'
 
-import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT } from '../../utils/constants'
+import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS } from '../../utils/constants'
 
 
 const RequestsBook = () => (
@@ -90,8 +90,6 @@ export default function SidebarMenu(props) {
 
     ]
 
-
-
     return (
         <Drawer
             sx={{
@@ -110,7 +108,7 @@ export default function SidebarMenu(props) {
             }}
             variant="persistent"
             anchor="left"
-            open={props.open}
+            open={props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open}
         >
             <div style={{ display: 'block' }}>
                 <Logo windowWidth={props.windowSize.width} />
