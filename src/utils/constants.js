@@ -11,7 +11,9 @@ const COLORS = {
     main: '#754ADA',
     second: '#F68C2D',
     success: '#00B967',
-    error: '#FF554B'
+    error: '#FF554B',
+    white: '#FFFFFF',
+    VZ_Text_content: '#B8B8B8'
 };
 
 const TEXT_STYLE = {

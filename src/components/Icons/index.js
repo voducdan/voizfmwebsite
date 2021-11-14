@@ -14,6 +14,7 @@ import ChildrenBook from './ChildrenBook';
 import Book from './Book';
 import CarouselPrev from './CarouselPrev';
 import CarouselNext from './CarouselNext';
+import RightArrow from './RightArrow';
 
 
 export {
@@ -32,5 +33,6 @@ export {
     ChildrenBook,
     Book,
     CarouselPrev,
-    CarouselNext
+    CarouselNext,
+    RightArrow
 }

@@ -43,6 +43,7 @@ const RequestsBook = () => (
 
 export default function SidebarMenu(props) {
 
+
     const navigatorLink = [
         {
             icon: Squircle,
@@ -102,7 +103,6 @@ export default function SidebarMenu(props) {
                     marginTop: { sm: 0, xs: HEADER_HEIGHT },
                     overflowX: 'hidden'
                 },
-                ...(props.open && { backgroundColor: COLORS.bg1 }),
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },
                 height: '100vh'
             }}
