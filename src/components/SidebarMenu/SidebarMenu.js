@@ -43,7 +43,8 @@ const RequestsBook = () => (
 
 export default function SidebarMenu(props) {
 
-
+    let open = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open
+    console.log(open)
     const navigatorLink = [
         {
             icon: Squircle,
@@ -73,6 +74,50 @@ export default function SidebarMenu(props) {
             text: 'Sách nói'
         },
         {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
+            icon: AudioBook,
+            text: 'Sách nói'
+        },
+        {
             icon: AudioStory,
             text: 'Truyện nói'
         },
@@ -87,7 +132,47 @@ export default function SidebarMenu(props) {
         {
             icon: ChildrenBook,
             text: 'Thiếu nhi'
-        }
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
+        {
+            icon: ChildrenBook,
+            text: 'Thiếu nhi'
+        },
 
     ]
 
@@ -100,15 +185,15 @@ export default function SidebarMenu(props) {
                     height: '100vh',
                     boxSizing: 'border-box',
                     backgroundColor: COLORS.bg1,
-                    marginTop: { sm: 0, xs: HEADER_HEIGHT },
+                    top: { sm: 0, xs: HEADER_HEIGHT },
                     overflowX: 'hidden'
                 },
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },
-                height: '100vh'
+                ...(!open && { display: 'none' }),
             }}
             variant="persistent"
             anchor="left"
-            open={props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open}
+            open={open}
         >
             <div style={{ display: 'block' }}>
                 <Logo windowWidth={props.windowSize.width} />

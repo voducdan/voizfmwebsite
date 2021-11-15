@@ -34,7 +34,7 @@ export default function HomeCarousel(props) {
     ]
 
     return (
-        <Box sx={{ height: '45%', position: 'relative', width: '100%' }}>
+        <Box sx={{ height: '420px', position: 'relative', width: '100%' }}>
             <div style={{ height: '100%', width: '100%' }}>
                 {images.map((image, idx) => (
                     <img style={{
@@ -44,18 +44,17 @@ export default function HomeCarousel(props) {
                         position: 'absolute',
                         height: '100%',
                         left: 0,
-                        ...(props.windowWidth <= SCREEN_BREAKPOINTS.sm && { left: 0, width: '100%' }),
+                        ...(props.windowWidth <= SCREEN_BREAKPOINTS.sm && { width: '100%' }),
                     }} alt={image.alt} key={idx} src={image.imgSrc}></img>
                 ))}
             </div>
-            <div style={{
+            <Box sx={{
                 position: 'absolute',
                 bottom: 33,
                 display: 'flex',
                 justifyContent: 'flex-end',
                 alignItems: 'center',
-                right: 48,
-                ...(props.windowWidth <= SCREEN_BREAKPOINTS.sm && { marginRight: 0 })
+                right: { sm: 48, xs: 0 }
             }}>
                 <div style={{
                     position: 'absolute',
@@ -85,7 +84,7 @@ export default function HomeCarousel(props) {
                 }}>
                     <CarouselNext></CarouselNext>
                 </div>
-            </div>
+            </Box>
         </Box>
     )
 }

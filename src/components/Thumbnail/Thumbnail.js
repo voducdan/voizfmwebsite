@@ -3,7 +3,7 @@ export default function Thumnail(props) {
     return (
         <img
             style={{
-                height: 201
+                ...props.style
             }}
             src={props.avtSrc}
             alt={props.alt}

@@ -8,7 +8,6 @@ import Header from "../../components/Header/Header"
 import HomeContent from "../../components/HomeContent/HomeContent"
 
 import useWindowSize from '../../utils/useWindowSize'
-import { COLORS } from '../../utils/constants'
 
 
 
@@ -23,7 +22,10 @@ export default function Home() {
 
     return (
 
-        <Box sx={{ display: 'flex', backgroundColor: COLORS.bg1 }}>
+        <Box sx={{
+            display: 'flex',
+            // backgroundColor: COLORS.bg1 
+        }}>
             <Header open={open} setOpen={setOpen} windowSize={windowSize}></Header>
             <SidebarMenu open={open} theme={theme} windowSize={windowSize}></SidebarMenu>
             <HomeContent open={open} windowSize={windowSize}></HomeContent>

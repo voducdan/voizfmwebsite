@@ -71,6 +71,11 @@ const TEXT_STYLE = {
         fontSize: '10px',
         lineHeight: '15px',
         fontWeight: 500
+    },
+    VZ_Caption_2: {
+        fontSize: '12px',
+        lineHeight: '16.8px',
+        fontWeight: 500
     }
 };
 const SCREEN_BREAKPOINTS = {
