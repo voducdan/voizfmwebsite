@@ -31,7 +31,7 @@ const RequestsBook = () => (
     <Button sx={{
         backgroundColor: COLORS.main,
         borderRadius: '33px',
-        margin: '13.5px 37px 0 25px',
+        margin: '13.5px 37px 31px 25px',
         height: '48px',
         width: '188px',
         textTransform: 'inherit',
@@ -44,7 +44,6 @@ const RequestsBook = () => (
 export default function SidebarMenu(props) {
 
     let open = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open
-    console.log(open)
     const navigatorLink = [
         {
             icon: Squircle,
@@ -74,50 +73,6 @@ export default function SidebarMenu(props) {
             text: 'Sách nói'
         },
         {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
-            icon: AudioBook,
-            text: 'Sách nói'
-        },
-        {
             icon: AudioStory,
             text: 'Truyện nói'
         },
@@ -132,48 +87,7 @@ export default function SidebarMenu(props) {
         {
             icon: ChildrenBook,
             text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-        {
-            icon: ChildrenBook,
-            text: 'Thiếu nhi'
-        },
-
+        }
     ]
 
     return (
@@ -182,11 +96,11 @@ export default function SidebarMenu(props) {
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
                     width: 'inherit',
-                    height: '100vh',
-                    boxSizing: 'border-box',
                     backgroundColor: COLORS.bg1,
                     top: { sm: 0, xs: HEADER_HEIGHT },
-                    overflowX: 'hidden'
+                    paddingBottom: { sm: 0, xs: HEADER_HEIGHT },
+                    overflowX: 'hidden',
+                    boxSizing: 'border-box'
                 },
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },
                 ...(!open && { display: 'none' }),

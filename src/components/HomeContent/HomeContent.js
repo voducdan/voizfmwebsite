@@ -4,8 +4,6 @@ import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
 import ImageList from '@mui/material/ImageList';
 import ImageListItem from '@mui/material/ImageListItem';
-import Avatar from '@mui/material/Avatar';
-import Stack from '@mui/material/Stack';
 import Box from '@mui/material/Box';
 
 import HomeCarousel from '../../components/HomeCarousel/HomeCarousel'
@@ -28,7 +26,7 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
         height: `calc(100% - ${HEADER_HEIGHT})`,
         width: `calc(100% - ${DRAWER_WIDTH}px)`,
         marginTop: HEADER_HEIGHT,
-        ...(open && { marginLeft: -SCREEN_BREAKPOINTS.sm }),
+        // ...(!open && { marginLeft: -SCREEN_BREAKPOINTS.sm }),
     }),
 );
 
@@ -67,15 +65,6 @@ const CatetoryBar = (categoryList) => (
     </Box>
 )
 
-// const DrawerHeader = styled('div')(({ theme }) => ({
-//     display: 'flex',
-//     alignItems: 'center',
-//     padding: theme.spacing(0, 1),
-//     // necessary for content to be below app bar
-//     ...theme.mixins.toolbar,
-//     justifyContent: 'flex-end',
-// }));
-
 
 export default function HomeContent(props) {
     // const [data, setData] = useState([])
@@ -85,16 +74,15 @@ export default function HomeContent(props) {
     // setSuggest(fakeSuggest)
     return (
         <Main open={props.open}>
-            {/* <DrawerHeader /> */}
             <HomeCarousel windowWidth={props.windowSize.width}></HomeCarousel>
             <Box sx={{
                 margin: '107px 48px 56px 48px'
             }}>
                 {Title('Gợi ý cho người chưa bắt đầu')}
-                <ImageList sx={{ height: 201, overflow: 'hidden' }} cols={5} gap={20}>
+                <ImageList sx={{ width: '100%' }} cols={5} gap={20}  >
                     {fakeSuggest.map((item) => (
                         <ImageListItem key={item.id}>
-                            <Thumbnail avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
+                            <Thumbnail avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                         </ImageListItem>
                     ))}
                 </ImageList>
@@ -106,13 +94,13 @@ export default function HomeContent(props) {
                     }} key={data.title}>
                         {Title(data.title)}
                         {data.categories && CatetoryBar(data.categories)}
-                        <ImageList sx={{ height: 201, marginTop: '35px', overflow: 'hidden' }} cols={5} gap={20}>
+                        <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0, marginTop: '35px' }}>
                             {data.items.map((item) => (
-                                <ImageListItem key={item.id}>
-                                    <Thumbnail avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
-                                </ImageListItem>
+                                <li style={{ width: '19%' }} key={item.id}>
+                                    <Thumbnail style={{ width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                                </li>
                             ))}
-                        </ImageList>
+                        </ul>
                     </Box>
                 ))
             }
@@ -129,64 +117,69 @@ export default function HomeContent(props) {
                     width: '24px',
                     height: '24px',
                     top: '50%',
-                    transform: 'translate(28px, 50%)',
+                    transform: 'translate(30px, 50%)',
                     zIndex: 2,
                     ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
                 }}>
                     <CarouselPrev></CarouselPrev>
                 </Box>
-                <ImageList sx={{ height: 201, overflow: 'hidden' }} cols={5} gap={20}>
+                <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0 }}>
                     {newContent.map((item) => (
-                        <ImageListItem key={item.id}>
-                            <Thumbnail style={{ height: 201 }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
-                        </ImageListItem>
+                        <li style={{ width: '19%' }} key={item.id} >
+                            <Thumbnail style={{ borderRadius: '6px', height: '100%', width: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
+                        </li>
+
                     ))}
 
-                </ImageList>
+                </ul>
                 <Box style={{
                     position: 'absolute',
                     right: 0,
                     width: '24px',
                     height: '24px',
                     top: '50%',
-                    transform: 'translate(-36px, 50%)',
+                    transform: 'translate(-42px, 50%)',
                     zIndex: 2,
                     ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
                 }}>
                     <CarouselNext></CarouselNext>
                 </Box>
             </Box>
+
             <Box sx={{
                 margin: '60px 48px'
             }}>
                 {Title('Tác giả nổi bật')}
-                <Box >
-                    <Stack direction="row" spacing={5} sx={{ justifyContent: 'center' }}>
-                        {authors.map(item => (
-                            <Box sx={{
-                                display: 'flex',
-                                justifyContent: 'center',
-                                alignItems: 'center',
-                                flexDirection: 'column',
-                                fontFamily: FONT_FAMILY,
-                                width: '150px'
-                            }} key={item.id}>
-                                <Avatar alt={"image" + item.id} src={item.avtSrc} sx={{ width: 150, height: 150 }} />
-                                <Typography sx={{
-                                    ...TEXT_STYLE.title1,
-                                    color: COLORS.white,
-                                    letterSpacing: 0,
-                                    marginTop: '9.38px'
-                                }}>Vũ trọng phụng</Typography>
-                                <Typography sx={{
-                                    ...TEXT_STYLE.VZ_Caption_2,
-                                    color: COLORS.VZ_Text_content,
-                                    marginTop: '8px'
-                                }}>Vũ Trọng Phụng là một nhà văn, nhà báo nổi tiếng của Việt Nam giai đo ...</Typography>
-                            </Box>
-                        ))}
-                    </Stack>
-                </Box>
+                <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0 }}>
+                    {authors.map((item) => (
+                        <li style={{
+                            alignItems: 'center',
+                            height: '10%',
+                            width: '10%',
+                            ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { height: '15%', width: '15%' })
+                        }}
+                            key={item.id}
+                        >
+                            <Thumbnail style={{ height: '100%', width: '100%', borderRadius: '50%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
+                            <Typography sx={{
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                letterSpacing: 0,
+                                marginTop: '22px'
+                            }}>Vũ trọng phụng</Typography>
+                            <Typography sx={{
+                                ...TEXT_STYLE.VZ_Caption_2,
+                                color: COLORS.VZ_Text_content,
+                                marginTop: '8px',
+                                textOverflow: 'ellipsis',
+                                whiteSpace: 'nowrap',
+                                overflow: 'hidden'
+                            }}>Vũ Trọng Phụng là một nhà văn, nhà báo nổi tiếng của Việt Nam giai đo ...</Typography>
+                        </li>
+                    ))}
+
+                </ul>
+
             </Box>
             <Box
                 sx={{
@@ -201,33 +194,34 @@ export default function HomeContent(props) {
                     width: '24px',
                     height: '24px',
                     top: '50%',
-                    transform: 'translate(28px, 50%)',
+                    transform: 'translate(30px, 50%)',
                     zIndex: 2,
                     ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
                 }}>
                     <CarouselPrev></CarouselPrev>
                 </Box>
-                <ImageList sx={{ overflow: 'hidden' }} cols={5} gap={20}>
+                <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0 }}>
                     {newContent.map((item) => (
-                        <ImageListItem key={item.id} >
-                            <Thumbnail style={{ borderRadius: '6px', height: 112 }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
-                        </ImageListItem>
+                        <li style={{ width: '19%', height: '112px' }} key={item.id} >
+                            <Thumbnail style={{ borderRadius: '6px', height: '100%', width: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
+                        </li>
+
                     ))}
 
-                </ImageList>
+                </ul>
                 <Box style={{
                     position: 'absolute',
                     right: 0,
                     width: '24px',
                     height: '24px',
                     top: '50%',
-                    transform: 'translate(-36px, 50%)',
+                    transform: 'translate(-42px, 50%)',
                     zIndex: 2,
                     ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
                 }}>
                     <CarouselNext></CarouselNext>
                 </Box>
             </Box>
-        </Main>
+        </Main >
     )
 }
