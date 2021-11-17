@@ -82,19 +82,21 @@ const Title = (content) => (
 )
 
 const CatetoryBar = (categoryList) => (
-    <Box sx={{
-        ...flexCenterStyle
-    }}>
-        {categoryList.map((item, idx) => (
-            <Typography sx={{
-                ...TEXT_STYLE.title1,
-                fontFamily: FONT_FAMILY,
-                color: COLORS.VZ_Text_content,
-                marginLeft: '38.86px',
-                ...(idx === 0 && { marginLeft: 0 }),
-                whiteSpace: 'nowrap'
-            }} key={idx}>{item}</Typography>
-        ))}
+    <Box >
+        <Swiper slidesPerView='auto' spaceBetween={40} style={{ marginTop: 35 }}>
+            {categoryList.map((item, idx) => (
+                <SwiperSlide key={idx} style={{ width: 'auto' }}>
+                    <Typography sx={{
+                        ...TEXT_STYLE.title1,
+                        fontFamily: FONT_FAMILY,
+                        color: COLORS.VZ_Text_content,
+                        ...(idx === 0 && { marginLeft: 0 }),
+                        whiteSpace: 'nowrap',
+                    }} key={idx}>{item}
+                    </Typography>
+                </SwiperSlide>
+            ))}
+        </Swiper>
     </Box>
 )
 
@@ -105,6 +107,7 @@ export default function HomeContent(props) {
 
     // setData(fakeData)
     // setSuggest(fakeSuggest)
+
     const navigationNewContentPrevRef = useRef(null)
     const navigationNewContentNextRef = useRef(null)
     const navigationPublisherPrevRef = useRef(null)
@@ -185,17 +188,19 @@ export default function HomeContent(props) {
                         <SwiperSlide key={item.id}>
                             <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                             <Typography sx={{
-                                ...TEXT_STYLE.title1,
+                                ...(props.windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
                                 color: COLORS.white,
                                 letterSpacing: 0,
                                 marginTop: '22px'
                             }}>Vũ trọng phụng</Typography>
                             <Typography sx={{
-                                ...TEXT_STYLE.VZ_Caption_2,
+                                ...(props.windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
                                 color: COLORS.VZ_Text_content,
+                                display: '-webkit-box',
                                 marginTop: '8px',
                                 textOverflow: 'ellipsis',
-                                whiteSpace: 'nowrap',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
                                 overflow: 'hidden'
                             }}>Vũ Trọng Phụng là một nhà văn, nhà báo nổi tiếng của Việt Nam giai đo ...</Typography>
                         </SwiperSlide>
