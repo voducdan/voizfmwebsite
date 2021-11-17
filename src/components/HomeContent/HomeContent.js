@@ -1,10 +1,18 @@
 // import { useState } from 'react';
+import { useRef } from 'react';
 
 import { styled } from '@mui/material/styles';
 import Typography from '@mui/material/Typography';
-import ImageList from '@mui/material/ImageList';
-import ImageListItem from '@mui/material/ImageListItem';
 import Box from '@mui/material/Box';
+
+
+import SwiperCore, { Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+
+import 'swiper/swiper.scss'; // core Swiper
+import 'swiper/modules/navigation/navigation.scss'; // Navigation module
+import 'swiper/modules/pagination/pagination.scss';
+
 
 import HomeCarousel from '../../components/HomeCarousel/HomeCarousel'
 import Thumbnail from '../../components/Thumbnail/Thumbnail'
@@ -14,11 +22,36 @@ import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, DRAWER_WIDTH, TEXT_STYLE, FONT_FAMIL
 
 import { fakeData, fakeSuggest, newContent, authors } from '../../mockData/HomeData'
 
+SwiperCore.use([Navigation]);
+
+
 const flexCenterStyle = {
     display: 'flex',
     justifyContent: 'flex-start',
     alignItems: 'center'
 }
+
+const SwiperBtnNext = (props) => ({
+    position: 'absolute',
+    right: 0,
+    width: '24px',
+    height: '24px',
+    top: '50%',
+    transform: 'translate(-40px, 70%)',
+    zIndex: 2,
+    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
+})
+
+const SwiperBtnPrev = (props) => ({
+    position: 'absolute',
+    left: 0,
+    width: '24px',
+    height: '24px',
+    top: '50%',
+    transform: 'translate(28px, 70%)',
+    zIndex: 2,
+    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
+})
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ open }) => ({
@@ -72,6 +105,13 @@ export default function HomeContent(props) {
 
     // setData(fakeData)
     // setSuggest(fakeSuggest)
+    const navigationNewContentPrevRef = useRef(null)
+    const navigationNewContentNextRef = useRef(null)
+    const navigationPublisherPrevRef = useRef(null)
+    const navigationPublisherNextRef = useRef(null)
+
+    let num_items_per_line = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? 5 : 3;
+
     return (
         <Main open={props.open}>
             <HomeCarousel windowWidth={props.windowSize.width}></HomeCarousel>
@@ -79,13 +119,13 @@ export default function HomeContent(props) {
                 margin: '107px 48px 56px 48px'
             }}>
                 {Title('Gợi ý cho người chưa bắt đầu')}
-                <ImageList sx={{ width: '100%' }} cols={5} gap={20}  >
+                <Swiper slidesPerView={num_items_per_line} spaceBetween={20} style={{ marginTop: 35 }}>
                     {fakeSuggest.map((item) => (
-                        <ImageListItem key={item.id}>
-                            <Thumbnail avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
-                        </ImageListItem>
+                        <SwiperSlide key={item.id}>
+                            <Thumbnail style={{ width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                        </SwiperSlide>
                     ))}
-                </ImageList>
+                </Swiper>
             </Box>
             {
                 fakeData.map(data => (
@@ -94,13 +134,13 @@ export default function HomeContent(props) {
                     }} key={data.title}>
                         {Title(data.title)}
                         {data.categories && CatetoryBar(data.categories)}
-                        <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0, marginTop: '35px' }}>
+                        <Swiper slidesPerView={num_items_per_line} spaceBetween={20} style={{ marginTop: 35 }}>
                             {data.items.map((item) => (
-                                <li style={{ width: '19%' }} key={item.id}>
+                                <SwiperSlide key={item.id}>
                                     <Thumbnail style={{ width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
-                                </li>
+                                </SwiperSlide>
                             ))}
-                        </ul>
+                        </Swiper>
                     </Box>
                 ))
             }
@@ -111,56 +151,39 @@ export default function HomeContent(props) {
                     position: 'relative'
                 }}>
                 {Title('Nội dung mới cho bạn')}
-                <Box style={{
-                    position: 'absolute',
-                    left: 0,
-                    width: '24px',
-                    height: '24px',
-                    top: '50%',
-                    transform: 'translate(30px, 50%)',
-                    zIndex: 2,
-                    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
-                }}>
-                    <CarouselPrev></CarouselPrev>
-                </Box>
-                <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0 }}>
+                <Swiper
+
+                    navigation={{
+                        prevEl: navigationNewContentPrevRef.current,
+                        nextEl: navigationNewContentNextRef.current
+                    }}
+                    onBeforeInit={(swiper) => {
+                        swiper.params.navigation.prevEl = navigationNewContentPrevRef.current;
+                        swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
+                    }}
+                    slidesPerView={num_items_per_line} spaceBetween={20} >
                     {newContent.map((item) => (
-                        <li style={{ width: '19%' }} key={item.id} >
-                            <Thumbnail style={{ borderRadius: '6px', height: '100%', width: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
-                        </li>
-
+                        <SwiperSlide key={item.id}>
+                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                        </SwiperSlide>
                     ))}
-
-                </ul>
-                <Box style={{
-                    position: 'absolute',
-                    right: 0,
-                    width: '24px',
-                    height: '24px',
-                    top: '50%',
-                    transform: 'translate(-42px, 50%)',
-                    zIndex: 2,
-                    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
-                }}>
-                    <CarouselNext></CarouselNext>
-                </Box>
+                </Swiper>
+                <div style={{
+                    ...SwiperBtnPrev(props)
+                }} ref={navigationNewContentPrevRef} ><CarouselPrev></CarouselPrev></div>
+                <div style={{
+                    ...SwiperBtnNext(props)
+                }} ref={navigationNewContentNextRef} > <CarouselNext></CarouselNext></div>
             </Box>
 
             <Box sx={{
                 margin: '60px 48px'
             }}>
                 {Title('Tác giả nổi bật')}
-                <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0 }}>
+                <Swiper slidesPerView={num_items_per_line} spaceBetween={20} >
                     {authors.map((item) => (
-                        <li style={{
-                            alignItems: 'center',
-                            height: '10%',
-                            width: '10%',
-                            ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { height: '15%', width: '15%' })
-                        }}
-                            key={item.id}
-                        >
-                            <Thumbnail style={{ height: '100%', width: '100%', borderRadius: '50%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
+                        <SwiperSlide key={item.id}>
+                            <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                             <Typography sx={{
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,
@@ -175,11 +198,9 @@ export default function HomeContent(props) {
                                 whiteSpace: 'nowrap',
                                 overflow: 'hidden'
                             }}>Vũ Trọng Phụng là một nhà văn, nhà báo nổi tiếng của Việt Nam giai đo ...</Typography>
-                        </li>
+                        </SwiperSlide>
                     ))}
-
-                </ul>
-
+                </Swiper>
             </Box>
             <Box
                 sx={{
@@ -188,39 +209,29 @@ export default function HomeContent(props) {
                     position: 'relative'
                 }}>
                 {Title('Nhà xuất bản')}
-                <Box style={{
-                    position: 'absolute',
-                    left: 0,
-                    width: '24px',
-                    height: '24px',
-                    top: '50%',
-                    transform: 'translate(30px, 50%)',
-                    zIndex: 2,
-                    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
-                }}>
-                    <CarouselPrev></CarouselPrev>
-                </Box>
-                <ul style={{ display: 'flex', justifyContent: 'space-between', padding: 0 }}>
+
+                <Swiper
+                    navigation={{
+                        prevEl: navigationPublisherPrevRef.current,
+                        nextEl: navigationPublisherNextRef.current
+                    }}
+                    onBeforeInit={(swiper) => {
+                        swiper.params.navigation.prevEl = navigationPublisherPrevRef.current;
+                        swiper.params.navigation.nextEl = navigationPublisherNextRef.current;
+                    }}
+                    slidesPerView={num_items_per_line} spaceBetween={20}>
                     {newContent.map((item) => (
-                        <li style={{ width: '19%', height: '112px' }} key={item.id} >
-                            <Thumbnail style={{ borderRadius: '6px', height: '100%', width: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`}></Thumbnail>
-                        </li>
-
+                        <SwiperSlide key={item.id}>
+                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                        </SwiperSlide>
                     ))}
-
-                </ul>
-                <Box style={{
-                    position: 'absolute',
-                    right: 0,
-                    width: '24px',
-                    height: '24px',
-                    top: '50%',
-                    transform: 'translate(-42px, 50%)',
-                    zIndex: 2,
-                    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
-                }}>
-                    <CarouselNext></CarouselNext>
-                </Box>
+                </Swiper>
+                <div style={{
+                    ...SwiperBtnPrev(props)
+                }} ref={navigationPublisherPrevRef} ><CarouselPrev></CarouselPrev></div>
+                <div style={{
+                    ...SwiperBtnNext(props)
+                }} ref={navigationPublisherNextRef} > <CarouselNext></CarouselNext></div>
             </Box>
         </Main >
     )
