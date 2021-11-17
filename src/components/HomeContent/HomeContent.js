@@ -122,7 +122,7 @@ export default function HomeContent(props) {
                 <Swiper slidesPerView={num_items_per_line} spaceBetween={20} style={{ marginTop: 35 }}>
                     {fakeSuggest.map((item) => (
                         <SwiperSlide key={item.id}>
-                            <Thumbnail style={{ width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                         </SwiperSlide>
                     ))}
                 </Swiper>
@@ -137,7 +137,7 @@ export default function HomeContent(props) {
                         <Swiper slidesPerView={num_items_per_line} spaceBetween={20} style={{ marginTop: 35 }}>
                             {data.items.map((item) => (
                                 <SwiperSlide key={item.id}>
-                                    <Thumbnail style={{ width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                                    <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
