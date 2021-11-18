@@ -24,14 +24,14 @@ import {
 
 import Logo from '../Logo/Logo'
 
-import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT } from '../../utils/constants'
+import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS } from '../../utils/constants'
 
 
 const RequestsBook = () => (
     <Button sx={{
         backgroundColor: COLORS.main,
         borderRadius: '33px',
-        margin: '13.5px 37px 0 25px',
+        margin: '13.5px 37px 31px 25px',
         height: '48px',
         width: '188px',
         textTransform: 'inherit',
@@ -42,7 +42,7 @@ const RequestsBook = () => (
 )
 
 export default function SidebarMenu(props) {
-
+    let open = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open
     const navigatorLink = [
         {
             icon: Squircle,
@@ -87,10 +87,7 @@ export default function SidebarMenu(props) {
             icon: ChildrenBook,
             text: 'Thiếu nhi'
         }
-
     ]
-
-
 
     return (
         <Drawer
@@ -98,19 +95,18 @@ export default function SidebarMenu(props) {
                 flexShrink: 0,
                 '& .MuiDrawer-paper': {
                     width: 'inherit',
-                    height: '100vh',
-                    boxSizing: 'border-box',
                     backgroundColor: COLORS.bg1,
-                    marginTop: { sm: 0, xs: HEADER_HEIGHT },
-                    overflowX: 'hidden'
+                    top: { sm: 0, xs: HEADER_HEIGHT },
+                    paddingBottom: { sm: 0, xs: HEADER_HEIGHT },
+                    overflowX: 'hidden',
+                    boxSizing: 'border-box'
                 },
-                ...(props.open && { backgroundColor: COLORS.bg1 }),
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },
-                height: '100vh'
+                ...(!open && { display: 'none' }),
             }}
             variant="persistent"
             anchor="left"
-            open={props.open}
+            open={open}
         >
             <div style={{ display: 'block' }}>
                 <Logo windowWidth={props.windowSize.width} />

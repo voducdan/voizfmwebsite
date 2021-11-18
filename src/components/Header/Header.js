@@ -9,7 +9,7 @@ import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
 import Avatar from '@mui/material/Avatar';
 
-import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS } from '../../utils/constants'
+import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
 import { Search, Bookmark, Cart } from '../Icons/index'
 
 const SearchIcon = (idx) => {
@@ -45,7 +45,7 @@ const userAvt = (idx, avtSrc) => {
 const AppBar = styled(MuiAppBar, {
     shouldForwardProp: (prop) => prop !== 'open',
 })(({ windowwidth, open }) => ({
-    height: HEADER_HEIGHT,
+    height: windowwidth > SCREEN_BREAKPOINTS.sm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
     backgroundColor: COLORS.bg1,
     justifyContent: 'center',
     ...(windowwidth > SCREEN_BREAKPOINTS.sm && {

@@ -1,10 +1,12 @@
-body, html {
+html {
   font-family: 'SF UI Display';
-  overflow: hidden;
+  background-color: #1F2129;
 }
 
 .App {
-  text-align: center;
+  width: 100%;
+  height: 100%;
+  overflow:hidden;
 }
 
 .App-logo {

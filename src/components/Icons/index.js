@@ -12,6 +12,15 @@ import Podcast from './Podcast';
 import SummaryBook from './SummaryBook';
 import ChildrenBook from './ChildrenBook';
 import Book from './Book';
+import CarouselPrev from './CarouselPrev';
+import CarouselNext from './CarouselNext';
+import RightArrow from './RightArrow';
+import Facebook from './Facebook';
+import Instagram from './Instagram';
+import Tiktok from './Tiktok';
+import Phone from './Phone';
+import Email from './Email';
+import Location from './Location';
 
 
 export {
@@ -28,5 +37,14 @@ export {
     Podcast,
     SummaryBook,
     ChildrenBook,
-    Book
+    Book,
+    CarouselPrev,
+    CarouselNext,
+    RightArrow,
+    Facebook,
+    Instagram,
+    Tiktok,
+    Phone,
+    Email,
+    Location
 }

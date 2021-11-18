@@ -11,7 +11,10 @@ const COLORS = {
     main: '#754ADA',
     second: '#F68C2D',
     success: '#00B967',
-    error: '#FF554B'
+    error: '#FF554B',
+    white: '#FFFFFF',
+    VZ_Text_content: '#B8B8B8',
+    gray2: '#C6C6C6'
 };
 
 const TEXT_STYLE = {
@@ -69,6 +72,11 @@ const TEXT_STYLE = {
         fontSize: '10px',
         lineHeight: '15px',
         fontWeight: 500
+    },
+    VZ_Caption_2: {
+        fontSize: '12px',
+        lineHeight: '16.8px',
+        fontWeight: 500
     }
 };
 const SCREEN_BREAKPOINTS = {
@@ -82,6 +90,7 @@ const FONT_FAMILY = 'SF UI Display';
 const FONT_COLOR = '#ACACAC';
 const DRAWER_WIDTH = 250;
 const HEADER_HEIGHT = '104px';
+const HEADER_HEIGHT_MB = '80px';
 export {
-    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS
+    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB
 }
