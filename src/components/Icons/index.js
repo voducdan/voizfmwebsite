@@ -15,6 +15,12 @@ import Book from './Book';
 import CarouselPrev from './CarouselPrev';
 import CarouselNext from './CarouselNext';
 import RightArrow from './RightArrow';
+import Facebook from './Facebook';
+import Instagram from './Instagram';
+import Tiktok from './Tiktok';
+import Phone from './Phone';
+import Email from './Email';
+import Location from './Location';
 
 
 export {
@@ -34,5 +40,11 @@ export {
     Book,
     CarouselPrev,
     CarouselNext,
-    RightArrow
+    RightArrow,
+    Facebook,
+    Instagram,
+    Tiktok,
+    Phone,
+    Email,
+    Location
 }

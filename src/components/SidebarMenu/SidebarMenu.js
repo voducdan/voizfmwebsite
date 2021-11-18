@@ -42,7 +42,6 @@ const RequestsBook = () => (
 )
 
 export default function SidebarMenu(props) {
-
     let open = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open
     const navigatorLink = [
         {

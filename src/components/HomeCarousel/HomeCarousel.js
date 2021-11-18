@@ -34,7 +34,7 @@ export default function HomeCarousel(props) {
     ]
 
     return (
-        <Box sx={{ height: '420px', position: 'relative', width: '100%' }}>
+        <Box sx={{ height: props.windowWidth <= SCREEN_BREAKPOINTS.sm ? '280px' : '420px', position: 'relative', width: '100%' }}>
             <div style={{ height: '100%', width: '100%' }}>
                 {images.map((image, idx) => (
                     <img style={{

@@ -57,9 +57,9 @@ const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
     ({ open }) => ({
         flexGrow: 1,
         height: `calc(100% - ${HEADER_HEIGHT})`,
-        width: `calc(100% - ${DRAWER_WIDTH}px)`,
         marginTop: HEADER_HEIGHT,
-        // ...(!open && { marginLeft: -SCREEN_BREAKPOINTS.sm }),
+        width: open ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+        ...(open && { marginLeft: DRAWER_WIDTH }),
     }),
 );
 

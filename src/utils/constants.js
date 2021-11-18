@@ -13,7 +13,8 @@ const COLORS = {
     success: '#00B967',
     error: '#FF554B',
     white: '#FFFFFF',
-    VZ_Text_content: '#B8B8B8'
+    VZ_Text_content: '#B8B8B8',
+    gray2: '#C6C6C6'
 };
 
 const TEXT_STYLE = {
@@ -89,6 +90,7 @@ const FONT_FAMILY = 'SF UI Display';
 const FONT_COLOR = '#ACACAC';
 const DRAWER_WIDTH = 250;
 const HEADER_HEIGHT = '104px';
+const HEADER_HEIGHT_MB = '80px';
 export {
-    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS
+    COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB
 }
