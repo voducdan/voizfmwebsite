@@ -38,7 +38,7 @@ const CartIcon = (idx) => {
 
 const userAvt = (idx, avtSrc) => {
     return (
-        <Avatar alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
+        <Avatar onClick={() => { console.log('alo') }} alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
     )
 }
 
