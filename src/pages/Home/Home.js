@@ -7,7 +7,7 @@ import HomeContent from "../../components/HomeContent/HomeContent"
 export default function Home(props) {
     return (
         <Box>
-            <HomeContent open={props.open} windowSize={props.windowSize}></HomeContent>
+            <HomeContent windowSize={props.windowSize}></HomeContent>
         </Box>
     )
 }

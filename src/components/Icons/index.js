@@ -21,6 +21,8 @@ import Tiktok from './Tiktok';
 import Phone from './Phone';
 import Email from './Email';
 import Location from './Location';
+import GreenTick from './GreenTick';
+import SelectDownArrow from './SelectDownArrow';
 
 
 export {
@@ -46,5 +48,7 @@ export {
     Tiktok,
     Phone,
     Email,
-    Location
+    Location,
+    GreenTick,
+    SelectDownArrow
 }

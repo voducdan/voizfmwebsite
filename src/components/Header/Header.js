@@ -7,7 +7,8 @@ import MuiAppBar from '@mui/material/AppBar';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
 import { Search, Bookmark, Cart } from '../Icons/index'
@@ -20,25 +21,30 @@ const SearchIcon = (idx) => {
     )
 }
 
-const BookmarkIcon = (idx) => {
+const BookmarkIcon = (props) => {
     return (
-        <SvgIcon key={idx} style={{ marginTop: '3px' }}>
+        <SvgIcon key={props.idx} style={{ marginTop: '3px' }}>
             {Bookmark()}
         </SvgIcon>
     )
 }
 
-const CartIcon = (idx) => {
+const CartIcon = (props) => {
     return (
-        <SvgIcon key={idx} style={{ margin: '0 35.5px' }}>
+        <SvgIcon key={props.idx}>
             {Cart()}
         </SvgIcon>
     )
 }
 
-const userAvt = (idx, avtSrc) => {
+// const userAvt = (idx, avtSrc) => {
+//     return (
+//         <Avatar alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
+//     )
+// }
+const UserIcon = (props) => {
     return (
-        <Avatar onClick={() => { console.log('alo') }} alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
+        <AccountCircleIcon onClick={() => { props.handleOpenLogin() }} key={props.idx} />
     )
 }
 
@@ -63,9 +69,13 @@ export default function Header(props) {
 
     // This url will be fetched from API later
     let avtSrc = '/images/avt.png'
+    const handleOpenLogin = props.handleOpenLogin
 
     const headerItems = [
-        BookmarkIcon, CartIcon, userAvt
+        BookmarkIcon,
+        CartIcon,
+        UserIcon
+        // userAvt
     ]
 
     const handleDrawerToggle = () => {
@@ -127,11 +137,12 @@ export default function Header(props) {
                             justifyContent: 'center',
                             alignItems: 'center',
                             marginRight: '13px',
+                            columnGap: '35px',
                             ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { marginRight: '6px' })
                         }}
                     >
                         {headerItems.map((item, idx) => (
-                            item(idx, avtSrc)
+                            item({ idx, avtSrc, handleOpenLogin })
                         ))}
                     </div>
 

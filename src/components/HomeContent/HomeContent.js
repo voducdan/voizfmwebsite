@@ -18,7 +18,7 @@ import HomeCarousel from '../../components/HomeCarousel/HomeCarousel'
 import Thumbnail from '../../components/Thumbnail/Thumbnail'
 
 import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/index'
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, DRAWER_WIDTH, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants'
+import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants'
 
 import { fakeData, fakeSuggest, newContent, authors } from '../../mockData/HomeData'
 
@@ -54,12 +54,8 @@ const SwiperBtnPrev = (props) => ({
 })
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-    ({ open }) => ({
-        flexGrow: 1,
-        height: `calc(100% - ${HEADER_HEIGHT})`,
-        marginTop: HEADER_HEIGHT,
-        width: open ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-        ...(open && { marginLeft: DRAWER_WIDTH }),
+    () => ({
+
     }),
 );
 
@@ -116,7 +112,7 @@ export default function HomeContent(props) {
     let num_items_per_line = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? 5 : 3;
 
     return (
-        <Main open={props.open}>
+        <Main>
             <HomeCarousel windowWidth={props.windowSize.width}></HomeCarousel>
             <Box sx={{
                 margin: '107px 48px 56px 48px'
