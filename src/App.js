@@ -39,7 +39,7 @@ function App() {
     return (
         <Router>
             <div className="App">
-                <Login openLogin={openLogin} handleCloseLogin={handleCloseLogin} />
+                <Login windowSize={windowSize} openLogin={openLogin} handleCloseLogin={handleCloseLogin} />
                 <Header open={open} setOpen={setOpen} handleOpenLogin={handleOpenLogin} windowSize={windowSize}></Header>
                 <SidebarMenu open={open} theme={theme} windowSize={windowSize}></SidebarMenu>
                 <Box sx={{

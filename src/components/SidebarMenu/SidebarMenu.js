@@ -24,7 +24,7 @@ import {
 
 import Logo from '../Logo/Logo'
 
-import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS } from '../../utils/constants'
+import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
 
 
 const RequestsBook = () => (
@@ -96,7 +96,7 @@ export default function SidebarMenu(props) {
                 '& .MuiDrawer-paper': {
                     width: 'inherit',
                     backgroundColor: COLORS.bg1,
-                    top: { sm: 0, xs: HEADER_HEIGHT },
+                    top: { sm: 0, xs: HEADER_HEIGHT_MB },
                     paddingBottom: { sm: 0, xs: HEADER_HEIGHT },
                     overflowX: 'hidden',
                     boxSizing: 'border-box'

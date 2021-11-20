@@ -1,6 +1,6 @@
 import {
     Box,
-    Modal,
+    Dialog,
     Typography,
     Divider,
     FormControl,
@@ -11,9 +11,11 @@ import {
     Button
 } from '@mui/material'
 
-import { GreenTick, SelectDownArrow } from '../../components/Icons/index'
+import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton'
 
-import { COLORS, TEXT_STYLE } from '../../utils/constants'
+import { GreenTick, SelectDownArrow, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index'
+
+import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants'
 
 
 
@@ -43,34 +45,50 @@ export default function Login(props) {
 
     return (
         <div>
-            <Modal
+            <Dialog
                 open={props.openLogin}
                 onClose={props.handleCloseLogin}
                 aria-labelledby="login-form-modal"
                 aria-describedby="login-form-modal"
-                sx={flexCenter}
+                PaperProps={{
+                    style: {
+                        backgroundColor: COLORS.bg1,
+                        boxShadow: 'none',
+                        borderRadius: '30px',
+                        margin: 0,
+                        width: props.windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100vw',
+                        height: props.windowSize.width > SCREEN_BREAKPOINTS.sm ? '646px' : '100vh',
+                        ...flexCenter,
+
+                    },
+                }}
             >
                 <FormControl sx={{
                     backgroundColor: COLORS.bg1,
-                    width: '512px',
-                    height: '646px',
-                    borderRadius: '30px',
+                    width: { sm: '100%', xs: '100vw' },
+                    height: { sm: '100%', xs: '100vh' },
+                    border: 'none',
                     ...flexCenter
                 }}>
                     <Box sx={{
                         ...flexCenter,
                         flexDirection: 'column',
-                        width: '400px'
+                        width: '80%'
                     }}>
-                        <Typography sx={{ ...TEXT_STYLE.h1, color: COLORS.white }}>
-                            Đăngn nhập hoặc đăng ký
+                        <Typography sx={{
+                            ...(props.windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h1 : TEXT_STYLE.h2),
+                            color: COLORS.white
+                        }}>
+                            Đăng nhập hoặc đăng ký
                         </Typography>
                         <Box sx={{
                             display: flexCenter.display,
                             alignItems: 'flex-start',
                             justifyContent: flexCenter.justifyContent,
                             rowGap: '10px',
-                            flexDirection: 'column'
+                            flexDirection: 'column',
+                            marginTop: '24px',
+                            marginBottom: '26px'
                         }}>
                             {
                                 [
@@ -82,17 +100,26 @@ export default function Login(props) {
                                 ))
                             }
                         </Box>
-                        <Divider />
-                        <Box>
+                        <Divider sx={{
+                            backgroundColor: COLORS.blackStroker,
+                            width: '100%'
+                        }} />
+                        <Box sx={{
+                            marginTop: '32px',
+                            ...flexCenter,
+                            flexDirection: 'column',
+                            rowGap: '24px',
+                            marginBottom: '24px'
+                        }}>
                             <Typography sx={{
                                 ...TEXT_STYLE.title1,
-                                color: COLORS.white
+                                color: COLORS.white,
                             }}>Nhập số điện thoại của bạn để tiếp tục</Typography>
                             <Box sx={{
                                 width: '100%',
                                 display: flexCenter.display,
                                 columnGap: '16px',
-                                height: '50px'
+                                height: '49px'
                             }}>
                                 <Select
                                     id="select-phone-prefix"
@@ -129,16 +156,26 @@ export default function Login(props) {
                                     }
                                 }} id="phone-number" placeholder="098775432" variant="outlined" />
                             </Box>
-                            <button disabled>Tiếp tục</button>
+                            <CustomDisabledButton
+                                style={{
+                                    width: '100%',
+                                    textTransform: 'none',
+                                    marginBottom: props.windowSize.width > SCREEN_BREAKPOINTS.sm ? '50px' : '40px',
+                                    height: '48px'
+                                }} content={'Tiếp tục'} />
                         </Box>
-                        <Typography>Hoặc tiếp tục với</Typography>
-                        <Stack spacing={2} direction="row">
-                            <Button variant="contained">Facebook</Button>
-                            <Button variant="contained">Google</Button>
+                        <Typography sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            marginBottom: '24px'
+                        }}>hoặc tiếp tục với</Typography>
+                        <Stack sx={{ width: '100%' }} spacing={3} direction="column">
+                            <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button>
+                            <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button>
                         </Stack>
                     </Box>
                 </FormControl>
-            </Modal>
+            </Dialog>
         </div >
     )
 }

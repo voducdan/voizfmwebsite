@@ -23,6 +23,8 @@ import Email from './Email';
 import Location from './Location';
 import GreenTick from './GreenTick';
 import SelectDownArrow from './SelectDownArrow';
+import FacebookButtonIcon from './FacebookButtonIcon';
+import GoogleButtonIcon from './GoogleButtonIcon';
 
 
 export {
@@ -50,5 +52,7 @@ export {
     Email,
     Location,
     GreenTick,
-    SelectDownArrow
+    SelectDownArrow,
+    FacebookButtonIcon,
+    GoogleButtonIcon
 }
