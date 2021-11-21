@@ -1,23 +1,24 @@
 import { withStyles } from "@material-ui/core/styles";
 import { Button } from "@mui/material";
 
-import { COLORS, TEXT_STYLE } from '../../utils/constants'
+import { COLORS } from '../../utils/constants'
 
 const styles = theme => ({
     button: {
         "&:disabled": {
             backgroundColor: COLORS.bg3,
             color: COLORS.placeHolder,
-            ...TEXT_STYLE.title1,
 
-        }
+        },
+        backgroundColor: COLORS.main,
+        color: COLORS.white
     }
 });
 
 function CustomDisabledButton(props) {
     const { classes } = props;
     return (
-        <Button sx={{ ...props.style }} disabled className={classes.button}>
+        <Button sx={{ ...props.style }} disabled={props.disabled} className={classes.button} onClick={props.onClick}>
             {props.content}
         </Button>
     );

@@ -1,3 +1,4 @@
+import { useState } from 'react'
 import { useSelector, useDispatch } from 'react-redux'
 import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin'
 
@@ -11,15 +12,16 @@ import {
     MenuItem,
     TextField,
     Stack,
-    Button
+    Button,
 } from '@mui/material'
 
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton'
 
-import { GreenTick, SelectDownArrow, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index'
+import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index'
 
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants'
 import useWindowSize from '../../utils/useWindowSize'
+import { validatePhoneNumber, validateOTP } from '../../utils/validate'
 
 
 
@@ -42,17 +44,55 @@ const loginInfo = (content) => (
     </Box>
 )
 
+
+
 export default function Login() {
 
     let windowSize = useWindowSize()
     const openLogin = useSelector(selectOpenLogin);
+    const [isPhoneValid, setIsPhoneValid] = useState(false)
+    const [isOTPValid, setIsOTPValid] = useState(false)
+    const [waitForOTP, setWaitForOTP] = useState(false)
+    const [loginSuccess, setLoginSuccess] = useState(false)
 
     const dispatch = useDispatch();
 
     const phonePrefix = 84
     const phonePrefixList = [84, 32, 27]
 
-    const onClose = () => { dispatch(handleCloseLogin()) };
+    const onClose = () => {
+        dispatch(handleCloseLogin())
+        setLoginSuccess(false)
+        setIsPhoneValid(false)
+        setIsOTPValid(false)
+        setWaitForOTP(false)
+    };
+    const onPhoneChange = (event) => {
+        if (validatePhoneNumber(event.target.value)) {
+            setIsPhoneValid(true)
+        }
+        else {
+            setIsPhoneValid(false)
+        }
+    }
+
+    const onOTPChange = (event) => {
+        if (validateOTP(event.target.value)) {
+            setIsOTPValid(true)
+        }
+        else {
+            setIsOTPValid(false)
+        }
+    }
+
+    const onEnterPhone = () => {
+        // Post phone to server here
+        setWaitForOTP(true)
+    }
+    const onEnterOTP = () => {
+        // Post OTP to server here
+        setLoginSuccess(true)
+    }
 
     return (
         <div>
@@ -67,24 +107,29 @@ export default function Login() {
                         boxShadow: 'none',
                         borderRadius: '30px',
                         margin: 0,
-                        width: windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100vw',
-                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? '646px' : '100vh',
-                        ...flexCenter,
-
-                    },
+                        width: windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100%',
+                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? '646px' : '100%',
+                        ...flexCenter
+                    }
+                }}
+                sx={{
+                    '& .MuiDialog-container': {
+                        alignItems: windowSize.width > SCREEN_BREAKPOINTS.sm ? 'center' : 'flex-end'
+                    }
                 }}
             >
                 <FormControl sx={{
                     backgroundColor: COLORS.bg1,
-                    width: { sm: '100%', xs: '100vw' },
-                    height: { sm: '100%', xs: '100vh' },
+                    width: '100%',
+                    height: '100%',
                     border: 'none',
                     ...flexCenter
                 }}>
                     <Box sx={{
                         ...flexCenter,
                         flexDirection: 'column',
-                        width: '80%'
+                        width: '80%',
+                        ...(loginSuccess && { display: 'none' })
                     }}>
                         <Typography sx={{
                             ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h1 : TEXT_STYLE.h2),
@@ -116,58 +161,113 @@ export default function Login() {
                             width: '100%'
                         }} />
                         <Box sx={{
-                            marginTop: '32px',
-                            ...flexCenter,
+                            display: waitForOTP ? 'none' : flexCenter.display,
+                            alignItems: flexCenter.alignItems,
                             flexDirection: 'column',
-                            rowGap: '24px',
-                            marginBottom: '24px'
+                        }}>
+                            <Box sx={{
+                                marginTop: '32px',
+                                width: '100%',
+                                ...flexCenter,
+                                flexDirection: 'column',
+                                rowGap: '24px',
+                                marginBottom: '24px',
+                            }}>
+                                <Typography sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                }}>Nhập số điện thoại của bạn để tiếp tục</Typography>
+                                <Box sx={{
+                                    width: '100%',
+                                    display: flexCenter.display,
+                                    columnGap: '16px',
+                                    height: '49px'
+                                }}>
+                                    <Select
+                                        id="select-phone-prefix"
+                                        value={phonePrefix}
+                                        label="phonePrefix"
+                                        sx={{
+                                            border: '1px solid #353535',
+                                            borderRadius: '4px',
+                                            color: COLORS.white,
+                                            '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                                border: "none"
+                                            },
+                                            '& .MuiSelect-icon': {
+                                                color: COLORS.white
+                                            }
+                                        }}
+                                    >
+                                        {
+                                            phonePrefixList.map(prefix => (
+                                                <MenuItem key={prefix} value={prefix}>+{prefix}</MenuItem>
+                                            ))
+                                        }
+                                    </Select>
+                                    <TextField
+                                        sx={{
+                                            borderRadius: '4px',
+                                            border: '1px solid #353535',
+                                            justifyContent: 'center',
+                                            height: '100%',
+                                            '& .MuiOutlinedInput-root': {
+                                                height: '100%'
+                                            },
+                                            '& .MuiOutlinedInput-input': {
+                                                color: COLORS.white,
+                                                ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                            }
+                                        }} id="phone-number" placeholder="098775432" variant="outlined" onChange={onPhoneChange} />
+                                </Box>
+                                <CustomDisabledButton
+                                    disabled={!isPhoneValid}
+                                    onClick={onEnterPhone}
+                                    style={{
+                                        width: '100%',
+                                        textTransform: 'none',
+                                        marginBottom: windowSize.width > SCREEN_BREAKPOINTS.sm ? '50px' : '40px',
+                                        height: '48px',
+                                        ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+                                    }} content={'Tiếp tục'} />
+                            </Box>
+                            <Typography sx={{
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                marginBottom: '24px'
+                            }}>hoặc tiếp tục với</Typography>
+                            <Stack sx={{ width: '100%' }} spacing={3} direction="column">
+                                <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button>
+                                <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button>
+                            </Stack>
+                        </Box>
+                        <Box sx={{
+                            display: waitForOTP ? flexCenter.display : 'none',
+                            alignItems: flexCenter.alignItems,
+                            flexDirection: 'column',
+                            rowGap: '25px'
                         }}>
                             <Typography sx={{
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,
                             }}>Nhập số điện thoại của bạn để tiếp tục</Typography>
-                            <Box sx={{
-                                width: '100%',
-                                display: flexCenter.display,
-                                columnGap: '16px',
-                                height: '49px'
-                            }}>
-                                <Select
-                                    id="select-phone-prefix"
-                                    value={phonePrefix}
-                                    label="phonePrefix"
-                                    IconComponent={SelectDownArrow}
-                                    onChange={() => { console.log('alo') }}
-                                    sx={{
-                                        border: '1px solid #353535',
-                                        borderRadius: '4px',
-                                        color: COLORS.white,
-                                        'div': {
-                                            padding: '16.5px 14px'
-                                        }
-                                    }}
-                                >
-                                    {
-                                        phonePrefixList.map(prefix => (
-                                            <MenuItem key={prefix} value={prefix}>+{prefix}</MenuItem>
-                                        ))
-                                    }
-                                </Select>
-                                <TextField sx={{
+                            <TextField
+                                sx={{
                                     borderRadius: '4px',
                                     border: '1px solid #353535',
                                     justifyContent: 'center',
-                                    height: '100%',
-                                    'div': {
+                                    height: '49px',
+                                    '& .MuiOutlinedInput-root': {
                                         height: '100%'
                                     },
-                                    'input': {
-                                        color: COLORS.placeHolder,
-                                        ...TEXT_STYLE.h2
+                                    '& .MuiOutlinedInput-input': {
+                                        color: COLORS.white,
+                                        ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                     }
-                                }} id="phone-number" placeholder="098775432" variant="outlined" />
-                            </Box>
+                                }} id="phone-number" placeholder="123456" variant="outlined" onChange={onOTPChange} />
                             <CustomDisabledButton
+                                disabled={!isOTPValid}
+                                onClick={onEnterOTP}
                                 style={{
                                     width: '100%',
                                     textTransform: 'none',
@@ -175,17 +275,30 @@ export default function Login() {
                                     height: '48px'
                                 }} content={'Tiếp tục'} />
                         </Box>
+                    </Box>'
+                    <Box
+                        sx={{
+                            display: loginSuccess ? flexCenter.display : 'none',
+                            alignItems: flexCenter.alignItems,
+                            flexDirection: 'column',
+                            rowGap: '25px'
+                        }}
+                    >
+                        <img src="/images/login_success.png" alt="login success img" />
                         <Typography sx={{
-                            ...TEXT_STYLE.title1,
+                            ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h2 : TEXT_STYLE.h3),
                             color: COLORS.white,
-                            marginBottom: '24px'
-                        }}>hoặc tiếp tục với</Typography>
-                        <Stack sx={{ width: '100%' }} spacing={3} direction="column">
-                            <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button>
-                            <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button>
-                        </Stack>
+                        }}>Chúc mừng bạn!</Typography>
+                        <Typography sx={{
+                            ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.content1 : TEXT_STYLE.content2),
+                            color: COLORS.contentIcon,
+                            textAlign: 'center',
+                            width: '277px'
+                        }}>Bạn đã đăng nhập thành công,
+                            hãy trải nghiệm ứng dụng ngay bây giờ </Typography>
                     </Box>
                 </FormControl>
+
             </Dialog>
         </div >
     )
