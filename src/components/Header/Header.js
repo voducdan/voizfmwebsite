@@ -1,6 +1,9 @@
 // Import react module
 import { useSelector, useDispatch } from 'react-redux';
 
+// import react router component
+import { Link } from 'react-router-dom'
+
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { selectToken } from '../../redux/token';
@@ -8,16 +11,18 @@ import { handleOpenLogin } from '../../redux/openLogin';
 
 // Import MUI component
 import { styled } from '@mui/material/styles';
-import IconButton from '@mui/material/IconButton';
-import MenuIcon from '@mui/icons-material/Menu';
-import Toolbar from '@mui/material/Toolbar';
-import SvgIcon from '@mui/material/SvgIcon';
-import MuiAppBar from '@mui/material/AppBar';
-import Input from '@mui/material/Input';
-import InputAdornment from '@mui/material/InputAdornment';
-import FormControl from '@mui/material/FormControl';
-import Avatar from '@mui/material/Avatar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
+import MenuIcon from '@mui/icons-material/Menu';
+import MuiAppBar from '@mui/material/AppBar';
+import {
+    IconButton,
+    Toolbar,
+    SvgIcon,
+    Input,
+    InputAdornment,
+    FormControl,
+    Avatar
+} from '@mui/material';
 
 // Import constant variables
 import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
@@ -54,7 +59,12 @@ const CartIcon = (props) => {
 
 const userAvt = (props) => {
     return (
-        <Avatar alt="Remy Sharp" key={props.idx} src={props.avtSrc} sx={{ width: 40, height: 40 }} />
+        <Link
+            to="/account"
+            key={props.idx}
+        >
+            <Avatar alt="Remy Sharp" src={props.avtSrc} sx={{ width: 40, height: 40 }} />
+        </Link>
     )
 }
 
