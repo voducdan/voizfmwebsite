@@ -1,3 +1,8 @@
+import { useSelector, useDispatch } from 'react-redux';
+
+import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
+import { handleOpenLogin } from '../../redux/openLogin';
+
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -7,9 +12,11 @@ import MuiAppBar from '@mui/material/AppBar';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-import Avatar from '@mui/material/Avatar';
+// import Avatar from '@mui/material/Avatar';
+import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
 import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
+import useWindowSize from '../../utils/useWindowSize'
 import { Search, Bookmark, Cart } from '../Icons/index'
 
 const SearchIcon = (idx) => {
@@ -20,25 +27,30 @@ const SearchIcon = (idx) => {
     )
 }
 
-const BookmarkIcon = (idx) => {
+const BookmarkIcon = (props) => {
     return (
-        <SvgIcon key={idx} style={{ marginTop: '3px' }}>
+        <SvgIcon key={props.idx} style={{ marginTop: '3px' }}>
             {Bookmark()}
         </SvgIcon>
     )
 }
 
-const CartIcon = (idx) => {
+const CartIcon = (props) => {
     return (
-        <SvgIcon key={idx} style={{ margin: '0 35.5px' }}>
+        <SvgIcon key={props.idx}>
             {Cart()}
         </SvgIcon>
     )
 }
 
-const userAvt = (idx, avtSrc) => {
+// const userAvt = (idx, avtSrc) => {
+//     return (
+//         <Avatar alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
+//     )
+// }
+const UserIcon = (props) => {
     return (
-        <Avatar alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
+        <AccountCircleIcon onClick={() => { props.onOpenLogin() }} key={props.idx} />
     )
 }
 
@@ -58,25 +70,36 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 
-export default function Header(props) {
+export default function Header() {
 
+    const windowSize = useWindowSize();
+    const openSidebar = useSelector(selectOpenSidebar);
+
+    const dispatch = useDispatch();
 
     // This url will be fetched from API later
     let avtSrc = '/images/avt.png'
 
     const headerItems = [
-        BookmarkIcon, CartIcon, userAvt
+        BookmarkIcon,
+        CartIcon,
+        UserIcon
+        // userAvt
     ]
 
+    const onOpenLogin = () => {
+        dispatch(handleOpenLogin())
+    }
+
     const handleDrawerToggle = () => {
-        props.setOpen(!props.open);
+        dispatch(setOpen(!openSidebar));
     };
 
     const showToogleIcon = (open) => {
-        if (open && props.windowSize.width > SCREEN_BREAKPOINTS.sm) {
+        if (open && windowSize.width > SCREEN_BREAKPOINTS.sm) {
             return false
         }
-        else if (open && props.windowSize.width <= SCREEN_BREAKPOINTS.sm) {
+        else if (open && windowSize.width <= SCREEN_BREAKPOINTS.sm) {
             return true
         }
         else if (!open) {
@@ -85,14 +108,14 @@ export default function Header(props) {
     }
 
     return (
-        <AppBar position="fixed" open={props.open} windowwidth={props.windowSize.width}>
+        <AppBar position="fixed" open={openSidebar} windowwidth={windowSize.width}>
             <Toolbar>
                 <IconButton
                     color="inherit"
                     aria-label="open drawer"
                     onClick={handleDrawerToggle}
                     edge="start"
-                    sx={{ mr: 2, ...(!showToogleIcon(props.open) && { display: 'none' }) }}
+                    sx={{ mr: 2, ...(!showToogleIcon(openSidebar) && { display: 'none' }) }}
                 >
                     <MenuIcon />
                 </IconButton>
@@ -101,14 +124,14 @@ export default function Header(props) {
                     justifyContent: 'space-between',
                     alignItems: 'center',
                     width: '100%',
-                    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { justifyContent: 'flex-end' })
+                    ...(windowSize.width <= SCREEN_BREAKPOINTS.sm && { justifyContent: 'flex-end' })
                 }}>
                     <FormControl variant="standard" sx={{
                         marginLeft: {
                             sm: '25px'
                         }
                     }}>
-                        {props.windowSize.width > SCREEN_BREAKPOINTS.sm && <Input
+                        {windowSize.width > SCREEN_BREAKPOINTS.sm && <Input
                             id="input-search"
                             placeholder="Tìm kiếm"
                             sx={{ color: COLORS.placeHolder }}
@@ -119,7 +142,7 @@ export default function Header(props) {
                                 </InputAdornment>
                             }
                         />}
-                        {props.windowSize.width <= SCREEN_BREAKPOINTS.sm && <div style={{ marginRight: '41px', marginTop: '12px' }}>{SearchIcon()}</div>}
+                        {windowSize.width <= SCREEN_BREAKPOINTS.sm && <div style={{ marginRight: '41px', marginTop: '12px' }}>{SearchIcon()}</div>}
                     </FormControl>
                     <div
                         style={{
@@ -127,11 +150,12 @@ export default function Header(props) {
                             justifyContent: 'center',
                             alignItems: 'center',
                             marginRight: '13px',
-                            ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { marginRight: '6px' })
+                            columnGap: '35px',
+                            ...(windowSize.width <= SCREEN_BREAKPOINTS.sm && { marginRight: '6px' })
                         }}
                     >
                         {headerItems.map((item, idx) => (
-                            item(idx, avtSrc)
+                            item({ idx, avtSrc, onOpenLogin })
                         ))}
                     </div>
 

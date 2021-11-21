@@ -1,6 +1,8 @@
+import { useSelector } from 'react-redux';
+import { selectOpenSidebar } from '../../redux/openSidebar';
+
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
-
 
 import Logo from '../../components/Logo/Logo';
 import { Facebook, Instagram, Tiktok, Phone, Email, Location } from '../../components/Icons/index'
@@ -28,10 +30,13 @@ const infoBox = (icon, content) => (
 )
 
 export default function Footer(props) {
+
+    const openSidebar = useSelector(selectOpenSidebar);
+
     return (
         <Box sx={{
-            width: props.open ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-            ...(props.open && { marginLeft: `${DRAWER_WIDTH}px` }),
+            width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+            ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
             marginTop: '80px'
         }}>
             <Logo />

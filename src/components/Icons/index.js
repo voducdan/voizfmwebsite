@@ -21,6 +21,10 @@ import Tiktok from './Tiktok';
 import Phone from './Phone';
 import Email from './Email';
 import Location from './Location';
+import GreenTick from './GreenTick';
+import SelectDownArrow from './SelectDownArrow';
+import FacebookButtonIcon from './FacebookButtonIcon';
+import GoogleButtonIcon from './GoogleButtonIcon';
 
 
 export {
@@ -46,5 +50,9 @@ export {
     Tiktok,
     Phone,
     Email,
-    Location
+    Location,
+    GreenTick,
+    SelectDownArrow,
+    FacebookButtonIcon,
+    GoogleButtonIcon
 }
