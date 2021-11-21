@@ -1,3 +1,6 @@
+import { useSelector } from 'react-redux'
+import { selectOpenSidebar } from '../../redux/openSidebar'
+
 import Divider from '@mui/material/Divider';
 import Drawer from '@mui/material/Drawer';
 import List from '@mui/material/List';
@@ -6,7 +9,6 @@ import ListItemIcon from '@mui/material/ListItemIcon';
 import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Button from '@mui/material/Button';
-
 
 import {
     Squircle,
@@ -25,7 +27,7 @@ import {
 import Logo from '../Logo/Logo'
 
 import { COLORS, TEXT_STYLE, FONT_COLOR, FONT_FAMILY, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
-
+import useWindowSize from '../../utils/useWindowSize'
 
 const RequestsBook = () => (
     <Button sx={{
@@ -41,8 +43,13 @@ const RequestsBook = () => (
     </Button>
 )
 
-export default function SidebarMenu(props) {
-    let open = props.windowSize.width > SCREEN_BREAKPOINTS.sm ? true : props.open
+export default function SidebarMenu() {
+
+    const windowSize = useWindowSize();
+    const openSidebar = useSelector(selectOpenSidebar);
+
+    let open = windowSize.width > SCREEN_BREAKPOINTS.sm ? true : openSidebar
+
     const navigatorLink = [
         {
             icon: Squircle,
@@ -109,7 +116,7 @@ export default function SidebarMenu(props) {
             open={open}
         >
             <div style={{ display: 'block' }}>
-                <Logo windowWidth={props.windowSize.width} />
+                <Logo windowWidth={windowSize.width} />
             </div>
             <Divider />
             <List>

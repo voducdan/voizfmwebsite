@@ -1,13 +1,12 @@
-import { useState } from 'react'
+import { useSelector, useDispatch } from 'react-redux'
 
-import { useTheme } from '@mui/material/styles';
+import { setOpen, selectOpenSidebar } from './redux/openSidebar'
+
 import Box from '@mui/material/Box';
-
 
 import { BrowserRouter as Router, Routes, Route } from 'react-router-dom'
 
 import './App.css';
-
 import ROUTES from './Routes'
 
 import SidebarMenu from "./components/SidebarMenu/SidebarMenu"
@@ -23,42 +22,36 @@ import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, DRAWER_WIDTH } from './utils/constan
 function App() {
 
     let windowSize = useWindowSize()
+    const openSidebar = useSelector(selectOpenSidebar);
 
-    const theme = useTheme();
-    const [open, setOpen] = useState(true);
-    const [openLogin, setOpenLogin] = useState(false);
+    const dispatch = useDispatch();
 
-    const handleOpenLogin = () => setOpenLogin(true);
-    const handleCloseLogin = () => setOpenLogin(false);
-
-
-    if (windowSize.width > SCREEN_BREAKPOINTS.sm && !open) {
-        setOpen(true)
+    if (windowSize.width > SCREEN_BREAKPOINTS.sm && !openSidebar) {
+        dispatch(setOpen(true))
     }
 
     return (
         <Router>
             <div className="App">
-                <Login windowSize={windowSize} openLogin={openLogin} handleCloseLogin={handleCloseLogin} />
-                <Header open={open} setOpen={setOpen} handleOpenLogin={handleOpenLogin} windowSize={windowSize}></Header>
-                <SidebarMenu open={open} theme={theme} windowSize={windowSize}></SidebarMenu>
+                <Login />
+                <Header />
+                <SidebarMenu />
                 <Box sx={{
                     flexGrow: 1,
                     height: `calc(100% - ${HEADER_HEIGHT})`,
                     marginTop: HEADER_HEIGHT,
-                    width: open ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-                    ...(open && { marginLeft: `${DRAWER_WIDTH}px` }),
+                    width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+                    ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
                 }}>
                     <Routes>
-
                         {
                             ROUTES.map(route => (
-                                <Route path={route.path} element={route.component({ windowSize })} key={route.key} exact={route.exact} />
+                                <Route path={route.path} element={route.component()} key={route.key} exact={route.exact} />
                             ))
                         }
                     </Routes>
                 </Box>
-                <Footer open={open} />
+                <Footer />
             </div>)
         </Router>
     )

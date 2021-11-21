@@ -1,3 +1,6 @@
+import { useSelector, useDispatch } from 'react-redux'
+import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin'
+
 import {
     Box,
     Dialog,
@@ -16,6 +19,7 @@ import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDi
 import { GreenTick, SelectDownArrow, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index'
 
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants'
+import useWindowSize from '../../utils/useWindowSize'
 
 
 
@@ -38,16 +42,23 @@ const loginInfo = (content) => (
     </Box>
 )
 
-export default function Login(props) {
+export default function Login() {
+
+    let windowSize = useWindowSize()
+    const openLogin = useSelector(selectOpenLogin);
+
+    const dispatch = useDispatch();
 
     const phonePrefix = 84
     const phonePrefixList = [84, 32, 27]
 
+    const onClose = () => { dispatch(handleCloseLogin()) };
+
     return (
         <div>
             <Dialog
-                open={props.openLogin}
-                onClose={props.handleCloseLogin}
+                open={openLogin}
+                onClose={onClose}
                 aria-labelledby="login-form-modal"
                 aria-describedby="login-form-modal"
                 PaperProps={{
@@ -56,8 +67,8 @@ export default function Login(props) {
                         boxShadow: 'none',
                         borderRadius: '30px',
                         margin: 0,
-                        width: props.windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100vw',
-                        height: props.windowSize.width > SCREEN_BREAKPOINTS.sm ? '646px' : '100vh',
+                        width: windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100vw',
+                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? '646px' : '100vh',
                         ...flexCenter,
 
                     },
@@ -76,7 +87,7 @@ export default function Login(props) {
                         width: '80%'
                     }}>
                         <Typography sx={{
-                            ...(props.windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h1 : TEXT_STYLE.h2),
+                            ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h1 : TEXT_STYLE.h2),
                             color: COLORS.white
                         }}>
                             Đăng nhập hoặc đăng ký
@@ -160,7 +171,7 @@ export default function Login(props) {
                                 style={{
                                     width: '100%',
                                     textTransform: 'none',
-                                    marginBottom: props.windowSize.width > SCREEN_BREAKPOINTS.sm ? '50px' : '40px',
+                                    marginBottom: windowSize.width > SCREEN_BREAKPOINTS.sm ? '50px' : '40px',
                                     height: '48px'
                                 }} content={'Tiếp tục'} />
                         </Box>
