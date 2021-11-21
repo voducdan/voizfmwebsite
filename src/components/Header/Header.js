@@ -1,8 +1,12 @@
+// Import react module
 import { useSelector, useDispatch } from 'react-redux';
 
+// Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
+import { selectToken } from '../../redux/token';
 import { handleOpenLogin } from '../../redux/openLogin';
 
+// Import MUI component
 import { styled } from '@mui/material/styles';
 import IconButton from '@mui/material/IconButton';
 import MenuIcon from '@mui/icons-material/Menu';
@@ -12,12 +16,17 @@ import MuiAppBar from '@mui/material/AppBar';
 import Input from '@mui/material/Input';
 import InputAdornment from '@mui/material/InputAdornment';
 import FormControl from '@mui/material/FormControl';
-// import Avatar from '@mui/material/Avatar';
+import Avatar from '@mui/material/Avatar';
 import AccountCircleIcon from '@mui/icons-material/AccountCircle';
 
-import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
-import useWindowSize from '../../utils/useWindowSize'
-import { Search, Bookmark, Cart } from '../Icons/index'
+// Import constant variables
+import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
+import useWindowSize from '../../utils/useWindowSize';
+
+// Import icons
+import { Search, Bookmark, Cart } from '../Icons/index';
+
+// Import services
 
 const SearchIcon = (idx) => {
     return (
@@ -43,11 +52,12 @@ const CartIcon = (props) => {
     )
 }
 
-// const userAvt = (idx, avtSrc) => {
-//     return (
-//         <Avatar alt="Remy Sharp" key={idx} src={avtSrc} sx={{ width: 40, height: 40 }} />
-//     )
-// }
+const userAvt = (props) => {
+    return (
+        <Avatar alt="Remy Sharp" key={props.idx} src={props.avtSrc} sx={{ width: 40, height: 40 }} />
+    )
+}
+
 const UserIcon = (props) => {
     return (
         <AccountCircleIcon onClick={() => { props.onOpenLogin() }} key={props.idx} />
@@ -74,18 +84,21 @@ export default function Header() {
 
     const windowSize = useWindowSize();
     const openSidebar = useSelector(selectOpenSidebar);
+    const token = useSelector(selectToken);
 
     const dispatch = useDispatch();
 
     // This url will be fetched from API later
-    let avtSrc = '/images/avt.png'
+    const avtSrc = '/images/avt.png'
 
     const headerItems = [
         BookmarkIcon,
-        CartIcon,
-        UserIcon
-        // userAvt
+        CartIcon
     ]
+
+    if (token) {
+        headerItems.push(userAvt)
+    } else headerItems.push(UserIcon)
 
     const onOpenLogin = () => {
         dispatch(handleOpenLogin())

@@ -1,7 +1,12 @@
+// import react module
 import { useState } from 'react'
+
+// import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux'
 import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin'
+import { setToken } from '../../redux/token'
 
+// import MUI component
 import {
     Box,
     Dialog,
@@ -15,10 +20,13 @@ import {
     Button,
 } from '@mui/material'
 
+// import others components
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton'
 
+// import icons
 import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index'
 
+// import utils
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants'
 import useWindowSize from '../../utils/useWindowSize'
 import { validatePhoneNumber, validateOTP } from '../../utils/validate'
@@ -92,6 +100,7 @@ export default function Login() {
     const onEnterOTP = () => {
         // Post OTP to server here
         setLoginSuccess(true)
+        dispatch(setToken('token'))
     }
 
     return (
@@ -108,8 +117,11 @@ export default function Login() {
                         borderRadius: '30px',
                         margin: 0,
                         width: windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100%',
-                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? '646px' : '100%',
-                        ...flexCenter
+                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? 'auto' : '100%',
+                        paddingTop: '40px',
+                        paddingBottom: '56px',
+                        display: flexCenter.display,
+                        alignItems: flexCenter.alignItems
                     }
                 }}
                 sx={{
@@ -226,7 +238,7 @@ export default function Login() {
                                     style={{
                                         width: '100%',
                                         textTransform: 'none',
-                                        marginBottom: windowSize.width > SCREEN_BREAKPOINTS.sm ? '50px' : '40px',
+                                        marginBottom: windowSize.width > SCREEN_BREAKPOINTS.sm ? '20px' : '30px',
                                         height: '48px',
                                         ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
                                     }} content={'Tiếp tục'} />
