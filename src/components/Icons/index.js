@@ -25,6 +25,7 @@ import GreenTick from './GreenTick';
 import SelectDownArrow from './SelectDownArrow';
 import FacebookButtonIcon from './FacebookButtonIcon';
 import GoogleButtonIcon from './GoogleButtonIcon';
+import VipMedal from './VipMedal';
 
 
 export {
@@ -54,5 +55,6 @@ export {
     GreenTick,
     SelectDownArrow,
     FacebookButtonIcon,
-    GoogleButtonIcon
+    GoogleButtonIcon,
+    VipMedal
 }
