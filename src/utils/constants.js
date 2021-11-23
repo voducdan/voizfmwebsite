@@ -21,62 +21,74 @@ const TEXT_STYLE = {
     h1: {
         fontSize: '28px',
         lineHeight: '33px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     h2: {
         fontSize: '24px',
         lineHeight: '26px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     h3: {
         fontSize: '18px',
         lineHeight: '25px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     title1: {
         fontSize: '16px',
         lineHeight: '20px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     content1: {
         fontSize: '16px',
         lineHeight: '20px',
-        fontWeight: 500
+        fontWeight: 500,
+        fontFamily: 'SF UI Display'
     },
     title2: {
         fontSize: '14px',
         lineHeight: '20px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     content2: {
         fontSize: '14px',
         lineHeight: '20px',
-        fontWeight: 500
+        fontWeight: 500,
+        fontFamily: 'SF UI Display'
     },
     title3: {
         fontSize: '12px',
         lineHeight: '16px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     caption12: {
         fontSize: '12px',
         lineHeight: '14px',
-        fontWeight: 300
+        fontWeight: 300,
+        fontFamily: 'SF UI Display'
     },
     caption10Bold: {
         fontSize: '10px',
         lineHeight: '13px',
-        fontWeight: 'bold'
+        fontWeight: 'bold',
+        fontFamily: 'SF UI Display'
     },
     caption10Regular: {
         fontSize: '10px',
         lineHeight: '15px',
-        fontWeight: 500
+        fontWeight: 500,
+        fontFamily: 'SF UI Display'
     },
     VZ_Caption_2: {
         fontSize: '12px',
         lineHeight: '16.8px',
-        fontWeight: 500
+        fontWeight: 500,
+        fontFamily: 'SF UI Display'
     }
 };
 const SCREEN_BREAKPOINTS = {

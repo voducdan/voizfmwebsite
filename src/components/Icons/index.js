@@ -26,7 +26,12 @@ import SelectDownArrow from './SelectDownArrow';
 import FacebookButtonIcon from './FacebookButtonIcon';
 import GoogleButtonIcon from './GoogleButtonIcon';
 import VipMedal from './VipMedal';
-
+import Pencil from './Pencil';
+import HorizontalMore from './HorizontalMore';
+import Save from './Save';
+import Share from './Share';
+import Feedback from './Feedback';
+import Rate from './Rate';
 
 export {
     Bookmark,
@@ -56,5 +61,11 @@ export {
     SelectDownArrow,
     FacebookButtonIcon,
     GoogleButtonIcon,
-    VipMedal
+    VipMedal,
+    Pencil,
+    HorizontalMore,
+    Save,
+    Share,
+    Feedback,
+    Rate
 }

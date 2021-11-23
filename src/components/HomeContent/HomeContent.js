@@ -73,7 +73,7 @@ const Title = (props) => (
             {props.content}
         </Typography>
         <Box sx={{ marginLeft: '11.3px', marginTop: '6px' }}>
-            <RightArrow />
+            <RightArrow fill={COLORS.white} />
         </Box>
     </ Box >
 )
