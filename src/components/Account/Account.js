@@ -5,8 +5,6 @@ import { useEffect, useState } from 'react';
 import { styled } from '@mui/material/styles';
 import {
     Box,
-    Avatar,
-    Typography,
     Tabs,
     Tab,
     Button,
@@ -17,7 +15,6 @@ import {
 
 // Import icons
 import {
-    VipMedal,
     Pencil,
     HorizontalMore,
     RightArrow,
@@ -29,21 +26,18 @@ import {
 
 // import others components
 import TabPanel from '../../components/TabPanel/TabPanel';
+import Info from './Info';
+import HistoryTransaction from './TabPanel/HistoryTransaction';
+import AppInfo from './TabPanel/AppInfo';
+import InviteFriend from './TabPanel/InviteFriend';
 
 // import utils
+import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB, HEADER_HEIGHT, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
 // import services
 import API from '../../services/api'
-
-const flexStyle = (justifyContent, alignItems) => {
-    return {
-        display: 'flex',
-        justifyContent: justifyContent,
-        alignItems: alignItems
-    }
-}
 
 
 const StyledTabs = styled((props) => (
@@ -68,7 +62,6 @@ const StyledTabs = styled((props) => (
     },
 });
 
-
 const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
     ({ theme }) => ({
         textTransform: 'none',
@@ -86,10 +79,70 @@ const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
     }),
 );
 
+const PopUpContent = [
+    {
+        id: 1,
+        text: 'Điều khoản ứng dụng',
+        startIcon: <Save />
+    },
+    {
+        id: 2,
+        text: 'Phản hồi cho chúng tôi',
+        startIcon: <Feedback />
+    },
+    {
+        id: 3,
+        text: 'Chia sẻ Voiz cho bạn bè',
+        startIcon: <Share />
+    },
+    {
+        id: 4,
+        text: 'Đánh giá Voiz tại store',
+        startIcon: <Rate />
+    }
+]
+
+const tabsList = [
+    'Lịch sử giao dịch',
+    'Thông tin ứng dụng',
+    'Mời bạn bè',
+    'Trở thành creator',
+    'Quét mã QR',
+]
+
+const PopUpButton = (props) => (
+    <MenuItem
+        key={props.id}
+        onClick={() => { console.log(1) }}
+    >
+        <Button sx={{
+            ...TEXT_STYLE.content2,
+            color: COLORS.white,
+            textTransform: 'none',
+            width: '100%',
+            justifyContent: 'flex-start',
+            '& .MuiButton-endIcon': {
+                marginLeft: '113px',
+                position: 'absolute',
+                right: 0
+            },
+            '& .MuiButton-startIcon': {
+                marginRight: '34px'
+            }
+        }}
+            endIcon={<RightArrow fill={COLORS.contentIcon} />}
+            startIcon={props.startIcon}
+        >{props.text}
+        </Button>
+    </MenuItem>
+
+)
+
 export default function Account() {
 
     const [value, setValue] = useState(0);
     const [accAnchorEl, setAccAnchorEl] = useState(null);
+    const [openInviteFriend, setOpenInviteFriend] = useState(false);
     const openMore = Boolean(accAnchorEl);
 
     // User id from params
@@ -99,6 +152,11 @@ export default function Account() {
 
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
+        if (newValue === 2) {
+            setOpenInviteFriend(true);
+        } else {
+            setOpenInviteFriend(false);
+        }
     };
 
     const handleClickMore = (event) => {
@@ -108,6 +166,7 @@ export default function Account() {
     const handleClose = () => {
         setAccAnchorEl(null);
     };
+
 
     useEffect(() => {
         const api = new API()
@@ -148,151 +207,7 @@ export default function Account() {
                     left: 0,
                 }} alt="cover img alt" src={accountData.coverImgSrc}></img>
             </Box>
-            <Box
-                sx={{
-                    width: '95%',
-                    position: 'relative'
-                }}
-            >
-                <Box
-                    sx={{
-                        marginTop: `${coverImgHeight}px`,
-                        transform: 'translate(0, -50%)',
-                        backgroundColor: COLORS.bg2,
-                        borderRadius: '30px'
-                    }}
-                >
-                    <Box sx={{
-                        padding: '20px',
-                        ...flexStyle('flex-start', 'center'),
-                        columnGap: '40px'
-                    }}>
-                        <Box sx={{ width: '15%' }}>
-                            <Avatar
-                                sx={{
-                                    width: isSm ? '160px' : '120px',
-                                    height: isSm ? '160px' : '120px'
-                                }} alt="Remy Sharp" src={accountData.avtImgSrc}
-                            />
-                        </Box>
-                        <Box
-                            sx={{
-                                width: '30%',
-                                ...flexStyle('center', 'flex-start'),
-                                flexDirection: 'column',
-                                rowGap: isSm ? '16px' : '25px'
-                            }}
-                        >
-                            <Typography
-                                sx={{
-                                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-                                    color: COLORS.white
-                                }}>{accountData.name}</Typography>
-                            <Typography
-                                sx={{
-                                    ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
-                                    color: COLORS.bg4
-                                }}
-                            >ID: {accountData.id}</Typography>
-                            {
-                                accountData.isVip && (
-                                    <Box
-                                        sx={{
-                                            ...flexStyle('flex-start', 'center'),
-                                            columnGap: '20px'
-                                        }}
-                                    >
-                                        <VipMedal />
-                                        <Typography
-                                            sx={{
-                                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.content2),
-                                                color: COLORS.contentIcon
-                                            }}
-                                        >
-                                            {`VIP (Còn ${Math.round((new Date(accountData.vipExpire) - new Date()) / (24 * 60 * 60 * 1000))} ngày)`}
-                                        </Typography>
-                                    </Box>
-
-                                )
-                            }
-                        </Box>
-                        <Box
-                            sx={{
-                                ...flexStyle('center', 'flex-end'),
-                                flexDirection: 'column',
-                                rowGap: '16px',
-                                width: '50%'
-                            }}
-                        >
-                            <Box
-                                sx={{
-                                    width: isSm ? '100%' : '80%',
-                                    paddingTop: '17px',
-                                    paddingLeft: isSm ? '16px' : '37px',
-                                    paddingBottom: '17px',
-                                    paddingRight: '20px',
-                                    ...flexStyle('space-between', 'center'),
-                                    backgroundColor: COLORS.error,
-                                    borderRadius: '6px',
-                                    height: '60px',
-                                    boxSizing: 'border-box'
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        ...TEXT_STYLE.h3,
-                                        color: COLORS.white
-                                    }}
-                                >Nâng cấp thành viên</Typography>
-                                <button
-                                    style={{
-                                        color: COLORS.error,
-                                        borderRadius: '20px',
-                                        border: 'none',
-                                        padding: '10px 20px',
-                                        backgroundColor: COLORS.white,
-                                        texTransform: 'none',
-                                        ...TEXT_STYLE.title2
-                                    }}
-                                >Nâng cấp</button>
-                            </Box>
-                            <Box
-                                sx={{
-                                    width: isSm ? '100%' : '80%',
-                                    paddingTop: '17px',
-                                    paddingLeft: isSm ? '16px' : '37px',
-                                    paddingBottom: '17px',
-                                    paddingRight: '20px',
-                                    ...flexStyle('space-between', 'center'),
-                                    backgroundColor: COLORS.main,
-                                    borderRadius: '6px',
-                                    height: '60px',
-                                    boxSizing: 'border-box',
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        ...TEXT_STYLE.h3,
-                                        color: COLORS.white
-                                    }}
-                                >Bạn đang có  {new Intl.NumberFormat('en-IN').format(accountData.coin)} xu</Typography>
-                                <button
-                                    style={{
-                                        color: COLORS.main,
-                                        borderRadius: '20px',
-                                        border: 'none',
-                                        padding: '10px 20px',
-                                        backgroundColor: COLORS.white,
-                                        texTransform: 'none',
-                                        ...TEXT_STYLE.title2
-                                    }}
-                                >Nạp thêm</button>
-                            </Box>
-                        </Box>
-                    </Box>
-                </Box>
-
-            </Box>
+            <Info accountData={accountData} />
             <Box
                 sx={{
                     width: '95%',
@@ -304,11 +219,12 @@ export default function Account() {
                     onChange={handleTabChange}
                     aria-label="account tab"
                 >
-                    <StyledTab label="Lịch sử giao dịch" />
-                    <StyledTab label="Thông tin ứng dụng" />
-                    <StyledTab label="Mời bạn bè" />
-                    <StyledTab label="Trở thành creator" />
-                    <StyledTab label="Quét mã QR" />
+                    {
+                        tabsList.map((label, idx) => (
+                            <StyledTab key={idx} label={label} />
+                        ))
+                    }
+
                     <Box sx={{
                         width: '30%',
                         marginLeft: '16px'
@@ -360,104 +276,17 @@ export default function Account() {
                                 'aria-labelledby': 'account-more'
                             }}
                         >
-                            <MenuItem
-                                onClick={() => { console.log(1) }}
-                            >
-                                <Button sx={{
-                                    ...TEXT_STYLE.content2,
-                                    color: COLORS.white,
-                                    textTransform: 'none',
-                                    width: '100%',
-                                    justifyContent: 'flex-start',
-                                    '& .MuiButton-endIcon': {
-                                        marginLeft: '113px',
-                                        position: 'absolute',
-                                        right: 0
-                                    },
-                                    '& .MuiButton-startIcon': {
-                                        marginRight: '34px'
-                                    }
-                                }}
-                                    endIcon={<RightArrow fill={COLORS.contentIcon} />}
-                                    startIcon={<Save />}
-                                >Điều khoản sử dụng
-                                </Button>
-                            </MenuItem>
-                            <MenuItem>
-                                <Button sx={{
-                                    ...TEXT_STYLE.content2,
-                                    color: COLORS.white,
-                                    textTransform: 'none',
-                                    width: '100%',
-                                    justifyContent: 'flex-start',
-                                    '& .MuiButton-endIcon': {
-                                        marginLeft: '113px',
-                                        position: 'absolute',
-                                        right: 0
-                                    },
-                                    '& .MuiButton-startIcon': {
-                                        marginRight: '34px'
-                                    }
-                                }}
-                                    endIcon={<RightArrow fill={COLORS.contentIcon} />}
-                                    startIcon={<Feedback />}
-                                >Phản hồi cho chúng tôi
-                                </Button>
-                            </MenuItem>
-                            <MenuItem>
-                                <Button sx={{
-                                    ...TEXT_STYLE.content2,
-                                    color: COLORS.white,
-                                    textTransform: 'none',
-                                    width: '100%',
-                                    justifyContent: 'flex-start',
-                                    '& .MuiButton-endIcon': {
-                                        marginLeft: '113px',
-                                        position: 'absolute',
-                                        right: 0
-                                    },
-                                    '& .MuiButton-startIcon': {
-                                        marginRight: '34px'
-                                    }
-                                }}
-                                    endIcon={<RightArrow fill={COLORS.contentIcon} />}
-                                    startIcon={<Share />}
-                                >Chia sẻ Voiz cho bạn bè
-                                </Button>
-                            </MenuItem>
-                            <MenuItem>
-                                <Button sx={{
-                                    ...TEXT_STYLE.content2,
-                                    color: COLORS.white,
-                                    textTransform: 'none',
-                                    width: '100%',
-                                    justifyContent: 'flex-start',
-                                    '& .MuiButton-endIcon': {
-                                        marginLeft: '113px',
-                                        position: 'absolute',
-                                        right: 0
-                                    },
-                                    '& .MuiButton-startIcon': {
-                                        marginRight: '34px'
-                                    }
-                                }}
-                                    endIcon={<RightArrow fill={COLORS.contentIcon} />}
-                                    startIcon={<Rate />}
-                                >Đánh giá Voiz tại store
-                                </Button>
-                            </MenuItem>
+                            {
+                                PopUpContent.map((item) => (
+                                    PopUpButton(item)
+                                ))
+                            }
                         </Menu>
                     </Box>
                 </StyledTabs>
-                <TabPanel value={value} index={0}>
-                    Item Three
-                </TabPanel>
-                <TabPanel value={value} index={1}>
-                    Item Three
-                </TabPanel>
-                <TabPanel value={value} index={2}>
-                    Item Three
-                </TabPanel>
+                <HistoryTransaction value={value} />
+                <AppInfo value={value} />
+                <InviteFriend value={value} open={openInviteFriend} />
                 <TabPanel value={value} index={3}>
                     Item Three
                 </TabPanel>
