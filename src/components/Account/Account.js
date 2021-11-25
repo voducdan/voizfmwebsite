@@ -30,6 +30,8 @@ import Info from './Info';
 import HistoryTransaction from './TabPanel/HistoryTransaction';
 import AppInfo from './TabPanel/AppInfo';
 import InviteFriend from './TabPanel/InviteFriend';
+import BeCreator from './TabPanel/BeCreator';
+import EditProfileModal from './EditProfileModal';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
@@ -143,6 +145,7 @@ export default function Account() {
     const [value, setValue] = useState(0);
     const [accAnchorEl, setAccAnchorEl] = useState(null);
     const [openInviteFriend, setOpenInviteFriend] = useState(false);
+    const [openEditProfile, setopenEditProfile] = useState(false);
     const openMore = Boolean(accAnchorEl);
 
     // User id from params
@@ -158,6 +161,10 @@ export default function Account() {
             setOpenInviteFriend(false);
         }
     };
+
+    const handleEditProfileOpen = () => {
+        setopenEditProfile(true)
+    }
 
     const handleClickMore = (event) => {
         setAccAnchorEl(event.currentTarget);
@@ -239,8 +246,10 @@ export default function Account() {
                                 ...TEXT_STYLE.title2
                             }}
                             startIcon={<Pencil />}
+                            onClick={handleEditProfileOpen}
                         >Thay đổi thông tin cá nhân</Button>
                     </Box>
+                    <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} accountData={accountData} />
                     <Box
                         sx={{
                             width: '81px',
@@ -286,12 +295,10 @@ export default function Account() {
                 </StyledTabs>
                 <HistoryTransaction value={value} />
                 <AppInfo value={value} />
-                <InviteFriend value={value} open={openInviteFriend} />
-                <TabPanel value={value} index={3}>
-                    Item Three
-                </TabPanel>
+                <InviteFriend value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
+                <BeCreator value={value} />
                 <TabPanel value={value} index={4}>
-                    Item Three
+                    Quét mã QR
                 </TabPanel>
                 <Box />
             </Box >
