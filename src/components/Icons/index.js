@@ -32,6 +32,9 @@ import Save from './Save';
 import Share from './Share';
 import Feedback from './Feedback';
 import Rate from './Rate';
+import Birthday from './Birthday';
+import Mobile from './Mobile';
+import Account from './Account';
 
 export {
     Bookmark,
@@ -67,5 +70,8 @@ export {
     Save,
     Share,
     Feedback,
-    Rate
+    Rate,
+    Birthday,
+    Mobile,
+    Account
 }

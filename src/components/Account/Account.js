@@ -62,6 +62,9 @@ const StyledTabs = styled((props) => (
         width: '100%',
         backgroundColor: COLORS.main,
     },
+    '& .MuiTabs-scrollButtons': {
+        color: COLORS.contentIcon
+    }
 });
 
 const StyledTab = styled((props) => <Tab disableRipple {...props} />)(
@@ -109,7 +112,7 @@ const tabsList = [
     'Thông tin ứng dụng',
     'Mời bạn bè',
     'Trở thành creator',
-    'Quét mã QR',
+    'Quét mã QR'
 ]
 
 const PopUpButton = (props) => (
@@ -221,82 +224,86 @@ export default function Account() {
                     borderRadius: '10px'
                 }}
             >
-                <StyledTabs
-                    value={value}
-                    onChange={handleTabChange}
-                    aria-label="account tab"
-                >
-                    {
-                        tabsList.map((label, idx) => (
-                            <StyledTab key={idx} label={label} />
-                        ))
-                    }
-
-                    <Box sx={{
-                        width: '30%',
-                        marginLeft: '16px'
-                    }}>
-                        <Button
-                            sx={{
-                                width: '100%',
-                                height: '36px',
-                                bgcolor: COLORS.bg2,
-                                color: COLORS.contentIcon,
-                                textTransform: 'none',
-                                ...TEXT_STYLE.title2
-                            }}
-                            startIcon={<Pencil />}
-                            onClick={handleEditProfileOpen}
-                        >Thay đổi thông tin cá nhân</Button>
-                    </Box>
-                    <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} accountData={accountData} />
-                    <Box
-                        sx={{
-                            width: '81px',
-                            height: '36px',
-                            marginLeft: '11px',
-                            bgcolor: COLORS.bg2,
-                            borderRadius: '4px',
-                            ...flexStyle('center', 'center')
-                        }}
+                <Box>
+                    <StyledTabs
+                        value={value}
+                        onChange={handleTabChange}
+                        aria-label="account tab"
+                        scrollButtons="auto"
+                        variant="scrollable"
                     >
-                        <Button
-                            id="account-more-button"
-                            aria-controls="account-more"
-                            aria-haspopup="true"
-                            aria-expanded={openMore ? 'true' : undefined}
-                            onClick={handleClickMore}
-                        >
-                            <HorizontalMore />
-                        </Button>
-                        <Menu
+                        {
+                            tabsList.map((label, idx) => (
+                                <StyledTab key={idx} label={label} />
+                            ))
+                        }
+
+                        <Box sx={{
+                            width: isSm ? '90%' : '30%',
+                            marginLeft: '16px'
+                        }}>
+                            <Button
+                                sx={{
+                                    width: '100%',
+                                    height: '36px',
+                                    bgcolor: COLORS.bg2,
+                                    color: COLORS.contentIcon,
+                                    textTransform: 'none',
+                                    ...TEXT_STYLE.title2
+                                }}
+                                startIcon={<Pencil />}
+                                onClick={handleEditProfileOpen}
+                            >Thay đổi thông tin cá nhân</Button>
+                        </Box>
+                        <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} accountData={accountData} />
+                        <Box
                             sx={{
-                                '& .MuiMenu-paper': {
-                                    padding: '24px',
-                                    width: '360px',
-                                    bgcolor: COLORS.bg2
-                                }
-                            }}
-                            id="account-more"
-                            anchorEl={accAnchorEl}
-                            open={openMore}
-                            onClose={handleClose}
-                            MenuListProps={{
-                                'aria-labelledby': 'account-more'
+                                width: '81px',
+                                height: '36px',
+                                marginLeft: '11px',
+                                bgcolor: COLORS.bg2,
+                                borderRadius: '4px',
+                                ...flexStyle('center', 'center')
                             }}
                         >
-                            {
-                                PopUpContent.map((item) => (
-                                    PopUpButton(item)
-                                ))
-                            }
-                        </Menu>
-                    </Box>
-                </StyledTabs>
-                <HistoryTransaction value={value} />
+                            <Button
+                                id="account-more-button"
+                                aria-controls="account-more"
+                                aria-haspopup="true"
+                                aria-expanded={openMore ? 'true' : undefined}
+                                onClick={handleClickMore}
+                            >
+                                <HorizontalMore />
+                            </Button>
+                            <Menu
+                                sx={{
+                                    '& .MuiMenu-paper': {
+                                        padding: '24px',
+                                        width: '360px',
+                                        bgcolor: COLORS.bg2
+                                    }
+                                }}
+                                id="account-more"
+                                anchorEl={accAnchorEl}
+                                open={openMore}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                    'aria-labelledby': 'account-more'
+                                }}
+                            >
+                                {
+                                    PopUpContent.map((item) => (
+                                        PopUpButton(item)
+                                    ))
+                                }
+                            </Menu>
+                        </Box>
+                    </StyledTabs>
+                </Box>
+                <HistoryTransaction value={value} isSm={isSm} />
                 <AppInfo value={value} />
                 <InviteFriend value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
-                <BeCreator value={value} />
+                <BeCreator value={value} isSm={isSm} />
                 <TabPanel value={value} index={4}>
                     Quét mã QR
                 </TabPanel>

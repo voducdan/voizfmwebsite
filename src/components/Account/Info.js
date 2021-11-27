@@ -42,64 +42,77 @@ export default function Info(props) {
             >
                 <Box sx={{
                     padding: '20px',
-                    ...flexStyle('flex-start', 'center'),
-                    columnGap: '40px'
+                    ...(isSm ? {
+                        ...flexStyle('center', 'flex-start'),
+                        flexDirection: 'column'
+
+                    } : {
+                        ...flexStyle('flex-start', 'center')
+                    })
                 }}>
-                    <Box sx={{ width: '15%' }}>
-                        <Avatar
-                            sx={{
-                                width: isSm ? '160px' : '120px',
-                                height: isSm ? '160px' : '120px'
-                            }} alt="Remy Sharp" src={props.accountData.avtImgSrc}
-                        />
-                    </Box>
                     <Box
                         sx={{
-                            width: '30%',
-                            ...flexStyle('center', 'flex-start'),
-                            flexDirection: 'column',
-                            rowGap: isSm ? '16px' : '25px'
+                            ...flexStyle('flex-start', 'center'),
+                            width: isSm ? '100%' : '50%',
+                            columnGap: '40px'
                         }}
                     >
-                        <Typography
+                        <Box>
+                            <Avatar
+                                sx={{
+                                    width: isSm ? '160px' : '120px',
+                                    height: isSm ? '160px' : '120px'
+                                }} alt="Remy Sharp" src={props.accountData.avtImgSrc}
+                            />
+                        </Box>
+                        <Box
                             sx={{
-                                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-                                color: COLORS.white
-                            }}>{props.accountData.name}</Typography>
-                        <Typography
-                            sx={{
-                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
-                                color: COLORS.bg4
+                                ...flexStyle('center', 'flex-start'),
+                                flexDirection: 'column',
+                                rowGap: isSm ? '16px' : '25px'
                             }}
-                        >ID: {props.accountData.id}</Typography>
-                        {
-                            props.accountData.isVip && (
-                                <Box
-                                    sx={{
-                                        ...flexStyle('flex-start', 'center'),
-                                        columnGap: '20px'
-                                    }}
-                                >
-                                    <VipMedal />
-                                    <Typography
+                        >
+                            <Typography
+                                sx={{
+                                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                                    color: COLORS.white
+                                }}>{props.accountData.name}</Typography>
+                            <Typography
+                                sx={{
+                                    ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
+                                    color: COLORS.bg4
+                                }}
+                            >ID: {props.accountData.id}</Typography>
+                            {
+                                props.accountData.isVip && (
+                                    <Box
                                         sx={{
-                                            ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.content2),
-                                            color: COLORS.contentIcon
+                                            ...flexStyle('flex-start', 'center'),
+                                            columnGap: '20px'
                                         }}
                                     >
-                                        {`VIP (Còn ${Math.round((new Date(props.accountData.vipExpire) - new Date()) / (24 * 60 * 60 * 1000))} ngày)`}
-                                    </Typography>
-                                </Box>
+                                        <VipMedal />
+                                        <Typography
+                                            sx={{
+                                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.content2),
+                                                color: COLORS.contentIcon
+                                            }}
+                                        >
+                                            {`VIP (Còn ${Math.round((new Date(props.accountData.vipExpire) - new Date()) / (24 * 60 * 60 * 1000))} ngày)`}
+                                        </Typography>
+                                    </Box>
 
-                            )
-                        }
+                                )
+                            }
+                        </Box>
                     </Box>
                     <Box
                         sx={{
                             ...flexStyle('center', 'flex-end'),
                             flexDirection: 'column',
                             rowGap: '16px',
-                            width: '50%'
+                            width: isSm ? '100%' : '50%',
+                            ...(isSm && { marginTop: '40px' })
                         }}
                     >
                         <Box
@@ -168,7 +181,7 @@ export default function Info(props) {
                         </Box>
                     </Box>
                 </Box>
-            </Box>
+            </Box >
 
         </Box >
     )

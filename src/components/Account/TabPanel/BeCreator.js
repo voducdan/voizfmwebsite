@@ -45,23 +45,28 @@ const PanelContent = (props) => (
             flexDirection: 'column',
             backgroundColor: COLORS.bg2,
             rowGap: '32px',
-            padding: '32px'
+            padding: props.isSm ? '16px' : '32px'
         }}>
-        <Typography sx={{ ...TEXT_STYLE.h2, color: COLORS.white }}>Trở thành creator</Typography>
+        <Typography sx={{ ...(props.isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2), color: COLORS.white }}>Trở thành creator</Typography>
         <Box
             sx={{
                 ...flexStyle('center', 'center'),
                 flexDirection: 'column',
                 rowGap: '16px',
                 width: '100%',
-                padding: '32px',
+                padding: props.isSm ? '16px' : '32px',
                 boxSizing: 'border-box',
                 borderRadius: '10px',
                 border: '1px solid #595959'
             }}
         >
             <Typography sx={{ ...TEXT_STYLE.h3, color: COLORS.white }}>Liên hệ với chúng tôi</Typography>
-            <Typography sx={{ ...TEXT_STYLE.content1, color: COLORS.contentIcon, maxWidth: '77%', textAlign: 'center' }}>Chúng tôi luôn ghi nhận  các đóng góp ý kién và đề xuất hợp tác của bạn để cải tiến và nâng cấp sản phẩm WeWe ngày một hoàn thiện và hữu ích hơn. Đừng ngại chia sẻ ý tưởng cho chúng tôi.</Typography>
+            <Typography sx={{
+                ...TEXT_STYLE.content1,
+                color: COLORS.contentIcon,
+                maxWidth: props.isSm ? '95%' : '77%',
+                textAlign: 'center'
+            }}>Chúng tôi luôn ghi nhận  các đóng góp ý kién và đề xuất hợp tác của bạn để cải tiến và nâng cấp sản phẩm WeWe ngày một hoàn thiện và hữu ích hơn. Đừng ngại chia sẻ ý tưởng cho chúng tôi.</Typography>
 
             <FormControl
                 sx={{
@@ -83,14 +88,15 @@ const PanelContent = (props) => (
                                 sx={{
                                     width: '15%',
                                     ...TEXT_STYLE.content1,
-                                    color: COLORS.contentIcon
+                                    color: COLORS.contentIcon,
+                                    ...(props.isSm && { display: 'none' })
                                 }}
                             >{item.label}</Typography>
                             <TextField
                                 sx={{
-                                    width: '85%',
+                                    width: props.isSm ? '100%' : '85%',
                                     '& .MuiOutlinedInput-input': {
-                                        color: COLORS.bg3,
+                                        color: props.isSm ? COLORS.placeHolder : COLORS.bg3,
                                         bgcolor: COLORS.bg1,
                                         fontFamily: 'Mulish',
                                         fontSize: '16px',
@@ -119,12 +125,12 @@ const PanelContent = (props) => (
                 }}
             >Gửi</Button>
         </Box>
-    </Box>
+    </Box >
 )
 
-export default function HistoryTransaction(props) {
-
+export default function BeCreator(props) {
+    const { isSm } = props
     return (
-        <TabPanel value={props.value} index={3} children={PanelContent()}></TabPanel>
+        <TabPanel value={props.value} index={3} children={PanelContent({ isSm })}></TabPanel>
     )
 }

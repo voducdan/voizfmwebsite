@@ -12,15 +12,15 @@ import { flexStyle } from '../../../utils/flexStyle';
 import { COLORS, TEXT_STYLE } from '../../../utils/constants';
 
 const PanelContent = (props) => (
-    <Box
+    <Box Box
         sx={{
             ...flexStyle('center', 'flex-start'),
             flexDirection: 'column',
             backgroundColor: COLORS.bg2,
-            rowGap: '32px',
-            padding: '32px'
+            rowGap: props.isSm ? '24px' : '32px',
+            padding: props.isSm ? '16px' : '32px'
         }}>
-        <Typography sx={{ ...TEXT_STYLE.h2, color: COLORS.white }}>Lịch sử giao dịch</Typography>
+        <Typography sx={{ ...(props.isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2), color: COLORS.white }}>Lịch sử giao dịch</Typography>
         <Box
             sx={{
                 ...flexStyle('center', 'center'),
@@ -42,10 +42,10 @@ const PanelContent = (props) => (
                         }}
                     >
                         <Box sx={{ display: 'flex' }}>
-                            <Typography sx={{ ...TEXT_STYLE.content1, color: COLORS.VZ_Text_content }} >
+                            <Typography sx={{ ...(props.isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1), color: COLORS.VZ_Text_content }} >
                                 Tên:
                             </Typography>
-                            <Typography sx={{ ...TEXT_STYLE.title1, color: COLORS.white, marginLeft: '7px' }}>
+                            <Typography sx={{ ...(props.isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1), color: COLORS.white, marginLeft: '7px' }}>
                                 {item.name}
                             </Typography>
                         </Box>
@@ -77,10 +77,11 @@ const PanelContent = (props) => (
                 ))
             }
         </Box>
-    </Box>
+    </Box >
 )
 
 export default function HistoryTransaction(props) {
+    const { isSm } = props
     const transactions = [
         {
             id: 'WEWE9042223482',
@@ -106,6 +107,6 @@ export default function HistoryTransaction(props) {
     ]
 
     return (
-        <TabPanel value={props.value} index={0} children={PanelContent({ transactions })}></TabPanel>
+        <TabPanel value={props.value} index={0} children={PanelContent({ transactions, isSm })} ></TabPanel>
     )
 }
