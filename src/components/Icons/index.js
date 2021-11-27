@@ -25,7 +25,16 @@ import GreenTick from './GreenTick';
 import SelectDownArrow from './SelectDownArrow';
 import FacebookButtonIcon from './FacebookButtonIcon';
 import GoogleButtonIcon from './GoogleButtonIcon';
-
+import VipMedal from './VipMedal';
+import Pencil from './Pencil';
+import HorizontalMore from './HorizontalMore';
+import Save from './Save';
+import Share from './Share';
+import Feedback from './Feedback';
+import Rate from './Rate';
+import Birthday from './Birthday';
+import Mobile from './Mobile';
+import Account from './Account';
 
 export {
     Bookmark,
@@ -54,5 +63,15 @@ export {
     GreenTick,
     SelectDownArrow,
     FacebookButtonIcon,
-    GoogleButtonIcon
+    GoogleButtonIcon,
+    VipMedal,
+    Pencil,
+    HorizontalMore,
+    Save,
+    Share,
+    Feedback,
+    Rate,
+    Birthday,
+    Mobile,
+    Account
 }

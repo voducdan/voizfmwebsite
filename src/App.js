@@ -52,7 +52,7 @@ function App() {
                     </Routes>
                 </Box>
                 <Footer />
-            </div>)
+            </div>
         </Router>
     )
 }
