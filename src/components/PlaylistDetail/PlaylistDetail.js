@@ -1,3 +1,6 @@
+// import react
+import { useState } from 'react';
+
 // import MUI components
 import {
     Box,
@@ -23,6 +26,7 @@ import { Share, StarEmpty, StarFill, Speaker, Play } from '../../components/Icon
 
 // import other components
 import Thumbnail from '../../components/Thumbnail/Thumbnail';
+import ShareModal from './ShareModal';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
@@ -98,6 +102,7 @@ const playlistInfo = [
 export default function PlatlistDetail() {
 
     const windowSize = useWindowSize();
+    const [openShareModal, setOpenShareModal] = useState(false);
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 260 : 380;
     const infoPanelHeight = isSm ? 340 : 150;
@@ -176,6 +181,11 @@ export default function PlatlistDetail() {
             duration: '14.24'
         }
     ]
+
+    const handleOpenShareModal = () => {
+        console.log(1)
+        setOpenShareModal(true)
+    }
 
     return (
         <Box
@@ -283,7 +293,10 @@ export default function PlatlistDetail() {
                                         columnGap: '35px'
                                     }}
                                 >
-                                    <Share></Share>
+                                    <Box onClick={handleOpenShareModal}>
+                                        <Share></Share>
+                                    </Box>
+                                    <ShareModal open={openShareModal} setOpen={setOpenShareModal} />
                                     <Button
                                         sx={{
                                             textTransform: 'none',
