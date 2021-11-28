@@ -35,6 +35,10 @@ import Rate from './Rate';
 import Birthday from './Birthday';
 import Mobile from './Mobile';
 import Account from './Account';
+import StarEmpty from './StarEmpty';
+import StarFill from './StarFill';
+import Speaker from './Speaker';
+import Play from './Play';
 
 export {
     Bookmark,
@@ -73,5 +77,9 @@ export {
     Rate,
     Birthday,
     Mobile,
-    Account
+    Account,
+    StarEmpty,
+    StarFill,
+    Speaker,
+    Play
 }

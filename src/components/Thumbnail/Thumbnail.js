@@ -1,5 +1,5 @@
 
-export default function Thumnail(props) {
+export default function Thumbnail(props) {
     return (
         <img
             style={{
