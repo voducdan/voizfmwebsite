@@ -39,6 +39,10 @@ import StarEmpty from './StarEmpty';
 import StarFill from './StarFill';
 import Speaker from './Speaker';
 import Play from './Play';
+import FacebookClassic from './FacebookClassic';
+import MessengerClassic from './MessengerClassic';
+import Hyperlink from './Hyperlink';
+import QR from './QR';
 
 export {
     Bookmark,
@@ -81,5 +85,9 @@ export {
     StarEmpty,
     StarFill,
     Speaker,
-    Play
+    Play,
+    FacebookClassic,
+    MessengerClassic,
+    Hyperlink,
+    QR
 }
