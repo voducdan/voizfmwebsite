@@ -35,7 +35,7 @@ import EditProfileModal from './EditProfileModal';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB, HEADER_HEIGHT, COLORS, TEXT_STYLE } from '../../utils/constants';
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB, HEADER_HEIGHT, COLORS, TEXT_STYLE, DRAWER_WIDTH } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
 // import services
@@ -207,12 +207,13 @@ export default function Account() {
                 sx={{
                     position: 'absolute',
                     top: isSm ? HEADER_HEIGHT_MB : HEADER_HEIGHT,
-                    height: `${coverImgHeight}px`
+                    height: `${coverImgHeight}px`,
+                    width: isSm ? '100%' : `calc(100% - ${DRAWER_WIDTH}px)`
                 }}
             >
                 <img style={{
                     objectFit: 'cover',
-                    width: `100%`,
+                    width: '100%',
                     height: '100%',
                     left: 0,
                 }} alt="cover img alt" src={accountData.coverImgSrc}></img>

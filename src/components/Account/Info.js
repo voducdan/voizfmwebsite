@@ -35,7 +35,7 @@ export default function Info(props) {
         >
             <Box
                 sx={{
-                    marginTop: `${coverImgHeight + 10 - (infoPanelHeight / 2)}px`,
+                    marginTop: isSm ? '182px' : `${coverImgHeight + 10 - (infoPanelHeight / 2)}px`,
                     backgroundColor: COLORS.bg2,
                     borderRadius: '30px'
                 }}
