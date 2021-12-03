@@ -6,6 +6,11 @@ import 'swiper/swiper.scss'; // core Swiper
 import 'swiper/modules/navigation/navigation.scss'; // Navigation module
 import 'swiper/modules/pagination/pagination.scss';
 
+// import css
+import './PlaylistDetail.css'
+
+import ShowMoreText from "react-show-more-text";
+
 // import react
 import { useState } from 'react';
 
@@ -28,9 +33,12 @@ import {
     ListItemText,
     ListItemButton
 } from '@mui/material';
+import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 // import icons
 import { Share, StarEmpty, StarFill, Speaker, Play } from '../../components/Icons/index';
+
 
 // import other components
 import Thumbnail from '../../components/Thumbnail/Thumbnail';
@@ -67,6 +75,21 @@ const playlistInfoValue = (value) => (
             }}
         >{value}</Typography>
     </Box>
+)
+
+const ShowTextBtn = (content) => (
+    <Button
+        endIcon={content === 'Xem thêm' ? <ExpandMoreIcon /> : <ExpandLessIcon />}
+        sx={{
+            color: COLORS.second,
+            ...TEXT_STYLE.VZ_Caption_2,
+            textTransform: 'none',
+            ...flexStyle('center', 'center'),
+            width: '100%'
+        }}
+    >
+        {content}
+    </Button>
 )
 
 SwiperCore.use([Navigation]);
@@ -485,24 +508,37 @@ export default function PlatlistDetail() {
                                 marginBottom: '8px'
                             }}
                         >Lời tựa</Typography>
-                        <Typography
-                            sx={{
-                                ...TEXT_STYLE.content2,
-                                color: COLORS.VZ_Text_content,
-                                marginBottom: '16px',
-                                maxWidth: '90%'
-                            }}
-                        >Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó.
 
-                            Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó. Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó ...
-                        </Typography>
+                        <ShowMoreText
+                            lines={3}
+                            more={ShowTextBtn('Xem thêm')}
+                            less={ShowTextBtn('Thu gọn')}
+                            className="truncated-text"
+                            anchorClass="my-anchor-css-class"
+                            expanded={false}
+                            width={isSm ? 400 : 1000}
+                            truncatedEndingComponent={"... "}
+                        >
+                            <Typography
+                                sx={{
+                                    ...TEXT_STYLE.content2,
+                                    color: COLORS.VZ_Text_content,
+                                    marginBottom: '16px',
+                                    maxWidth: '90%'
+                                }}
+                            >Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó.
+
+                                Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó. Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó ...
+                            </Typography>
+                        </ShowMoreText>
                     </Box>
                     <Box>
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.title2,
                                 color: COLORS.white,
-                                marginBottom: '15px'
+                                marginBottom: '15px',
+                                marginTop: isSm ? '26px' : '16px'
                             }}
                         >Có thể bạn muốn nghe</Typography>
                         {
