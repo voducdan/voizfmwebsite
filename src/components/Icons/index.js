@@ -44,6 +44,8 @@ import MessengerClassic from './MessengerClassic';
 import Hyperlink from './Hyperlink';
 import QR from './QR';
 import Favorite from './Favorite';
+import Loop from './Loop';
+import Clock from './Clock';
 
 export {
     Bookmark,
@@ -91,5 +93,7 @@ export {
     MessengerClassic,
     Hyperlink,
     QR,
-    Favorite
+    Favorite,
+    Loop,
+    Clock
 }

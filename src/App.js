@@ -1,20 +1,21 @@
 import { useEffect, useState } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
-import { setOpen, selectOpenSidebar } from './redux/openSidebar'
+import { setOpen, selectOpenSidebar } from './redux/openSidebar';
 
 import Box from '@mui/material/Box';
 
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import './App.css';
-import ROUTES from './Routes'
+import ROUTES from './Routes';
 
-import SidebarMenu from "./components/SidebarMenu/SidebarMenu"
-import Header from "./components/Header/Header"
-import Footer from "./components/Footer/Footer"
-import Login from "./components/Login/Login"
+import SidebarMenu from "./components/SidebarMenu/SidebarMenu";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import Login from "./components/Login/Login";
+import PlayBar from './components/PlayBar/PlayBar';
 
 import useWindowSize from './utils/useWindowSize'
 import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
@@ -26,18 +27,22 @@ function App() {
     const location = useLocation({});
     const [includeFooter, setIncludeFooter] = useState(null);
 
-
     let windowSize = useWindowSize()
     const openSidebar = useSelector(selectOpenSidebar);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (EXCLUDE_FOOTER.includes(location.pathname)) {
-            setIncludeFooter(false)
-        } else {
-            setIncludeFooter(true)
+        function checkIncludeFooter() {
+            if (EXCLUDE_FOOTER.includes(location.pathname)) {
+                setIncludeFooter(false)
+            } else {
+                setIncludeFooter(true)
+            }
         }
+
+        checkIncludeFooter()
+
     }, [location])
 
     if (windowSize.width > SCREEN_BREAKPOINTS.sm && !openSidebar) {
@@ -64,6 +69,11 @@ function App() {
                     }
                 </Routes>
             </Box>
+            {
+                location.pathname && (
+                    <PlayBar />
+                )
+            }
             {includeFooter && <Footer />}
         </div>
     )
