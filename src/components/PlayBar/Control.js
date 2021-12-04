@@ -32,7 +32,7 @@ const Widget = styled('div')(({ theme }) => ({
     position: 'relative',
     ...flexStyle('center', 'center'),
     flexDirection: 'column',
-    rowGap: '30px'
+    rowGap: '20px'
 }));
 
 

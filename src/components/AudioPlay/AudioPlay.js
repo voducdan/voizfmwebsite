@@ -79,7 +79,7 @@ export default function AudioPlay() {
     return (
         <Box
             sx={{
-                ...flexStyle('flex-start', 'center'),
+                ...(isSm ? flexStyle('center', 'center') : flexStyle('flex-start', 'center')),
                 flexDirection: 'column',
                 width: '95%',
                 margin: '0px auto 120px auto',
@@ -91,7 +91,7 @@ export default function AudioPlay() {
                     columnGap: '36px',
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: '35px 0'
+                    padding: isSm ? '20px 0 32px 0' : '35px 0'
                 }}
             >
                 <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
@@ -99,7 +99,8 @@ export default function AudioPlay() {
             </Box>
             <Box
                 sx={{
-                    ...flexStyle('center', 'flex-start'),
+                    ...(isSm ? flexStyle('center', 'center') : flexStyle('center', 'flex-start')),
+                    ...(isSm && { flexDirection: 'column', rowGap: '32px' }),
                     columnGap: '75px',
                     width: '100%'
                 }}
@@ -111,9 +112,10 @@ export default function AudioPlay() {
                 <Box>
                     <Typography
                         sx={{
-                            ...TEXT_STYLE.h1,
+                            ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
                             color: COLORS.white,
-                            marginBottom: '25px'
+                            marginBottom: '25px',
+                            ...(isSm && { textAlign: 'center' })
                         }}
                     >
                         {audioData.name}
@@ -122,7 +124,8 @@ export default function AudioPlay() {
                         sx={{
                             width: '100%',
                             bgcolor: 'transparent',
-                            boxShadow: 'none'
+                            boxShadow: 'none',
+                            ...(isSm && { ml: '36px' })
                         }}
                         component={Paper}>
                         <Table
@@ -224,7 +227,7 @@ export default function AudioPlay() {
                         </Table>
                     </TableContainer>
                     {
-                        playing && (
+                        (playing && !isSm) && (
                             <Button
                                 sx={{
                                     ...TEXT_STYLE.title1,

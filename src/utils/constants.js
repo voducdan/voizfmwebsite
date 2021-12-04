@@ -60,6 +60,12 @@ const TEXT_STYLE = {
         fontWeight: 500,
         fontFamily: 'SF UI Display'
     },
+    content3: {
+        fontSize: '12px',
+        lineHeight: '17px',
+        fontWeight: 500,
+        fontFamily: 'SF UI Display'
+    },
     title3: {
         fontSize: '12px',
         lineHeight: '16px',

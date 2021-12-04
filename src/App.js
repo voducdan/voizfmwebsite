@@ -18,7 +18,7 @@ import Login from "./components/Login/Login";
 import PlayBar from './components/PlayBar/PlayBar';
 
 import useWindowSize from './utils/useWindowSize'
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
 
 
 
@@ -49,6 +49,18 @@ function App() {
         dispatch(setOpen(true))
     }
 
+    const openPlayBar = () => {
+        if (location.pathname === '/audio-play') {
+            if (windowSize.width > SCREEN_BREAKPOINTS.sm) {
+                return true
+            }
+            if (!openSidebar) {
+                return true
+            }
+        }
+        return false
+    };
+
     return (
         <div className="App">
             <Login />
@@ -57,7 +69,7 @@ function App() {
             <Box sx={{
                 flexGrow: 1,
                 height: `calc(100% - ${HEADER_HEIGHT})`,
-                marginTop: HEADER_HEIGHT,
+                marginTop: windowSize.width > SCREEN_BREAKPOINTS.sm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
                 width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
                 ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
             }}>
@@ -70,7 +82,7 @@ function App() {
                 </Routes>
             </Box>
             {
-                location.pathname && (
+                openPlayBar() && (
                     <PlayBar />
                 )
             }
