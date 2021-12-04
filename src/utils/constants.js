@@ -103,7 +103,7 @@ const FONT_COLOR = '#ACACAC';
 const DRAWER_WIDTH = 250;
 const HEADER_HEIGHT = '104px';
 const HEADER_HEIGHT_MB = '80px';
-const EXCLUDE_FOOTER = ['/playlist-detail']
+const EXCLUDE_FOOTER = ['/playlist-detail', '/audio-play']
 export {
     COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB,
     EXCLUDE_FOOTER

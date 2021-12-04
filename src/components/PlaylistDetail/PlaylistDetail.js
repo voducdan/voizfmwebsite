@@ -44,38 +44,13 @@ import { Share, StarEmpty, StarFill, Speaker, Play } from '../../components/Icon
 import Thumbnail from '../../components/Thumbnail/Thumbnail';
 import { RateModal, AfterRateModal } from './RateModal';
 import ShareModal from './ShareModal';
+import InfoLabel from '../../components/Shared/InfoLabel';
+import InfoValue from '../../components/Shared/InfoValue';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
-
-const playlistInfoLabel = (title) => (
-    <Typography
-        sx={{
-            ...TEXT_STYLE.title2,
-            color: COLORS.white
-        }}
-    >{title}</Typography>
-)
-
-const playlistInfoValue = (value) => (
-    <Box
-        sx={{
-            bgcolor: COLORS.bg3,
-            borderRadius: '20px',
-            padding: '4px 16px',
-            width: 'fit-content'
-        }}
-    >
-        <Typography
-            sx={{
-                ...TEXT_STYLE.content2,
-                color: COLORS.VZ_Text_content
-            }}
-        >{value}</Typography>
-    </Box>
-)
 
 const ShowTextBtn = (content) => (
     <Button
@@ -181,23 +156,23 @@ export default function PlatlistDetail() {
 
     const playlistInfo = [
         {
-            label: playlistInfoLabel('Tác giả'),
-            value: playlistInfoValue('Ken Honda')
+            label: <InfoLabel title='Tác giả' />,
+            value: <InfoValue value='Ken Honda' />
         },
         {
-            label: playlistInfoLabel('Thời lượng'),
+            label: <InfoLabel title='Thời lượng' />,
             value: <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>3 giờ 9 phút 25 giây</Typography>
         },
         {
-            label: playlistInfoLabel('Kênh'),
-            value: playlistInfoValue('NXB Tổng Hợp TP.HCM')
+            label: <InfoLabel title='Kênh' />,
+            value: <InfoValue value='NXB Tổng Hợp TP.HCM' />
         },
         {
-            label: playlistInfoLabel('Người đọc'),
-            value: playlistInfoValue('Ngyễn lan Anh')
+            label: <InfoLabel title='Người đọc' />,
+            value: <InfoValue value='Ngyễn lan Anh' />
         },
         {
-            label: playlistInfoLabel('Giá bán lẻ'),
+            label: <InfoLabel title='Giá bán lẻ' />,
             value:
                 <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
                     <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>50.000đ</Typography>
@@ -206,7 +181,7 @@ export default function PlatlistDetail() {
 
         },
         {
-            label: playlistInfoLabel('Đánh giá'),
+            label: <InfoLabel title='Đánh giá' />,
             value:
                 <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
                     <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>4.5</Typography>
@@ -338,7 +313,7 @@ export default function PlatlistDetail() {
                                     }}
                                 >
                                     <Box onClick={handleOpenShareModal}>
-                                        <Share></Share>
+                                        <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
                                     <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal isSm={isSm} open={openRateModal} setOpen={setOpenRateModal} setOpenAfterRate={setOpenAfterRateModal} />

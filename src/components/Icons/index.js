@@ -43,6 +43,7 @@ import FacebookClassic from './FacebookClassic';
 import MessengerClassic from './MessengerClassic';
 import Hyperlink from './Hyperlink';
 import QR from './QR';
+import Favorite from './Favorite';
 
 export {
     Bookmark,
@@ -89,5 +90,6 @@ export {
     FacebookClassic,
     MessengerClassic,
     Hyperlink,
-    QR
+    QR,
+    Favorite
 }

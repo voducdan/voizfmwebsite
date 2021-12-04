@@ -6,7 +6,7 @@ export default class API {
     constructor() {
         this.api_token = null;
         this.client = null;
-        this.base_url = `http://${process.env.REACT_APP_BASE_URL}`;
+        this.base_url = `https://${process.env.REACT_APP_BASE_URL}`;
     }
 
     init = () => {
@@ -31,5 +31,9 @@ export default class API {
 
     getUser = (id) => {
         return this.init().get(`/accounts/${id}`)
+    }
+
+    getAudio = (id) => {
+        return this.init().get(`/audios/${id}`)
     }
 }
