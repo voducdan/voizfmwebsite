@@ -98,7 +98,7 @@ const PopUpContent = [
     {
         id: 3,
         text: 'Chia sẻ Voiz cho bạn bè',
-        startIcon: <Share />
+        startIcon: <Share bgfill='none' fill={COLORS.white} />
     },
     {
         id: 4,

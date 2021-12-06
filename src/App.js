@@ -1,23 +1,24 @@
 import { useEffect, useState } from 'react';
 
-import { useSelector, useDispatch } from 'react-redux'
+import { useSelector, useDispatch } from 'react-redux';
 
-import { setOpen, selectOpenSidebar } from './redux/openSidebar'
+import { setOpen, selectOpenSidebar } from './redux/openSidebar';
 
 import Box from '@mui/material/Box';
 
-import { Routes, Route, useLocation } from 'react-router-dom'
+import { Routes, Route, useLocation } from 'react-router-dom';
 
 import './App.css';
-import ROUTES from './Routes'
+import ROUTES from './Routes';
 
-import SidebarMenu from "./components/SidebarMenu/SidebarMenu"
-import Header from "./components/Header/Header"
-import Footer from "./components/Footer/Footer"
-import Login from "./components/Login/Login"
+import SidebarMenu from "./components/SidebarMenu/SidebarMenu";
+import Header from "./components/Header/Header";
+import Footer from "./components/Footer/Footer";
+import Login from "./components/Login/Login";
+import PlayBar from './components/PlayBar/PlayBar';
 
 import useWindowSize from './utils/useWindowSize'
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
 
 
 
@@ -26,23 +27,39 @@ function App() {
     const location = useLocation({});
     const [includeFooter, setIncludeFooter] = useState(null);
 
-
     let windowSize = useWindowSize()
     const openSidebar = useSelector(selectOpenSidebar);
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (EXCLUDE_FOOTER.includes(location.pathname)) {
-            setIncludeFooter(false)
-        } else {
-            setIncludeFooter(true)
+        function checkIncludeFooter() {
+            if (EXCLUDE_FOOTER.includes(location.pathname)) {
+                setIncludeFooter(false)
+            } else {
+                setIncludeFooter(true)
+            }
         }
+
+        checkIncludeFooter()
+
     }, [location])
 
     if (windowSize.width > SCREEN_BREAKPOINTS.sm && !openSidebar) {
         dispatch(setOpen(true))
     }
+
+    const openPlayBar = () => {
+        if (location.pathname === '/audio-play') {
+            if (windowSize.width > SCREEN_BREAKPOINTS.sm) {
+                return true
+            }
+            if (!openSidebar) {
+                return true
+            }
+        }
+        return false
+    };
 
     return (
         <div className="App">
@@ -52,7 +69,7 @@ function App() {
             <Box sx={{
                 flexGrow: 1,
                 height: `calc(100% - ${HEADER_HEIGHT})`,
-                marginTop: HEADER_HEIGHT,
+                marginTop: windowSize.width > SCREEN_BREAKPOINTS.sm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
                 width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
                 ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
             }}>
@@ -64,6 +81,11 @@ function App() {
                     }
                 </Routes>
             </Box>
+            {
+                openPlayBar() && (
+                    <PlayBar />
+                )
+            }
             {includeFooter && <Footer />}
         </div>
     )
