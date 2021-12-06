@@ -2,6 +2,7 @@ import Home from './pages/Home/Home';
 import Account from './components/Account/Account';
 import PlaylistDetail from './components/PlaylistDetail/PlaylistDetail';
 import AudioPlay from './components/AudioPlay/AudioPlay';
+import Payment from './components/Payment/Payment';
 
 const ROUTES = [
     {
@@ -27,6 +28,12 @@ const ROUTES = [
         key: "APP_AUDIO_PLAY",
         exact: true,
         component: AudioPlay,
+    },
+    {
+        path: "/cart",
+        key: "APP_CART",
+        exact: true,
+        component: Payment,
     }
 ]
 

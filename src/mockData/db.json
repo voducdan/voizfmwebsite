@@ -1,5 +1,5 @@
 {
-    "accounts":[
+    "accounts": [
         {
             "id": "5ZOQS5",
             "coverImgSrc": "https://picsum.photos/1190/420?img=3",
@@ -8,6 +8,308 @@
             "coin": 1235,
             "isVip": true,
             "vipExpire": "2021-11-30"
+        }
+    ],
+    "cart": [
+        {
+            "type": "voiz",
+            "id": 5,
+            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
+            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
+            "description": "Corrupti possimus adipisci.",
+            "promotion": "coin",
+            "total_duration": 96,
+            "coin_price": 19999,
+            "is_bookmark": false,
+            "sale_coin_price": 19999,
+            "order": "desc",
+            "voicers": [
+                {
+                    "id": 1,
+                    "name": "Maria Corkery Ebert"
+                },
+                {
+                    "id": 23,
+                    "name": "Camie Leannon Ferry"
+                }
+            ],
+            "playlist_rating": {
+                "type": "voiz",
+                "id": 1,
+                "content_stars": 5,
+                "voice_stars": 5,
+                "content": "Good Boook"
+            },
+            "authors": [
+                {
+                    "id": 55,
+                    "name": "Daniel Coyle"
+                }
+            ],
+            "avatar": {
+                "id": 380,
+                "original_url": "https://picsum.photos/1190/420?img=100",
+                "thumb_url": "https://picsum.photos/1190/420?img=100"
+            },
+            "channel": {
+                "id": 2,
+                "name": "PamCast - Nghe Phim",
+                "description": "PamCast - Nghe Phim",
+                "avatar": {
+                    "id": 4,
+                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
+                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
+                }
+            },
+            "category": {
+                "id": 13,
+                "code": "tam-linh",
+                "name": "Tâm linh",
+                "sub_name": "Bình an tâm hồn",
+                "type": "Audiobook"
+            },
+            "playlist_trailers": [
+                {
+                    "id": 5,
+                    "file_size": "154062",
+                    "file_extension": "mp3",
+                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
+                }
+            ],
+            "playlist_counter": {
+                "id": 5,
+                "bookmarks_count": 0,
+                "downloads_count": 0,
+                "ratings_count": 0,
+                "content_avg": 0,
+                "voice_avg": 0,
+                "audios_count": 0
+            }
+        },
+        {
+            "type": "voiz",
+            "id": 6,
+            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
+            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
+            "description": "Corrupti possimus adipisci.",
+            "promotion": "coin",
+            "total_duration": 96,
+            "coin_price": 19999,
+            "is_bookmark": false,
+            "sale_coin_price": 19999,
+            "order": "desc",
+            "voicers": [
+                {
+                    "id": 1,
+                    "name": "Maria Corkery Ebert"
+                },
+                {
+                    "id": 23,
+                    "name": "Camie Leannon Ferry"
+                }
+            ],
+            "playlist_rating": {
+                "type": "voiz",
+                "id": 1,
+                "content_stars": 5,
+                "voice_stars": 5,
+                "content": "Good Boook"
+            },
+            "authors": [
+                {
+                    "id": 55,
+                    "name": "Daniel Coyle"
+                }
+            ],
+            "avatar": {
+                "id": 380,
+                "original_url": "https://picsum.photos/1190/420?img=100",
+                "thumb_url": "https://picsum.photos/1190/420?img=100"
+            },
+            "channel": {
+                "id": 2,
+                "name": "PamCast - Nghe Phim",
+                "description": "PamCast - Nghe Phim",
+                "avatar": {
+                    "id": 4,
+                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
+                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
+                }
+            },
+            "category": {
+                "id": 13,
+                "code": "tam-linh",
+                "name": "Tâm linh",
+                "sub_name": "Bình an tâm hồn",
+                "type": "Audiobook"
+            },
+            "playlist_trailers": [
+                {
+                    "id": 5,
+                    "file_size": "154062",
+                    "file_extension": "mp3",
+                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
+                }
+            ],
+            "playlist_counter": {
+                "id": 5,
+                "bookmarks_count": 0,
+                "downloads_count": 0,
+                "ratings_count": 0,
+                "content_avg": 0,
+                "voice_avg": 0,
+                "audios_count": 0
+            }
+        },
+        {
+            "type": "voiz",
+            "id": 7,
+            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
+            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
+            "description": "Corrupti possimus adipisci.",
+            "promotion": "coin",
+            "total_duration": 96,
+            "coin_price": 19999,
+            "is_bookmark": false,
+            "sale_coin_price": 19999,
+            "order": "desc",
+            "voicers": [
+                {
+                    "id": 1,
+                    "name": "Maria Corkery Ebert"
+                },
+                {
+                    "id": 23,
+                    "name": "Camie Leannon Ferry"
+                }
+            ],
+            "playlist_rating": {
+                "type": "voiz",
+                "id": 1,
+                "content_stars": 5,
+                "voice_stars": 5,
+                "content": "Good Boook"
+            },
+            "authors": [
+                {
+                    "id": 55,
+                    "name": "Daniel Coyle"
+                }
+            ],
+            "avatar": {
+                "id": 380,
+                "original_url": "https://picsum.photos/1190/420?img=100",
+                "thumb_url": "https://picsum.photos/1190/420?img=100"
+            },
+            "channel": {
+                "id": 2,
+                "name": "PamCast - Nghe Phim",
+                "description": "PamCast - Nghe Phim",
+                "avatar": {
+                    "id": 4,
+                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
+                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
+                }
+            },
+            "category": {
+                "id": 13,
+                "code": "tam-linh",
+                "name": "Tâm linh",
+                "sub_name": "Bình an tâm hồn",
+                "type": "Audiobook"
+            },
+            "playlist_trailers": [
+                {
+                    "id": 5,
+                    "file_size": "154062",
+                    "file_extension": "mp3",
+                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
+                }
+            ],
+            "playlist_counter": {
+                "id": 5,
+                "bookmarks_count": 0,
+                "downloads_count": 0,
+                "ratings_count": 0,
+                "content_avg": 0,
+                "voice_avg": 0,
+                "audios_count": 0
+            }
+        },
+        {
+            "type": "voiz",
+            "id": 8,
+            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
+            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
+            "description": "Corrupti possimus adipisci.",
+            "promotion": "coin",
+            "total_duration": 96,
+            "coin_price": 19999,
+            "is_bookmark": false,
+            "sale_coin_price": 19999,
+            "order": "desc",
+            "voicers": [
+                {
+                    "id": 1,
+                    "name": "Maria Corkery Ebert"
+                },
+                {
+                    "id": 23,
+                    "name": "Camie Leannon Ferry"
+                }
+            ],
+            "playlist_rating": {
+                "type": "voiz",
+                "id": 1,
+                "content_stars": 5,
+                "voice_stars": 5,
+                "content": "Good Boook"
+            },
+            "authors": [
+                {
+                    "id": 55,
+                    "name": "Daniel Coyle"
+                }
+            ],
+            "avatar": {
+                "id": 380,
+                "original_url": "https://picsum.photos/1190/420?img=100",
+                "thumb_url": "https://picsum.photos/1190/420?img=100"
+            },
+            "channel": {
+                "id": 2,
+                "name": "PamCast - Nghe Phim",
+                "description": "PamCast - Nghe Phim",
+                "avatar": {
+                    "id": 4,
+                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
+                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
+                }
+            },
+            "category": {
+                "id": 13,
+                "code": "tam-linh",
+                "name": "Tâm linh",
+                "sub_name": "Bình an tâm hồn",
+                "type": "Audiobook"
+            },
+            "playlist_trailers": [
+                {
+                    "id": 5,
+                    "file_size": "154062",
+                    "file_extension": "mp3",
+                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
+                }
+            ],
+            "playlist_counter": {
+                "id": 5,
+                "bookmarks_count": 0,
+                "downloads_count": 0,
+                "ratings_count": 0,
+                "content_avg": 0,
+                "voice_avg": 0,
+                "audios_count": 0
+            }
         }
     ]
 }
