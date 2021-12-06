@@ -25,6 +25,8 @@ import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 // import others components
 import InfoLabel from '../../components/Shared/InfoLabel';
 import InfoValue from '../../components/Shared/InfoValue';
+import ShareModal from '../../components/Shared/ShareModal';
+
 
 // import services
 import API from '../../services/api';
@@ -42,6 +44,8 @@ export default function AudioPlay() {
 
     const playing = useSelector(selectPlayAudio);
     const [audioData, setAudio] = useState({})
+    const [openShareModal, setOpenShareModal] = useState(false);
+
     const windowSize = useWindowSize()
     const audioId = 1;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -65,6 +69,7 @@ export default function AudioPlay() {
                         name: "NXB Tổng Hợp TP.HCM"
                     }
                     setAudio(data)
+                    dispatch(setAudioData(data))
                 }
             }
             catch (err) {
@@ -72,9 +77,16 @@ export default function AudioPlay() {
             }
         }
         getAudio()
-        dispatch(setAudioData(audioData))
-    }, [audioData, dispatch])
+    }, [])
 
+    const handleOpenShareModal = () => {
+        setOpenShareModal(true)
+    }
+
+    const getPlayBarHeight = () => {
+        const playbarEl = document.querySelector('#play-audio-bar');
+        return playbarEl?.clientHeight || 0
+    }
 
     return (
         <Box
@@ -82,7 +94,7 @@ export default function AudioPlay() {
                 ...(isSm ? flexStyle('center', 'center') : flexStyle('flex-start', 'center')),
                 flexDirection: 'column',
                 width: '95%',
-                margin: '0px auto 120px auto',
+                margin: isSm ? `0px auto ${getPlayBarHeight()}px auto` : 'auto',
             }}
         >
             <Box
@@ -94,7 +106,10 @@ export default function AudioPlay() {
                     padding: isSm ? '20px 0 32px 0' : '35px 0'
                 }}
             >
-                <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
+                <Box onClick={handleOpenShareModal}>
+                    <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
+                </Box>
+                <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                 <ExpandMoreIcon sx={{ color: COLORS.contentIcon }} />
             </Box>
             <Box

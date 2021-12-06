@@ -43,7 +43,7 @@ import { Share, StarEmpty, StarFill, Speaker, Play } from '../../components/Icon
 // import other components
 import Thumbnail from '../../components/Thumbnail/Thumbnail';
 import { RateModal, AfterRateModal } from './RateModal';
-import ShareModal from './ShareModal';
+import ShareModal from '../../components/Shared/ShareModal';
 import InfoLabel from '../../components/Shared/InfoLabel';
 import InfoValue from '../../components/Shared/InfoValue';
 

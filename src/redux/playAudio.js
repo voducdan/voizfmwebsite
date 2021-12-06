@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const playAudioSlice = createSlice({
     name: 'playAudio',
     initialState: {
-        playing: true
+        playing: false
     },
     reducers: {
         togglePlayAudio: (state) => {

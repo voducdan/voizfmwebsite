@@ -8,9 +8,11 @@ import {
     ListItemIcon,
     ListItemText,
     ListItemButton,
-    Popover
+    Popover,
+    IconButton
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
+import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 
 // import utils
 import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
@@ -19,7 +21,7 @@ import { flexStyle } from '../../utils/flexStyle';
 
 export default function AudioList(props) {
 
-    const { anchorAudioList, onCloseAudioList } = props
+    const { anchorAudioList, onCloseAudioList, audioId } = props
     const open = Boolean(anchorAudioList);
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -128,8 +130,23 @@ export default function AudioList(props) {
                                         paddingLeft: 0,
                                         paddingRight: '20px',
                                         borderTop: `.5px solid ${COLORS.placeHolder}`,
-                                        height: '72px'
+                                        height: '72px',
+                                        ...(value.id === audioId && {
+                                            bgcolor: COLORS.bg3,
+                                            borderRadius: '6px',
+                                            borderTop: 'none'
+                                        }),
+                                        ...(value.id === (audioId + 1) && {
+                                            borderTop: 'none'
+                                        })
                                     }}
+                                    secondaryAction={
+                                        value.id === audioId && (
+                                            <IconButton edge="end" aria-label="delete">
+                                                <GraphicEqIcon sx={{ color: COLORS.contentIcon }} />
+                                            </IconButton>
+                                        )
+                                    }
                                     key={value.id}
                                 >
                                     <ListItemButton role={undefined} onClick={() => (1)} dense>

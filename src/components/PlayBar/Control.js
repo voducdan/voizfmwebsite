@@ -1,4 +1,4 @@
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // import redux
 import { useDispatch } from 'react-redux';
@@ -41,14 +41,34 @@ const TinyText = styled(Typography)({
     color: COLORS.white
 });
 
-export default function Control() {
+export default function Control(props) {
+
+    const { audioData } = props
+    const audioUrl = 'https://assets.coderrocketfuel.com/pomodoro-times-up.mp3';
+
+    // audioData.meta_data.remaining_minutes
+    const remainingTime = 19;
 
     const theme = useTheme();
     const dispatch = useDispatch();
-    const duration = 200; // seconds
-    const [position, setPosition] = useState(32);
-    const [paused, setPaused] = useState(false);
+    const [position, setPosition] = useState(audioData.duration - remainingTime);
+    const [paused, setPaused] = useState(true);
+    const [audio] = useState(new Audio(audioUrl));
 
+    useEffect(() => {
+        !paused ? audio.play() : audio.pause();
+    }, [paused]);
+
+    useEffect(() => {
+        audio.addEventListener('ended', () => setPaused(true));
+        // audio.addEventListener('timeupdate', (e) => {
+        //     const currentTime = e.target.currentTime;
+        //     setPosition(currentTime)
+        // });
+        return () => {
+            audio.removeEventListener('ended', () => setPaused(true));
+        };
+    }, []);
 
     function formatDuration(value) {
         const minute = Math.floor(value / 60);
@@ -141,7 +161,7 @@ export default function Control() {
                         value={position}
                         min={0}
                         step={1}
-                        max={duration}
+                        max={audioData?.duration}
                         onChange={(_, value) => setPosition(value)}
                         sx={{
                             height: 3,
@@ -173,7 +193,7 @@ export default function Control() {
                             },
                         }}
                     />
-                    <TinyText>-{formatDuration(duration - position)}</TinyText>
+                    <TinyText>-{formatDuration(audioData?.duration - position)}</TinyText>
                 </Box>
             </Widget>
             <WallPaper />

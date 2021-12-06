@@ -39,7 +39,6 @@ export default function PlayBar() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     const audioData = useSelector(selectAudioData);
-
     const openAudioList = (event) => {
         setAnchorAudioList(event.currentTarget);
     }
@@ -50,6 +49,7 @@ export default function PlayBar() {
 
     return (
         <Box
+            id='play-audio-bar'
             sx={{
                 bgcolor: COLORS.bg1,
                 ...flexStyle('center', 'center'),
@@ -126,13 +126,14 @@ export default function PlayBar() {
                 </Box>
             </Box>
             {isSm && (<Divider sx={{ borderColor: COLORS.blackStroker, margin: '5px 0', width: '100%', borderWidth: '1px' }} />)}
-            <Box
+            {Object.keys(audioData).length > 0 && (<Box
                 sx={{
                     width: isSm ? '100%' : '40%',
                 }}
             >
-                <Control />
-            </Box>
+                <Control audioData={audioData} />
+            </Box>)
+            }
             {
                 !isSm && (
                     <Box
@@ -188,7 +189,7 @@ export default function PlayBar() {
                     </Box>
                 )
             }
-            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} />
+            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} audioId={5} />
         </Box>
     )
 }
