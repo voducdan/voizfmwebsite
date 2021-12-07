@@ -11,10 +11,14 @@ import {
     ListItemIcon,
     Divider,
     Checkbox,
-    CardActionArea,
     Card,
     CardContent,
-    CardMedia
+    CardMedia,
+    FormControl,
+    Select,
+    InputBase,
+    Paper,
+    Button
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -22,6 +26,7 @@ import DeleteIcon from '@mui/icons-material/Delete';
 import { flexStyle } from '../../utils/flexStyle';
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
+import formatPrice from '../../utils/formatPrice';
 
 // import service
 import API from '../../services/api';
@@ -31,7 +36,10 @@ export default function Cart() {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    const [cart, setCart] = useState([])
+    const [cart, setCart] = useState([]);
+    const [selectedItem, setSelectedItem] = useState([]);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [finalPrice, setFinalPrice] = useState(0);
 
     useEffect(() => {
         const api = new API()
@@ -40,15 +48,41 @@ export default function Cart() {
             const data = await res.data
             setCart(data)
         }
-
         fetchCart()
-    }, [])
+    }, []);
+
+    useEffect(() => {
+
+        function calculatePrice() {
+            const price = selectedItem.reduce((a, b) => ({ sale_coin_price: (a.sale_coin_price + b.sale_coin_price) }), { sale_coin_price: 0 })['sale_coin_price']
+            setTotalPrice(price)
+            // wait for handle discount code
+            setFinalPrice(price)
+        }
+        calculatePrice()
+    }, [selectedItem])
+
+    const handleSelectAllItem = () => {
+        setSelectedItem(cart)
+    }
+    const handleSelectCartItem = (event, id) => {
+        const checked = event.target.checked
+        if (checked) {
+            const item = cart.filter(i => i.id === id)
+            const currentSelect = [...selectedItem, ...item]
+            setSelectedItem(currentSelect)
+        }
+        else {
+            const remainedItem = selectedItem.filter(i => i.id !== id)
+            setSelectedItem(remainedItem)
+        }
+    }
 
     return (
         <Box
             sx={{
                 width: '100%',
-                padding: '32px 48px',
+                padding: isSm ? 0 : '32px 48px',
                 boxSizing: 'border-box'
             }}
         >
@@ -56,19 +90,24 @@ export default function Cart() {
                 sx={{
                     ...TEXT_STYLE.h2,
                     color: COLORS.white,
-                    mb: '32px'
+                    mb: '32px',
+                    ...(isSm && { pt: '24px', pl: '16px' })
                 }}
             >Giỏ hàng</Typography>
             <Box
                 sx={{
                     ...flexStyle('flex-start', 'flex-start'),
                     width: '100%',
-                    columnGap: '32px'
+                    columnGap: '32px',
+                    ...(isSm && {
+                        flexDirection: 'column',
+                        rowGap: '16px'
+                    })
                 }}
             >
                 <Box
                     sx={{
-                        width: '70%'
+                        width: isSm ? '100%' : '70%'
                     }}
                 >
                     <MenuList
@@ -79,7 +118,7 @@ export default function Cart() {
                     >
                         <MenuItem>
                             <ListItemIcon>
-                                <Checkbox sx={{ color: COLORS.contentIcon }} />
+                                <Checkbox onChange={handleSelectAllItem} sx={{ color: COLORS.contentIcon }} />
                             </ListItemIcon>
                             <ListItemText
                                 sx={{
@@ -108,15 +147,16 @@ export default function Cart() {
                             cart.map((item) => (
                                 <MenuItem key={item.id}
                                     sx={{
-                                        width: '100%'
+                                        width: '100%',
+                                        columnGap: '13px'
                                     }}
                                 >
                                     <ListItemIcon
                                         sx={{
-                                            width: '5%'
+                                            maxWidth: '5%',
                                         }}
                                     >
-                                        <Checkbox sx={{ color: COLORS.contentIcon }} />
+                                        <Checkbox onChange={(event) => { handleSelectCartItem(event, item.id) }} sx={{ color: COLORS.contentIcon }} />
                                     </ListItemIcon>
                                     <Card
                                         sx={{
@@ -183,7 +223,7 @@ export default function Cart() {
                                                 ...TEXT_STYLE.content1,
                                                 color: COLORS.contentIcon
                                             }}
-                                        >{item.sale_coin_price}</Typography>
+                                        >{formatPrice(item.sale_coin_price)}đ</Typography>
                                         <DeleteIcon sx={{ color: COLORS.contentIcon }} />
                                     </ListItemIcon>
                                 </MenuItem>
@@ -194,10 +234,195 @@ export default function Cart() {
                 </Box>
                 <Box
                     sx={{
-                        width: '30%'
+                        width: isSm ? '100%' : '20%',
+                        bgcolor: COLORS.bg2,
+                        borderRadius: '10px',
+                        padding: '32px',
+                        boxSizing: 'border-box'
                     }}
                 >
-                    Tổng cộng
+                    {
+                        selectedItem.length > 0 && (
+                            <Box>
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h3,
+                                        color: COLORS.white,
+                                        mb: '32px',
+                                        textAlign: 'left'
+                                    }}
+                                >Thông tin đơn hàng</Typography>
+                                <FormControl fullWidth>
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.content1,
+                                            color: COLORS.contentIcon,
+                                            mb: '16px',
+                                            textAlign: 'left'
+                                        }}
+                                    >
+                                        Bạn đang chọn gói VIP sau
+                                    </Typography>
+                                    <Select
+                                        defaultValue={10}
+                                        inputProps={{
+                                            name: 'package',
+                                            id: 'vip-package',
+                                        }}
+                                        onChange={() => { console.log(1) }}
+                                        sx={{
+                                            ...TEXT_STYLE.title1,
+                                            color: COLORS.white,
+                                            '& .MuiOutlinedInput-input': {
+                                                padding: '14px'
+                                            },
+                                            '& .MuiSelect-icon': {
+                                                color: COLORS.VZ_Text_content
+                                            },
+                                            '& .MuiOutlinedInput-notchedOutline': {
+                                                borderColor: COLORS.placeHolder,
+                                                height: '50px'
+                                            }
+                                        }}
+                                    >
+                                        <MenuItem value={10}>Tiêu chuẩn</MenuItem>
+                                        <MenuItem value={20}>Tiết kiệm</MenuItem>
+                                        <MenuItem value={30}>VIP</MenuItem>
+                                    </Select>
+                                </FormControl>
+                                <Box
+                                    sx={{
+                                        mt: '24px',
+                                        mb: '60px',
+                                        ...flexStyle('space-between', 'center')
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.content1,
+                                            color: COLORS.contentIcon
+                                        }}
+                                    >Số tiền</Typography>
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.h2,
+                                            color: COLORS.white
+                                        }}
+                                    >{formatPrice(totalPrice)}đ</Typography>
+                                </Box>
+                                <Paper
+                                    component="form"
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        width: '100%',
+                                        bgcolor: 'inherit',
+                                        boxShadow: 'none',
+                                        borderRadius: '4px',
+                                        height: '50px'
+                                    }}
+                                >
+                                    <InputBase
+                                        sx={{
+                                            ml: 1,
+                                            flex: 1,
+                                            ...TEXT_STYLE.content2,
+                                            color: COLORS.placeHolder,
+                                            margin: 0,
+                                            width: '80%',
+                                            border: `1px solid ${COLORS.placeHolder}`,
+                                            height: '50px',
+                                            'input': {
+                                                padding: '13px 18px'
+                                            }
+                                        }}
+                                        placeholder="Nhập mã giảm giá (Nếu có)"
+                                        inputProps={{ 'aria-label': 'discount-code' }}
+                                    />
+                                    <Button
+                                        sx={{
+                                            width: '20%',
+                                            textTransform: 'none',
+                                            bgcolor: COLORS.main,
+                                            ...TEXT_STYLE.title2,
+                                            color: COLORS.white,
+                                            height: '100%',
+                                            borderRadius: 0
+                                        }}
+                                    >Sử dụng</Button>
+                                </Paper>
+                            </Box>
+                        )
+                    }
+
+                    <Box
+                        sx={{
+                            mt: '32px'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                ...flexStyle('space-between', 'center')
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    ...TEXT_STYLE.content1,
+                                    color: COLORS.contentIcon
+                                }}
+
+                            >Tổng cộng</Typography>
+                            <Box
+                                sx={{
+                                    ...flexStyle('center', 'flex-end'),
+                                    flexDirection: 'column',
+                                    rowGap: '16px'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h2,
+                                        color: COLORS.white
+                                    }}
+                                >{formatPrice(totalPrice)}đ</Typography>
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.caption12,
+                                        color: COLORS.white
+                                    }}
+                                >Đã bao gồm VAT(nếu có)</Typography>
+                            </Box>
+                        </Box>
+                        <Button
+                            sx={{
+                                width: '100%',
+                                textTransform: 'none',
+                                bgcolor: COLORS.main,
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                height: '48px',
+                                borderRadius: '8px',
+                                mt: '24px'
+                            }}
+                        >
+                            Thanh toán
+                        </Button>
+                        {
+                            selectedItem.length > 0 && (
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.content2,
+                                        color: COLORS.white,
+                                        textAlign: 'right',
+                                        mt: '24px'
+                                    }}
+                                >
+                                    Bạn có muốn chuyển khoản?
+                                </Typography>
+                            )
+                        }
+
+                    </Box>
                 </Box>
             </Box>
         </Box>
