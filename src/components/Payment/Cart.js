@@ -28,44 +28,34 @@ import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
 
-// import service
-import API from '../../services/api';
+export default function Cart(props) {
 
-export default function Cart() {
-
+    const { setStep, cart, setTotalPrice, setFinalPrice, totalPrice, finalPrice, selectedItem, setSelectedItem } = props
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    const [cart, setCart] = useState([]);
     const [checkControl, setCheckControl] = useState({});
     const [checkAllControl, setCheckAllControl] = useState(false);
-    const [selectedItem, setSelectedItem] = useState([]);
-    const [totalPrice, setTotalPrice] = useState(0);
-    const [finalPrice, setFinalPrice] = useState(0);
 
     useEffect(() => {
-        const api = new API()
-        async function fetchCart() {
-            const res = await api.getCart()
-            const data = await res.data
-            setCart(data)
-        }
-
         function initCheckControl(cart) {
             const init = {}
             cart.map(i => {
                 const id = i.id
                 init[id] = false
             })
+
+            selectedItem.map(i => {
+                const id = i.id
+                init[id] = true
+            })
             setCheckControl(init)
         }
 
-        fetchCart()
         initCheckControl(cart)
     }, []);
 
     useEffect(() => {
-
         function calculatePrice() {
             const price = selectedItem.reduce((a, b) => ({ sale_coin_price: (a.sale_coin_price + b.sale_coin_price) }), { sale_coin_price: 0 })['sale_coin_price']
             setTotalPrice(price)
@@ -108,6 +98,10 @@ export default function Cart() {
             setSelectedItem(remainedItem)
             setCheckAllControl(false)
         }
+    }
+
+    const handlePayment = () => {
+        setStep(2)
     }
 
     return (
@@ -266,7 +260,7 @@ export default function Cart() {
                 </Box>
                 <Box
                     sx={{
-                        width: isSm ? '100%' : '20%',
+                        width: isSm ? '100%' : '30%',
                         bgcolor: COLORS.bg2,
                         borderRadius: '10px',
                         padding: '32px',
@@ -436,6 +430,7 @@ export default function Cart() {
                                 borderRadius: '8px',
                                 mt: '24px'
                             }}
+                            onClick={handlePayment}
                         >
                             Thanh toán
                         </Button>
