@@ -37,6 +37,8 @@ export default function Cart() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     const [cart, setCart] = useState([]);
+    const [checkControl, setCheckControl] = useState({});
+    const [checkAllControl, setCheckAllControl] = useState(false);
     const [selectedItem, setSelectedItem] = useState([]);
     const [totalPrice, setTotalPrice] = useState(0);
     const [finalPrice, setFinalPrice] = useState(0);
@@ -48,7 +50,18 @@ export default function Cart() {
             const data = await res.data
             setCart(data)
         }
+
+        function initCheckControl(cart) {
+            const init = {}
+            cart.map(i => {
+                const id = i.id
+                init[id] = false
+            })
+            setCheckControl(init)
+        }
+
         fetchCart()
+        initCheckControl(cart)
     }, []);
 
     useEffect(() => {
@@ -62,19 +75,38 @@ export default function Cart() {
         calculatePrice()
     }, [selectedItem])
 
-    const handleSelectAllItem = () => {
-        setSelectedItem(cart)
+    const handleSelectAllItem = (event) => {
+        const checked = event.target.checked
+        const checkAll = {}
+        cart.map(i => {
+            const id = i.id
+            checkAll[id] = checked
+        })
+        if (checked) {
+            setSelectedItem(cart)
+        }
+        else {
+            setSelectedItem([])
+        }
+        setCheckAllControl(checked)
+        setCheckControl(checkAll)
     }
     const handleSelectCartItem = (event, id) => {
         const checked = event.target.checked
+        const copyCheckedControl = { ...checkControl }
+        copyCheckedControl[id] = checked
+        setCheckControl(copyCheckedControl)
         if (checked) {
             const item = cart.filter(i => i.id === id)
             const currentSelect = [...selectedItem, ...item]
+            const isCheckAll = currentSelect.length === cart.length
+            setCheckAllControl(isCheckAll)
             setSelectedItem(currentSelect)
         }
         else {
             const remainedItem = selectedItem.filter(i => i.id !== id)
             setSelectedItem(remainedItem)
+            setCheckAllControl(false)
         }
     }
 
@@ -118,7 +150,7 @@ export default function Cart() {
                     >
                         <MenuItem>
                             <ListItemIcon>
-                                <Checkbox onChange={handleSelectAllItem} sx={{ color: COLORS.contentIcon }} />
+                                <Checkbox checked={checkAllControl} onChange={handleSelectAllItem} sx={{ color: COLORS.contentIcon }} />
                             </ListItemIcon>
                             <ListItemText
                                 sx={{
@@ -156,7 +188,7 @@ export default function Cart() {
                                             maxWidth: '5%',
                                         }}
                                     >
-                                        <Checkbox onChange={(event) => { handleSelectCartItem(event, item.id) }} sx={{ color: COLORS.contentIcon }} />
+                                        <Checkbox checked={checkControl[item.id] || false} onChange={(event) => { handleSelectCartItem(event, item.id) }} sx={{ color: COLORS.contentIcon }} />
                                     </ListItemIcon>
                                     <Card
                                         sx={{
