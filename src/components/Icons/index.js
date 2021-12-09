@@ -46,6 +46,7 @@ import QR from './QR';
 import Favorite from './Favorite';
 import Loop from './Loop';
 import Clock from './Clock';
+import CartEmpty from './CartEmpty';
 
 export {
     Bookmark,
@@ -95,5 +96,6 @@ export {
     QR,
     Favorite,
     Loop,
-    Clock
+    Clock,
+    CartEmpty
 }
