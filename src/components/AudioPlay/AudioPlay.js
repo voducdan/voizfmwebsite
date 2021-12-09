@@ -41,7 +41,6 @@ import useWindowSize from '../../utils/useWindowSize';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
 export default function AudioPlay() {
-
     const playing = useSelector(selectPlayAudio);
     const [audioData, setAudio] = useState({})
     const [openShareModal, setOpenShareModal] = useState(false);
