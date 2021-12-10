@@ -36,6 +36,12 @@ const TEXT_STYLE = {
         fontWeight: 'bold',
         fontFamily: 'SF UI Display'
     },
+    title0: {
+        fontSize: '40px',
+        lineHeight: '48px',
+        fontWeight: '700',
+        fontFamily: 'SF UI Display'
+    },
     title1: {
         fontSize: '16px',
         lineHeight: '20px',
