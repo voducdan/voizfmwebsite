@@ -1,5 +1,5 @@
 // import react
-import { useState, useEffect } from 'react';
+import { useState } from 'react';
 
 // import MUI components
 import {
@@ -12,15 +12,12 @@ import {
     Radio,
     Divider,
     ListItemButton,
-    ListItemIcon,
     ListItemText,
     Collapse,
-    List
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
 import ArrowDropUpIcon from '@mui/icons-material/ArrowDropUp';
-import StarBorder from '@mui/icons-material/StarBorder';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';

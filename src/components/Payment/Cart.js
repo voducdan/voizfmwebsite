@@ -43,15 +43,15 @@ export default function Cart(props) {
     useEffect(() => {
         function initCheckControl(cart) {
             const init = {}
-            cart.map(i => {
+            cart.forEach(i => {
                 const id = i.id
                 init[id] = false
             })
-
-            selectedItem.map(i => {
+            selectedItem.forEach(i => {
                 const id = i.id
                 init[id] = true
             })
+
             setCheckControl(init)
         }
 
@@ -415,7 +415,7 @@ export default function Cart(props) {
                                                 ...TEXT_STYLE.h2,
                                                 color: COLORS.white
                                             }}
-                                        >{formatPrice(totalPrice)}đ</Typography>
+                                        >{formatPrice(finalPrice)}đ</Typography>
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.caption12,

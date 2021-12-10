@@ -225,6 +225,7 @@ export default function VipPackage() {
                         ...TEXT_STYLE.content1,
                         color: COLORS.bg4,
                         mt: '40px',
+                        mb: '80px',
                         textDecoration: 'underline'
                     }}
                 >Hỗ trợ khi gặp vấn đề trong thanh toán</Typography>

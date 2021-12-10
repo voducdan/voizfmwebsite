@@ -106,7 +106,8 @@ export default function SidebarMenu() {
                     top: { sm: 0, xs: HEADER_HEIGHT_MB },
                     paddingBottom: { sm: 0, xs: HEADER_HEIGHT },
                     overflowX: 'hidden',
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    borderRight: `1px solid ${COLORS.blackStroker}`
                 },
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },
                 ...(!open && { display: 'none' }),
