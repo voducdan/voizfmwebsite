@@ -1,10 +1,14 @@
+// import react
 import { useRef } from 'react';
 
+// import MUI components
 import { styled } from '@mui/material/styles';
-import Typography from '@mui/material/Typography';
-import Box from '@mui/material/Box';
+import {
+    Typography,
+    Box
+} from '@mui/material';
 
-
+// import swiper
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
@@ -12,15 +16,21 @@ import 'swiper/swiper.scss'; // core Swiper
 import 'swiper/modules/navigation/navigation.scss'; // Navigation module
 import 'swiper/modules/pagination/pagination.scss';
 
+// import others components
+import HomeCarousel from '../../components/HomeCarousel/HomeCarousel';
+import Thumbnail from '../../components/Thumbnail/Thumbnail';
+import CategoryBar from '../../components/Shared/CategoryBar';
 
-import HomeCarousel from '../../components/HomeCarousel/HomeCarousel'
-import Thumbnail from '../../components/Thumbnail/Thumbnail'
+// import icons
+import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/index';
 
-import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/index'
-import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants'
+// import utils
+import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
+import { flexStyle } from '../../utils/flexStyle'
 
-import { fakeData, fakeSuggest, newContent, authors } from '../../mockData/HomeData'
+// import fake data
+import { fakeData, fakeSuggest, newContent, authors } from '../../mockData/HomeData';
 
 SwiperCore.use([Navigation]);
 
@@ -31,75 +41,63 @@ const flexCenterStyle = {
     alignItems: 'center'
 }
 
-const SwiperBtnNext = (props) => ({
-    position: 'absolute',
-    right: 0,
-    width: '24px',
-    height: '24px',
-    top: '50%',
-    transform: 'translate(-40px, 70%)',
-    zIndex: 2,
-    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
-})
+const SwiperBtnNext = (props) => {
+    const { isSm } = props;
+    return {
+        position: 'absolute',
+        right: 0,
+        width: '24px',
+        height: '24px',
+        top: '50%',
+        transform: 'translate(-40px, 70%)',
+        zIndex: 2,
+        ...(isSm && { display: 'none' })
+    }
+}
 
-const SwiperBtnPrev = (props) => ({
-    position: 'absolute',
-    left: 0,
-    width: '24px',
-    height: '24px',
-    top: '50%',
-    transform: 'translate(28px, 70%)',
-    zIndex: 2,
-    ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm && { display: 'none' })
-})
+const SwiperBtnPrev = (props) => {
+    const { isSm } = props
+    return {
+        position: 'absolute',
+        left: 0,
+        width: '24px',
+        height: '24px',
+        top: '50%',
+        transform: 'translate(28px, 70%)',
+        zIndex: 2,
+        ...(isSm && { display: 'none' })
+    }
+}
 
 const Main = styled('main', { shouldForwardProp: (prop) => prop !== 'open' })(
-    () => ({
-
-    }),
+    () => ({})
 );
 
-const Title = (props) => (
-    < Box sx={{
-        ...flexCenterStyle,
-        marginBottom: '24px'
-    }}>
-        <Typography sx={{
-            ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-            fontFamily: FONT_FAMILY,
-            color: COLORS.white
+const Title = (props) => {
+    const { isSm, content } = props
+    return (
+        < Box sx={{
+            ...flexCenterStyle,
+            marginBottom: '24px'
         }}>
-            {props.content}
-        </Typography>
-        <Box sx={{ marginLeft: '11.3px', marginTop: '6px' }}>
-            <RightArrow fill={COLORS.white} />
-        </Box>
-    </ Box >
-)
+            <Typography sx={{
+                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                fontFamily: FONT_FAMILY,
+                color: COLORS.white
+            }}>
+                {content}
+            </Typography>
+            <Box sx={{ marginLeft: '11.3px', marginTop: '6px' }}>
+                <RightArrow fill={COLORS.white} />
+            </Box>
+        </ Box >
+    )
+}
 
-const CatetoryBar = (props) => (
-    <Box >
-        <Swiper slidesPerView='auto' spaceBetween={40} style={{ marginTop: props.windowSize.width <= SCREEN_BREAKPOINTS.sm ? 20 : 35 }}>
-            {props.categoryList.map((item, idx) => (
-                <SwiperSlide key={idx} style={{ width: 'auto' }}>
-                    <Typography sx={{
-                        ...(props.windowSize.width <= SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                        fontFamily: FONT_FAMILY,
-                        color: COLORS.VZ_Text_content,
-                        ...(idx === 0 && { marginLeft: 0 }),
-                        whiteSpace: 'nowrap',
-                    }} key={idx}>{item}
-                    </Typography>
-                </SwiperSlide>
-            ))}
-        </Swiper>
-    </Box>
-)
-
-
-export default function HomeContent(props) {
+export default function HomeContent() {
 
     const windowSize = useWindowSize();
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     // const [data, setData] = useState([])
     // const [suggest, setSuggest] = useState([])
@@ -112,7 +110,7 @@ export default function HomeContent(props) {
     const navigationPublisherPrevRef = useRef(null)
     const navigationPublisherNextRef = useRef(null)
 
-    let num_items_per_line = windowSize.width > SCREEN_BREAKPOINTS.sm ? 5 : 3;
+    let num_items_per_line = !isSm ? 5 : 3;
 
     return (
         <Main>
@@ -120,7 +118,7 @@ export default function HomeContent(props) {
             <Box sx={{
                 margin: '107px 48px 56px 48px'
             }}>
-                {Title({ content: 'Gợi ý cho người chưa bắt đầu', windowSize })}
+                {<Title content="Gợi ý cho người chưa bắt đầu" isSm={isSm} />}
                 <Swiper slidesPerView={num_items_per_line} spaceBetween={20} style={{ marginTop: 35 }}>
                     {fakeSuggest.map((item) => (
                         <SwiperSlide key={item.id}>
@@ -134,10 +132,10 @@ export default function HomeContent(props) {
                     <Box sx={{
                         margin: '0 48px 56px 48px'
                     }} key={data.title}>
-                        {Title({ content: data.title, windowSize })}
-                        {data.categories && CatetoryBar({ categoryList: data.categories, windowSize })}
+                        {<Title content={data.title} isSm={isSm} />}
+                        {data.categories && <CategoryBar categoryList={data.categories} isSm={isSm} />}
                         <Swiper slidesPerView={num_items_per_line} spaceBetween={20}
-                            style={{ marginTop: windowSize.width > SCREEN_BREAKPOINTS.sm ? 35 : 20 }}
+                            style={{ marginTop: !isSm ? 35 : 20 }}
                         >
                             {data.items.map((item) => (
                                 <SwiperSlide key={item.id}>
@@ -154,7 +152,7 @@ export default function HomeContent(props) {
                     backgroundColor: COLORS.bg2,
                     position: 'relative'
                 }}>
-                {Title({ content: 'Nội dung mới cho bạn', windowSize })}
+                {<Title content="Nội dung mới cho bạn" isSm={isSm} />}
                 <Swiper
 
                     navigation={{
@@ -173,29 +171,38 @@ export default function HomeContent(props) {
                     ))}
                 </Swiper>
                 <div style={{
-                    ...SwiperBtnPrev({ windowSize })
+                    ...SwiperBtnPrev({ isSm })
                 }} ref={navigationNewContentPrevRef} ><CarouselPrev></CarouselPrev></div>
                 <div style={{
-                    ...SwiperBtnNext({ windowSize })
+                    ...SwiperBtnNext({ isSm })
                 }} ref={navigationNewContentNextRef} > <CarouselNext></CarouselNext></div>
             </Box>
 
             <Box sx={{
                 margin: '60px 48px'
             }}>
-                {Title({ content: 'Tác giả nổi bật', windowSize })}
-                <Swiper slidesPerView={num_items_per_line} spaceBetween={20} >
+                {<Title content="Tác giả nổi bật" isSm={isSm} />}
+                <Swiper
+                    slidesPerView={num_items_per_line}
+                    spaceBetween={20}
+                >
                     {authors.map((item) => (
-                        <SwiperSlide key={item.id}>
+                        <SwiperSlide
+                            style={{
+                                ...flexStyle('center', 'center'),
+                                flexDirection: 'column'
+                            }}
+                            key={item.id}
+                        >
                             <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                             <Typography sx={{
-                                ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
+                                ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
                                 color: COLORS.white,
                                 letterSpacing: 0,
                                 marginTop: '22px'
                             }}>Vũ trọng phụng</Typography>
                             <Typography sx={{
-                                ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
+                                ...(!isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
                                 color: COLORS.VZ_Text_content,
                                 display: '-webkit-box',
                                 marginTop: '8px',
@@ -214,7 +221,7 @@ export default function HomeContent(props) {
                     backgroundColor: COLORS.bg2,
                     position: 'relative'
                 }}>
-                {Title({ content: 'Nhà xuất bản', windowSize })}
+                {<Title content="Nhà xuất bản" isSm={isSm} />}
 
                 <Swiper
                     navigation={{
@@ -233,10 +240,10 @@ export default function HomeContent(props) {
                     ))}
                 </Swiper>
                 <div style={{
-                    ...SwiperBtnPrev({ windowSize })
+                    ...SwiperBtnPrev({ isSm })
                 }} ref={navigationPublisherPrevRef} ><CarouselPrev></CarouselPrev></div>
                 <div style={{
-                    ...SwiperBtnNext({ windowSize })
+                    ...SwiperBtnNext({ isSm })
                 }} ref={navigationPublisherNextRef} > <CarouselNext></CarouselNext></div>
             </Box>
         </Main >
