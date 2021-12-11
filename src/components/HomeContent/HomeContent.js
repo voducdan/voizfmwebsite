@@ -133,7 +133,7 @@ export default function HomeContent() {
                         margin: '0 48px 56px 48px'
                     }} key={data.title}>
                         {<Title content={data.title} isSm={isSm} />}
-                        {data.categories && <CategoryBar categoryList={data.categories} isSm={isSm} />}
+                        {data.categories && <CategoryBar categoryList={data.categories} isSm={isSm} active={0} />}
                         <Swiper slidesPerView={num_items_per_line} spaceBetween={20}
                             style={{ marginTop: !isSm ? 35 : 20 }}
                         >
