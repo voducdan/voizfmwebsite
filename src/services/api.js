@@ -6,7 +6,7 @@ export default class API {
     constructor() {
         this.api_token = null;
         this.client = null;
-        this.base_url = `http://${process.env.REACT_APP_BASE_URL}`;
+        this.base_url = `https://${process.env.REACT_APP_BASE_URL}`;
     }
 
     init = () => {
@@ -17,7 +17,7 @@ export default class API {
         };
 
         if (!!this.api_token) {
-            headers['Authorization'] = `Bearer ${this.api_token}`
+            headers['X-Authorization'] = this.api_token
         };
 
         this.client = axios.create({
@@ -39,5 +39,9 @@ export default class API {
 
     getCart = () => {
         return this.init().get(`/cart`)
+    }
+
+    getComboPackage = () => {
+        return this.init().get(`/combo_packages`)
     }
 }

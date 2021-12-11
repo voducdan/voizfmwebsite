@@ -1,8 +1,7 @@
 // import MUI components
 import {
     Box,
-    Typography,
-    Button
+    Typography
 } from '@mui/material';
 
 // import utils

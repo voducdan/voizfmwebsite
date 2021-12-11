@@ -71,7 +71,7 @@ export default function Cart(props) {
     const handleSelectAllItem = (event) => {
         const checked = event.target.checked
         const checkAll = {}
-        cart.map(i => {
+        cart.forEach(i => {
             const id = i.id
             checkAll[id] = checked
         })
