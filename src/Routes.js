@@ -3,6 +3,7 @@ import Account from './components/Account/Account';
 import PlaylistDetail from './components/PlaylistDetail/PlaylistDetail';
 import AudioPlay from './components/AudioPlay/AudioPlay';
 import Payment from './components/Payment/Payment';
+import UpVip from './components/UpVip/UpVip';
 
 const ROUTES = [
     {
@@ -34,6 +35,12 @@ const ROUTES = [
         key: "APP_CART",
         exact: true,
         component: <Payment />,
+    },
+    {
+        path: "/up-vip",
+        key: "APP_UP_VIP",
+        exact: true,
+        component: <UpVip />,
     }
 ]
 

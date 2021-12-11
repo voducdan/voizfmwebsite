@@ -2,7 +2,7 @@
 import { useSelector, useDispatch } from 'react-redux';
 
 // import react router component
-import { Link } from 'react-router-dom'
+import { Link } from 'react-router-dom';
 
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';

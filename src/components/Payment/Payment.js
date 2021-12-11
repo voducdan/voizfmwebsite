@@ -41,9 +41,9 @@ export default function Payment() {
                     setCart={setCart}
                     setStep={setStep}
                     totalPrice={totalPrice}
-                    finalPrice={totalPrice}
+                    finalPrice={finalPrice}
                     setTotalPrice={setTotalPrice}
-                    setFinalPrice={setTotalPrice}
+                    setFinalPrice={setFinalPrice}
                     selectedItem={selectedItem}
                     setSelectedItem={setSelectedItem}
                 />)
