@@ -1,16 +1,13 @@
-
 // import react
 import { useState, useEffect } from 'react';
 
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
 
+// import swiper
 import 'swiper/swiper.scss'; // core Swiper
 import 'swiper/modules/navigation/navigation.scss'; // Navigation module
 import 'swiper/modules/pagination/pagination.scss';
-
-
-
 
 // import MUI components
 import {
@@ -119,7 +116,7 @@ const VipComboItem = (props) => {
             <CardActions>
                 <Button
                     sx={{
-                        ...TEXT_STYLE.title4,
+                        ...(isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.title4),
                         color: COLORS.white,
                         textTransform: 'none',
                         bgcolor: COLORS.main,

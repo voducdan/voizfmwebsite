@@ -7,6 +7,7 @@ import {
 import VipPackage from "./VipPackage";
 import VipBenefit from "./VipBenefit";
 import VipCombo from "./VipCombo";
+import FAQ from "./FAQ";
 
 export default function UpVip() {
     return (
@@ -14,6 +15,7 @@ export default function UpVip() {
             <VipPackage />
             <VipBenefit />
             <VipCombo />
+            <FAQ />
         </Box>
     )
 }
