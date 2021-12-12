@@ -1,7 +1,17 @@
 const fakeData = [
     {
         title: 'Sách nói chất lượng',
-        categories: ['Tất cả', 'Sắp phát hành', 'Tâm linh', 'Con cái', 'Kỹ năng', 'Doanh nhân', 'Thành công', 'Hạnh phúc', 'Lịch sử'],
+        categories: [
+            { name: 'Tất cả', id: null },
+            { name: 'Sắp phát hành', id: 1 },
+            { name: 'Tâm linh', id: 2 },
+            { name: 'Con cái', id: 3 },
+            { name: 'Kỹ năng', id: 4 },
+            { name: 'Doanh nhân', id: 5 },
+            { name: 'Thành công', id: 6 },
+            { name: 'Hạnh phúc', id: 7 },
+            { name: 'Lịch sử', id: 8 }
+        ],
         items: [
             { id: 1, avtSrc: 'https://picsum.photos/201/201?img=6' },
             { id: 2, avtSrc: 'https://picsum.photos/201/201?img=7' },
@@ -14,7 +24,40 @@ const fakeData = [
     },
     {
         title: 'Truyện nói hấp dẫn',
-        categories: ['Tất cả', 'Kinh điển Việt Nam', 'Kinh điển quốc tế', 'Ngôn tình', 'Văn học QT hiện đại', 'Văn học VN hiện đại', 'Thành công', 'Trinh thám'],
+        categories: [
+            {
+                "name": "Tất cả",
+                "id": null
+            },
+            {
+                "name": "Kinh điển Việt Nam",
+                "id": 1
+            },
+            {
+                "name": "Kinh điển quốc tế",
+                "id": 2
+            },
+            {
+                "name": "Ngôn tình",
+                "id": 3
+            },
+            {
+                "name": "Văn học QT hiện đại",
+                "id": 4
+            },
+            {
+                "name": "Văn học VN hiện đại",
+                "id": 5
+            },
+            {
+                "name": "Thành công",
+                "id": 6
+            },
+            {
+                "name": "Trinh thám",
+                "id": 7
+            }
+        ],
         items: [
             { id: 1, avtSrc: 'https://picsum.photos/201/201?img=11' },
             { id: 2, avtSrc: 'https://picsum.photos/201/201?img=12' },
@@ -28,7 +71,48 @@ const fakeData = [
     },
     {
         title: 'Podcast đặc sắc',
-        categories: ['Tất cả', 'Tin tức', 'Văn hóa', 'Giải trí', 'Kiến thức', 'Phân loại', 'Kinh dị', 'Ngủ ngon', 'Thiền-tĩnh tâm', 'Tâm sự'],
+        categories: [
+            {
+                "name": "Tất cả",
+                "id": null
+            },
+            {
+                "name": "Tin tức",
+                "id": 1
+            },
+            {
+                "name": "Văn hóa",
+                "id": 2
+            },
+            {
+                "name": "Giải trí",
+                "id": 3
+            },
+            {
+                "name": "Kiến thức",
+                "id": 4
+            },
+            {
+                "name": "Phân loại",
+                "id": 5
+            },
+            {
+                "name": "Kinh dị",
+                "id": 6
+            },
+            {
+                "name": "Ngủ ngon",
+                "id": 7
+            },
+            {
+                "name": "Thiền-tĩnh tâm",
+                "id": 8
+            },
+            {
+                "name": "Tâm sự",
+                "id": 9
+            }
+        ],
         items: [
             { id: 1, avtSrc: 'https://picsum.photos/201/201?img=16' },
             { id: 2, avtSrc: 'https://picsum.photos/201/201?img=17' },

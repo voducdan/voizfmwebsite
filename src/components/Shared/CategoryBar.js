@@ -1,3 +1,6 @@
+//import react 
+import { useState } from 'react';
+
 // import MUI components
 import {
     Typography,
@@ -17,18 +20,25 @@ import 'swiper/modules/pagination/pagination.scss';
 import './style.css';
 
 // import utils
-import { TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants'
+import { TEXT_STYLE, COLORS } from '../../utils/constants'
 
 SwiperCore.use([Navigation]);
 
 export default function CategoryBar(props) {
-    const { categoryList, isSm, active } = props
+    const { categoryList, isSm, onSelectCategory } = props
+    const [activeCategory, setActiveCategory] = useState(0);
+
+    const handleSelectCategory = (e) => {
+        const channeId = e.target.id
+        setActiveCategory(Number(channeId))
+        onSelectCategory()
+    }
 
     return (
         <Box >
             <Swiper
                 slidesPerView='auto'
-                paceBetween={40}
+                spaceBetween={40}
                 style={{
                     marginTop: isSm ? 20 : 35
                 }}
@@ -41,27 +51,31 @@ export default function CategoryBar(props) {
                         }}
                     >
                         {
-                            (idx !== active) && (
-                                <Typography sx={{
-                                    ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                    color: COLORS.VZ_Text_content,
-                                    marginLeft: idx === 0 ? 0 : '38px',
-                                    whiteSpace: 'nowrap',
-                                }}
+                            (idx !== activeCategory) && (
+                                <Typography
+                                    id={item.id}
+                                    onClick={handleSelectCategory}
+                                    sx={{
+                                        ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                        color: COLORS.VZ_Text_content,
+                                        whiteSpace: 'nowrap',
+                                        cursor: 'pointer'
+                                    }}
                                     key={idx}>
-                                    {item}
+                                    {item.name}
                                 </Typography>
                             )
                         }
                         {
-                            (idx === active) && (
+                            (idx === activeCategory) && (
                                 <Chip
+                                    id={item.id}
+                                    onClick={handleSelectCategory}
                                     key={idx}
-                                    label={item}
+                                    label={item.name}
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                         color: COLORS.VZ_Text_content,
-                                        marginLeft: idx === 0 ? 0 : '38px',
                                         bgcolor: COLORS.bg3,
                                         whiteSpace: 'nowrap',
                                     }}

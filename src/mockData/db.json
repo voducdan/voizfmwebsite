@@ -317,35 +317,36 @@
             "description": "Hưởng ứng lời kêu gọi hạn chế đi lại từ Bộ Y tế, Voiz FM phục vụ miễm phí 100% sách nói chất lượng cao, giúp mọi người tận dụng thời gian ở nhà để nâng cao tri thức!",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [
-                    "StayHome"
+                    "StayHome",
+                    "Covid19"
                 ],
                 "status": null,
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/420/420?img=101",
+                    "thumb_url": "https://picsum.photos/420/420?img=101"
                 }
             },
             "discovery_counter": {
                 "id": 5,
-                "like_count": 0,
-                "comment_count": 0
+                "like_count": 10,
+                "comment_count": 7
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
+                "original_url": "https://picsum.photos/420/420?img=100",
+                "thumb_url": "https://picsum.photos/420/420?img=100"
             }
         },
         {
             "description": "Tuần lễ khuyến đọc: Đồng giá 50k. Mua ngay kẻo lỡ!",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [
@@ -354,8 +355,8 @@
                 "status": null,
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/450/450?img=101",
+                    "thumb_url": "https://picsum.photos/450/420?img=101"
                 }
             },
             "discovery_counter": {
@@ -365,8 +366,8 @@
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=102",
-                "thumb_url": "https://picsum.photos/1190/420?img=102"
+                "original_url": "https://picsum.photos/490/420?img=102",
+                "thumb_url": "https://picsum.photos/490/420?img=102"
             }
         },
         {
@@ -386,20 +387,20 @@
             },
             "discovery_counter": {
                 "id": 5,
-                "like_count": 0,
-                "comment_count": 0
+                "like_count": 9,
+                "comment_count": 12
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/100/450?img=103",
-                "thumb_url": "https://picsum.photos/100/450?img=103"
+                "original_url": "https://picsum.photos/480/450?img=103",
+                "thumb_url": "https://picsum.photos/480/450?img=103"
             }
         },
         {
             "description": "Tuần lễ khuyến đọc: Đồng giá 50k. Mua ngay kẻo lỡ!",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [
@@ -408,8 +409,8 @@
                 "status": null,
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/400/400?img=101",
+                    "thumb_url": "https://picsum.photos/400/400?img=101"
                 }
             },
             "discovery_counter": {
@@ -419,15 +420,15 @@
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
+                "original_url": "https://picsum.photos/520/520?img=100",
+                "thumb_url": "https://picsum.photos/520/520?img=100"
             }
         },
         {
             "description": "Đừng bỏ lỡ những tự sách được nghe nhiều nhất tháng vừa qua. Tất cả đều là những tựa sách chất lượng cao và độc quyền.",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [
@@ -436,8 +437,8 @@
                 "status": null,
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/500/500?img=101",
+                    "thumb_url": "https://picsum.photos/500/500?img=101"
                 }
             },
             "discovery_counter": {
@@ -447,15 +448,15 @@
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
+                "original_url": "https://picsum.photos/420/420?img=100",
+                "thumb_url": "https://picsum.photos/420/420?img=100"
             }
         },
         {
             "description": "Hưởng ứng lời kêu gọi hạn chế đi lại từ Bộ Y tế, Voiz FM phục vụ miễm phí 100% sách nói chất lượng cao, giúp mọi người tận dụng thời gian ở nhà để nâng cao tri thức!",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [
@@ -464,8 +465,8 @@
                 "status": null,
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/410/420?img=101",
+                    "thumb_url": "https://picsum.photos/410/420?img=101"
                 }
             },
             "discovery_counter": {
@@ -475,23 +476,23 @@
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
+                "original_url": "https://picsum.photos/410/420?img=100",
+                "thumb_url": "https://picsum.photos/410/420?img=100"
             }
         },
         {
             "description": "Tuần lễ khuyến đọc: Đồng giá 50k. Mua ngay kẻo lỡ!",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [],
                 "status": "Top 10 sách nói tháng 8",
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/410/420?img=101",
+                    "thumb_url": "https://picsum.photos/410/420?img=101"
                 }
             },
             "discovery_counter": {
@@ -501,23 +502,23 @@
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
+                "original_url": "https://picsum.photos/410/420?img=100",
+                "thumb_url": "https://picsum.photos/410/420?img=100"
             }
         },
         {
             "description": "Hưởng ứng lời kêu gọi hạn chế đi lại từ Bộ Y tế, Voiz FM phục vụ miễm phí 100% sách nói chất lượng cao, giúp mọi người tận dụng thời gian ở nhà để nâng cao tri thức!",
             "time": "24-03-2021",
             "channel": {
-                "id": 2,
+                "id": 1,
                 "name": "Cộng đồng Voiz FM",
                 "description": "Cộng đồng Voiz FM",
                 "tags": [],
                 "status": "Sale đồng giá",
                 "avatar": {
                     "id": 4,
-                    "original_url": "https://picsum.photos/1190/420?img=101",
-                    "thumb_url": "https://picsum.photos/1190/420?img=101"
+                    "original_url": "https://picsum.photos/460/420?img=101",
+                    "thumb_url": "https://picsum.photos/460/420?img=101"
                 }
             },
             "discovery_counter": {
@@ -527,8 +528,8 @@
             },
             "avatar": {
                 "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
+                "original_url": "https://picsum.photos/560/420?img=100",
+                "thumb_url": "https://picsum.photos/560/420?img=100"
             }
         }
     ]
