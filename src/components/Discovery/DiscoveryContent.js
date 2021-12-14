@@ -34,14 +34,19 @@ const DiscoveryItem = (props) => {
     return (
         <Box>
             <Masonry
-                columns={3}
-                spacing={4}
+                columns={isSm ? 1 : 3}
+                spacing={isSm ? 0 : 4}
+                sx={{
+                    overflow: 'hidden',
+                    margin: 0
+                }}
             >
                 {discoveryList.map((item, index) => (
                     <Stack key={index}>
                         <Card
                             sx={{
-                                bgcolor: COLORS.bg2
+                                bgcolor: COLORS.bg2,
+                                margin: '8px 0'
                             }}>
                             <Box
                                 sx={{
@@ -198,7 +203,7 @@ export default function DiscoveryContent() {
     return (
         <Box
             sx={{
-                margin: '0 48px 0 48px'
+                margin: isSm ? '0 16px' : '0 48px 0 48px'
             }}
         >
             <Box
