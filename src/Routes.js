@@ -5,6 +5,7 @@ import AudioPlay from './components/AudioPlay/AudioPlay';
 import Payment from './components/Payment/Payment';
 import UpVip from './components/UpVip/UpVip';
 import Discovery from './components/Discovery/Discovery';
+import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
 
 const ROUTES = [
     {
@@ -48,6 +49,12 @@ const ROUTES = [
         key: "APP_DISCOVERY",
         exact: true,
         component: <Discovery />,
+    },
+    {
+        path: "/discovery/:id",
+        key: "APP_DISCOVERY_DETAIL",
+        exact: true,
+        component: <DiscoveryDetail />,
     }
 ]
 

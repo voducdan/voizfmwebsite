@@ -532,5 +532,62 @@
                 "thumb_url": "https://picsum.photos/560/420?img=100"
             }
         }
+    ],
+    "discoveryDetail": [
+        {
+            "id": 69,
+            "summary": "Thông tin quan trọng từ Voiz FM",
+            "title": "CẬP NHẬT CHÍNH SÁCH",
+            "published_at": "15-07-2021",
+            "is_liked": false,
+            "channel": {
+                "id": 35,
+                "name": "Voiz Network",
+                "description": "Cộng đồng liên kết Voiz FM",
+                "avatar": {
+                    "id": 266,
+                    "original_url": "/uploads/avatar/filename/266/a103ea3dee42f9a9ad197b6dfcd74d0399230172.jpg",
+                    "thumb_url": "/uploads/avatar/filename/266/thumb_a103ea3dee42f9a9ad197b6dfcd74d0399230172.jpg",
+                    "small_url": "/uploads/avatar/filename/266/small_a103ea3dee42f9a9ad197b6dfcd74d0399230172.jpg"
+                }
+            },
+            "image": {
+                "id": 7002,
+                "original_url": "/uploads/image/filename/7002/8d55b161fd35999925f165277ba3b5bd88622d01.png",
+                "thumb_url": "/uploads/image/filename/7002/thumb_8d55b161fd35999925f165277ba3b5bd88622d01.png",
+                "small_url": "/uploads/image/filename/7002/small_8d55b161fd35999925f165277ba3b5bd88622d01.png",
+                "width": 1020,
+                "height": 600
+            },
+            "discovery_counter": {
+                "id": 69,
+                "comments_count": 22,
+                "likes_count": 9
+            },
+            "discovery_contents": [
+                {
+                    "id": 154,
+                    "content": "Kính gửi Quý khách hàng!\r\n\r\nVoiz FM trân trọng thông báo đến Quý khách hàng về việc điều chỉnh bản quyền như sau:\r\n\r\n- Do yêu cầu từ đơn vị xuất bản, từ ngày 22/07/2021, các tựa sách sau đây sẽ được điều chỉnh từ VIP (dành cho thành viên VIP) sang COIN (cần phải mua lẻ).\r\n\r\n- Các thành viên VIP sẽ được giảm 10% giá bìa khi mua những tựa sách COIN.\r\n\r\nDanh mục cụ thể như sau: \r\n\r\n- Sự Sống Bất Tử\r\n\r\n- Thay Thái Độ Đổi Cuộc Đời 3\r\n\r\n- Nghĩ Lớn Để Thành Công\r\n\r\n- Bí Mật Tư Duy Triệu Phú\r\n\r\n- Vị Giám Đốc Một Phút: Phương Pháp Quản Lý Hiệu Quả Nhất Thế Giới\r\n\r\n- Điệp Viên Hoàn Hảo\r\n\r\n- Yes Or No - Những Quyết Định Thay Đổi Cuộc Sống\r\n\r\n- Bí Quyết Để Có Một Cuộc Sống Khoẻ Mạnh\r\n\r\n- Phút Dành Cho Cha\r\n\r\n- Vị Giám Đốc Hiệu Quả\r\n\r\n- Bí Quyết Để Có Một Gia Đình Hạnh Phúc\r\n\r\n- Từ Nước Mắt Tới Nụ Cười\r\n\r\n- Bí Mật Hành Trình Tình Yêu\r\n\r\n- Bí Mật Của Hạnh Phúc\r\n\r\n- Bí Quyết Của Thành Công\r\n\r\n- Nghệ Thuật Làm Mẹ\r\n\r\n- 22 Quy Luật Bất Biến Trong Marketing\r\n\r\n- Sức Mạnh Của Vị Giám Đốc Một Phút\r\n\r\nTrân trọng thông báo!",
+                    "title": "THÔNG BÁO ĐIỀU CHỈNH BẢN QUYỀN THÁNG 07/2021",
+                    "playlist_id": 754,
+                    "avatar": null,
+                    "playlist": {
+                        "type": "voiz",
+                        "id": 754,
+                        "name": "Sự Sống Bất Tử",
+                        "description": "Sự Sống Bất Tử không chỉ giúp người đọc giải đáp thắc mắc về những thay đổi xảy ra sau TNCT như: Các mối quan hệ có thay đổi không?, Niềm tin tôn giáo hay thực hành tâm linh có thay đổi không? và Có bất kỳ thay đổi nào về nhân sinh quan hay hệ giá trị cá nhân không?, mà còn đề cập đến Thượng Đế, đấng siêu linh, sinh vật kỳ ảo, giọng nói phát ra từ hư không và cả sự hiện hữu của Chúa Jesus, Muhammad, Đức Phật…\r\n\r\nMục tiêu của Sự Sống Bất Tử không gì hơn ngoài cung cấp cho bạn đọc những minh chứng khoa học đáng tin cậy nhất về thế giới bên kia qua hàng loạt ghi nhận về TNCT.",
+                        "promotion": "coin",
+                        "total_duration": 19687,
+                        "coin_price": 588,
+                        "avatar": {
+                            "id": 1043,
+                            "original_url": "/uploads/avatar/filename/1043/55967304a9e3af89675165bdb7df7a3d74d7a573.png",
+                            "thumb_url": "/uploads/avatar/filename/1043/thumb_55967304a9e3af89675165bdb7df7a3d74d7a573.png",
+                            "small_url": "/uploads/avatar/filename/1043/small_55967304a9e3af89675165bdb7df7a3d74d7a573.png"
+                        }
+                    }
+                }
+            ]
+        }
     ]
 }

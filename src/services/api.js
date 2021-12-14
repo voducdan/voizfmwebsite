@@ -29,6 +29,12 @@ export default class API {
         return this.client
     }
 
+    buildQueryString = (params) => {
+        const searchParams = new URLSearchParams();
+        const queryString = new URLSearchParams(params).toString();
+        return queryString
+    }
+
     getUser = (id) => {
         // reset base url for test
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
@@ -53,5 +59,17 @@ export default class API {
         // reset base url for test
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
         return this.init().get(`/discoveries`)
+    }
+    getDiscovery = (id, page, limit = 10) => {
+        // reset base url for test
+        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+        // return this.init().get(`/discoveries/${id}?${queryString}`)
+        return this.init().get(`/discoveryDetail/${id}?${queryString}`)
+    }
+    getDiscoveryComment = (discoveryId) => {
+        return this.init().get(`/discoveries/${discoveryId}/comments`)
     }
 }
