@@ -1,4 +1,5 @@
 // Import react module
+import { useEffect } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // import react router component
@@ -99,16 +100,21 @@ export default function Header() {
     const dispatch = useDispatch();
 
     // This url will be fetched from API later
-    const avtSrc = '/images/avt.png'
-
+    const avtSrc = '/images/avt.png';
     const headerItems = [
         BookmarkIcon,
         CartIcon
-    ]
+    ];
 
-    if (token) {
-        headerItems.push(userAvt)
-    } else headerItems.push(UserIcon)
+    useEffect(() => {
+        function setHeaderIcons() {
+            if (token) {
+                headerItems.push(userAvt)
+            } else headerItems.push(UserIcon)
+        }
+
+        setHeaderIcons()
+    }, [])
 
     const onOpenLogin = () => {
         dispatch(handleOpenLogin())

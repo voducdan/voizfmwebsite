@@ -4,6 +4,8 @@ import PlaylistDetail from './components/PlaylistDetail/PlaylistDetail';
 import AudioPlay from './components/AudioPlay/AudioPlay';
 import Payment from './components/Payment/Payment';
 import UpVip from './components/UpVip/UpVip';
+import Discovery from './components/Discovery/Discovery';
+import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
 
 const ROUTES = [
     {
@@ -19,7 +21,7 @@ const ROUTES = [
         component: <Account />,
     },
     {
-        path: "/playlist-detail",
+        path: "/playlists/:id",
         key: "APP_PLAYLIST_DETAIL",
         exact: true,
         component: <PlaylistDetail />,
@@ -41,6 +43,18 @@ const ROUTES = [
         key: "APP_UP_VIP",
         exact: true,
         component: <UpVip />,
+    },
+    {
+        path: "/discoveries",
+        key: "APP_DISCOVERY",
+        exact: true,
+        component: <Discovery />,
+    },
+    {
+        path: "/discoveries/:id",
+        key: "APP_DISCOVERY_DETAIL",
+        exact: true,
+        component: <DiscoveryDetail />,
     }
 ]
 
