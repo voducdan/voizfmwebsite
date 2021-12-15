@@ -1,6 +1,9 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import react router component
+import { Link } from 'react-router-dom';
+
 // import MUI components
 import {
     Box,
@@ -43,131 +46,140 @@ const DiscoveryItem = (props) => {
             >
                 {discoveryList.map((item, index) => (
                     <Stack key={index}>
-                        <Card
-                            sx={{
-                                bgcolor: COLORS.bg2,
-                                margin: '8px 0'
-                            }}>
-                            <Box
+                        <Link
+                            to={`/discoveries/${item.id}`}
+                            key={props.idx}
+                            style={{
+                                textDecoration: 'none'
+                            }}
+                        >
+                            <Card
                                 sx={{
-                                    ...flexStyle('flex-start', 'center'),
-                                    columnGap: '16px',
-                                    margin: '24px'
-                                }}
-                            >
-                                <Box>
-                                    <Avatar alt={`${item.channel.name} alt`} src={item.channel.avatar.thumb_url} />
-                                </Box>
+                                    bgcolor: COLORS.bg2,
+                                    margin: '8px 0'
+                                }}>
                                 <Box
                                     sx={{
-                                        ...flexStyle('center', 'flex-start'),
-                                        flexDirection: 'column',
-                                        rowGap: '6px'
+                                        ...flexStyle('flex-start', 'center'),
+                                        columnGap: '16px',
+                                        margin: '24px'
                                     }}
                                 >
-                                    <Typography
+                                    <Box>
+                                        <Avatar alt={`${item.channel.name} alt`} src={item.channel.avatar.thumb_url} />
+                                    </Box>
+                                    <Box
                                         sx={{
-                                            ...TEXT_STYLE.title1,
-                                            color: COLORS.white
+                                            ...flexStyle('center', 'flex-start'),
+                                            flexDirection: 'column',
+                                            rowGap: '6px'
                                         }}
-                                    >{item.channel.name}</Typography>
-                                    <Typography
-                                        sx={{
-                                            ...TEXT_STYLE.content3,
-                                            color: COLORS.contentIcon
-                                        }}
-                                    >{item.time}</Typography>
-                                </Box>
-                            </Box>
-                            <Divider sx={{ border: `1px solid ${COLORS.blackStroker}`, margin: 'auto 24px' }} />
-                            <CardContent
-                                sx={{
-                                    padding: '16px 0',
-                                    margin: '0 24px'
-                                }}
-                            >
-                                <Typography
-                                    sx={{
-                                        ...TEXT_STYLE.content2,
-                                        color: COLORS.contentIcon,
-                                        mb: '16px'
-                                    }}
-                                >
-                                    {item.description}
-                                </Typography>
-                                {
-                                    item.channel.tags.map((i, idx) => (
-                                        <span
-                                            key={idx}
-                                            style={{
-                                                ...TEXT_STYLE.h3,
-                                                color: COLORS.white,
-                                                marginRight: '5px'
-                                            }}
-                                        >
-                                            #{i}
-                                        </span>
-                                    ))
-                                }
-                                {
-                                    item.channel.status && (
+                                    >
                                         <Typography
                                             sx={{
-                                                ...TEXT_STYLE.h3,
+                                                ...TEXT_STYLE.title1,
+                                                color: COLORS.white
+                                            }}
+                                        >{item.channel.name}</Typography>
+                                        <Typography
+                                            sx={{
+                                                ...TEXT_STYLE.content3,
+                                                color: COLORS.contentIcon
+                                            }}
+                                        >{item.time}</Typography>
+                                    </Box>
+                                </Box>
+                                <Divider sx={{ border: `1px solid ${COLORS.blackStroker}`, margin: 'auto 24px' }} />
+                                <CardContent
+                                    sx={{
+                                        padding: '16px 0',
+                                        margin: '0 24px'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.content2,
+                                            color: COLORS.contentIcon,
+                                            mb: '16px'
+                                        }}
+                                    >
+                                        {item.description}
+                                    </Typography>
+                                    {
+                                        item.channel.tags.map((i, idx) => (
+                                            <span
+                                                key={idx}
+                                                style={{
+                                                    ...TEXT_STYLE.h3,
+                                                    color: COLORS.white,
+                                                    marginRight: '5px'
+                                                }}
+                                            >
+                                                #{i}
+                                            </span>
+                                        ))
+                                    }
+                                    {
+                                        item.channel.status && (
+                                            <Typography
+                                                sx={{
+                                                    ...TEXT_STYLE.h3,
+                                                    color: COLORS.white
+                                                }}
+                                            >
+                                                {item.channel.status}
+                                            </Typography>
+                                        )
+                                    }
+                                </CardContent>
+                                <CardMedia
+                                    component="img"
+                                    image={`${item.avatar.thumb_url}?w=162&auto=format`}
+                                    alt="green iguana"
+                                />
+                                <CardActions
+                                    sx={{
+                                        justifyContent: 'space-between',
+                                        margin: '15px 24px',
+                                        padding: 0
+                                    }}
+                                >
+                                    <Box
+                                        sx={{
+                                            ...flexStyle('flex-start', 'center'),
+                                            columnGap: '9px'
+                                        }}
+                                    >
+                                        <CommentIcon sx={{ color: COLORS.white }} />
+                                        <Typography
+                                            sx={{
+                                                ...TEXT_STYLE.content2,
                                                 color: COLORS.white
                                             }}
                                         >
-                                            {item.channel.status}
+                                            {item.discovery_counter.comment_count} góp ý
                                         </Typography>
-                                    )
-                                }
-                            </CardContent>
-                            <CardMedia
-                                component="img"
-                                image={`${item.avatar.thumb_url}?w=162&auto=format`}
-                                alt="green iguana"
-                            />
-                            <CardActions
-                                sx={{
-                                    justifyContent: 'space-between',
-                                    margin: '15px 24px',
-                                    padding: 0
-                                }}
-                            >
-                                <Box
-                                    sx={{
-                                        ...flexStyle('flex-start', 'center'),
-                                        columnGap: '9px'
-                                    }}
-                                >
-                                    <CommentIcon sx={{ color: COLORS.white }} />
-                                    <Typography
+                                    </Box>
+                                    <Box
                                         sx={{
-                                            ...TEXT_STYLE.content2,
-                                            color: COLORS.white
+                                            ...flexStyle('flex-start', 'center'),
+                                            columnGap: '9px'
                                         }}
                                     >
-                                        {item.discovery_counter.comment_count} góp ý
-                                    </Typography>
-                                </Box>
-                                <Box
-                                    sx={{
-                                        ...flexStyle('flex-start', 'center'),
-                                        columnGap: '9px'
-                                    }}
-                                >
-                                    <ThumbUpAltIcon sx={{ color: COLORS.white }} />
-                                    <Typography
-                                        sx={{
-                                            ...TEXT_STYLE.content2,
-                                            color: COLORS.white
-                                        }}
-                                    >
-                                        {item.discovery_counter.like_count} thích
-                                    </Typography>
-                                </Box>
-                            </CardActions>
-                        </Card>
+                                        <ThumbUpAltIcon sx={{ color: COLORS.white }} />
+                                        <Typography
+                                            sx={{
+                                                ...TEXT_STYLE.content2,
+                                                color: COLORS.white
+                                            }}
+                                        >
+                                            {item.discovery_counter.like_count} thích
+                                        </Typography>
+                                    </Box>
+                                </CardActions>
+                            </Card>
+                        </Link>
+
                     </Stack>
                 ))}
             </Masonry>

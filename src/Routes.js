@@ -21,7 +21,7 @@ const ROUTES = [
         component: <Account />,
     },
     {
-        path: "/playlist-detail",
+        path: "/playlists/:id",
         key: "APP_PLAYLIST_DETAIL",
         exact: true,
         component: <PlaylistDetail />,
@@ -45,13 +45,13 @@ const ROUTES = [
         component: <UpVip />,
     },
     {
-        path: "/discovery",
+        path: "/discoveries",
         key: "APP_DISCOVERY",
         exact: true,
         component: <Discovery />,
     },
     {
-        path: "/discovery/:id",
+        path: "/discoveries/:id",
         key: "APP_DISCOVERY_DETAIL",
         exact: true,
         component: <DiscoveryDetail />,

@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 // import react router dom
-import { useParams } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom'
 
 // import MUI components
 import {
@@ -17,6 +17,8 @@ import {
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
+import HeadphonesIcon from '@mui/icons-material/Headphones';
+
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
 import { TEXT_STYLE, COLORS, SCREEN_BREAKPOINTS } from '../../utils/constants';
@@ -262,9 +264,10 @@ export default function DiscoveryDetail() {
                 </Typography>
                 <Box
                     sx={{
-                        height: '329.66px',
+                        height: '329px',
                         width: '100%',
-                        top: 0
+                        top: 0,
+                        position: 'relative'
                     }}
                 >
                     <img style={{
@@ -273,6 +276,33 @@ export default function DiscoveryDetail() {
                         height: '100%',
                         left: 0,
                     }} alt="cover img alt" src="https://picsum.photos/1190/420?img=3"></img>
+                    <Link
+                        style={{
+                            position: 'absolute',
+                            bottom: '10px',
+                            right: '10px',
+                            textDecoration: 'none'
+                        }}
+                        to={`/playlists/${discovery.discovery_contents ? discovery.discovery_contents[0].playlist_id : undefined}`}
+                    >
+                        <Button
+                            sx={{
+                                ...TEXT_STYLE.title2,
+                                color: COLORS.white,
+                                bgcolor: COLORS.main,
+                                textTransform: 'none',
+                                height: '48px',
+                                width: '150px',
+                                borderRadius: '48px',
+                                ':hover': {
+                                    bgcolor: '#7c4ee9'
+                                }
+                            }}
+                            startIcon={<HeadphonesIcon sx={{ color: COLORS.white }} />}
+                        >
+                            Nghe sách
+                        </Button>
+                    </Link>
                 </Box>
                 <Typography
                     sx={{
