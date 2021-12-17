@@ -16,6 +16,7 @@ import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
+import formatDuration from '../../utils/formatDuration';
 import { Loop, Clock } from '../Icons';
 
 const WallPaper = styled('div')({
@@ -69,12 +70,6 @@ export default function Control(props) {
             audio.removeEventListener('ended', () => setPaused(true));
         };
     }, []);
-
-    function formatDuration(value) {
-        const minute = Math.floor(value / 60);
-        const secondLeft = value - minute * 60;
-        return `${minute}:${secondLeft < 9 ? `0${secondLeft}` : secondLeft}`;
-    }
 
     const onPlayClick = () => {
         setPaused(!paused)
