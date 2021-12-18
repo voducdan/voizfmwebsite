@@ -21,7 +21,7 @@ export default function PlaylistThumnail(props) {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    const { src, name, authors, isBookmark, hasDelete, children } = props;
+    const { id, src, name, authors, isBookmark, hasDelete, handleConfirmDeleteModalOpen, children } = props;
 
     const authorsString = (authors) => {
         if (Array.isArray(authors)) {
@@ -180,7 +180,7 @@ export default function PlaylistThumnail(props) {
                     }
                     {
                         hasDelete && (
-                            <IconButton aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content }}>
+                            <IconButton onClick={handleConfirmDeleteModalOpen} id={id} aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content }}>
                                 <DeleteIcon fontSize="small" />
                             </IconButton>
                         )

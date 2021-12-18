@@ -8,7 +8,12 @@ import {
     Divider,
     Button,
     Radio,
-    FormControlLabel
+    FormControlLabel,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText,
+    DialogTitle
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -75,6 +80,9 @@ export default function AudioLike() {
     const [deleteList, setDeleteList] = useState([]);
     const [isDeleteMode, setIsDeleteMode] = useState(false);
     const [isSelectDeleteAll, setIsSelectDeleteAll] = useState(false);
+    const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
+    const [singleItemIdToDelete, setSingleItemIdToDelete] = useState(null);
+    const [confirmDeleteModalText, setConfirmDeleteModalText] = useState('');
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const pageLimit = 10;
 
@@ -97,8 +105,39 @@ export default function AudioLike() {
     }
 
     const handleSubmitDelete = () => {
-        return 0
+        let remainItems = null;
+        let initDeleteList = null;
+        if (singleItemIdToDelete) {
+            remainItems = audioLikes.filter(i => i.id !== singleItemIdToDelete);
+            initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            setSingleItemIdToDelete(null);
+        }
+        else {
+            const selectdItems = deleteList.filter(i => i.checked === true).map(i => i.id);
+            remainItems = audioLikes.filter(i => !(selectdItems.includes(i.id)));
+            initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+        }
+        setIsSelectDeleteAll(false);
+        setDeleteList(initDeleteList);
+        setAudioLikes(remainItems);
+        handleConfirmDeleteModalClose();
     }
+
+    const handleClickDeleteSingleAudio = (e) => {
+        handleConfirmDeleteModalOpen('Bạn có chắc chắn muỗn xóa audio này không?');
+        const id = Number(e.currentTarget.id);
+        setSingleItemIdToDelete(id);
+        e.stopPropagation();
+    }
+
+    const handleConfirmDeleteModalClose = () => {
+        setConfirmDeleteModal(false);
+    };
+
+    const handleConfirmDeleteModalOpen = (content) => {
+        setConfirmDeleteModalText(content);
+        setConfirmDeleteModal(true);
+    };
 
     const handleSelectAll = (e) => {
         const tmpIsSelectDeleteAll = !isSelectDeleteAll;
@@ -118,7 +157,7 @@ export default function AudioLike() {
         const numCheckItems = tmpDeleteList.filter(i => i.checked === true).length;
         let isDeleteAll = numCheckItems === deleteList.length ? true : false;
 
-        setIsSelectDeleteAll(isDeleteAll)
+        setIsSelectDeleteAll(isDeleteAll);
         setDeleteList(tmpDeleteList);
     }
 
@@ -131,7 +170,8 @@ export default function AudioLike() {
                     textAlign: 'left',
                     ...(isSm && { mb: '32px' })
                 }}
-            >Thích</Typography>
+            >Thích
+            </Typography>
             <Box
                 sx={{
                     ...(!isDeleteMode ? flexStyle('flex-end', 'center') : flexStyle('space-between', 'center')),
@@ -178,7 +218,7 @@ export default function AudioLike() {
                 {
                     isDeleteMode && (
                         <Button
-                            onClick={handleSubmitDelete}
+                            onClick={() => { handleConfirmDeleteModalOpen('Bạn có chắc chắn muỗn xóa những audio này không?') }}
                             sx={{
                                 ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                 color: COLORS.white,
@@ -218,10 +258,12 @@ export default function AudioLike() {
                             }
                             <Box>
                                 <PlaylistThumnail
+                                    id={i.id}
                                     name={i.name}
                                     src={i?.avatar?.thumb_url}
                                     authors={i?.author?.name}
                                     hasDelete={true}
+                                    handleConfirmDeleteModalOpen={handleClickDeleteSingleAudio}
                                     children={<AudioDuration isSm={isSm} duration={i?.duration} />}
                                 />
                             </Box>
@@ -229,6 +271,78 @@ export default function AudioLike() {
                     ))
                 }
             </TabPanel>
+            <Dialog
+                open={confirmDeleteModal}
+                onClose={handleConfirmDeleteModalClose}
+                sx={{
+                    '& .MuiPaper-root': {
+                        bgcolor: COLORS.bg1,
+                        p: '40px 56px',
+                        boxSizing: 'border-box',
+                        borderRadius: isSm ? '10px' : '30px',
+                        ...(isSm && { m: '0 16px' })
+                    }
+                }}
+            >
+                <DialogTitle
+                    sx={{
+                        ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
+                        color: COLORS.white,
+                        textAlign: 'center'
+                    }}
+                >
+                    Voiz FM
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.contentIcon,
+                            textAlign: 'center'
+                        }}
+                    >
+                        {confirmDeleteModalText}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center'),
+                        columnGap: '16px'
+                    }}
+                >
+                    <Button
+                        onClick={handleConfirmDeleteModalClose}
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            borderRadius: '8px',
+                            maxWidth: '192px',
+                            width: 'calc(50% - 8px)',
+                            height: '48px',
+                            bgcolor: COLORS.bg3
+                        }}
+                    >
+                        Hủy
+                    </Button>
+                    <Button
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            borderRadius: '8px',
+                            maxWidth: '192px',
+                            width: 'calc(50% - 8px)',
+                            height: '48px',
+                            bgcolor: COLORS.main
+                        }}
+                        onClick={handleSubmitDelete}
+                        autoFocus
+                    >
+                        Đồng ý
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }
