@@ -4,10 +4,13 @@ import {
     Box,
     CardContent,
     Typography,
-    Button
+    Button,
+    IconButton
 } from '@mui/material';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CheckIcon from '@mui/icons-material/Check';
+import DeleteIcon from '@mui/icons-material/Delete';
+import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -18,7 +21,7 @@ export default function PlaylistThumnail(props) {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    const { src, name, authors, isBookmark, children } = props;
+    const { src, name, authors, isBookmark, hasDelete, children } = props;
 
     const authorsString = (authors) => {
         if (Array.isArray(authors)) {
@@ -36,18 +39,45 @@ export default function PlaylistThumnail(props) {
                 columnGap: isSm ? '10px' : '20px',
                 bgcolor: 'inherit',
                 boxShadow: 'none',
-                width: isSm ? '100%' : '45%',
-                height: '90px'
+                width: (isSm || hasDelete) ? '100%' : '45%',
+                height: '100px'
             }}
         >
+            <Box
+                sx={{
+                    width: '100px',
+                    height: '100px',
+                    position: 'relative'
+                }}
+            >
+                <img
+                    style=
+                    {{
+                        width: '100px',
+                        height: '100px',
+                        borderRadius: hasDelete ? '50%' : '4px'
+                    }}
+                    // img src currently not working
+                    // image={src}
+                    src="https://picsum.photos/420/420?img=11"
+                    alt={src}
+                />
+                {
+                    hasDelete && (
+                        <PlayArrowIcon
+                            fontSize="large"
+                            sx={{
+                                position: 'absolute',
+                                color: COLORS.white,
+                                top: '50%',
+                                left: '50%',
+                                transform: 'translate(-50%,-50%)'
+                            }}
+                        />
+                    )
+                }
+            </Box>
 
-            <img
-                style={{ width: isSm ? 'calc(30% - 5px)' : 'calc(30% - 10px)', height: '100%', borderRadius: '5px' }}
-                // img src currently not working
-                // image={src}
-                src="https://picsum.photos/1190/420?img=3"
-                alt={src}
-            />
             <CardContent
                 sx={{
                     ...flexStyle('space-between', 'flex-start'),
@@ -55,7 +85,7 @@ export default function PlaylistThumnail(props) {
                     flex: '1 0 auto',
                     p: 0,
                     height: '100%',
-                    width: isSm ? 'calc(70% - 5px)' : 'calc(70% - 10px)',
+                    width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 120px)',
                     '&:last-child': {
                         p: 0
                     }
@@ -146,6 +176,13 @@ export default function PlaylistThumnail(props) {
                                 }}
                                 startIcon={<CheckIcon sx={{ color: COLORS.white, ...(isSm && { width: '12px', height: '12px' }) }} />}
                             >Hủy đánh dấu</Button>
+                        )
+                    }
+                    {
+                        hasDelete && (
+                            <IconButton aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content }}>
+                                <DeleteIcon fontSize="small" />
+                            </IconButton>
                         )
                     }
                 </Box>
