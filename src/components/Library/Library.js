@@ -4,6 +4,7 @@ import { useState } from 'react';
 // import others component
 import ListenedList from './ListenedList';
 import PlaylistOrder from './PlaylistOrder';
+import PlaylistBookmark from './PlaylistBookmark';
 
 // import MUI component
 import {
@@ -70,6 +71,8 @@ const TabPanel = (props) => {
             return <ListenedList />
         case 2:
             return <PlaylistOrder />
+        case 3:
+            return <PlaylistBookmark />
         default:
             return <Typography>Alo</Typography>
     }

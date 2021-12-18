@@ -598,10 +598,1376 @@
             ]
         }
     ],
-    "bookmarks": [
+    "playlist_bookmarks": [
+        {
+            "type": "listennotes",
+            "promotion": "free",
+            "id": 4,
+            "name": "TED Health",
+            "avatar": {
+                "id": null,
+                "original_url": "https://production.listennotes.com/podcasts/ted-health-ted-Qu0GENswY3A-E-oUK8AZGa2.1400x1400.jpg",
+                "thumb_url": "https://production.listennotes.com/podcasts/ted-health-ted-Huegz2ZU5_Q-E-oUK8AZGa2.300x300.jpg"
+            },
+            "authors": [],
+            "author_string": "",
+            "playlist_counter": {
+                "id": null,
+                "audios_count": 229
+            }
+        },
+        {
+            "type": "listennotes",
+            "promotion": "free",
+            "id": 3,
+            "name": "TED Health",
+            "avatar": {
+                "id": null,
+                "original_url": "https://production.listennotes.com/podcasts/ted-health-ted-Qu0GENswY3A-E-oUK8AZGa2.1400x1400.jpg",
+                "thumb_url": "https://production.listennotes.com/podcasts/ted-health-ted-Huegz2ZU5_Q-E-oUK8AZGa2.300x300.jpg"
+            },
+            "authors": [],
+            "author_string": "",
+            "playlist_counter": {
+                "id": null,
+                "audios_count": 229
+            }
+        },
+        {
+            "type": "listennotes",
+            "promotion": "free",
+            "id": 2,
+            "name": "TED Health",
+            "avatar": {
+                "id": null,
+                "original_url": "https://production.listennotes.com/podcasts/ted-health-ted-Qu0GENswY3A-E-oUK8AZGa2.1400x1400.jpg",
+                "thumb_url": "https://production.listennotes.com/podcasts/ted-health-ted-Huegz2ZU5_Q-E-oUK8AZGa2.300x300.jpg"
+            },
+            "authors": [],
+            "author_string": "",
+            "playlist_counter": {
+                "id": null,
+                "audios_count": 229
+            }
+        },
+        {
+            "type": "voiz",
+            "id": 400,
+            "name": "Hashtag ethical sriracha. - 973082f0114",
+            "promotion": "coin",
+            "author_string": "Steven S. Little,Shirzad Chamine,Michael Bungay Stanier,Jon Acuff,Guy Kawasaki - Peg Fitzpatrick,Jocelyn K. Glei,Jurgen Wolff,Josiane Chriqui Feigon,Lâm Vân An",
+            "authors": [
+                {
+                    "id": 289,
+                    "name": "Steven S. Little"
+                },
+                {
+                    "id": 279,
+                    "name": "Shirzad Chamine"
+                },
+                {
+                    "id": 203,
+                    "name": "Michael Bungay Stanier"
+                },
+                {
+                    "id": 151,
+                    "name": "Jon Acuff"
+                },
+                {
+                    "id": 93,
+                    "name": "Guy Kawasaki - Peg Fitzpatrick"
+                },
+                {
+                    "id": 135,
+                    "name": "Jocelyn K. Glei"
+                },
+                {
+                    "id": 160,
+                    "name": "Jurgen Wolff"
+                },
+                {
+                    "id": 157,
+                    "name": "Josiane Chriqui Feigon"
+                },
+                {
+                    "id": 184,
+                    "name": "Lâm Vân An"
+                }
+            ],
+            "avatar": {
+                "id": 781,
+                "original_url": "/uploads/avatar/filename/781/a1f1cacc38c14c31.jpg",
+                "thumb_url": "/uploads/avatar/filename/781/thumb_a1f1cacc38c14c31.jpg"
+            },
+            "playlist_counter": {
+                "id": 386,
+                "bookmarks_count": 0,
+                "downloads_count": 0,
+                "ratings_count": 0,
+                "content_avg": 0,
+                "voice_avg": 0,
+                "audios_count": 9
+            }
+        }
+    ],
+    "channel_bookmarks": [
         {
             "id": 1,
             "name": "First News - Trí Việt",
+            "avatar": {
+                "id": 3,
+                "original_url": "/uploads/avatar/filename/3/a1f1cacc38c14c31.jpg",
+                "thumb_url": "/uploads/avatar/filename/3/thumb_a1f1cacc38c14c31.jpg"
+            },
+            "playlists": [
+                {
+                    "id": 70,
+                    "name": "Cray tote bag pbr&b kickstarter microdosing chia blue bottle retro. #fa09ed",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 383,
+                        "original_url": "/uploads/avatar/filename/383/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/383/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 150,
+                            "name": "John Sviokla"
+                        }
+                    ]
+                },
+                {
+                    "id": 38,
+                    "name": "Kinfolk roof echo 90's gentrify chicharrones locavore. #255dc7",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 409,
+                        "original_url": "/uploads/avatar/filename/409/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/409/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 152,
+                            "name": "Jonathan Yabut"
+                        },
+                        {
+                            "id": 224,
+                            "name": "Nguyễn Mai Đức"
+                        },
+                        {
+                            "id": 228,
+                            "name": "Ngọc Huyền"
+                        }
+                    ]
+                },
+                {
+                    "id": 88,
+                    "name": "Selfies paleo vice. #a70214",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 444,
+                        "original_url": "/uploads/avatar/filename/444/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/444/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 294,
+                            "name": "TS. Josh Davis"
+                        },
+                        {
+                            "id": 189,
+                            "name": "Marc Benioff"
+                        },
+                        {
+                            "id": 4,
+                            "name": "Al Ries"
+                        },
+                        {
+                            "id": 195,
+                            "name": "Mark Shaw"
+                        },
+                        {
+                            "id": 84,
+                            "name": "Frederick L. Allen"
+                        },
+                        {
+                            "id": 172,
+                            "name": "Larry Bossidy, Ram Charan"
+                        },
+                        {
+                            "id": 100,
+                            "name": "Henry Cloud - John Townsend"
+                        }
+                    ]
+                },
+                {
+                    "id": 86,
+                    "name": "Flannel vinegar seitan blue bottle direct trade you probably haven't heard of them forage mixtape. #17d52a",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 393,
+                        "original_url": "/uploads/avatar/filename/393/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/393/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 193,
+                            "name": "Mark H. McCormack"
+                        },
+                        {
+                            "id": 125,
+                            "name": "Jeffrey Gitomer"
+                        },
+                        {
+                            "id": 56,
+                            "name": "Daniel Goleman"
+                        },
+                        {
+                            "id": 83,
+                            "name": "Frederic Laloux"
+                        },
+                        {
+                            "id": 26,
+                            "name": "Bob Negen, Susan Negen"
+                        },
+                        {
+                            "id": 100,
+                            "name": "Henry Cloud - John Townsend"
+                        }
+                    ]
+                },
+                {
+                    "id": 54,
+                    "name": "Pour-over vegan church-key etsy mixtape beard skateboard schlitz. #0bbadf",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 437,
+                        "original_url": "/uploads/avatar/filename/437/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/437/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 72,
+                            "name": "Don Sexton"
+                        },
+                        {
+                            "id": 208,
+                            "name": "Michael Michalko"
+                        },
+                        {
+                            "id": 59,
+                            "name": "Daniel Rutley"
+                        },
+                        {
+                            "id": 86,
+                            "name": "Geoffrey A. Moore"
+                        },
+                        {
+                            "id": 274,
+                            "name": "Sharon Connolly"
+                        }
+                    ]
+                },
+                {
+                    "id": 10,
+                    "name": "Artisan seitan shabby chic migas put a bird on it bicycle rights. #4e2c57",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 365,
+                        "original_url": "/uploads/avatar/filename/365/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/365/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 36,
+                            "name": "C. Richard Weylman"
+                        },
+                        {
+                            "id": 216,
+                            "name": "Mỹ Tâm"
+                        },
+                        {
+                            "id": 15,
+                            "name": "Ann Handley, C.C Chapman"
+                        }
+                    ]
+                },
+                {
+                    "id": 90,
+                    "name": "Etsy shabby chic organic gluten-free ramps. #d74597",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 391,
+                        "original_url": "/uploads/avatar/filename/391/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/391/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 74,
+                            "name": "Donald Trump"
+                        },
+                        {
+                            "id": 159,
+                            "name": "Jung Hyuk June"
+                        },
+                        {
+                            "id": 189,
+                            "name": "Marc Benioff"
+                        },
+                        {
+                            "id": 325,
+                            "name": "William Poundstone"
+                        }
+                    ]
+                },
+                {
+                    "id": 57,
+                    "name": "Authentic blue bottle twee semiotics echo chillwave blog. #474b8f",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 370,
+                        "original_url": "/uploads/avatar/filename/370/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/370/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 236,
+                            "name": "Oprah Winfrey"
+                        },
+                        {
+                            "id": 207,
+                            "name": "Michael Lewis"
+                        },
+                        {
+                            "id": 207,
+                            "name": "Michael Lewis"
+                        },
+                        {
+                            "id": 100,
+                            "name": "Henry Cloud - John Townsend"
+                        },
+                        {
+                            "id": 316,
+                            "name": "Varun agarwal"
+                        },
+                        {
+                            "id": 133,
+                            "name": "Jim Collins - Jerry I.Porras"
+                        }
+                    ]
+                },
+                {
+                    "id": 97,
+                    "name": "Tacos fanny pack godard +1 flexitarian. #badd30",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 453,
+                        "original_url": "/uploads/avatar/filename/453/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/453/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 151,
+                            "name": "Jon Acuff"
+                        },
+                        {
+                            "id": 202,
+                            "name": "Mervyn King"
+                        },
+                        {
+                            "id": 162,
+                            "name": "Kai Hoàng"
+                        },
+                        {
+                            "id": 5,
+                            "name": "Alejandro Cremades"
+                        },
+                        {
+                            "id": 159,
+                            "name": "Jung Hyuk June"
+                        }
+                    ]
+                },
+                {
+                    "id": 95,
+                    "name": "Franzen fashion axe viral freegan sriracha kickstarter. #852fcc",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 395,
+                        "original_url": "/uploads/avatar/filename/395/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/395/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 234,
+                            "name": "Nir Eyal"
+                        },
+                        {
+                            "id": 83,
+                            "name": "Frederic Laloux"
+                        }
+                    ]
+                },
+                {
+                    "id": 13,
+                    "name": "Sustainable 90's drinking ethical wolf skateboard stumptown. #ac79be",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 451,
+                        "original_url": "/uploads/avatar/filename/451/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/451/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 251,
+                            "name": "Philip Kotler"
+                        },
+                        {
+                            "id": 51,
+                            "name": "Dale E. Bredesen"
+                        },
+                        {
+                            "id": 309,
+                            "name": "Trương Văn Dân"
+                        },
+                        {
+                            "id": 313,
+                            "name": "Trần Thượng Tuấn, Nguyễn Minh Huy"
+                        },
+                        {
+                            "id": 144,
+                            "name": "John Kay"
+                        },
+                        {
+                            "id": 30,
+                            "name": "Brene Brown"
+                        },
+                        {
+                            "id": 147,
+                            "name": "John Perkins"
+                        },
+                        {
+                            "id": 116,
+                            "name": "Jack. D. Schwager"
+                        }
+                    ]
+                },
+                {
+                    "id": 103,
+                    "name": "Kogi artisan goth bushwick farm-to-table brunch. #54bcc8",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 411,
+                        "original_url": "/uploads/avatar/filename/411/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/411/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 13,
+                            "name": "Andy Molinsky"
+                        },
+                        {
+                            "id": 334,
+                            "name": "Đặng Hoài"
+                        },
+                        {
+                            "id": 108,
+                            "name": "Hồ Thu Hương"
+                        }
+                    ]
+                },
+                {
+                    "id": 83,
+                    "name": "Chia slow-carb everyday banh mi wes anderson yolo iphone. #629423",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 378,
+                        "original_url": "/uploads/avatar/filename/378/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/378/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 267,
+                            "name": "Ron Zemke, Kristin Anderson"
+                        },
+                        {
+                            "id": 239,
+                            "name": "Pasi Sahlberg"
+                        },
+                        {
+                            "id": 28,
+                            "name": "Brad Lomenick"
+                        },
+                        {
+                            "id": 274,
+                            "name": "Sharon Connolly"
+                        }
+                    ]
+                },
+                {
+                    "id": 47,
+                    "name": "Pork belly aesthetic twee jean shorts sriracha hoodie pour-over. #f8ffdf",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 434,
+                        "original_url": "/uploads/avatar/filename/434/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/434/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 227,
+                            "name": "Ngô Mục Thiên"
+                        },
+                        {
+                            "id": 300,
+                            "name": "Ths. Hoàng Xuân Phương"
+                        },
+                        {
+                            "id": 303,
+                            "name": "Thích Nhật Từ"
+                        },
+                        {
+                            "id": 237,
+                            "name": "Orison Swett Marden"
+                        },
+                        {
+                            "id": 87,
+                            "name": "Geoffrey G. Parker"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Alpha Books biên soạn"
+                        }
+                    ]
+                },
+                {
+                    "id": 85,
+                    "name": "Pabst sriracha five dollar toast lomo distillery hella tote bag. #b208dd",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 430,
+                        "original_url": "/uploads/avatar/filename/430/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/430/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 116,
+                            "name": "Jack. D. Schwager"
+                        },
+                        {
+                            "id": 124,
+                            "name": "Jeffrey Bussgang"
+                        },
+                        {
+                            "id": 311,
+                            "name": "Trần Bảo Định"
+                        },
+                        {
+                            "id": 96,
+                            "name": "Harvard Business Review Press"
+                        },
+                        {
+                            "id": 197,
+                            "name": "Martin Lindstrom"
+                        }
+                    ]
+                },
+                {
+                    "id": 62,
+                    "name": "Before they sold out franzen slow-carb next level shabby chic beard ennui. #0ad6e6",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 372,
+                        "original_url": "/uploads/avatar/filename/372/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/372/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 316,
+                            "name": "Varun agarwal"
+                        },
+                        {
+                            "id": 268,
+                            "name": "Russell Conwell"
+                        }
+                    ]
+                },
+                {
+                    "id": 72,
+                    "name": "Seitan etsy poutine. #459b7d",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 443,
+                        "original_url": "/uploads/avatar/filename/443/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/443/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 97,
+                            "name": "Harvard Business School Press"
+                        },
+                        {
+                            "id": 89,
+                            "name": "Gerald G. Jampolsky, M.D"
+                        },
+                        {
+                            "id": 197,
+                            "name": "Martin Lindstrom"
+                        },
+                        {
+                            "id": 95,
+                            "name": "Harriet Beecher Stowe"
+                        },
+                        {
+                            "id": 182,
+                            "name": "Loren B. Belker"
+                        },
+                        {
+                            "id": 22,
+                            "name": "Barry Watson"
+                        },
+                        {
+                            "id": 147,
+                            "name": "John Perkins"
+                        },
+                        {
+                            "id": 54,
+                            "name": "Dan Shapiro"
+                        },
+                        {
+                            "id": 317,
+                            "name": "Vita"
+                        }
+                    ]
+                },
+                {
+                    "id": 28,
+                    "name": "Next level pabst kinfolk humblebrag truffaut. #26bfdc",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 425,
+                        "original_url": "/uploads/avatar/filename/425/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/425/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 271,
+                            "name": "Scott Adams"
+                        },
+                        {
+                            "id": 329,
+                            "name": "Yoshimoto Yoshio"
+                        },
+                        {
+                            "id": 254,
+                            "name": "Rachel Hollis"
+                        },
+                        {
+                            "id": 80,
+                            "name": "Eran Katz"
+                        }
+                    ]
+                },
+                {
+                    "id": 76,
+                    "name": "Pbr&b synth kombucha neutra slow-carb listicle lo-fi 3 wolf moon. #2786a7",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 432,
+                        "original_url": "/uploads/avatar/filename/432/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/432/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 158,
+                            "name": "Julia Cameron"
+                        },
+                        {
+                            "id": 118,
+                            "name": "James Allen"
+                        },
+                        {
+                            "id": 214,
+                            "name": "Miyamoto Musashi"
+                        },
+                        {
+                            "id": 213,
+                            "name": "Mike Hernaki"
+                        },
+                        {
+                            "id": 257,
+                            "name": "Richard Branson"
+                        }
+                    ]
+                },
+                {
+                    "id": 71,
+                    "name": "Dreamcatcher diy chambray narwhal 3 wolf moon. #00d8c8",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 387,
+                        "original_url": "/uploads/avatar/filename/387/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/387/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 190,
+                            "name": "Marcello Conti"
+                        },
+                        {
+                            "id": 305,
+                            "name": "Thạch Chân Ngữ"
+                        },
+                        {
+                            "id": 239,
+                            "name": "Pasi Sahlberg"
+                        },
+                        {
+                            "id": 192,
+                            "name": "Mark Goulston"
+                        },
+                        {
+                            "id": 243,
+                            "name": "Paul Sloane"
+                        },
+                        {
+                            "id": 111,
+                            "name": "JONATHAN SPALL"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 2,
+            "name": "Hana's Lexis",
+            "avatar": {
+                "id": 3,
+                "original_url": "/uploads/avatar/filename/3/a1f1cacc38c14c31.jpg",
+                "thumb_url": "/uploads/avatar/filename/3/thumb_a1f1cacc38c14c31.jpg"
+            },
+            "playlists": [
+                {
+                    "id": 70,
+                    "name": "Cray tote bag pbr&b kickstarter microdosing chia blue bottle retro. #fa09ed",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 383,
+                        "original_url": "/uploads/avatar/filename/383/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/383/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 150,
+                            "name": "John Sviokla"
+                        }
+                    ]
+                },
+                {
+                    "id": 38,
+                    "name": "Kinfolk roof echo 90's gentrify chicharrones locavore. #255dc7",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 409,
+                        "original_url": "/uploads/avatar/filename/409/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/409/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 152,
+                            "name": "Jonathan Yabut"
+                        },
+                        {
+                            "id": 224,
+                            "name": "Nguyễn Mai Đức"
+                        },
+                        {
+                            "id": 228,
+                            "name": "Ngọc Huyền"
+                        }
+                    ]
+                },
+                {
+                    "id": 88,
+                    "name": "Selfies paleo vice. #a70214",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 444,
+                        "original_url": "/uploads/avatar/filename/444/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/444/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 294,
+                            "name": "TS. Josh Davis"
+                        },
+                        {
+                            "id": 189,
+                            "name": "Marc Benioff"
+                        },
+                        {
+                            "id": 4,
+                            "name": "Al Ries"
+                        },
+                        {
+                            "id": 195,
+                            "name": "Mark Shaw"
+                        },
+                        {
+                            "id": 84,
+                            "name": "Frederick L. Allen"
+                        },
+                        {
+                            "id": 172,
+                            "name": "Larry Bossidy, Ram Charan"
+                        },
+                        {
+                            "id": 100,
+                            "name": "Henry Cloud - John Townsend"
+                        }
+                    ]
+                },
+                {
+                    "id": 86,
+                    "name": "Flannel vinegar seitan blue bottle direct trade you probably haven't heard of them forage mixtape. #17d52a",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 393,
+                        "original_url": "/uploads/avatar/filename/393/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/393/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 193,
+                            "name": "Mark H. McCormack"
+                        },
+                        {
+                            "id": 125,
+                            "name": "Jeffrey Gitomer"
+                        },
+                        {
+                            "id": 56,
+                            "name": "Daniel Goleman"
+                        },
+                        {
+                            "id": 83,
+                            "name": "Frederic Laloux"
+                        },
+                        {
+                            "id": 26,
+                            "name": "Bob Negen, Susan Negen"
+                        },
+                        {
+                            "id": 100,
+                            "name": "Henry Cloud - John Townsend"
+                        }
+                    ]
+                },
+                {
+                    "id": 54,
+                    "name": "Pour-over vegan church-key etsy mixtape beard skateboard schlitz. #0bbadf",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 437,
+                        "original_url": "/uploads/avatar/filename/437/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/437/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 72,
+                            "name": "Don Sexton"
+                        },
+                        {
+                            "id": 208,
+                            "name": "Michael Michalko"
+                        },
+                        {
+                            "id": 59,
+                            "name": "Daniel Rutley"
+                        },
+                        {
+                            "id": 86,
+                            "name": "Geoffrey A. Moore"
+                        },
+                        {
+                            "id": 274,
+                            "name": "Sharon Connolly"
+                        }
+                    ]
+                },
+                {
+                    "id": 10,
+                    "name": "Artisan seitan shabby chic migas put a bird on it bicycle rights. #4e2c57",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 365,
+                        "original_url": "/uploads/avatar/filename/365/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/365/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 36,
+                            "name": "C. Richard Weylman"
+                        },
+                        {
+                            "id": 216,
+                            "name": "Mỹ Tâm"
+                        },
+                        {
+                            "id": 15,
+                            "name": "Ann Handley, C.C Chapman"
+                        }
+                    ]
+                },
+                {
+                    "id": 90,
+                    "name": "Etsy shabby chic organic gluten-free ramps. #d74597",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 391,
+                        "original_url": "/uploads/avatar/filename/391/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/391/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 74,
+                            "name": "Donald Trump"
+                        },
+                        {
+                            "id": 159,
+                            "name": "Jung Hyuk June"
+                        },
+                        {
+                            "id": 189,
+                            "name": "Marc Benioff"
+                        },
+                        {
+                            "id": 325,
+                            "name": "William Poundstone"
+                        }
+                    ]
+                },
+                {
+                    "id": 57,
+                    "name": "Authentic blue bottle twee semiotics echo chillwave blog. #474b8f",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 370,
+                        "original_url": "/uploads/avatar/filename/370/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/370/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 236,
+                            "name": "Oprah Winfrey"
+                        },
+                        {
+                            "id": 207,
+                            "name": "Michael Lewis"
+                        },
+                        {
+                            "id": 207,
+                            "name": "Michael Lewis"
+                        },
+                        {
+                            "id": 100,
+                            "name": "Henry Cloud - John Townsend"
+                        },
+                        {
+                            "id": 316,
+                            "name": "Varun agarwal"
+                        },
+                        {
+                            "id": 133,
+                            "name": "Jim Collins - Jerry I.Porras"
+                        }
+                    ]
+                },
+                {
+                    "id": 97,
+                    "name": "Tacos fanny pack godard +1 flexitarian. #badd30",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 453,
+                        "original_url": "/uploads/avatar/filename/453/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/453/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 151,
+                            "name": "Jon Acuff"
+                        },
+                        {
+                            "id": 202,
+                            "name": "Mervyn King"
+                        },
+                        {
+                            "id": 162,
+                            "name": "Kai Hoàng"
+                        },
+                        {
+                            "id": 5,
+                            "name": "Alejandro Cremades"
+                        },
+                        {
+                            "id": 159,
+                            "name": "Jung Hyuk June"
+                        }
+                    ]
+                },
+                {
+                    "id": 95,
+                    "name": "Franzen fashion axe viral freegan sriracha kickstarter. #852fcc",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 395,
+                        "original_url": "/uploads/avatar/filename/395/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/395/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 234,
+                            "name": "Nir Eyal"
+                        },
+                        {
+                            "id": 83,
+                            "name": "Frederic Laloux"
+                        }
+                    ]
+                },
+                {
+                    "id": 13,
+                    "name": "Sustainable 90's drinking ethical wolf skateboard stumptown. #ac79be",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 451,
+                        "original_url": "/uploads/avatar/filename/451/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/451/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 251,
+                            "name": "Philip Kotler"
+                        },
+                        {
+                            "id": 51,
+                            "name": "Dale E. Bredesen"
+                        },
+                        {
+                            "id": 309,
+                            "name": "Trương Văn Dân"
+                        },
+                        {
+                            "id": 313,
+                            "name": "Trần Thượng Tuấn, Nguyễn Minh Huy"
+                        },
+                        {
+                            "id": 144,
+                            "name": "John Kay"
+                        },
+                        {
+                            "id": 30,
+                            "name": "Brene Brown"
+                        },
+                        {
+                            "id": 147,
+                            "name": "John Perkins"
+                        },
+                        {
+                            "id": 116,
+                            "name": "Jack. D. Schwager"
+                        }
+                    ]
+                },
+                {
+                    "id": 103,
+                    "name": "Kogi artisan goth bushwick farm-to-table brunch. #54bcc8",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 411,
+                        "original_url": "/uploads/avatar/filename/411/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/411/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 13,
+                            "name": "Andy Molinsky"
+                        },
+                        {
+                            "id": 334,
+                            "name": "Đặng Hoài"
+                        },
+                        {
+                            "id": 108,
+                            "name": "Hồ Thu Hương"
+                        }
+                    ]
+                },
+                {
+                    "id": 83,
+                    "name": "Chia slow-carb everyday banh mi wes anderson yolo iphone. #629423",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 378,
+                        "original_url": "/uploads/avatar/filename/378/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/378/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 267,
+                            "name": "Ron Zemke, Kristin Anderson"
+                        },
+                        {
+                            "id": 239,
+                            "name": "Pasi Sahlberg"
+                        },
+                        {
+                            "id": 28,
+                            "name": "Brad Lomenick"
+                        },
+                        {
+                            "id": 274,
+                            "name": "Sharon Connolly"
+                        }
+                    ]
+                },
+                {
+                    "id": 47,
+                    "name": "Pork belly aesthetic twee jean shorts sriracha hoodie pour-over. #f8ffdf",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 434,
+                        "original_url": "/uploads/avatar/filename/434/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/434/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 227,
+                            "name": "Ngô Mục Thiên"
+                        },
+                        {
+                            "id": 300,
+                            "name": "Ths. Hoàng Xuân Phương"
+                        },
+                        {
+                            "id": 303,
+                            "name": "Thích Nhật Từ"
+                        },
+                        {
+                            "id": 237,
+                            "name": "Orison Swett Marden"
+                        },
+                        {
+                            "id": 87,
+                            "name": "Geoffrey G. Parker"
+                        },
+                        {
+                            "id": 8,
+                            "name": "Alpha Books biên soạn"
+                        }
+                    ]
+                },
+                {
+                    "id": 85,
+                    "name": "Pabst sriracha five dollar toast lomo distillery hella tote bag. #b208dd",
+                    "promotion": "coin",
+                    "avatar": {
+                        "id": 430,
+                        "original_url": "/uploads/avatar/filename/430/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/430/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 116,
+                            "name": "Jack. D. Schwager"
+                        },
+                        {
+                            "id": 124,
+                            "name": "Jeffrey Bussgang"
+                        },
+                        {
+                            "id": 311,
+                            "name": "Trần Bảo Định"
+                        },
+                        {
+                            "id": 96,
+                            "name": "Harvard Business Review Press"
+                        },
+                        {
+                            "id": 197,
+                            "name": "Martin Lindstrom"
+                        }
+                    ]
+                },
+                {
+                    "id": 62,
+                    "name": "Before they sold out franzen slow-carb next level shabby chic beard ennui. #0ad6e6",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 372,
+                        "original_url": "/uploads/avatar/filename/372/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/372/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 316,
+                            "name": "Varun agarwal"
+                        },
+                        {
+                            "id": 268,
+                            "name": "Russell Conwell"
+                        }
+                    ]
+                },
+                {
+                    "id": 72,
+                    "name": "Seitan etsy poutine. #459b7d",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 443,
+                        "original_url": "/uploads/avatar/filename/443/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/443/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 97,
+                            "name": "Harvard Business School Press"
+                        },
+                        {
+                            "id": 89,
+                            "name": "Gerald G. Jampolsky, M.D"
+                        },
+                        {
+                            "id": 197,
+                            "name": "Martin Lindstrom"
+                        },
+                        {
+                            "id": 95,
+                            "name": "Harriet Beecher Stowe"
+                        },
+                        {
+                            "id": 182,
+                            "name": "Loren B. Belker"
+                        },
+                        {
+                            "id": 22,
+                            "name": "Barry Watson"
+                        },
+                        {
+                            "id": 147,
+                            "name": "John Perkins"
+                        },
+                        {
+                            "id": 54,
+                            "name": "Dan Shapiro"
+                        },
+                        {
+                            "id": 317,
+                            "name": "Vita"
+                        }
+                    ]
+                },
+                {
+                    "id": 28,
+                    "name": "Next level pabst kinfolk humblebrag truffaut. #26bfdc",
+                    "promotion": "vip",
+                    "avatar": {
+                        "id": 425,
+                        "original_url": "/uploads/avatar/filename/425/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/425/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 271,
+                            "name": "Scott Adams"
+                        },
+                        {
+                            "id": 329,
+                            "name": "Yoshimoto Yoshio"
+                        },
+                        {
+                            "id": 254,
+                            "name": "Rachel Hollis"
+                        },
+                        {
+                            "id": 80,
+                            "name": "Eran Katz"
+                        }
+                    ]
+                },
+                {
+                    "id": 76,
+                    "name": "Pbr&b synth kombucha neutra slow-carb listicle lo-fi 3 wolf moon. #2786a7",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 432,
+                        "original_url": "/uploads/avatar/filename/432/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/432/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 158,
+                            "name": "Julia Cameron"
+                        },
+                        {
+                            "id": 118,
+                            "name": "James Allen"
+                        },
+                        {
+                            "id": 214,
+                            "name": "Miyamoto Musashi"
+                        },
+                        {
+                            "id": 213,
+                            "name": "Mike Hernaki"
+                        },
+                        {
+                            "id": 257,
+                            "name": "Richard Branson"
+                        }
+                    ]
+                },
+                {
+                    "id": 71,
+                    "name": "Dreamcatcher diy chambray narwhal 3 wolf moon. #00d8c8",
+                    "promotion": "free",
+                    "avatar": {
+                        "id": 387,
+                        "original_url": "/uploads/avatar/filename/387/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/387/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "authors": [
+                        {
+                            "id": 190,
+                            "name": "Marcello Conti"
+                        },
+                        {
+                            "id": 305,
+                            "name": "Thạch Chân Ngữ"
+                        },
+                        {
+                            "id": 239,
+                            "name": "Pasi Sahlberg"
+                        },
+                        {
+                            "id": 192,
+                            "name": "Mark Goulston"
+                        },
+                        {
+                            "id": 243,
+                            "name": "Paul Sloane"
+                        },
+                        {
+                            "id": 111,
+                            "name": "JONATHAN SPALL"
+                        }
+                    ]
+                }
+            ]
+        },
+        {
+            "id": 3,
+            "name": "Gari",
             "avatar": {
                 "id": 3,
                 "original_url": "/uploads/avatar/filename/3/a1f1cacc38c14c31.jpg",

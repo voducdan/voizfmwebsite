@@ -80,4 +80,18 @@ export default class API {
     getPlaylistOrders = () => {
         return this.init().get(`/profiles/playlist_orders`)
     }
+    getPlaylistBookmarks = (page, limit) => {
+        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+
+        return this.init().get(`/playlist_bookmarks?${queryString}`)
+    }
+    getChannelBookmarks = (page, limit) => {
+        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+
+        return this.init().get(`/channel_bookmarks?${queryString}`)
+    }
 }

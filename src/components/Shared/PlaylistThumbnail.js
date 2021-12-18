@@ -3,9 +3,11 @@ import {
     Card,
     Box,
     CardContent,
-    Typography
+    Typography,
+    Button
 } from '@mui/material';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
+import CheckIcon from '@mui/icons-material/Check';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -16,7 +18,7 @@ export default function PlaylistThumnail(props) {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    const { src, name, authors, children } = props;
+    const { src, name, authors, isBookmark, children } = props;
 
     const authorsString = (authors) => {
         if (Array.isArray(authors)) {
@@ -53,7 +55,6 @@ export default function PlaylistThumnail(props) {
                     flex: '1 0 auto',
                     p: 0,
                     height: '100%',
-                    width: 'inherit',
                     width: isSm ? 'calc(70% - 5px)' : 'calc(70% - 10px)',
                     '&:last-child': {
                         p: 0
@@ -62,55 +63,89 @@ export default function PlaylistThumnail(props) {
             >
                 <Box
                     sx={{
-                        ...flexStyle('flex-start', 'flex-start'),
-                        flexDirection: 'column',
-                        flex: '1 0 auto',
-                        rowGap: '6px'
+                        ...flexStyle('space-between', 'flex-start'),
+                        width: '100%',
+                        ...(isSm && { columnGap: '10px' })
                     }}
                 >
-                    <Typography
+                    <Box
                         sx={{
-                            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                            color: COLORS.white,
-                            display: '-webkit-box',
-                            textOverflow: 'ellipsis',
-                            WebkitLineClamp: 1,
-                            WebkitBoxOrient: 'vertical',
-                            overflow: 'hidden'
+                            ...flexStyle('flex-start', 'flex-start'),
+                            flexDirection: 'column',
+                            flex: '1 0 auto',
+                            rowGap: '6px',
+                            width: '50%'
                         }}
                     >
-                        {name}
-                    </Typography>
-                    {
-                        authorsString() && (
-                            <Box
-                                sx={{
-                                    ...flexStyle('flex-start', 'center'),
-                                    columnGap: '6px'
-                                }}
-                            >
-                                <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+                        <Typography
+                            sx={{
+                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                color: COLORS.white,
+                                display: '-webkit-box',
+                                textOverflow: 'ellipsis',
+                                WebkitLineClamp: 1,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
+                            }}
+                        >
+                            {name}
+                        </Typography>
+                        {
+                            authorsString(authors) && (
+                                <Box
+                                    sx={{
+                                        ...flexStyle('flex-start', 'center'),
+                                        columnGap: '6px'
+                                    }}
+                                >
+                                    <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+                                    <Typography
+                                        sx={{
+                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                            color: COLORS.contentIcon,
+                                            display: '-webkit-box',
+                                            textOverflow: 'ellipsis',
+                                            WebkitLineClamp: 1,
+                                            WebkitBoxOrient: 'vertical',
+                                            overflow: 'hidden'
+                                        }}
+                                    >
+                                        {authorsString(authors)} {Array.isArray(authors) ? '(Tác giả)' : ''}
+                                    </Typography>
+                                </Box>
+                            )
+                        }
+                        {
+                            !authorsString(authors) && (
                                 <Typography
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                         color: COLORS.contentIcon
                                     }}
                                 >
-                                    {authorsString()} {Array.isArray(authors) ? '(Tác giả)' : ''}
+                                    Không có tác giả
                                 </Typography>
-                            </Box>
-                        )
-                    }
+                            )
+                        }
+                    </Box>
                     {
-                        !authorsString() && (
-                            <Typography
+                        isBookmark && (
+                            <Button
                                 sx={{
-                                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                    color: COLORS.contentIcon
+                                    ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.title2),
+                                    textTransform: 'none',
+                                    color: COLORS.white,
+                                    bgcolor: COLORS.bg3,
+                                    borderRadius: '22px',
+                                    maxWidth: '144px',
+                                    width: '50%',
+                                    height: '32px',
+                                    '& .MuiButton-startIcon': {
+                                        mr: '2px'
+                                    }
                                 }}
-                            >
-                                Không có tác giả
-                            </Typography>
+                                startIcon={<CheckIcon sx={{ color: COLORS.white, ...(isSm && { width: '12px', height: '12px' }) }} />}
+                            >Hủy đánh dấu</Button>
                         )
                     }
                 </Box>
