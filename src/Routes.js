@@ -6,6 +6,7 @@ import Payment from './components/Payment/Payment';
 import UpVip from './components/UpVip/UpVip';
 import Discovery from './components/Discovery/Discovery';
 import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
+import Library from './components/Library/Library';
 
 const ROUTES = [
     {
@@ -55,6 +56,12 @@ const ROUTES = [
         key: "APP_DISCOVERY_DETAIL",
         exact: true,
         component: <DiscoveryDetail />,
+    },
+    {
+        path: "/library",
+        key: "APP_LIBRARY",
+        exact: true,
+        component: <Library />,
     }
 ]
 

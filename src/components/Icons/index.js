@@ -47,6 +47,11 @@ import Favorite from './Favorite';
 import Loop from './Loop';
 import Clock from './Clock';
 import CartEmpty from './CartEmpty';
+import LibraryBook from './LibraryBook';
+import LibraryBookmark from './LibraryBookmark';
+import LibraryHeart from './LibraryHeart';
+import LibraryClock from './LibraryClock';
+
 
 export {
     Bookmark,
@@ -97,5 +102,9 @@ export {
     Favorite,
     Loop,
     Clock,
-    CartEmpty
+    CartEmpty,
+    LibraryBook,
+    LibraryBookmark,
+    LibraryHeart,
+    LibraryClock
 }

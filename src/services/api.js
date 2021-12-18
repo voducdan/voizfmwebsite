@@ -30,7 +30,6 @@ export default class API {
     }
 
     buildQueryString = (params) => {
-        const searchParams = new URLSearchParams();
         const queryString = new URLSearchParams(params).toString();
         return queryString
     }
@@ -71,5 +70,35 @@ export default class API {
     }
     getDiscoveryComment = (discoveryId) => {
         return this.init().get(`/discoveries/${discoveryId}/comments`)
+    }
+    getPlaylistHistory = () => {
+        return this.init().get(`/profiles/playlist_histories`)
+    }
+    getAudioHistory = () => {
+        return this.init().get(`/profiles/audio_histories`)
+    }
+    getPlaylistOrders = () => {
+        return this.init().get(`/profiles/playlist_orders`)
+    }
+    getPlaylistBookmarks = (page, limit) => {
+        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+
+        return this.init().get(`/playlist_bookmarks?${queryString}`)
+    }
+    getChannelBookmarks = (page, limit) => {
+        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+
+        return this.init().get(`/channel_bookmarks?${queryString}`)
+    }
+    getAudioLikes = (page, limit) => {
+        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+
+        return this.init().get(`/audio_likes?${queryString}`)
     }
 }
