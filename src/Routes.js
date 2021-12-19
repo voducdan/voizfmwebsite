@@ -7,6 +7,7 @@ import UpVip from './components/UpVip/UpVip';
 import Discovery from './components/Discovery/Discovery';
 import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
 import Library from './components/Library/Library';
+import AudioBook from './components/AudioBook/AudioBook';
 
 const ROUTES = [
     {
@@ -62,7 +63,37 @@ const ROUTES = [
         key: "APP_LIBRARY",
         exact: true,
         component: <Library />,
-    }
+    },
+    {
+        path: "/audio-book",
+        key: "APP_LIBRARY",
+        exact: true,
+        component: <AudioBook />,
+    },
+    {
+        path: "/audio-story",
+        key: "APP_LIBRARY",
+        exact: true,
+        component: <AudioBook />,
+    },
+    {
+        path: "/podcast",
+        key: "APP_LIBRARY",
+        exact: true,
+        component: <AudioBook />,
+    },
+    {
+        path: "/summary-book",
+        key: "APP_LIBRARY",
+        exact: true,
+        component: <AudioBook />,
+    },
+    {
+        path: "/children",
+        key: "APP_LIBRARY",
+        exact: true,
+        component: <AudioBook />,
+    },
 ]
 
 export default ROUTES
