@@ -20,6 +20,7 @@ import 'swiper/modules/pagination/pagination.scss';
 import HomeCarousel from '../../components/HomeCarousel/HomeCarousel';
 import Thumbnail from '../../components/Thumbnail/Thumbnail';
 import CategoryBar from '../../components/Shared/CategoryBar';
+import PublisherComponent from '../../components/Shared/PublisherComponent';
 
 // import icons
 import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/index';
@@ -33,13 +34,6 @@ import { flexStyle } from '../../utils/flexStyle'
 import { fakeData, fakeSuggest, newContent, authors } from '../../mockData/HomeData';
 
 SwiperCore.use([Navigation]);
-
-
-const flexCenterStyle = {
-    display: 'flex',
-    justifyContent: 'flex-start',
-    alignItems: 'center'
-}
 
 const SwiperBtnNext = (props) => {
     const { isSm } = props;
@@ -77,7 +71,7 @@ const Title = (props) => {
     const { isSm, content } = props
     return (
         < Box sx={{
-            ...flexCenterStyle,
+            ...flexStyle('flex-start', 'center'),
             marginBottom: '24px'
         }}>
             <Typography sx={{
@@ -105,12 +99,10 @@ export default function HomeContent() {
     // setData(fakeData)
     // setSuggest(fakeSuggest)
 
-    const navigationNewContentPrevRef = useRef(null)
-    const navigationNewContentNextRef = useRef(null)
-    const navigationPublisherPrevRef = useRef(null)
-    const navigationPublisherNextRef = useRef(null)
+    const navigationNewContentPrevRef = useRef(null);
+    const navigationNewContentNextRef = useRef(null);
 
-    let num_items_per_line = !isSm ? 5 : 3;
+    const num_items_per_line = !isSm ? 5 : 3;
 
     return (
         <Main>
@@ -215,37 +207,7 @@ export default function HomeContent() {
                     ))}
                 </Swiper>
             </Box>
-            <Box
-                sx={{
-                    padding: '32px 48px 23px 48px',
-                    backgroundColor: COLORS.bg2,
-                    position: 'relative'
-                }}>
-                {<Title content="Nhà xuất bản" isSm={isSm} />}
-
-                <Swiper
-                    navigation={{
-                        prevEl: navigationPublisherPrevRef.current,
-                        nextEl: navigationPublisherNextRef.current
-                    }}
-                    onBeforeInit={(swiper) => {
-                        swiper.params.navigation.prevEl = navigationPublisherPrevRef.current;
-                        swiper.params.navigation.nextEl = navigationPublisherNextRef.current;
-                    }}
-                    slidesPerView={num_items_per_line} spaceBetween={20}>
-                    {newContent.map((item) => (
-                        <SwiperSlide key={item.id}>
-                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-                <div style={{
-                    ...SwiperBtnPrev({ isSm })
-                }} ref={navigationPublisherPrevRef} ><CarouselPrev></CarouselPrev></div>
-                <div style={{
-                    ...SwiperBtnNext({ isSm })
-                }} ref={navigationPublisherNextRef} > <CarouselNext></CarouselNext></div>
-            </Box>
+            <PublisherComponent isSm={isSm} />
         </Main >
     )
 }

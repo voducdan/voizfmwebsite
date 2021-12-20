@@ -111,4 +111,9 @@ export default class API {
         const queryString = this.buildQueryString(params)
         return this.init().get(`/categories/${code}/playlists?${queryString}`)
     }
+    getPlaylistsRandom = (limit = 10) => {
+        const params = { limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/playlists/random?${queryString}`)
+    }
 }
