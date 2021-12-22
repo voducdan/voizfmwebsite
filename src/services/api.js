@@ -101,4 +101,19 @@ export default class API {
 
         return this.init().get(`/audio_likes?${queryString}`)
     }
+    getCategories = (code, type) => {
+        const params = { code, type };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/categories?${queryString}`)
+    }
+    getCategoryPlaylists = (code, limit = 10, ignore_ids = '', sort = 'latest', have_author = 0) => {
+        const params = { limit, ignore_ids, sort, have_author };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/categories/${code}/playlists?${queryString}`)
+    }
+    getPlaylistsRandom = (limit = 10) => {
+        const params = { limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/playlists/random?${queryString}`)
+    }
 }

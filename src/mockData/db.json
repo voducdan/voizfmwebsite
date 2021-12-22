@@ -2669,5 +2669,78 @@
                 "name": "Julia Cameron"
             }
         }
+    ],
+    "categories": [
+        {
+            "code": "audio_book",
+            "type": "Audiobook",
+            "data": [
+                {
+                    "name": "Kinh doanh",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Tâm linh",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Con cái",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Kỹ năng",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Doanh nhân",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Thành công",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Hạnh phúc",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Lịch sử",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Lứa đôi",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Sức khỏe",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Lãnh đạo",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Marketing",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                },
+                {
+                    "name": "Công nghệ",
+                    "sub_name": null,
+                    "code": "giai_tri"
+                }
+            ]
+        }
     ]
 }
