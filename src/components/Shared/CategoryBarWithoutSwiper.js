@@ -1,5 +1,5 @@
 //import react 
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // import MUI components
 import {
@@ -16,57 +16,72 @@ import { TEXT_STYLE, COLORS } from '../../utils/constants'
 import { flexStyle } from '../../utils/flexStyle'
 
 export default function CategoryBarWithoutSwiper(props) {
-    const { categoryList, isSm, onSelectCategory } = props;
-    const [activeCategory, setActiveCategory] = useState(null);
+    const { categoryList, isSm, windowWidth, onSelectCategory } = props;
+    const [activeCategory, setActiveCategory] = useState('');
     const [isAllCategoty, setIsAllCategoty] = useState(false);
-    const [categoryBarHeight, setCategoryBarHeight] = useState('36px');
+    const [showedItems, setShowedItems] = useState([]);
+    const newCategoryList = [{ "name": "Tất cả", "sub_name": null, "code": '' }, ...categoryList];
 
-    const newCategoryList = [{ "name": "Tất cả", "sub_name": null, "code": null }, ...categoryList];
+    const width = 100;
+    const height = 36;
+
+    useEffect(() => {
+        getNumItem();
+    }, [categoryList, windowWidth, isSm])
+
+    const getNumItem = () => {
+        let numItems = Math.floor(windowWidth / width);
+        if (isSm) {
+            numItems *= 2;
+        }
+        const itemsList = newCategoryList.slice(0, numItems - 2);
+        setShowedItems(itemsList);
+    }
 
     const handleSelectCategory = (e) => {
-        let categoryCode = e.target.id;
+        const categoryCode = e.currentTarget.id;
         setActiveCategory(categoryCode);
         onSelectCategory(categoryCode);
     }
 
     const handleShowAllCategory = () => {
-        setCategoryBarHeight('auto');
         setIsAllCategoty(true);
+        setShowedItems(newCategoryList);
     }
 
     const handleShowLessCategory = () => {
-        setCategoryBarHeight('36px');
         setIsAllCategoty(false);
+        getNumItem();
     }
 
     return (
         <Box
             style={{
                 marginTop: isSm ? 20 : 48,
-                ...flexStyle('center', 'center')
+                ...flexStyle('flex-start', 'center'),
             }}
         >
             <Box
                 sx={{
-                    ...(isAllCategoty ? flexStyle('flex-start', 'center') : flexStyle('space-between', 'center')),
-                    columnGap: '30px',
-                    rowGap: '34px',
+                    ...flexStyle('flex-start', 'center'),
+                    rowGap: '20px',
                     overflow: 'hidden',
                     flexWrap: 'wrap',
-                    height: categoryBarHeight
                 }}
             >
 
-                {newCategoryList.map(item => (
+                {showedItems.map(item => (
                     <Box
                         key={item.code}
                         sx={{
-                            height: '100%',
-                            ...flexStyle('center', 'center'),
+                            ...flexStyle('flex-start', 'center'),
+                            minWidth: `${width}px`,
+                            minHeight: `${height}px`,
                         }}
                     >
                         {
                             (item.code !== activeCategory) && (
+
                                 <Typography
                                     id={item.code}
                                     onClick={handleSelectCategory}
@@ -74,7 +89,9 @@ export default function CategoryBarWithoutSwiper(props) {
                                         ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                         color: COLORS.VZ_Text_content,
                                         whiteSpace: 'nowrap',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        padding: '5px 15px',
+                                        boxSizing: 'border-box',
                                     }}
                                 >
                                     {item.name}
@@ -83,60 +100,49 @@ export default function CategoryBarWithoutSwiper(props) {
                         }
                         {
                             (item.code === activeCategory) && (
-                                <Chip
+                                <Typography
                                     id={item.code}
                                     onClick={handleSelectCategory}
-                                    label={item.name}
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                        color: COLORS.VZ_Text_content,
+                                        color: COLORS.white,
                                         bgcolor: COLORS.bg3,
                                         whiteSpace: 'nowrap',
+                                        cursor: 'pointer',
+                                        padding: '5px 15px',
+                                        borderRadius: '25px',
+                                        boxSizing: 'border-box',
                                         '&:hover': {
                                             bgcolor: 'rgb(219 173 173 / 26%)'
                                         }
                                     }}
-                                />
+                                >{item.name}</Typography>
                             )
                         }
                     </Box>
                 ))
                 }
-                {
-                    isAllCategoty && (
-                        <Button
-                            onClick={handleShowLessCategory}
-                            sx={{
-                                ...TEXT_STYLE.title1,
-                                color: COLORS.VZ_Text_content,
-                                textTransform: 'none',
-                                minWidth: '116px',
-                                p: 0
-                            }}
-                            endIcon={<ArrowDropUpIcon />}
-                        >
-                            Thu gọn
-                        </Button>
-                    )
-                }
-            </Box>
-            {!isAllCategoty && (
-                <Button
-                    onClick={handleShowAllCategory}
+                <Box
                     sx={{
-                        ...TEXT_STYLE.title1,
-                        color: COLORS.VZ_Text_content,
-                        textTransform: 'none',
-                        ml: '30px',
-                        minWidth: '116px',
-                        p: 0
+                        minWidth: `${width}px`,
+                        minHeight: `${height}px`,
+                        ...flexStyle('center', 'center'),
                     }}
-                    endIcon={<ArrowDropDownIcon />}
                 >
-                    Xem thêm
-                </Button>
-            )}
-
+                    <Button
+                        onClick={isAllCategoty ? handleShowLessCategory : handleShowAllCategory}
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.VZ_Text_content,
+                            textTransform: 'none',
+                            p: '5px 15px'
+                        }}
+                        endIcon={isAllCategoty ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                    >
+                        {isAllCategoty ? 'Thu gọn' : 'Xem thêm'}
+                    </Button>
+                </Box>
+            </Box>
         </Box >
     )
 }

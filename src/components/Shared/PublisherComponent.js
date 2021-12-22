@@ -82,7 +82,7 @@ const Title = (props) => {
 
 export default function PublisherComponent(props) {
     const { isSm } = props;
-    const num_items_per_line = !isSm ? 5 : 3;
+    const num_items_per_line = !isSm ? 5 : 2.5;
 
     const navigationPublisherPrevRef = useRef(null);
     const navigationPublisherNextRef = useRef(null);
@@ -90,7 +90,7 @@ export default function PublisherComponent(props) {
     return (
         <Box
             sx={{
-                padding: '32px 48px 23px 48px',
+                padding: isSm ? '32px 15px 23px 15px' : '32px 48px 23px 48px',
                 backgroundColor: COLORS.bg2,
                 position: 'relative'
             }}>
@@ -105,10 +105,10 @@ export default function PublisherComponent(props) {
                     swiper.params.navigation.prevEl = navigationPublisherPrevRef.current;
                     swiper.params.navigation.nextEl = navigationPublisherNextRef.current;
                 }}
-                slidesPerView={num_items_per_line} spaceBetween={20}>
+                slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}>
                 {newContent.map((item) => (
                     <SwiperSlide key={item.id}>
-                        <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                        <Thumbnail style={{ borderRadius: '6px', width: '100%', height: isSm ? '81px' : '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
                     </SwiperSlide>
                 ))}
             </Swiper>

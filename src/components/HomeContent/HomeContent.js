@@ -93,12 +93,6 @@ export default function HomeContent() {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    // const [data, setData] = useState([])
-    // const [suggest, setSuggest] = useState([])
-
-    // setData(fakeData)
-    // setSuggest(fakeSuggest)
-
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
 
