@@ -1,3 +1,9 @@
+// import react
+import { useState, useEffect } from 'react';
+
+// import react router dom
+import { useParams, Link } from 'react-router-dom';
+
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
@@ -10,9 +16,6 @@ import 'swiper/modules/pagination/pagination.scss';
 import './PlaylistDetail.css'
 
 import ShowMoreText from "react-show-more-text";
-
-// import react
-import { useState } from 'react';
 
 // import MUI components
 import {
@@ -51,6 +54,12 @@ import InfoValue from '../../components/Shared/InfoValue';
 import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
+import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
+import FormatPrice from '../../utils/formatPrice';
+import formatDuration from '../../utils/formatDuration';
+
+// import service
+import API from '../../services/api';
 
 const ShowTextBtn = (content) => (
     <Button
@@ -71,7 +80,14 @@ SwiperCore.use([Navigation]);
 
 export default function PlatlistDetail() {
 
+    const api = new API();
+
     const windowSize = useWindowSize();
+    const { id } = useParams();
+    const [playlist, setPlaylist] = useState({});
+    const [playlistInfo, setPlaylistInfo] = useState([]);
+    const [playlistAudios, setPlaylistAudios] = useState([]);
+    const [recommendedPlaylist, setRecommendedPlaylist] = useState([]);
     const [openRateModal, setOpenRateModal] = useState(false);
     const [openAfterRateModal, setOpenAfterRateModal] = useState(false);
     const [openShareModal, setOpenShareModal] = useState(false);
@@ -79,119 +95,80 @@ export default function PlatlistDetail() {
     const coverImgHeight = isSm ? 182 : 380;
     const infoPanelHeight = isSm ? 190 : 150;
 
-    const SuggestdBooks = [
-        {
-            src: 'https://picsum.photos/201/201?img=1',
-            alt: 'image 1'
-        },
-        {
-            src: 'https://picsum.photos/201/201?img=2',
-            alt: 'image 2'
-        },
-        {
-            src: 'https://picsum.photos/201/201?img=3',
-            alt: 'image 3'
-        },
-        {
-            src: 'https://picsum.photos/201/201?img=4',
-            alt: 'image 4'
-        },
-        {
-            src: 'https://picsum.photos/201/201?img=5',
-            alt: 'image 5'
-        },
-        {
-            src: 'https://picsum.photos/201/201?img=6',
-            alt: 'image 6'
+    useEffect(() => {
+        async function fetchPlaylist() {
+            const res = await api.getPlaylistDetail(id);
+            const data = res.data.data;
+            setPlaylist(data);
         }
-    ]
 
-    const audiosList = [
-        {
-            id: 1,
-            title: 'Cách Nghĩ Để thành công trong cuộc sống thời hiện tại',
-            duration: '14.24'
-        },
-        {
-            id: 2,
-            title: 'Trở về thôn quê',
-            duration: '14.24'
-        },
-        {
-            id: 3,
-            title: '01.4 Tiến tới nghề nông Không-Làm-Gì-Cả',
-            duration: '14.24'
-        },
-        {
-            id: 4,
-            title: 'Cách Nghĩ Để thành công trong cuộc sống thời hiện tại',
-            duration: '14.24'
-        },
-        {
-            id: 5,
-            title: 'Trở về cuội nguồn',
-            duration: '14.24'
-        },
-        {
-            id: 6,
-            title: 'Một lý do kiến nông nghiệp tự nhiên chưa được tốt',
-            duration: '14.24'
-        },
-        {
-            id: 7,
-            title: 'Khi con người không hiểu được tự nhiên',
-            duration: '14.24'
-        },
-        {
-            id: 8,
-            title: 'Bốn nguyên tắc',
-            duration: '14.24'
-        },
-        {
-            id: 9,
-            title: 'Cách nghĩ để thành công trong cuộc sống hiện đại',
-            duration: '14.24'
+        async function fetchRecommendedPlaylist() {
+            const res = await api.getPlaylistAnalyses();
+            const data = res.data.data;
+            setRecommendedPlaylist(data);
         }
-    ]
 
-    const playlistInfo = [
-        {
-            label: <InfoLabel title='Tác giả' />,
-            value: <InfoValue value='Ken Honda' />
-        },
-        {
-            label: <InfoLabel title='Thời lượng' />,
-            value: <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>3 giờ 9 phút 25 giây</Typography>
-        },
-        {
-            label: <InfoLabel title='Kênh' />,
-            value: <InfoValue value='NXB Tổng Hợp TP.HCM' />
-        },
-        {
-            label: <InfoLabel title='Người đọc' />,
-            value: <InfoValue value='Ngyễn lan Anh' />
-        },
-        {
-            label: <InfoLabel title='Giá bán lẻ' />,
-            value:
-                <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
-                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>50.000đ</Typography>
-                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>20.000đ</Typography>
-                </Box>
-
-        },
-        {
-            label: <InfoLabel title='Đánh giá' />,
-            value:
-                <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
-                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>4.5</Typography>
-                    <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                        <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
-                    </svg>
-                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>(123)</Typography>
-                </Box>
+        async function fetchPlaylistAudios() {
+            const res = await api.getPlaylistAudios(id);
+            const data = res.data.data;
+            setPlaylistAudios(data);
         }
-    ]
+        fetchPlaylist();
+        fetchRecommendedPlaylist();
+        fetchPlaylistAudios();
+        setPlaylistInfo(createPlaylistInfo());
+    }, [id]);
+
+    useEffect(() => {
+        const p = createPlaylistInfo();
+        setPlaylistInfo(p);
+    }, [playlist]);
+
+    const createPlaylistInfo = () => {
+        const playlistInfo = [
+            {
+                label: <InfoLabel title='Tác giả' />,
+                value: <InfoValue value={playlist?.author_string} />
+            },
+            {
+                label: <InfoLabel title='Thời lượng' />,
+                value: <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{convertSecondsToReadableString(playlist?.total_duration)}</Typography>
+            },
+            {
+                label: <InfoLabel title='Kênh' />,
+                value: <InfoValue value={playlist?.channel?.name} />
+            },
+            {
+                label: <InfoLabel title='Người đọc' />,
+                value: <InfoValue value={playlist?.voicers.map(i => i.name).join(', ')} />
+            },
+            {
+                label: <InfoLabel title='Giá bán lẻ' />,
+                value:
+                    <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
+                        {
+                            playlist?.sale_coin_price < playlist?.coin_price && (
+                                <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.sale_coin_price)}</Typography>
+                            )
+                        }
+                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price)}</Typography>
+                    </Box>
+
+            },
+            {
+                label: <InfoLabel title='Đánh giá' />,
+                value:
+                    <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
+                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{playlist?.playlist_counter?.content_avg}</Typography>
+                        <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
+                        </svg>
+                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>({playlist?.playlist_counter?.ratings_count})</Typography>
+                    </Box>
+            }
+        ]
+        return playlistInfo;
+    }
 
     const handleOpenRateModal = () => {
         setOpenRateModal(true)
@@ -223,7 +200,7 @@ export default function PlatlistDetail() {
                     width: '100%',
                     height: '100%',
                     left: 0,
-                }} alt="cover img alt" src="https://picsum.photos/1190/420?img=3"></img>
+                }} alt="cover img alt" src={playlist?.avatar?.original_url}></img>
             </Box>
             <Box
                 sx={{
@@ -264,15 +241,15 @@ export default function PlatlistDetail() {
                                 <Box
                                     sx={{
                                         width: isSm ? '40%' : '30%',
+                                        minWidth: isSm ? '136px' : '250px',
                                         transform: 'translateY(-60%)'
                                     }}
                                 >
                                     <Avatar
                                         sx={{
-                                            width: isSm ? '136px' : '262px',
-                                            height: isSm ? '136px' : '262px',
-                                            maxWidth: '100%',
-                                        }} alt="Remy Sharp" src="https://picsum.photos/1190/420?img=3"
+                                            width: isSm ? '136px' : '250px',
+                                            height: isSm ? '136px' : '250px',
+                                        }} alt="Remy Sharp" src={playlist?.avatar?.thumb_url}
                                         variant="rounded"
                                     />
                                 </Box>
@@ -290,17 +267,23 @@ export default function PlatlistDetail() {
                                             <Typography
                                                 sx={{
                                                     ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
-                                                    color: COLORS.white
-                                                }}>Nói ít lại làm nhiều hơn
+                                                    color: COLORS.white,
+                                                    display: '-webkit-box',
+                                                    textOverflow: 'ellipsis',
+                                                    WebkitLineClamp: 1,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
+                                                }}>{playlist?.name}
                                             </Typography>
                                             <Box onClick={handleOpenRateModal}>
                                                 <Rating
                                                     sx={{
-                                                        columnGap: '24px'
+                                                        columnGap: '24px',
+                                                        '& .MuiRating-iconEmpty': {
+                                                            color: COLORS.contentIcon
+                                                        }
                                                     }}
-                                                    emptyIcon={<StarEmpty />}
-                                                    icon={<StarFill />}
-                                                    name="playlist-rate" value={1} precision={0.5} readOnly />
+                                                    name="playlist-rate" value={playlist?.playlist_counter?.content_avg || 0} precision={0.5} readOnly />
                                             </Box>
                                         </Box>
                                     )
@@ -501,9 +484,7 @@ export default function PlatlistDetail() {
                                     marginBottom: '16px',
                                     maxWidth: '90%'
                                 }}
-                            >Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó.
-
-                                Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó. Cuốn sách này được viết ra sau trận động đất lớn ở quê hương Kobe của tác giả vào năm 1995 và trận “đại địa chấn” ởTohoku năm 2011. Ken Honda đã lồng vào đó ...
+                            >{playlist?.description}
                             </Typography>
                         </ShowMoreText>
                     </Box>
@@ -527,14 +508,22 @@ export default function PlatlistDetail() {
                                     }}
                                 >
                                     {
-                                        SuggestdBooks.map((item, idx) => (
-                                            <Thumbnail
+                                        recommendedPlaylist.map((item, idx) => (
+                                            <Link
+                                                to={`/playlists/${item?.id}`}
                                                 key={idx}
                                                 style={{
-                                                    width: '32%',
-                                                    height: '32%'
+                                                    width: 'calc(100% / 3 - 3.5px)',
                                                 }}
-                                                avtSrc={item.src} alt={item.alt} />
+                                            >
+                                                <Thumbnail
+                                                    style={{
+                                                        width: '100%',
+                                                        height: '100%'
+                                                    }}
+                                                    avtSrc={item?.avatar?.thumb_url} alt={item.alt}
+                                                />
+                                            </Link>
                                         ))
                                     }
                                 </Box>
@@ -543,7 +532,7 @@ export default function PlatlistDetail() {
                         {
                             isSm && (
                                 <Swiper slidesPerView='auto' spaceBetween={10} >
-                                    {SuggestdBooks.map((item, idx) => (
+                                    {recommendedPlaylist.map((item, idx) => (
                                         <SwiperSlide key={idx} style={{ width: 'auto' }}>
                                             <Thumbnail
                                                 key={idx}
@@ -627,7 +616,7 @@ export default function PlatlistDetail() {
                         >Danh sách audios</Typography>
                         <Box>
                             <List sx={{ width: '100%' }}>
-                                {audiosList.map((value) => {
+                                {playlistAudios.map((value, idx) => {
                                     return (
                                         <ListItem
                                             sx={{
@@ -643,18 +632,10 @@ export default function PlatlistDetail() {
                                                         ...TEXT_STYLE.content2,
                                                         color: COLORS.bg4
                                                     }}
-                                                >{value.duration}</Typography>
+                                                >{formatDuration(value.duration)}</Typography>
                                             }
                                         >
                                             <ListItemButton role={undefined} onClick={() => (1)} dense>
-                                                <ListItemIcon sx={{ minWidth: '22px' }}>
-                                                    <Typography
-                                                        sx={{
-                                                            ...TEXT_STYLE.title1,
-                                                            color: COLORS.bg4
-                                                        }}
-                                                    >{value.id}</Typography>
-                                                </ListItemIcon>
                                                 <ListItemText
                                                     sx={{
                                                         'span': {
@@ -662,7 +643,7 @@ export default function PlatlistDetail() {
                                                             color: COLORS.white
                                                         }
                                                     }}
-                                                    id={`label-${value.id}`} primary={value.title} />
+                                                    id={`label-${value.id}`} primary={value.name} />
                                             </ListItemButton>
                                         </ListItem>
                                     );
