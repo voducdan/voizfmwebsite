@@ -23,28 +23,33 @@ import { flexStyle } from '../../utils/flexStyle';
 
 function RateModal(props) {
     const [isFormValid, setIsFormValid] = useState(true);
-    const { open, setOpen, setOpenAfterRate, isSm } = props;
+    const [contentRating, setContentRating] = useState(0);
+    const [voiceRating, setVoiceRating] = useState(0);
+    const [content, setContent] = useState('');
+    const { open, setOpen, setOpenAfterRate, handleRatePlaylist, isSm } = props;
 
     const handleClose = () => {
-        setOpen(false)
+        setOpen(false);
     }
 
     const handleSubmit = () => {
-        handleClose()
-        handleOpenAfterRateModal()
+        handleClose();
+        handleRatePlaylist({ content_stars: contentRating, voice_stars: voiceRating, content: content })
+        handleOpenAfterRateModal();
     }
 
     const handleOpenAfterRateModal = () => {
-        setOpenAfterRate(true)
+        setOpenAfterRate(true);
     }
 
     const onShareContentChange = (e) => {
         if (e.target.value === '') {
-            setIsFormValid(true)
+            setIsFormValid(false);
         }
         else {
-            setIsFormValid(false)
+            setIsFormValid(true);
         }
+        setContent(e.target.value);
     }
 
     return (
@@ -105,9 +110,10 @@ function RateModal(props) {
                                     color: COLORS.contentIcon
                                 }
                             }}
-                            emptyIcon={<StarIcon />}
-                            icon={<StarIcon />}
-                            name="playlist-rate" value={0.5} precision={0.5} />
+                            onChange={(event, newValue) => {
+                                setContentRating(newValue);
+                            }}
+                            name="playlist-rate" value={contentRating} precision={0.5} />
                     </Box>
                     <Box
                         sx={{
@@ -129,9 +135,10 @@ function RateModal(props) {
                                     color: COLORS.contentIcon
                                 }
                             }}
-                            emptyIcon={<StarIcon />}
-                            icon={<StarIcon />}
-                            name="playlist-rate" value={1.5} precision={0.5} />
+                            onChange={(event, newValue) => {
+                                setVoiceRating(newValue);
+                            }}
+                            name="playlist-rate" value={voiceRating} precision={0.5} />
                     </Box>
                 </Box>
                 <TextField
@@ -147,6 +154,7 @@ function RateModal(props) {
                             border: `1px solid ${COLORS.blackStroker}`
                         }
                     }}
+                    value={content}
                     onChange={onShareContentChange}
                     id="share text area" placeholder="Những đóng góp khác, ví dụ: Cảm nhận nội dung, góp ý nhạc nền, thắc mắc về sách,..." multiline rows={5} variant="outlined"
                 />
@@ -174,7 +182,7 @@ function RateModal(props) {
                     </Button>
                     <CustomDisabledButton
                         onClick={handleSubmit}
-                        disabled={isFormValid}
+                        disabled={!isFormValid}
                         content='Gửi'
                         style={{
                             width: '50%',

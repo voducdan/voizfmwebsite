@@ -127,4 +127,7 @@ export default class API {
     getPlaylistAudios = (id) => {
         return this.init().get(`/playlists/${id}/audios`);
     }
+    ratePlaylist = (id, body) => {
+        return this.init().post(`/playlists/${id}/ratings`, body);
+    }
 }

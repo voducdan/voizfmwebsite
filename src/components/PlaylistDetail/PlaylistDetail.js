@@ -38,9 +38,10 @@ import {
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
-
+import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
+import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 // import icons
-import { Share, StarEmpty, StarFill, Speaker, Play } from '../../components/Icons/index';
+import { Share, Speaker, Play } from '../../components/Icons/index';
 
 
 // import other components
@@ -88,6 +89,9 @@ export default function PlatlistDetail() {
     const [playlistInfo, setPlaylistInfo] = useState([]);
     const [playlistAudios, setPlaylistAudios] = useState([]);
     const [recommendedPlaylist, setRecommendedPlaylist] = useState([]);
+    const [audioTrailerUrl, setAudioTrailerUrl] = useState('');
+    const [audio, setAudio] = useState(new Audio(audioTrailerUrl));
+    const [paused, setPaused] = useState(true);
     const [openRateModal, setOpenRateModal] = useState(false);
     const [openAfterRateModal, setOpenAfterRateModal] = useState(false);
     const [openShareModal, setOpenShareModal] = useState(false);
@@ -99,7 +103,9 @@ export default function PlatlistDetail() {
         async function fetchPlaylist() {
             const res = await api.getPlaylistDetail(id);
             const data = res.data.data;
+            const playlistTrailer = data.playlist_trailers[0]['file_url'];
             setPlaylist(data);
+            setAudioTrailerUrl(playlistTrailer);
         }
 
         async function fetchRecommendedPlaylist() {
@@ -124,50 +130,74 @@ export default function PlatlistDetail() {
         setPlaylistInfo(p);
     }, [playlist]);
 
-    const createPlaylistInfo = () => {
-        const playlistInfo = [
-            {
-                label: <InfoLabel title='Tác giả' />,
-                value: <InfoValue value={playlist?.author_string} />
-            },
-            {
-                label: <InfoLabel title='Thời lượng' />,
-                value: <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{convertSecondsToReadableString(playlist?.total_duration)}</Typography>
-            },
-            {
-                label: <InfoLabel title='Kênh' />,
-                value: <InfoValue value={playlist?.channel?.name} />
-            },
-            {
-                label: <InfoLabel title='Người đọc' />,
-                value: <InfoValue value={playlist?.voicers.map(i => i.name).join(', ')} />
-            },
-            {
-                label: <InfoLabel title='Giá bán lẻ' />,
-                value:
-                    <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
-                        {
-                            playlist?.sale_coin_price < playlist?.coin_price && (
-                                <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.sale_coin_price)}</Typography>
-                            )
-                        }
-                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price)}</Typography>
-                    </Box>
+    useEffect(() => {
+        setAudio(new Audio(audioTrailerUrl));
+    }, [audioTrailerUrl]);
 
-            },
-            {
-                label: <InfoLabel title='Đánh giá' />,
-                value:
-                    <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
-                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{playlist?.playlist_counter?.content_avg}</Typography>
-                        <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                            <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
-                        </svg>
-                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>({playlist?.playlist_counter?.ratings_count})</Typography>
-                    </Box>
-            }
-        ]
-        return playlistInfo;
+    useEffect(() => {
+        console.log(paused)
+        !paused ? audio.play() : audio.pause();
+    }, [paused]);
+
+
+    useEffect(() => {
+        audio.addEventListener('ended', () => setPaused(true));
+        return () => {
+            audio.removeEventListener('ended', () => setPaused(true));
+        };
+    }, []);
+
+    const onPlayClick = () => {
+        setPaused(!paused)
+    }
+
+    const createPlaylistInfo = () => {
+        if (Object.keys(playlist).length > 0) {
+            const playlistInfo = [
+                {
+                    label: <InfoLabel title='Tác giả' />,
+                    value: <InfoValue value={playlist?.author_string} />
+                },
+                {
+                    label: <InfoLabel title='Thời lượng' />,
+                    value: <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{convertSecondsToReadableString(playlist?.total_duration)}</Typography>
+                },
+                {
+                    label: <InfoLabel title='Kênh' />,
+                    value: <InfoValue value={playlist?.channel?.name} />
+                },
+                {
+                    label: <InfoLabel title='Người đọc' />,
+                    value: <InfoValue value={playlist?.voicers.map(i => i.name).join(', ')} />
+                },
+                {
+                    label: <InfoLabel title='Giá bán lẻ' />,
+                    value:
+                        <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
+                            {
+                                playlist?.sale_coin_price < playlist?.coin_price && (
+                                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.sale_coin_price)}</Typography>
+                                )
+                            }
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price)}</Typography>
+                        </Box>
+
+                },
+                {
+                    label: <InfoLabel title='Đánh giá' />,
+                    value:
+                        <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{playlist?.playlist_counter?.content_avg}</Typography>
+                            <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
+                            </svg>
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>({playlist?.playlist_counter?.ratings_count})</Typography>
+                        </Box>
+                }
+            ]
+            return playlistInfo;
+        }
+        return []
     }
 
     const handleOpenRateModal = () => {
@@ -177,6 +207,12 @@ export default function PlatlistDetail() {
 
     const handleOpenShareModal = () => {
         setOpenShareModal(true)
+    }
+
+    const handleRatePlaylist = async (data) => {
+        const res = await api.ratePlaylist(id, data);
+        const result = await res.data.data;
+        console.log(result);
     }
 
     return (
@@ -299,7 +335,7 @@ export default function PlatlistDetail() {
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
                                     <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
-                                    <RateModal isSm={isSm} open={openRateModal} setOpen={setOpenRateModal} setOpenAfterRate={setOpenAfterRateModal} />
+                                    <RateModal isSm={isSm} open={openRateModal} setOpen={setOpenRateModal} setOpenAfterRate={setOpenAfterRateModal} handleRatePlaylist={handleRatePlaylist} />
                                     <AfterRateModal isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
                                     <Button
                                         sx={{
@@ -336,8 +372,6 @@ export default function PlatlistDetail() {
                                                 sx={{
                                                     columnGap: '24px'
                                                 }}
-                                                emptyIcon={<StarEmpty />}
-                                                icon={<StarFill />}
                                                 name="playlist-rate" value={1} precision={0.5} readOnly />
                                         </Box>
                                     </Box>
@@ -383,7 +417,8 @@ export default function PlatlistDetail() {
                                 textTransform: 'none',
                                 height: '48px'
                             }}
-                            startIcon={<Speaker />}
+                            startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                            onClick={onPlayClick}
                         >Nghe thử</Button>
                     </Box>
                 )
@@ -593,7 +628,8 @@ export default function PlatlistDetail() {
                                         textTransform: 'none',
                                         height: '48px'
                                     }}
-                                    startIcon={<Speaker />}
+                                    startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                                    onClick={onPlayClick}
                                 >Nghe thử</Button>
                             </Box>
                         )
