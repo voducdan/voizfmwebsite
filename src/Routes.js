@@ -7,7 +7,7 @@ import UpVip from './components/UpVip/UpVip';
 import Discovery from './components/Discovery/Discovery';
 import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
 import Library from './components/Library/Library';
-import AudioBook from './components/AudioBook/AudioBook';
+import PlaylistByCategoryLevel1 from './components/PlaylistByCategoryLevel1/PlaylistByCategoryLevel1';
 
 const ROUTES = [
     {
@@ -68,31 +68,31 @@ const ROUTES = [
         path: "/audio-book",
         key: "APP_LIBRARY",
         exact: true,
-        component: <AudioBook />,
+        component: <PlaylistByCategoryLevel1 />,
     },
     {
-        path: "/audio-story",
+        path: "/story-book",
         key: "APP_LIBRARY",
         exact: true,
-        component: <AudioBook />,
+        component: <PlaylistByCategoryLevel1 />,
     },
     {
         path: "/podcast",
         key: "APP_LIBRARY",
         exact: true,
-        component: <AudioBook />,
+        component: <PlaylistByCategoryLevel1 />,
     },
     {
         path: "/summary-book",
         key: "APP_LIBRARY",
         exact: true,
-        component: <AudioBook />,
+        component: <PlaylistByCategoryLevel1 />,
     },
     {
-        path: "/children",
+        path: "/children-book",
         key: "APP_LIBRARY",
         exact: true,
-        component: <AudioBook />,
+        component: <PlaylistByCategoryLevel1 />,
     },
 ]
 

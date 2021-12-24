@@ -100,10 +100,11 @@ export default function PlatlistDetail() {
     const infoPanelHeight = isSm ? 190 : 150;
 
     useEffect(() => {
+        console.log(id)
         async function fetchPlaylist() {
             const res = await api.getPlaylistDetail(id);
             const data = res.data.data;
-            const playlistTrailer = data.playlist_trailers[0]['file_url'];
+            const playlistTrailer = data.playlist_trailers.length > 0 ? data.playlist_trailers[0]['file_url'] : '';
             setPlaylist(data);
             setAudioTrailerUrl(playlistTrailer);
         }
@@ -135,7 +136,6 @@ export default function PlatlistDetail() {
     }, [audioTrailerUrl]);
 
     useEffect(() => {
-        console.log(paused)
         !paused ? audio.play() : audio.pause();
     }, [paused]);
 
@@ -146,6 +146,10 @@ export default function PlatlistDetail() {
             audio.removeEventListener('ended', () => setPaused(true));
         };
     }, []);
+
+    useEffect(() => {
+        setPaused(true);
+    }, [])
 
     const onPlayClick = () => {
         setPaused(!paused)
@@ -365,14 +369,15 @@ export default function PlatlistDetail() {
                                             sx={{
                                                 ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                                 color: COLORS.white
-                                            }}>Nói ít lại làm nhiều hơn
+                                            }}>
+                                            {playlist?.name}
                                         </Typography>
                                         <Box onClick={handleOpenRateModal}>
                                             <Rating
                                                 sx={{
                                                     columnGap: '24px'
                                                 }}
-                                                name="playlist-rate" value={1} precision={0.5} readOnly />
+                                                name="playlist-rate" value={playlist?.playlist_counter?.content_avg || 0} precision={0.5} readOnly />
                                         </Box>
                                     </Box>
                                 )
@@ -417,7 +422,8 @@ export default function PlatlistDetail() {
                                 textTransform: 'none',
                                 height: '48px'
                             }}
-                            startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                            disabled={!!!audioTrailerUrl}
+                            startIcon={paused ? <VolumeMuteIcon sx={{ color: !!audioTrailerUrl ? COLORS.white : 'rgba(0, 0, 0, 0.26)' }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
                             onClick={onPlayClick}
                         >Nghe thử</Button>
                     </Box>
@@ -575,7 +581,7 @@ export default function PlatlistDetail() {
                                                     width: '96px',
                                                     height: '96px'
                                                 }}
-                                                avtSrc={item.src} alt={item.alt} />
+                                                avtSrc={item?.avatar?.thumb_url} alt={item.alt} />
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
@@ -628,7 +634,8 @@ export default function PlatlistDetail() {
                                         textTransform: 'none',
                                         height: '48px'
                                     }}
-                                    startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                                    disabled={!!!audioTrailerUrl}
+                                    startIcon={paused ? <VolumeMuteIcon sx={{ color: !!audioTrailerUrl ? COLORS.white : 'rgba(0, 0, 0, 0.26)' }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
                                     onClick={onPlayClick}
                                 >Nghe thử</Button>
                             </Box>

@@ -20,7 +20,6 @@ export default function CategoryBarWithoutSwiper(props) {
     const [isAllCategoty, setIsAllCategoty] = useState(false);
     const [showedItems, setShowedItems] = useState([]);
     const newCategoryList = [{ "name": "Tất cả", "sub_name": null, "code": '' }, ...categoryList];
-
     const width = 100;
     const height = 36;
 
@@ -121,26 +120,30 @@ export default function CategoryBarWithoutSwiper(props) {
                     </Box>
                 ))
                 }
-                <Box
-                    sx={{
-                        minWidth: `${width}px`,
-                        minHeight: `${height}px`,
-                        ...flexStyle('center', 'center'),
-                    }}
-                >
-                    <Button
-                        onClick={isAllCategoty ? handleShowLessCategory : handleShowAllCategory}
-                        sx={{
-                            ...TEXT_STYLE.title1,
-                            color: COLORS.VZ_Text_content,
-                            textTransform: 'none',
-                            p: '5px 15px'
-                        }}
-                        endIcon={isAllCategoty ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                    >
-                        {isAllCategoty ? 'Thu gọn' : 'Xem thêm'}
-                    </Button>
-                </Box>
+                {
+                    (showedItems.length < newCategoryList.length) && (
+                        <Box
+                            sx={{
+                                minWidth: `${width}px`,
+                                minHeight: `${height}px`,
+                                ...flexStyle('center', 'center'),
+                            }}
+                        >
+                            <Button
+                                onClick={isAllCategoty ? handleShowLessCategory : handleShowAllCategory}
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.VZ_Text_content,
+                                    textTransform: 'none',
+                                    p: '5px 15px'
+                                }}
+                                endIcon={isAllCategoty ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                            >
+                                {isAllCategoty ? 'Thu gọn' : 'Xem thêm'}
+                            </Button>
+                        </Box>
+                    )
+                }
             </Box>
         </Box >
     )
