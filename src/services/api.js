@@ -90,30 +90,44 @@ export default class API {
     getChannelBookmarks = (page, limit) => {
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
         const params = { page, limit };
-        const queryString = this.buildQueryString(params)
+        const queryString = this.buildQueryString(params);
 
-        return this.init().get(`/channel_bookmarks?${queryString}`)
+        return this.init().get(`/channel_bookmarks?${queryString}`);
     }
     getAudioLikes = (page, limit) => {
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
         const params = { page, limit };
-        const queryString = this.buildQueryString(params)
+        const queryString = this.buildQueryString(params);
 
-        return this.init().get(`/audio_likes?${queryString}`)
+        return this.init().get(`/audio_likes?${queryString}`);
     }
     getCategories = (code, type) => {
         const params = { code, type };
-        const queryString = this.buildQueryString(params)
-        return this.init().get(`/categories?${queryString}`)
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/categories?${queryString}`);
     }
     getCategoryPlaylists = (code, limit = 10, ignore_ids = '', sort = 'latest', have_author = 0) => {
         const params = { limit, ignore_ids, sort, have_author };
-        const queryString = this.buildQueryString(params)
-        return this.init().get(`/categories/${code}/playlists?${queryString}`)
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/categories/${code}/playlists?${queryString}`);
     }
     getPlaylistsRandom = (limit = 10) => {
         const params = { limit };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/playlists/random?${queryString}`);
+    }
+    getPlaylistDetail = (id) => {
+        return this.init().get(`/playlists/${id}`)
+    }
+    getPlaylistAnalyses = (type = 'MostListenWeek') => {
+        const params = { type };
         const queryString = this.buildQueryString(params)
-        return this.init().get(`/playlists/random?${queryString}`)
+        return this.init().get(`/playlists/analyses?${queryString}`);
+    }
+    getPlaylistAudios = (id) => {
+        return this.init().get(`/playlists/${id}/audios`);
+    }
+    ratePlaylist = (id, body) => {
+        return this.init().post(`/playlists/${id}/ratings`, body);
     }
 }

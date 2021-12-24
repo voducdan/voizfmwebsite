@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 // import react router dom
-import { useParams, Link } from 'react-router-dom'
+import { useParams, Link } from 'react-router-dom';
 
 // import MUI components
 import {
@@ -136,7 +136,7 @@ export default function DiscoveryDetail() {
     const [comments, setComments] = useState([])
     const [commentContent, setCommentContent] = useState('')
     const [commentPage, setCommentPage] = useState(0)
-    const { id } = useParams()
+    const { id } = useParams();
 
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 200 : 380;

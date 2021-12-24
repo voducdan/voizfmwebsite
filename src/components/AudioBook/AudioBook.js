@@ -1,6 +1,9 @@
 // import react
 import { useEffect, useState } from 'react';
 
+// import react router dom
+import { Link } from 'react-router-dom';
+
 // import MUI components
 import {
     Typography,
@@ -256,7 +259,12 @@ export default function AudioBook() {
                                         }}
                                     >
                                         {playlists.map((item) => (
-                                            <Thumbnail key={item.id} style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)`, height: `${getPlaylistImgWidth()}px`, borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} />
+                                            <Link
+                                                to={`/playlists/${item.id}`}
+                                                style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)`, height: `${getPlaylistImgWidth()}px` }}
+                                            >
+                                                <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} />
+                                            </Link>
                                         ))}
                                     </Box>
                                 </Box>
