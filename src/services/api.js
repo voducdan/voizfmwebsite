@@ -130,4 +130,14 @@ export default class API {
     ratePlaylist = (id, body) => {
         return this.init().post(`/playlists/${id}/ratings`, body);
     }
+    getRequestedBook = () => {
+        // Hardcode api for testing
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().get(`/book_request`);
+    }
+    requestedBook = (body) => {
+        // Hardcode api for testing
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().post(`/book_request`, body);
+    }
 }

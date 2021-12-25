@@ -6,7 +6,7 @@ import { useSelector } from 'react-redux'
 import { selectOpenSidebar } from '../../redux/openSidebar'
 
 // import react router dom
-import { useNavigate, useLocation } from "react-router-dom";
+import { useNavigate, useLocation, Link } from "react-router-dom";
 
 // import MUI components
 import {
@@ -243,7 +243,12 @@ export default function SidebarMenu() {
                     </Box>
                 ))}
             </List>
-            {RequestsBook()}
+            <Link
+                to='/book-request'
+                style={{ textDecoration: 'none' }}
+            >
+                <RequestsBook />
+            </Link>
         </Drawer >
     )
 }

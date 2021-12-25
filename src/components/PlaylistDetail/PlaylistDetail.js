@@ -32,7 +32,6 @@ import {
     TableCell,
     List,
     ListItem,
-    ListItemIcon,
     ListItemText,
     ListItemButton
 } from '@mui/material';
@@ -41,7 +40,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 // import icons
-import { Share, Speaker, Play } from '../../components/Icons/index';
+import { Share, Play } from '../../components/Icons/index';
 
 
 // import other components

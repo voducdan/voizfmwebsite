@@ -51,6 +51,7 @@ import LibraryBook from './LibraryBook';
 import LibraryBookmark from './LibraryBookmark';
 import LibraryHeart from './LibraryHeart';
 import LibraryClock from './LibraryClock';
+import OpenBook from './OpenBook';
 
 
 export {
@@ -106,5 +107,6 @@ export {
     LibraryBook,
     LibraryBookmark,
     LibraryHeart,
-    LibraryClock
+    LibraryClock,
+    OpenBook,
 }

@@ -11,9 +11,6 @@ import {
     Box
 } from "@mui/material";
 
-// import icons
-import StarIcon from '@mui/icons-material/Star';
-
 // import others component
 import CustomDisabledButton from '../CustomDisabledButton/CustomDisabledButton';
 

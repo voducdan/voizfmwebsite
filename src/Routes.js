@@ -8,6 +8,7 @@ import Discovery from './components/Discovery/Discovery';
 import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
 import Library from './components/Library/Library';
 import PlaylistByCategoryLevel1 from './components/PlaylistByCategoryLevel1/PlaylistByCategoryLevel1';
+import BookRequest from './components/BookRequest/BookRequest';
 
 const ROUTES = [
     {
@@ -66,34 +67,40 @@ const ROUTES = [
     },
     {
         path: "/audio-book",
-        key: "APP_LIBRARY",
+        key: "APP_AUDIO_BOOK",
         exact: true,
         component: <PlaylistByCategoryLevel1 />,
     },
     {
         path: "/story-book",
-        key: "APP_LIBRARY",
+        key: "APP_STORY_BOOK",
         exact: true,
         component: <PlaylistByCategoryLevel1 />,
     },
     {
         path: "/podcast",
-        key: "APP_LIBRARY",
+        key: "APP_PODCAST",
         exact: true,
         component: <PlaylistByCategoryLevel1 />,
     },
     {
         path: "/summary-book",
-        key: "APP_LIBRARY",
+        key: "APP_SUMMARY_BOOK",
         exact: true,
         component: <PlaylistByCategoryLevel1 />,
     },
     {
         path: "/children-book",
-        key: "APP_LIBRARY",
+        key: "APP_CHILDREN_BOOK",
         exact: true,
         component: <PlaylistByCategoryLevel1 />,
     },
+    {
+        path: "/book-request",
+        key: "APP_BOOK_REQUEST",
+        exact: true,
+        component: <BookRequest />,
+    }
 ]
 
 export default ROUTES
