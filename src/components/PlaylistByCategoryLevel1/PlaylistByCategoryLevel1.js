@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 // import react router dom
-import { Link } from 'react-router-dom';
+import { useLocation, Link } from "react-router-dom";
 
 // import MUI components
 import {
@@ -14,14 +14,14 @@ import {
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 
 // import others components
-import HomeCarousel from '../../components/HomeCarousel/HomeCarousel';
-import Thumbnail from '../../components/Thumbnail/Thumbnail';
-import CategoryBarWithoutSwiper from '../../components/Shared/CategoryBarWithoutSwiper';
-import PlaylistByCategory from '../../components/Shared/PlaylistByCategory';
-import PublisherComponent from '../../components/Shared/PublisherComponent';
+import HomeCarousel from '../HomeCarousel/HomeCarousel';
+import Thumbnail from '../Thumbnail/Thumbnail';
+import CategoryBarWithoutSwiper from '../Shared/CategoryBarWithoutSwiper';
+import PlaylistByCategory from '../Shared/PlaylistByCategory';
+import PublisherComponent from '../Shared/PublisherComponent';
 
 // import icons
-import { RightArrow } from '../../components/Icons/index';
+import { RightArrow } from '../Icons/index';
 
 // import utils
 import { SCREEN_BREAKPOINTS, TEXT_STYLE, COLORS, DRAWER_WIDTH } from '../../utils/constants';
@@ -63,9 +63,8 @@ const RandomPlayList = (props) => {
         <Box
             sx={{
                 ...flexStyle('center', 'center'),
-                width: isSm ? '100%' : 'calc(50% - 14px)',
-                height: height,
                 bgcolor: COLORS.bg2,
+                height: height,
                 borderRadius: '4px',
                 columnGap: isSm ? '11px' : '18px'
             }}
@@ -129,9 +128,13 @@ const RandomPlayList = (props) => {
     )
 }
 
+const NUM_PLAYLIST_RANDOM = 12;
+
 export default function AudioBook() {
 
     const api = new API();
+    const location = useLocation();
+    const pathname = location.pathname;
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const SPACE_BETWEEN = 24;
@@ -146,19 +149,20 @@ export default function AudioBook() {
 
     useEffect(() => {
         async function fetchCategories() {
-            const res = await api.getCategories('audio_book', 'Audiobook');
+            const code = pathname.replace('-', '_').slice(1);
+            const res = await api.getCategories(code);
             const data = await res.data.data;
             setCategoryies(data)
         };
         async function fetchPlaylistsRandom() {
-            const res = await api.getPlaylistsRandom(12);
+            const res = await api.getPlaylistsRandom(NUM_PLAYLIST_RANDOM);
             const data = await res.data.data;
             setPlaylistsRandom(data);
         }
 
         fetchCategories();
         fetchPlaylistsRandom();
-    }, []);
+    }, [pathname]);
 
     useEffect(() => {
         async function initPlaylists() {
@@ -288,12 +292,21 @@ export default function AudioBook() {
                     ...flexStyle('flex-start', 'center'),
                     rowGap: isSm ? '20px' : '22px',
                     flexWrap: 'wrap',
-                    ...(isSm && { columnGap: '28px' })
+                    ...(!isSm && { columnGap: '28px' })
                 }}
             >
                 {
                     playlistsRandom.map(i => (
-                        <RandomPlayList key={i.id} data={i} isSm={isSm} />
+                        <Link
+                            to={`/playlists/${i.id}`}
+                            style={{
+                                width: isSm ? '100%' : 'calc(50% - 14px)',
+                                textDecoration: 'none'
+                            }}
+                            key={i.id}
+                        >
+                            <RandomPlayList data={i} isSm={isSm} />
+                        </Link>
                     ))
                 }
                 <Box

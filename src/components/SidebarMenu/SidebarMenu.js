@@ -110,25 +110,25 @@ export default function SidebarMenu() {
             id: 7,
             icon: <AudioStory />,
             text: 'Truyện nói',
-            url: 'audio-story'
+            url: '/story-book'
         },
         {
             id: 8,
             icon: <Podcast />,
             text: 'Podcast',
-            url: 'podcast'
+            url: '/podcast'
         },
         {
             id: 9,
             icon: <SummaryBook />,
             text: 'Tóm tắt sách',
-            url: 'summary-book'
+            url: '/summary-book'
         },
         {
             id: 10,
             icon: <ChildrenBook />,
             text: 'Thiếu nhi',
-            url: 'children'
+            url: '/children-book'
         }
     ]
 
