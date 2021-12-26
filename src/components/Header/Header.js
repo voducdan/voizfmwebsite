@@ -1,14 +1,16 @@
 // Import react module
-import { useEffect, useState } from 'react';
+import { useEffect, useState, useCallback } from 'react';
+
+// import redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // import react router component
-import { Link } from 'react-router-dom';
+import { Link, useNavigate } from 'react-router-dom';
 
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
-import { selectToken } from '../../redux/token';
 import { handleOpenLogin } from '../../redux/openLogin';
+import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult, handleCloseSearch } from '../../redux/OpenSearch';
 
 // Import MUI component
 import { styled } from '@mui/material/styles';
@@ -22,23 +24,37 @@ import {
     Input,
     InputAdornment,
     FormControl,
-    Avatar
+    Avatar,
+    Box
 } from '@mui/material';
+import SearchIcon from '@mui/icons-material/Search';
+import ClearIcon from '@mui/icons-material/Clear';
 
-// Import constant variables
+// Import utils
 import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
 // Import icons
-import { Search, Bookmark, Cart } from '../Icons/index';
+import { Bookmark, Cart } from '../Icons/index';
 
-// Import services
+// import lodash
+import _debounce from 'lodash/debounce';
 
-const SearchIcon = (idx) => {
+// import service
+import API from '../../services/api';
+
+const SearchBtn = (idx) => {
     return (
-        <SvgIcon key={idx}>
-            {Search()}
-        </SvgIcon>
+        <IconButton aria-label="search">
+            <SearchIcon sx={{ color: COLORS.contentIcon }} />
+        </IconButton>
+    )
+}
+const ClearBtn = () => {
+    return (
+        <IconButton aria-label="clear-search">
+            <ClearIcon sx={{ color: COLORS.white }} />
+        </IconButton>
     )
 }
 
@@ -59,19 +75,20 @@ const CartIcon = (props) => {
 }
 
 const userAvt = (props) => {
+    const { avtSrc, idx, onOpenLogin } = props;
+    if (avtSrc) {
+        return (
+            <Link
+                to="/account"
+                key={idx}
+            >
+                <Avatar alt="Remy Sharp" src={avtSrc} sx={{ width: 40, height: 40 }} />
+            </Link>
+        )
+    }
     return (
-        <Link
-            to="/account"
-            key={props.idx}
-        >
-            <Avatar alt="Remy Sharp" src={props.avtSrc} sx={{ width: 40, height: 40 }} />
-        </Link>
-    )
-}
 
-const UserIcon = (props) => {
-    return (
-        <AccountCircleIcon onClick={() => { props.onOpenLogin() }} key={props.idx} />
+        <AccountCircleIcon onClick={() => { onOpenLogin() }} key={idx} />
     )
 }
 
@@ -92,33 +109,87 @@ const AppBar = styled(MuiAppBar, {
 
 
 export default function Header() {
+    const api = new API();
 
     const windowSize = useWindowSize();
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const navigate = useNavigate();
+    const [avtSrc, setAvtSrc] = useState(null);
+    const [searchKeyword, setSearchKeyword] = useState('');
+    const [searchOnMb, setSearchOnMb] = useState(false);
+    const [searchOnPC, setSearchOnPC] = useState(false);
+    const [showHeaderItems, setShowHeaderItems] = useState(true);
     const openSidebar = useSelector(selectOpenSidebar);
-    const token = useSelector(selectToken);
-    const [headerItems, setHeaderItems] = useState([
-        BookmarkIcon,
-        CartIcon
-    ]);
+    const headerItems = [BookmarkIcon, CartIcon, userAvt];
 
     const dispatch = useDispatch();
 
-    // This url will be fetched from API later
-    const avtSrc = 'https://picsum.photos/1190/420?img=3';
 
     useEffect(() => {
-        function setHeaderIcons() {
-            let item = UserIcon
-            if (token) {
-                item = userAvt
-            }
-            const newHeaderitems = [...headerItems, ...[item]]
-            setHeaderItems(newHeaderitems)
+        setAvtSrc('https://picsum.photos/335/335?img=16');
+    }, []);
+
+    useEffect(() => {
+        setSearchStatus();
+    }, [isSm]);
+
+    function setSearchStatus() {
+        if (isSm) {
+            setSearchOnMb(true);
+            setSearchOnPC(false);
         }
-        setHeaderIcons()
-    }, [])
-    const onOpenLogin = () => {
-        dispatch(handleOpenLogin())
+        else {
+            setSearchOnMb(false);
+            setSearchOnPC(true)
+        }
+    }
+
+    const onOpenLogin = (e) => {
+        dispatch(handleOpenLogin());
+    }
+
+    const onOpenSearch = (e) => {
+        const anchor = e.currentTarget;
+        const anchorId = anchor.id;
+        dispatch(setAnchorEl(anchorId));
+    }
+
+    const onSearchInput = (e) => {
+        const { value } = e.target;
+        setSearchKeyword(value);
+        if (value === '') {
+            dispatch(handleStopSearch());
+        }
+        else {
+            debounceOnSearch('playlists', value);
+            dispatch(handleStartSearch());
+        }
+    }
+
+    const handleSearchKeyUp = (e) => {
+        const { keyCode } = e;
+        if (keyCode === 13) {
+            setShowHeaderItems(true);
+            setSearchStatus();
+            navigate(`/search?searchKey=${searchKeyword}`, { replace: true });
+        }
+    }
+
+    const handleClickSearchBtn = () => {
+        setShowHeaderItems(true);
+        setSearchStatus();
+        navigate(`/search?searchKey=${searchKeyword}`, { replace: true });
+    }
+
+    const handleClearSearchKeyword = () => {
+        setSearchKeyword('');
+        dispatch(handleStopSearch());
+    }
+
+    const handleSearchOnMB = () => {
+        setShowHeaderItems(false);
+        setSearchOnPC(true);
+        setSearchOnMb(false);
     }
 
     const handleDrawerToggle = () => {
@@ -126,16 +197,22 @@ export default function Header() {
     };
 
     const showToogleIcon = (open) => {
-        if (open && windowSize.width > SCREEN_BREAKPOINTS.sm) {
-            return false
+        if (open && !isSm) {
+            return false;
         }
-        else if (open && windowSize.width <= SCREEN_BREAKPOINTS.sm) {
-            return true
+        else if (open && isSm) {
+            return true;
         }
         else if (!open) {
-            return true
+            return true;
         }
     }
+
+    const debounceOnSearch = useCallback(_debounce(async (type, keyword) => {
+        const res = await api.getSearchResults(type, keyword);
+        const data = await res.data.data;
+        dispatch(setPlaylistResult(data));
+    }, 300), []);
 
     return (
         <AppBar position="fixed" open={openSidebar} windowwidth={windowSize.width}>
@@ -149,47 +226,68 @@ export default function Header() {
                 >
                     <MenuIcon />
                 </IconButton>
-                <div style={{
-                    display: 'flex',
-                    justifyContent: 'space-between',
-                    alignItems: 'center',
-                    width: '100%',
-                    ...(windowSize.width <= SCREEN_BREAKPOINTS.sm && { justifyContent: 'flex-end' })
-                }}>
-                    <FormControl variant="standard" sx={{
-                        marginLeft: {
-                            sm: '25px'
-                        }
+                <Box
+                    sx={{
+                        display: 'flex',
+                        justifyContent: 'space-between',
+                        alignItems: 'center',
+                        width: '100%',
+                        ...(isSm && { justifyContent: 'flex-end' })
                     }}>
-                        {windowSize.width > SCREEN_BREAKPOINTS.sm && <Input
+                    <FormControl variant="standard" sx={{
+                        width: isSm ? '100%' : '60%',
+                        ...(!isSm && { borderRight: `1px solid ${COLORS.blackStroker}` })
+                    }}>
+                        {searchOnPC && <Input
+                            onFocus={onOpenSearch}
+                            onChange={onSearchInput}
+                            onKeyUp={handleSearchKeyUp}
                             id="input-search"
                             placeholder="Tìm kiếm"
+                            value={searchKeyword}
                             sx={{ color: COLORS.placeHolder }}
                             disableUnderline
                             startAdornment={
-                                <InputAdornment position="start">
-                                    {SearchIcon()}
+                                <InputAdornment position="start" onClick={handleClickSearchBtn}>
+                                    {<SearchBtn />}
                                 </InputAdornment>
                             }
+                            endAdornment={
+                                (searchKeyword !== '') && (
+                                    <InputAdornment position="end" onClick={handleClearSearchKeyword} >
+                                        {< ClearBtn />}
+                                    </InputAdornment>
+                                )}
                         />}
-                        {windowSize.width <= SCREEN_BREAKPOINTS.sm && <div style={{ marginRight: '41px', marginTop: '12px' }}>{SearchIcon()}</div>}
+                        {searchOnMb && (
+                            <Box
+                                onClick={handleSearchOnMB}
+                                sx={{ mr: '41px' }}
+                            >
+                                {<SearchBtn />}
+                            </Box>)
+                        }
                     </FormControl>
-                    <div
-                        style={{
-                            display: 'flex',
-                            justifyContent: 'center',
-                            alignItems: 'center',
-                            marginRight: '13px',
-                            columnGap: '35px',
-                            ...(windowSize.width <= SCREEN_BREAKPOINTS.sm && { marginRight: '6px' })
-                        }}
-                    >
-                        {headerItems.map((item, idx) => (
-                            item({ idx, avtSrc, onOpenLogin })
-                        ))}
-                    </div>
-
-                </div>
+                    {
+                        showHeaderItems && (
+                            <Box
+                                sx={{
+                                    width: '30%',
+                                    display: 'flex',
+                                    justifyContent: 'flex-end',
+                                    alignItems: 'center',
+                                    marginRight: '13px',
+                                    columnGap: '35px',
+                                    ...(isSm && { marginRight: '6px' })
+                                }}
+                            >
+                                {headerItems.map((item, idx) => (
+                                    item({ idx, avtSrc, onOpenLogin })
+                                ))}
+                            </Box>
+                        )
+                    }
+                </Box>
 
             </Toolbar >
         </AppBar >

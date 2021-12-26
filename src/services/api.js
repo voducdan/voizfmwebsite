@@ -121,7 +121,7 @@ export default class API {
     }
     getPlaylistAnalyses = (type = 'MostListenWeek') => {
         const params = { type };
-        const queryString = this.buildQueryString(params)
+        const queryString = this.buildQueryString(params);
         return this.init().get(`/playlists/analyses?${queryString}`);
     }
     getPlaylistAudios = (id) => {
@@ -139,5 +139,16 @@ export default class API {
         // Hardcode api for testing
         this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().post(`/book_request`, body);
+    }
+    getCommonKeyword = () => {
+        return this.init().get(`/keyword/recommendation`);
+    }
+    getPlaylistRecommendation = () => {
+        return this.init().get(`/playlists/recommendation`);
+    }
+    getSearchResults = (type, keyword, limit = 20, next_offset = 1, language = '', next_query_type = '') => {
+        const params = { keyword, limit, next_offset, language, next_query_type };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/search/${type}?${queryString}`);
     }
 }

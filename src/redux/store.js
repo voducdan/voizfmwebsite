@@ -7,6 +7,7 @@ import openLoginReducer from './openLogin';
 import tokenSlice from './token';
 import playAudioReducer from './playAudio';
 import audioReducer from './audio';
+import openSearchReducer from './OpenSearch';
 
 export default configureStore({
   reducer: {
@@ -14,7 +15,8 @@ export default configureStore({
     openLogin: openLoginReducer,
     token: tokenSlice,
     playAudio: playAudioReducer,
-    audio: audioReducer
+    audio: audioReducer,
+    openSearch: openSearchReducer
   },
 })
 

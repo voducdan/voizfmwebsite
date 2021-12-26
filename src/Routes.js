@@ -9,6 +9,7 @@ import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
 import Library from './components/Library/Library';
 import PlaylistByCategoryLevel1 from './components/PlaylistByCategoryLevel1/PlaylistByCategoryLevel1';
 import BookRequest from './components/BookRequest/BookRequest';
+import Search from './components/Search/Search';
 
 const ROUTES = [
     {
@@ -100,6 +101,12 @@ const ROUTES = [
         key: "APP_BOOK_REQUEST",
         exact: true,
         component: <BookRequest />,
+    },
+    {
+        path: "/search",
+        key: "APP_SEARCH",
+        exact: true,
+        component: <Search />,
     }
 ]
 
