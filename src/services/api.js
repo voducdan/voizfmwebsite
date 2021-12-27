@@ -72,6 +72,7 @@ export default class API {
         return this.init().get(`/discoveries/${discoveryId}/comments`)
     }
     getPlaylistHistory = () => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().get(`/profiles/playlist_histories`)
     }
     getAudioHistory = () => {
@@ -150,5 +151,19 @@ export default class API {
         const params = { keyword, limit, next_offset, language, next_query_type };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/search/${type}?${queryString}`);
+    }
+    getAuthor = (id) => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().get(`/authors/${id}`);
+    }
+    getFeaturedAuthors = (page = 1, limit = 6) => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().get(`/authors/featured`);
+    }
+    getAuthorPlaylists = (id, page = 1, limit = 5) => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        const params = { limit, page };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/authors/${id}/playlists?${queryString}`);
     }
 }
