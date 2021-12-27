@@ -35,7 +35,7 @@ function useOutsideAlerter(ref) {
     const dispatch = useDispatch();
     useEffect(() => {
         function handleClickOutside(event) {
-            if (ref.current && !ref.current.contains(event.target)) {
+            if (ref.current && !ref.current.contains(event.target) && event.target.id !== 'input-search') {
                 dispatch(handleCloseSearch());
             }
         }

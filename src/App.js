@@ -34,7 +34,6 @@ function App() {
     const [anchorEl, setAnchorEl] = useState(null);
     const anchorSearchElId = useSelector(selectAnchorEl);
     const openSearchModal = Boolean(anchorEl);
-
     const dispatch = useDispatch();
 
     useEffect(() => {
@@ -45,7 +44,6 @@ function App() {
                 setIncludeFooter(true);
             }
         }
-
         checkIncludeFooter();
         dispatch(handleCloseSearch());
 

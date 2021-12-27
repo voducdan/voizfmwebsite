@@ -5,12 +5,12 @@ import { useEffect, useState, useCallback } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 // import react router component
-import { Link, useNavigate } from 'react-router-dom';
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
-import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult, handleCloseSearch } from '../../redux/OpenSearch';
+import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
 
 // Import MUI component
 import { styled } from '@mui/material/styles';
@@ -112,6 +112,9 @@ export default function Header() {
     const api = new API();
 
     const windowSize = useWindowSize();
+    const location = useLocation();
+    const pathname = location.pathname;
+    const search = location.search;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const navigate = useNavigate();
     const [avtSrc, setAvtSrc] = useState(null);
@@ -132,6 +135,11 @@ export default function Header() {
     useEffect(() => {
         setSearchStatus();
     }, [isSm]);
+
+    useEffect(() => {
+        setShowHeaderItems(true);
+        setSearchStatus();
+    }, [pathname, search]);
 
     function setSearchStatus() {
         if (isSm) {
@@ -184,12 +192,17 @@ export default function Header() {
     const handleClearSearchKeyword = () => {
         setSearchKeyword('');
         dispatch(handleStopSearch());
+        dispatch(setAnchorEl('input-search'));
     }
 
     const handleSearchOnMB = () => {
         setShowHeaderItems(false);
         setSearchOnPC(true);
         setSearchOnMb(false);
+        setTimeout(() => {
+            const el = document.getElementById('input-search');
+            el.focus();
+        })
     }
 
     const handleDrawerToggle = () => {
