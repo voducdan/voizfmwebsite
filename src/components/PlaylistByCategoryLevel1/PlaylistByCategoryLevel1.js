@@ -137,7 +137,7 @@ export default function AudioBook() {
     const pathname = location.pathname;
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const SPACE_BETWEEN = 24;
+    const SPACE_BETWEEN = isSm ? 16 : 24;
     const NUMBER_ITEMS_PER_LINE = isSm ? 2.5 : 5;
     const SIDE_PADDING = isSm ? 19 : 48;
     const [categories, setCategoryies] = useState([]);
@@ -250,30 +250,28 @@ export default function AudioBook() {
                 {
                     (categoryCode !== null && categoryCode !== '') && (
                         <Box>
-                            {
-                                <Box>
-                                    {<Title content={categoryName} isSm={isSm} haveArrow={false} />}
-                                    <Box
-                                        sx={{
-                                            ...flexStyle('flex-start', 'center'),
-                                            columnGap: isSm ? '16px' : '24px',
-                                            mb: '56px',
-                                            flexWrap: 'wrap',
-                                            rowGap: isSm ? '16px' : '32px'
-                                        }}
-                                    >
-                                        {playlists.map((item) => (
-                                            <Link
-                                                to={`/playlists/${item.id}`}
-                                                style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)`, height: `${getPlaylistImgWidth()}px` }}
-                                            >
-                                                <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} />
-                                            </Link>
-                                        ))}
-                                    </Box>
+                            <Box>
+                                {<Title content={categoryName} isSm={isSm} haveArrow={false} />}
+                                <Box
+                                    sx={{
+                                        ...flexStyle('flex-start', 'center'),
+                                        columnGap: `${SPACE_BETWEEN}px`,
+                                        mb: '56px',
+                                        flexWrap: 'wrap',
+                                        rowGap: isSm ? '16px' : '32px'
+                                    }}
+                                >
+                                    {playlists.map((item) => (
+                                        <Link
+                                            to={`/playlists/${item.id}`}
+                                            style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)`, height: `${getPlaylistImgWidth()}px` }}
+                                        >
+                                            <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} />
+                                        </Link>
+                                    ))}
                                 </Box>
+                            </Box>
 
-                            }
                         </Box>
                     )
                 }

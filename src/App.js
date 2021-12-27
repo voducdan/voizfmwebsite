@@ -3,6 +3,7 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 
 import { setOpen, selectOpenSidebar } from './redux/openSidebar';
+import { selectAnchorEl, handleCloseSearch } from './redux/OpenSearch';
 
 import Box from '@mui/material/Box';
 
@@ -16,6 +17,7 @@ import Header from "./components/Header/Header";
 import Footer from "./components/Footer/Footer";
 import Login from "./components/Login/Login";
 import PlayBar from './components/PlayBar/PlayBar';
+import SearchModal from './components/Search/SearchModal';
 
 import useWindowSize from './utils/useWindowSize'
 import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
@@ -29,21 +31,27 @@ function App() {
 
     let windowSize = useWindowSize()
     const openSidebar = useSelector(selectOpenSidebar);
-
+    const [anchorEl, setAnchorEl] = useState(null);
+    const anchorSearchElId = useSelector(selectAnchorEl);
+    const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
 
     useEffect(() => {
         function checkIncludeFooter() {
             if (EXCLUDE_FOOTER.includes(location.pathname)) {
-                setIncludeFooter(false)
+                setIncludeFooter(false);
             } else {
-                setIncludeFooter(true)
+                setIncludeFooter(true);
             }
         }
-
-        checkIncludeFooter()
+        checkIncludeFooter();
+        dispatch(handleCloseSearch());
 
     }, [location])
+
+    useEffect(() => {
+        getSearchAnchorEl();
+    }, [anchorSearchElId]);
 
     if (windowSize.width > SCREEN_BREAKPOINTS.sm && !openSidebar) {
         dispatch(setOpen(true))
@@ -61,10 +69,20 @@ function App() {
         return false
     };
 
+    const getSearchAnchorEl = () => {
+        const el = document.getElementById(anchorSearchElId);
+        setAnchorEl(el);
+    }
+
     return (
         <div className="App">
             <Login />
             <Header />
+            {
+                openSearchModal && (
+                    <SearchModal />
+                )
+            }
             <SidebarMenu />
             <Box sx={{
                 flexGrow: 1,
