@@ -140,17 +140,18 @@ export default function Author() {
                 sx={{
                     width: '100%',
                     ...flexStyle('space-between', 'stretch'),
-                    p: '48px',
+                    ...(isSm && { flexDirection: 'column' }),
+                    p: isSm ? '16px 0' : '48px',
                     boxSizing: 'border-box'
                 }}
             >
                 <Box
                     id='author-detail-info'
                     sx={{
-                        width: '40%',
+                        width: isSm ? '100%' : '40%',
                         ...flexStyle('flex-start', 'center'),
                         flexDirection: 'column',
-                        rowGap: '32px',
+                        rowGap: isSm ? '16px' : '32px',
                     }}
                 >
                     <Box
@@ -162,15 +163,15 @@ export default function Author() {
                         <Box
                             sx={{
                                 width: '100%',
-                                p: '26px 32px',
+                                p: isSm ? '26px 16px' : '26px 32px',
                                 boxSizing: 'border-box'
                             }}
                         >
                             <Typography
                                 sx={{
-                                    ...TEXT_STYLE.h2,
+                                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                     color: COLORS.white,
-                                    marginBottom: '32px'
+                                    marginBottom: isSm ? '16px' : '32px'
                                 }}
                             >Giới thiệu</Typography>
                             <Typography
@@ -182,6 +183,49 @@ export default function Author() {
                             </Typography>
                         </Box>
                     </Box>
+                    {isSm && (
+                        <Box
+                            sx={{
+                                width: '100%',
+                                bgcolor: COLORS.bg2
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    p: isSm ? '26px 16px' : '26px 32px',
+                                    boxSizing: 'border-box'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                                        color: COLORS.white,
+                                        marginBottom: '32px'
+                                    }}
+                                >Danh sách album ({author?.author_counter?.playlists_count} albums)</Typography>
+                                <Box
+                                    sx={{
+                                        ...flexStyle('center', 'flex-start'),
+                                        flexDirection: 'column',
+                                        rowGap: '32px'
+                                    }}
+                                >
+                                    {
+                                        playlists.map(i => (
+                                            <PlaylistThumnail
+                                                width='100%'
+                                                key={i?.id}
+                                                name={i.name}
+                                                src={i?.avatar?.thumb_url}
+                                                authors={i?.authors}
+                                                children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
+                                            />
+                                        ))
+                                    }
+                                </Box>
+                            </Box>
+                        </Box>
+                    )}
                     <Box
                         sx={{
                             width: '100%',
@@ -190,14 +234,14 @@ export default function Author() {
                     >
                         <Box
                             sx={{
-                                p: '26px 32px',
+                                p: isSm ? '26px 18px' : '26px 32px',
                                 boxSizing: 'border-box',
                                 width: '100%'
                             }}
                         >
                             <Typography
                                 sx={{
-                                    ...TEXT_STYLE.h2,
+                                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                     color: COLORS.white,
                                     marginBottom: '32px'
                                 }}
@@ -259,47 +303,51 @@ export default function Author() {
                         </Box>
                     </Box>
                 </Box>
-                <Box
-                    sx={{
-                        width: '57%',
-                        bgcolor: COLORS.bg2
-                    }}
-                >
-                    <Box
-                        sx={{
-                            p: '26px 32px',
-                            boxSizing: 'border-box'
-                        }}
-                    >
-                        <Typography
-                            sx={{
-                                ...TEXT_STYLE.h2,
-                                color: COLORS.white,
-                                marginBottom: '32px'
-                            }}
-                        >Danh sách album ({playlists.length} albums)</Typography>
+                {
+                    !isSm && (
                         <Box
                             sx={{
-                                ...flexStyle('center', 'flex-start'),
-                                flexDirection: 'column',
-                                rowGap: '32px'
+                                width: '57%',
+                                bgcolor: COLORS.bg2
                             }}
                         >
-                            {
-                                playlists.map(i => (
-                                    <PlaylistThumnail
-                                        width='100%'
-                                        key={i?.id}
-                                        name={i.name}
-                                        src={i?.avatar?.thumb_url}
-                                        authors={i?.authors}
-                                        children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
-                                    />
-                                ))
-                            }
+                            <Box
+                                sx={{
+                                    p: '26px 32px',
+                                    boxSizing: 'border-box'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h2,
+                                        color: COLORS.white,
+                                        marginBottom: '32px'
+                                    }}
+                                >Danh sách album ({author?.author_counter?.playlists_count} albums)</Typography>
+                                <Box
+                                    sx={{
+                                        ...flexStyle('center', 'flex-start'),
+                                        flexDirection: 'column',
+                                        rowGap: '32px'
+                                    }}
+                                >
+                                    {
+                                        playlists.map(i => (
+                                            <PlaylistThumnail
+                                                width='100%'
+                                                key={i?.id}
+                                                name={i.name}
+                                                src={i?.avatar?.thumb_url}
+                                                authors={i?.authors}
+                                                children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
+                                            />
+                                        ))
+                                    }
+                                </Box>
+                            </Box>
                         </Box>
-                    </Box>
-                </Box>
+                    )
+                }
             </Box>
         </Box>
     )
