@@ -257,87 +257,72 @@ const SearchResult = (props) => {
                                     ...flexStyle('flex-start', 'center')
                                 }}
                             >
-                                <Card
-                                    sx={{
-                                        ...flexStyle('flex-start', 'center'),
-                                        columnGap: isSm ? '10px' : '20px',
-                                        bgcolor: 'inherit',
-                                        boxShadow: 'none',
-                                        width: '100%',
-                                        height: '100%'
-                                    }}
+                                <Link
+                                    to={`/authors/${i?.id}`}
+                                    style={{ textDecoration: 'none', height: '100%', width: '100%' }}
                                 >
-                                    <Box
+                                    <Card
                                         sx={{
-                                            width: isSm ? '40px' : '100px',
-                                            height: isSm ? '40px' : '100px',
-                                            position: 'relative'
-                                        }}
-                                    >
-                                        <img
-                                            style=
-                                            {{
-                                                width: isSm ? '40px' : '100px',
-                                                height: isSm ? '40px' : '100px',
-                                                borderRadius: '50%'
-                                            }}
-                                            src={i?.avatar?.thumb_url}
-                                            alt={`images ${i.name}`}
-                                        />
-                                    </Box>
-                                    <CardContent
-                                        sx={{
-                                            ...flexStyle('space-between', 'flex-start'),
-                                            flexDirection: 'column',
-                                            flex: '1 0 auto',
-                                            p: 0,
-                                            height: '100%',
-                                            width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 120px)',
-                                            '&:last-child': {
-                                                p: 0
-                                            }
+                                            ...flexStyle('flex-start', 'center'),
+                                            columnGap: isSm ? '10px' : '20px',
+                                            bgcolor: 'inherit',
+                                            boxShadow: 'none',
+                                            width: '100%',
+                                            height: '100%'
                                         }}
                                     >
                                         <Box
                                             sx={{
-                                                ...flexStyle('space-between', 'center'),
-                                                width: '100%',
-                                                borderBottom: `1px solid ${COLORS.bg2}`,
+                                                width: isSm ? '40px' : '100px',
+                                                height: isSm ? '40px' : '100px',
+                                                position: 'relative'
+                                            }}
+                                        >
+                                            <img
+                                                style=
+                                                {{
+                                                    width: isSm ? '40px' : '100px',
+                                                    height: isSm ? '40px' : '100px',
+                                                    borderRadius: '50%'
+                                                }}
+                                                src={i?.avatar?.thumb_url}
+                                                alt={`images ${i.name}`}
+                                            />
+                                        </Box>
+                                        <CardContent
+                                            sx={{
+                                                ...flexStyle('space-between', 'flex-start'),
+                                                flexDirection: 'column',
+                                                flex: '1 0 auto',
+                                                p: 0,
                                                 height: '100%',
+                                                width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 120px)',
+                                                '&:last-child': {
+                                                    p: 0
+                                                }
                                             }}
                                         >
                                             <Box
                                                 sx={{
-                                                    ...flexStyle('center', 'flex-start'),
-                                                    flexDirection: 'column',
-                                                    flex: '1 0 auto',
-                                                    rowGap: '6px',
+                                                    ...flexStyle('space-between', 'center'),
                                                     width: '100%',
+                                                    borderBottom: `1px solid ${COLORS.bg2}`,
+                                                    height: '100%',
                                                 }}
                                             >
-                                                <Typography
-                                                    sx={{
-                                                        ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                                        color: COLORS.white,
-                                                        display: '-webkit-box',
-                                                        textOverflow: 'ellipsis',
-                                                        WebkitLineClamp: 1,
-                                                        WebkitBoxOrient: 'vertical',
-                                                        overflow: 'hidden'
-                                                    }}
-                                                >
-                                                    {i?.name}
-                                                </Typography>
                                                 <Box
                                                     sx={{
-                                                        ...flexStyle('flex-start', 'center'),
-                                                        columnGap: '6px'
+                                                        ...flexStyle('center', 'flex-start'),
+                                                        flexDirection: 'column',
+                                                        flex: '1 0 auto',
+                                                        rowGap: '6px',
+                                                        width: '100%',
                                                     }}
                                                 >
                                                     <Typography
                                                         sx={{
-                                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                                            color: COLORS.contentIcon,
+                                                            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                            color: COLORS.white,
                                                             display: '-webkit-box',
                                                             textOverflow: 'ellipsis',
                                                             WebkitLineClamp: 1,
@@ -345,13 +330,33 @@ const SearchResult = (props) => {
                                                             overflow: 'hidden'
                                                         }}
                                                     >
-                                                        {i?.description}
+                                                        {i?.name}
                                                     </Typography>
+                                                    <Box
+                                                        sx={{
+                                                            ...flexStyle('flex-start', 'center'),
+                                                            columnGap: '6px'
+                                                        }}
+                                                    >
+                                                        <Typography
+                                                            sx={{
+                                                                ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                                                color: COLORS.contentIcon,
+                                                                display: '-webkit-box',
+                                                                textOverflow: 'ellipsis',
+                                                                WebkitLineClamp: 1,
+                                                                WebkitBoxOrient: 'vertical',
+                                                                overflow: 'hidden'
+                                                            }}
+                                                        >
+                                                            {i?.description}
+                                                        </Typography>
+                                                    </Box>
                                                 </Box>
                                             </Box>
-                                        </Box>
-                                    </CardContent>
-                                </Card>
+                                        </CardContent>
+                                    </Card>
+                                </Link>
                             </Box>
                         ))
                     }
@@ -548,7 +553,10 @@ export default function Search() {
                             sx={{
                                 bgcolor: (i.type === type) ? COLORS.bg3 : 'transparent',
                                 color: COLORS.VZ_Text_content,
-                                ...TEXT_STYLE.content2
+                                ...TEXT_STYLE.content2,
+                                ':hover': {
+                                    bgcolor: COLORS.bg3
+                                }
                             }}
                             onClick={() => { handleClickSearchTab(i.type) }}
                         />

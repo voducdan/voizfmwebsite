@@ -21,7 +21,9 @@ export default function PlaylistThumnail(props) {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-    const { id, src, name, authors, isBookmark, hasDelete, handleConfirmDeleteModalOpen, children } = props;
+    const { id, src, name, authors, isBookmark, hasDelete, handleConfirmDeleteModalOpen, children, width } = props;
+
+    const clientWidth = width ? width : (isSm || hasDelete) ? '100%' : '45%'
 
     const authorsString = (authors) => {
         if (Array.isArray(authors)) {
@@ -39,7 +41,7 @@ export default function PlaylistThumnail(props) {
                 columnGap: isSm ? '10px' : '20px',
                 bgcolor: 'inherit',
                 boxShadow: 'none',
-                width: (isSm || hasDelete) ? '100%' : '45%',
+                width: clientWidth,
                 height: '100px'
             }}
         >
