@@ -96,7 +96,7 @@ export default function SidebarMenu() {
             id: 5,
             icon: Adward,
             text: 'Bảng xếp hạng',
-            url: '/charts'
+            url: '/playlists/rankings'
         }
     ]
     const categories = [

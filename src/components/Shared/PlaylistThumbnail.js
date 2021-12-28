@@ -60,9 +60,8 @@ export default function PlaylistThumnail(props) {
                         borderRadius: hasDelete ? '50%' : '4px'
                     }}
                     // img src currently not working
-                    // image={src}
-                    src="https://picsum.photos/420/420?img=11"
-                    alt={src}
+                    src={src}
+                    alt={`images ${name}`}
                 />
                 {
                     hasDelete && (
