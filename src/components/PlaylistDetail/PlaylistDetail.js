@@ -159,7 +159,7 @@ export default function PlatlistDetail() {
             const playlistInfo = [
                 {
                     label: <InfoLabel title='Tác giả' />,
-                    value: <InfoValue value={playlist?.author_string} />
+                    value: <Link to={`/authors/${playlist?.authors[0]?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.author_string} /></Link>
                 },
                 {
                     label: <InfoLabel title='Thời lượng' />,
@@ -419,7 +419,10 @@ export default function PlatlistDetail() {
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,
                                 textTransform: 'none',
-                                height: '48px'
+                                height: '48px',
+                                ':hover': {
+                                    bgcolor: COLORS.second
+                                }
                             }}
                             disabled={!!!audioTrailerUrl}
                             startIcon={paused ? <VolumeMuteIcon sx={{ color: !!audioTrailerUrl ? COLORS.white : 'rgba(0, 0, 0, 0.26)' }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}

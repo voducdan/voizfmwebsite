@@ -295,7 +295,7 @@ export default function DiscoveryDetail() {
                                 width: '150px',
                                 borderRadius: '48px',
                                 ':hover': {
-                                    bgcolor: '#7c4ee9'
+                                    bgcolor: 'rgb(56 57 68 / 93%)'
                                 }
                             }}
                             startIcon={<HeadphonesIcon sx={{ color: COLORS.white }} />}
