@@ -4,6 +4,14 @@ import { useEffect, useState } from 'react';
 // import react router dom
 import { Link } from 'react-router-dom';
 
+// import swiper
+import SwiperCore, { Navigation } from 'swiper';
+import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+
+import 'swiper/swiper.scss'; // core Swiper
+import 'swiper/modules/navigation/navigation.scss'; // Navigation module
+import 'swiper/modules/pagination/pagination.scss';
+
 // import MUI component
 import {
     Box,
@@ -27,8 +35,10 @@ import useWindowSize from '../../utils/useWindowSize';
 // import service
 import API from '../../services/api';
 
+SwiperCore.use([Navigation]);
+
 const Tab = (props) => {
-    const { id, text, tab, onClick, isSm } = props;
+    const { id, text, tab, onClick, isSm, idx } = props;
     const iconProps = id === tab ? {
         bgfill: 'none',
         fill: '#50D0EC',
@@ -46,6 +56,7 @@ const Tab = (props) => {
                 ...flexStyle('flex-start', 'center'),
                 width: 'max-content',
                 height: '100%',
+                mr: (idx === tabItems.length - 1) ? 0 : '5%',
                 columnGap: '16px',
                 cursor: 'pointer'
             }}
@@ -59,7 +70,7 @@ const Tab = (props) => {
             </Box>
             <Typography
                 sx={{
-                    ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.h3),
+                    ...TEXT_STYLE.h3,
                     color: (id === tab) ? COLORS.white : COLORS.contentIcon
                 }}
             >
@@ -178,28 +189,61 @@ export default function PlaylistRanking() {
                     Bảng xếp hạng
                 </Typography>
             </Box>
-            <Box
-                sx={{
-                    width: '100%',
-                    height: '80px',
-                    bgcolor: COLORS.bg2,
-                    ...flexStyle('space-around', 'center'),
-                    p: '0 10%',
-                    boxSizing: 'border-box'
-                }}
-            >
-                {
-                    tabItems.map(i => (
-                        <Tab
-                            onClick={handleTabClick}
-                            isSm={isSm}
-                            tab={tab}
-                            id={i.id}
-                            key={i.id}
-                            text={i.text} />
-                    ))
-                }
-            </Box>
+            {
+                !isSm && (
+                    <Box
+                        sx={{
+                            width: '100%',
+                            height: '80px',
+                            bgcolor: COLORS.bg2,
+                            ...flexStyle('center', 'center'),
+                            boxSizing: 'border-box'
+                        }}
+                    >
+                        {
+                            tabItems.map((i, idx) => (
+                                <Tab
+                                    onClick={handleTabClick}
+                                    isSm={isSm}
+                                    tab={tab}
+                                    id={i.id}
+                                    key={i.id}
+                                    idx={idx}
+                                    text={i.text} />
+                            ))
+
+                        }
+                    </Box>
+                )
+            }
+            {
+                isSm && (
+                    <Swiper
+                        slidesPerView='auto'
+                        spaceBetween={32}
+                        style={{
+                            height: '80px',
+                            backgroundColor: COLORS.bg2,
+                            padding: '0 16px'
+                        }}
+                    >
+                        {
+                            tabItems.map(i => (
+                                <SwiperSlide key={i?.id} style={{ width: 'auto' }}>
+                                    <Tab
+                                        onClick={handleTabClick}
+                                        isSm={isSm}
+                                        tab={tab}
+                                        id={i.id}
+                                        key={i.id}
+                                        text={i.text} />
+                                </SwiperSlide>
+                            ))
+
+                        }
+                    </Swiper>
+                )
+            }
             <Box
                 sx={{
                     width: '100%',
@@ -209,8 +253,8 @@ export default function PlaylistRanking() {
                 <Box
                     sx={{
                         mt: isSm ? '32px' : '36px',
-                        width: '40%',
-                        minWidth: '560px'
+                        width: isSm ? '90%' : '40%',
+                        ...(!isSm && { minWidth: '560px' })
                     }}
                 >
                     <Box
@@ -245,9 +289,10 @@ export default function PlaylistRanking() {
                     {
                         playlists.map((i, idx) => (
                             <Box
+                                key={i?.id}
                                 sx={{
                                     width: '100%',
-                                    height: '116px',
+                                    height: isSm ? '96px' : '116px',
                                     ...flexStyle('flex-start', 'center'),
                                     columnGap: '22px',
                                     bgcolor: COLORS.bg2,
@@ -257,22 +302,24 @@ export default function PlaylistRanking() {
                             >
                                 <Box
                                     sx={{
-                                        width: '94px',
+                                        width: '15%',
                                         height: '100%',
                                         bgcolor: COLORS.bg3,
-                                        ...flexStyle('center', 'center')
+                                        ...flexStyle('center', 'center'),
+                                        borderTopLeftRadius: '6px',
+                                        borderBottomLeftRadius: '6px',
                                     }}
                                 >
                                     <Typography
                                         sx={{
-                                            ...TEXT_STYLE.h2,
+                                            ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                             color: COLORS.white
                                         }}
                                     >{(idx + 1) <= 9 ? `0${idx + 1}` : (idx + 1)}</Typography>
                                 </Box>
                                 <Link
                                     to={`/playlists/${i?.id}`}
-                                    style={{ textDecoration: 'none' }}
+                                    style={{ textDecoration: 'none', width: 'calc(85% - 22px)' }}
                                 >
                                     <Box
                                         sx={{
@@ -287,8 +334,8 @@ export default function PlaylistRanking() {
                                                 src={i?.avatar?.thumb_url}
                                                 alt={`image ${i?.name}`}
                                                 style={{
-                                                    width: '100px',
-                                                    height: '100px'
+                                                    width: isSm ? '80px' : '100px',
+                                                    height: isSm ? '80px' : '100px'
                                                 }}
                                             />
                                         </Box>
@@ -296,22 +343,33 @@ export default function PlaylistRanking() {
                                         >
                                             <Typography
                                                 sx={{
-                                                    ...TEXT_STYLE.h3,
+                                                    ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
                                                     color: COLORS.white,
-                                                    mb: '8px'
+                                                    mb: '8px',
+                                                    display: '-webkit-box',
+                                                    textOverflow: 'ellipsis',
+                                                    WebkitLineClamp: 1,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
                                                 }}
                                             >{i?.name}</Typography>
                                             <Box
                                                 sx={{
                                                     ...flexStyle('flex-start', 'center'),
                                                     columnGap: '8px',
-                                                    mb: '16px'
+                                                    mb: isSm ? '4px' : '16px'
                                                 }}
                                             >
-                                                <AccountCircleOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+                                                <AccountCircleOutlinedIcon sx={{
+                                                    color: COLORS.contentIcon,
+                                                    ...(isSm && {
+                                                        width: '16px',
+                                                        height: '16px'
+                                                    })
+                                                }} />
                                                 <Typography
                                                     sx={{
-                                                        ...TEXT_STYLE.content1,
+                                                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                                         color: COLORS.contentIcon
                                                     }}
                                                 >{i?.author_string}</Typography>
@@ -322,10 +380,16 @@ export default function PlaylistRanking() {
                                                     columnGap: '8px'
                                                 }}
                                             >
-                                                <StarIcon sx={{ color: COLORS.second }} />
+                                                <StarIcon sx={{
+                                                    color: COLORS.second,
+                                                    ...(isSm && {
+                                                        width: '16px',
+                                                        height: '16px'
+                                                    })
+                                                }} />
                                                 <Typography
                                                     sx={{
-                                                        ...TEXT_STYLE.content1,
+                                                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                                         color: COLORS.contentIcon
                                                     }}
                                                 >{i?.playlist_counter?.content_avg} ({i?.playlist_counter?.ratings_count})</Typography>
