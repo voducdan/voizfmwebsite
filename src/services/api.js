@@ -10,7 +10,9 @@ export default class API {
     }
 
     init = () => {
-        this.api_token = getToken();
+        // this.api_token = getToken();
+        // Hardcode
+        this.api_token = 'wjfQexJRdn9tK7Xza-UKag';
         let headers = {
             'Content-type': 'application/json',
             'Accept': 'application/json'
