@@ -11,6 +11,7 @@ import PlaylistByCategoryLevel1 from './components/PlaylistByCategoryLevel1/Play
 import BookRequest from './components/BookRequest/BookRequest';
 import Search from './components/Search/Search';
 import Author from './components/Author/Author';
+import PlaylistRanking from './components/PlaylistRanking/PlaylistRanking';
 
 const ROUTES = [
     {
@@ -111,9 +112,15 @@ const ROUTES = [
     },
     {
         path: "/authors/:id",
-        key: "APP_AUHTOR",
+        key: "APP_AUTHOR",
         exact: true,
         component: <Author />,
+    },
+    {
+        path: "playlists/rankings",
+        key: "APP_PLAYLIST_RANKING",
+        exact: true,
+        component: <PlaylistRanking />,
     }
 ]
 
