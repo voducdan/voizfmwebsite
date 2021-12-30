@@ -2,8 +2,8 @@
 import { useState } from 'react';
 
 // import redux
-import { useSelector } from 'react-redux'
-import { selectOpenSidebar } from '../../redux/openSidebar'
+import { useSelector, useDispatch } from 'react-redux'
+import { selectOpenSidebar, setOpen } from '../../redux/openSidebar'
 
 // import react router dom
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -64,6 +64,7 @@ export default function SidebarMenu() {
     const location = useLocation();
     const [current, setCurrent] = useState(null)
     const openSidebar = useSelector(selectOpenSidebar);
+    const dispatch = useDispatch();
 
     let open = windowSize.width > SCREEN_BREAKPOINTS.sm ? true : openSidebar
 
@@ -137,6 +138,7 @@ export default function SidebarMenu() {
         const allItems = [...navigatorLink, ...categories];
         const item = allItems.filter(i => i.id === id);
         setCurrent(id);
+        dispatch(setOpen(false));
         navigate(`../${item[0].url}`, { replace: true });
         e.stopPropagation();
     }
