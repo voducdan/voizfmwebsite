@@ -33,10 +33,6 @@ import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils
 import useWindowSize from '../../utils/useWindowSize';
 import { flexStyle } from '../../utils/flexStyle'
 
-// import fake data
-import { authors } from '../../mockData/HomeData';
-
-// import service
 // import services
 import API from '../../services/api'
 
@@ -179,7 +175,7 @@ export default function HomeContent() {
         }
 
         async function fetchFeaturedAuthors(page = 1, limit = 10) {
-            const res = await api.getFeaturedAuthors();
+            const res = await api.getFeaturedAuthors(page, limit);
             const data = await res.data.data;
             setFeaturedAuthors(data);
         }
