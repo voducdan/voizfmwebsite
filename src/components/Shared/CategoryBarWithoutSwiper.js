@@ -17,7 +17,7 @@ import { flexStyle } from '../../utils/flexStyle'
 export default function CategoryBarWithoutSwiper(props) {
     const { categoryList, isSm, windowWidth, onSelectCategory } = props;
     const [activeCategory, setActiveCategory] = useState('');
-    const [isAllCategoty, setIsAllCategoty] = useState(false);
+    const [isAllCategory, setisAllCategory] = useState(false);
     const [showedItems, setShowedItems] = useState([]);
     const newCategoryList = [{ "name": "Tất cả", "sub_name": null, "code": '' }, ...categoryList];
     const width = 100;
@@ -25,7 +25,8 @@ export default function CategoryBarWithoutSwiper(props) {
 
     useEffect(() => {
         getNumItem();
-    }, [categoryList, windowWidth, isSm])
+        setisAllCategory(false);
+    }, [categoryList, windowWidth, isSm]);
 
     const getNumItem = () => {
         let numItems = Math.floor(windowWidth / width);
@@ -33,6 +34,8 @@ export default function CategoryBarWithoutSwiper(props) {
             numItems *= 2;
         }
         const itemsList = newCategoryList.slice(0, numItems - 2);
+        console.log(itemsList)
+        console.log(newCategoryList)
         setShowedItems(itemsList);
     }
 
@@ -43,12 +46,12 @@ export default function CategoryBarWithoutSwiper(props) {
     }
 
     const handleShowAllCategory = () => {
-        setIsAllCategoty(true);
+        setisAllCategory(true);
         setShowedItems(newCategoryList);
     }
 
     const handleShowLessCategory = () => {
-        setIsAllCategoty(false);
+        setisAllCategory(false);
         getNumItem();
     }
 
@@ -120,30 +123,26 @@ export default function CategoryBarWithoutSwiper(props) {
                     </Box>
                 ))
                 }
-                {
-                    (showedItems.length < newCategoryList.length) && (
-                        <Box
-                            sx={{
-                                minWidth: `${width}px`,
-                                minHeight: `${height}px`,
-                                ...flexStyle('center', 'center'),
-                            }}
-                        >
-                            <Button
-                                onClick={isAllCategoty ? handleShowLessCategory : handleShowAllCategory}
-                                sx={{
-                                    ...TEXT_STYLE.title1,
-                                    color: COLORS.VZ_Text_content,
-                                    textTransform: 'none',
-                                    p: '5px 15px'
-                                }}
-                                endIcon={isAllCategoty ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
-                            >
-                                {isAllCategoty ? 'Thu gọn' : 'Xem thêm'}
-                            </Button>
-                        </Box>
-                    )
-                }
+                <Box
+                    sx={{
+                        minWidth: `${width}px`,
+                        minHeight: `${height}px`,
+                        ...flexStyle('center', 'center'),
+                    }}
+                >
+                    <Button
+                        onClick={isAllCategory ? handleShowLessCategory : handleShowAllCategory}
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.VZ_Text_content,
+                            textTransform: 'none',
+                            p: '5px 15px'
+                        }}
+                        endIcon={isAllCategory ? <ArrowDropUpIcon /> : <ArrowDropDownIcon />}
+                    >
+                        {isAllCategory ? 'Thu gọn' : 'Xem thêm'}
+                    </Button>
+                </Box>
             </Box>
         </Box >
     )
