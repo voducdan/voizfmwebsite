@@ -685,7 +685,12 @@ export default function PlatlistDetail() {
                                                     sx={{
                                                         'span': {
                                                             ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                                            color: COLORS.white
+                                                            color: COLORS.white,
+                                                            display: '-webkit-box',
+                                                            textOverflow: 'ellipsis',
+                                                            WebkitLineClamp: 2,
+                                                            WebkitBoxOrient: 'vertical',
+                                                            overflow: 'hidden'
                                                         }
                                                     }}
                                                     id={`label-${value.id}`} primary={value.name} />
