@@ -25,35 +25,43 @@ import { TEXT_STYLE, COLORS } from '../../utils/constants'
 SwiperCore.use([Navigation]);
 
 export default function CategoryBar(props) {
-    const { categoryList, isSm, onSelectCategory } = props
-    const [activeCategory, setActiveCategory] = useState(0);
+    const { parent, categoryList, isSm, onSelectCategory } = props
+    const [activeCategory, setActiveCategory] = useState(parent);
+    const newCategoryList = [
+        {
+            code: parent,
+            name: "Tất cả",
+            sub_name: null
+        },
+        ...categoryList
+    ]
 
     const handleSelectCategory = (e) => {
-        const channeId = e.target.id
-        setActiveCategory(Number(channeId))
-        onSelectCategory()
+        const channeId = e.currentTarget.id;
+        setActiveCategory(channeId);
+        onSelectCategory(parent, channeId);
     }
 
     return (
-        <Box >
+        <Box>
             <Swiper
                 slidesPerView='auto'
-                spaceBetween={40}
+                spaceBetween={isSm ? 20 : 40}
                 style={{
                     marginTop: isSm ? 20 : 35
                 }}
             >
-                {categoryList.map((item, idx) => (
+                {newCategoryList.map(item => (
                     <SwiperSlide
-                        key={idx}
+                        key={item?.code}
                         style={{
                             width: 'auto'
                         }}
                     >
                         {
-                            (idx !== activeCategory) && (
+                            (item?.code !== activeCategory) && (
                                 <Typography
-                                    id={item.id}
+                                    id={item?.code}
                                     onClick={handleSelectCategory}
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
@@ -61,25 +69,30 @@ export default function CategoryBar(props) {
                                         whiteSpace: 'nowrap',
                                         cursor: 'pointer'
                                     }}
-                                    key={idx}>
+                                    key={item?.code}>
                                     {item.name}
                                 </Typography>
                             )
                         }
                         {
-                            (idx === activeCategory) && (
-                                <Chip
-                                    id={item.id}
+                            (item?.code === activeCategory) && (
+                                <Typography
+                                    id={item.code}
                                     onClick={handleSelectCategory}
-                                    key={idx}
-                                    label={item.name}
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                        color: COLORS.VZ_Text_content,
+                                        color: COLORS.white,
                                         bgcolor: COLORS.bg3,
                                         whiteSpace: 'nowrap',
+                                        cursor: 'pointer',
+                                        padding: '5px 15px',
+                                        borderRadius: '25px',
+                                        boxSizing: 'border-box',
+                                        '&:hover': {
+                                            bgcolor: COLORS.bg3
+                                        }
                                     }}
-                                />
+                                >{item.name}</Typography>
                             )
                         }
                     </SwiperSlide>

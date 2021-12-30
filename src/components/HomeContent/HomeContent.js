@@ -1,5 +1,8 @@
 // import react
-import { useRef } from 'react';
+import { useRef, useState, useEffect } from 'react';
+
+// import react router dom
+import { Link } from 'react-router-dom';
 
 // import MUI components
 import { styled } from '@mui/material/styles';
@@ -30,8 +33,8 @@ import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils
 import useWindowSize from '../../utils/useWindowSize';
 import { flexStyle } from '../../utils/flexStyle'
 
-// import fake data
-import { fakeData, fakeSuggest, newContent, authors } from '../../mockData/HomeData';
+// import services
+import API from '../../services/api'
 
 SwiperCore.use([Navigation]);
 
@@ -88,44 +91,178 @@ const Title = (props) => {
     )
 }
 
+const CATEGORIES_LEVEL1 = [
+    {
+        code: 'audio_book',
+        name: 'Sách nói chất lượng'
+    },
+    {
+        code: 'story_book',
+        name: 'Truyện nói hấp dẫn'
+    },
+    {
+        code: 'podcast',
+        name: 'Podcast đặc sắc'
+    },
+    {
+        code: 'summary_book',
+        name: 'Sách tóm tắt tinh gọn'
+    },
+    {
+        code: 'children_book',
+        name: 'Thiếu nhi'
+    }
+]
+const CATEGORIES_LEVEL2 = [
+    {
+        code: 'audio_book',
+        name: 'Tin tức'
+    },
+    {
+        code: 'tin_tuc',
+        name: 'Giải trí'
+    },
+    {
+        code: 'tam_linh',
+        name: 'Bình an tâm hồn'
+    },
+    {
+        code: 'thanh_cong',
+        name: 'Phát triển bản thân'
+    },
+    {
+        code: 'kinh_dien_viet_nam',
+        name: 'Việt nam danh tác'
+    },
+    {
+        code: 'lich_su',
+        name: 'Dân ta phải biết sử ta'
+    },
+    {
+        code: 'coming_soon',
+        name: 'Sắp phát hành'
+    }
+]
+
 export default function HomeContent() {
+    const api = new API();
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
+    const [randomPlaylists, setRandomPlaylists] = useState([]);
+    const [playlistsBycategory, setPlaylistsBycategory] = useState([]);
+    const [playlistsBycategoryLevel2, setPlaylistsBycategoryLevel2] = useState([]);
+    const [newContents, setNewContents] = useState([]);
+    const [featuredsAuthors, setFeaturedAuthors] = useState([]);
+
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
 
-    const num_items_per_line = !isSm ? 5 : 3;
+    const num_items_per_line = !isSm ? 5 : 2.5;
+
+    useEffect(() => {
+        async function fetchRandomPlaylists() {
+            const res = await api.getPlaylistsRandom();
+            const data = await res.data.data;
+            setRandomPlaylists(data);
+        }
+
+        async function fetchNewContent() {
+            const res = await api.getHomeNewContent();
+            const data = await res.data.data;
+            setNewContents(data);
+        }
+
+        async function fetchFeaturedAuthors(page = 1, limit = 10) {
+            const res = await api.getFeaturedAuthors(page, limit);
+            const data = await res.data.data;
+            setFeaturedAuthors(data);
+        }
+
+        async function fetchCategoryLevel1Playlists() {
+            let playlists = [];
+            for (let category of CATEGORIES_LEVEL1) {
+                let playlistsByOneCategory = {
+                    code: category.code,
+                    name: category.name
+                }
+                const resPlaylist = api.getCategoryPlaylists(category.code);
+                const resCategoryLevel2 = api.getCategories(category.code);
+                const res = await Promise.all([resPlaylist, resCategoryLevel2]);
+                playlistsByOneCategory['data'] = await res[0].data.data;
+                playlistsByOneCategory['categories'] = await res[1].data.data;
+                playlists.push(playlistsByOneCategory)
+            }
+            setPlaylistsBycategory(playlists);
+        }
+
+        async function fetchCategoryLevel2Playlists() {
+            let playlists = [];
+            for (let category of CATEGORIES_LEVEL2) {
+                let playlistsByOneCategory = {
+                    code: category.code,
+                    name: category.name
+                }
+                const res = await api.getCategoryPlaylists(category.code);
+                const data = await res.data.data;
+                playlistsByOneCategory['data'] = data;
+                playlists.push(playlistsByOneCategory)
+            }
+            setPlaylistsBycategoryLevel2(playlists);
+        }
+
+        fetchFeaturedAuthors();
+        fetchNewContent();
+        fetchCategoryLevel1Playlists();
+        fetchCategoryLevel2Playlists();
+        fetchRandomPlaylists();
+    }, []);
+
+    const onSelectCategory = async (parent, code) => {
+        const tmpPlaylists = playlistsBycategory;
+        const parentIdx = playlistsBycategory.findIndex(i => i.code === parent);
+        const res = await api.getCategoryPlaylists(code);
+        const data = await res.data.data;
+        tmpPlaylists[parentIdx]['data'] = data;
+        setPlaylistsBycategory([...tmpPlaylists]);
+    }
 
     return (
         <Main>
             <HomeCarousel windowWidth={windowSize.width}></HomeCarousel>
             <Box sx={{
-                margin: '107px 48px 56px 48px'
+                m: isSm ? '40px 20px' : '56px 48px'
             }}>
                 {<Title content="Gợi ý cho người chưa bắt đầu" isSm={isSm} />}
-                <Swiper slidesPerView={num_items_per_line} spaceBetween={20} style={{ marginTop: 35 }}>
-                    {fakeSuggest.map((item) => (
-                        <SwiperSlide key={item.id}>
-                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                <Swiper slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20} style={{ marginTop: 35, height: isSm ? '145px' : '200px' }}>
+                    {randomPlaylists.map(item => (
+                        <SwiperSlide key={item?.id}>
+                            <Link to={`/playlists/${item?.id}`}>
+                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Swiper>
             </Box>
             {
-                fakeData.map(data => (
-                    <Box sx={{
-                        margin: '0 48px 56px 48px'
-                    }} key={data.title}>
-                        {<Title content={data.title} isSm={isSm} />}
-                        {data.categories && <CategoryBar categoryList={data.categories} isSm={isSm} active={0} />}
-                        <Swiper slidesPerView={num_items_per_line} spaceBetween={20}
-                            style={{ marginTop: !isSm ? 35 : 20 }}
+                playlistsBycategory.map(data => (
+                    <Box
+                        sx={{
+                            margin: isSm ? '0 20px 56px 20px' : '0 48px 56px 48px'
+                        }}
+                        key={data.code}
+                    >
+                        {<Title content={data.name} isSm={isSm} />}
+                        {data?.categories && <CategoryBar categoryList={data.categories} isSm={isSm} active={0} onSelectCategory={onSelectCategory} parent={data.code} />}
+                        <Swiper slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}
+                            style={{ marginTop: !isSm ? 35 : 20, height: isSm ? '145px' : '200px' }}
                         >
-                            {data.items.map((item) => (
-                                <SwiperSlide key={item.id}>
-                                    <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                            {data.data.map((item) => (
+                                <SwiperSlide key={item?.id}>
+                                    <Link to={`/playlists/${item?.id}`}>
+                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                    </Link>
                                 </SwiperSlide>
                             ))}
                         </Swiper>
@@ -134,7 +271,7 @@ export default function HomeContent() {
             }
             <Box
                 sx={{
-                    padding: '32px 48px 23px 48px',
+                    p: isSm ? '32px 20px 23px 20px' : '32px 48px 23px 48px',
                     backgroundColor: COLORS.bg2,
                     position: 'relative'
                 }}>
@@ -149,10 +286,16 @@ export default function HomeContent() {
                         swiper.params.navigation.prevEl = navigationNewContentPrevRef.current;
                         swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
                     }}
-                    slidesPerView={num_items_per_line} spaceBetween={20} >
-                    {newContent.map((item) => (
-                        <SwiperSlide key={item.id}>
-                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                    slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}
+                    style={{
+                        height: isSm ? '145px' : '200px'
+                    }}
+                >
+                    {newContents.map((item) => (
+                        <SwiperSlide key={item.id} >
+                            <Link to={`/playlists/${item?.id}`}>
+                                <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Swiper>
@@ -165,14 +308,14 @@ export default function HomeContent() {
             </Box>
 
             <Box sx={{
-                margin: '60px 48px'
+                m: isSm ? '40px 20px' : '60px 48px'
             }}>
                 {<Title content="Tác giả nổi bật" isSm={isSm} />}
                 <Swiper
                     slidesPerView={num_items_per_line}
-                    spaceBetween={20}
+                    spaceBetween={isSm ? 8 : 20}
                 >
-                    {authors.map((item) => (
+                    {featuredsAuthors.map((item) => (
                         <SwiperSlide
                             style={{
                                 ...flexStyle('center', 'center'),
@@ -180,27 +323,53 @@ export default function HomeContent() {
                             }}
                             key={item.id}
                         >
-                            <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
-                            <Typography sx={{
-                                ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
-                                color: COLORS.white,
-                                letterSpacing: 0,
-                                marginTop: '22px'
-                            }}>Vũ trọng phụng</Typography>
-                            <Typography sx={{
-                                ...(!isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
-                                color: COLORS.VZ_Text_content,
-                                display: '-webkit-box',
-                                marginTop: '8px',
-                                textOverflow: 'ellipsis',
-                                WebkitLineClamp: 2,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden'
-                            }}>Vũ Trọng Phụng là một nhà văn, nhà báo nổi tiếng của Việt Nam giai đo ...</Typography>
+                            <Link to={`/authors/${item?.id}`} style={{ textDecoration: 'none', textAlign: 'center' }}>
+                                <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                <Typography sx={{
+                                    ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
+                                    color: COLORS.white,
+                                    letterSpacing: 0,
+                                    marginTop: '22px'
+                                }}>{item?.name}</Typography>
+                                <Typography sx={{
+                                    ...(!isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
+                                    color: COLORS.VZ_Text_content,
+                                    display: '-webkit-box',
+                                    marginTop: '8px',
+                                    textOverflow: 'ellipsis',
+                                    WebkitLineClamp: 2,
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden'
+                                }}>{item?.description}
+                                </Typography>
+                            </Link>
                         </SwiperSlide>
                     ))}
                 </Swiper>
             </Box>
+            {
+                playlistsBycategoryLevel2.map(data => (
+                    <Box
+                        sx={{
+                            margin: isSm ? '0 20px 56px 20px' : '0 48px 56px 48px'
+                        }}
+                        key={data.code}
+                    >
+                        {<Title content={data.name} isSm={isSm} />}
+                        <Swiper slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}
+                            style={{ marginTop: !isSm ? 35 : 20, height: isSm ? '145px' : '200px' }}
+                        >
+                            {data.data.map((item) => (
+                                <SwiperSlide key={item?.id}>
+                                    <Link to={`/playlists/${item?.id}`}>
+                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                    </Link>
+                                </SwiperSlide>
+                            ))}
+                        </Swiper>
+                    </Box>
+                ))
+            }
             <PublisherComponent isSm={isSm} />
         </Main >
     )

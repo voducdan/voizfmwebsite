@@ -170,4 +170,9 @@ export default class API {
         const queryString = this.buildQueryString(params)
         return this.init().get(`/playlists/rankings?${queryString}`);
     }
+    getHomeNewContent = (limit = 10) => {
+        const params = { limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/playlists/new_contents?${queryString}`);
+    }
 }
