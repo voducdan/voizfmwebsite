@@ -144,17 +144,17 @@ const PopUpButton = (props) => (
 )
 
 export default function Account() {
+    const api = new API();
 
+    const windowSize = useWindowSize()
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const coverImgHeight = isSm ? 260 : 380
     const [value, setValue] = useState(0);
     const [accAnchorEl, setAccAnchorEl] = useState(null);
     const [openInviteFriend, setOpenInviteFriend] = useState(false);
     const [openEditProfile, setopenEditProfile] = useState(false);
     const openMore = Boolean(accAnchorEl);
-
-    // User id from params
-    const userId = '5ZOQS5'
-
-    let [accountData, setAccountData] = useState({})
+    let [accountData, setAccountData] = useState({});
 
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
@@ -179,22 +179,17 @@ export default function Account() {
 
 
     useEffect(() => {
-        const api = new API()
-
-        function getUser() {
-            api.getUser(userId)
-                .then(res => {
-                    setAccountData(res.data)
-                })
-                .catch(err => { console.log(err) })
+        async function fetchUserInfo() {
+            const res = await api.getUserInfo();
+            const data = await res.data.data;
+            if (data.error) {
+                return;
+            }
+            setAccountData(data);
         }
-        getUser()
-    }, [])
 
-    const windowSize = useWindowSize()
-    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm
-    const coverImgHeight = isSm ? 260 : 380
-
+        fetchUserInfo();
+    }, []);
 
     return (
         <Box
@@ -216,7 +211,7 @@ export default function Account() {
                     width: '100%',
                     height: '100%',
                     left: 0,
-                }} alt="cover img alt" src={accountData.coverImgSrc}></img>
+                }} alt="cover img alt" src={accountData?.avatar?.original_url}></img>
             </Box>
             <Info accountData={accountData} />
             <Box

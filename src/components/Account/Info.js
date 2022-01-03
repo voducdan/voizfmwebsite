@@ -2,9 +2,12 @@
 import {
     Box,
     Avatar,
-    Typography
+    Typography,
+    Button
 } from '@mui/material';
 
+// import react router dom
+import { Link } from 'react-router-dom';
 
 // Import icons
 import {
@@ -16,12 +19,11 @@ import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
-
-
 export default function Info(props) {
 
+    const { accountData } = props;
     const windowSize = useWindowSize()
-    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 260 : 380
     const infoPanelHeight = isSm ? 340 : 200
 
@@ -62,7 +64,7 @@ export default function Info(props) {
                                 sx={{
                                     width: isSm ? '160px' : '120px',
                                     height: isSm ? '160px' : '120px'
-                                }} alt="Remy Sharp" src={props.accountData.avtImgSrc}
+                                }} alt="Remy Sharp" src={accountData?.avatar?.thumb_url}
                             />
                         </Box>
                         <Box
@@ -76,34 +78,44 @@ export default function Info(props) {
                                 sx={{
                                     ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                     color: COLORS.white
-                                }}>{props.accountData.name}</Typography>
-                            <Typography
+                                }}>{`${accountData?.first_name} ${accountData?.last_name}`}</Typography>
+                            <Box
                                 sx={{
-                                    ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
-                                    color: COLORS.bg4
+                                    ...flexStyle('flex-start', 'center'),
+                                    columnGap: '20px'
                                 }}
-                            >ID: {props.accountData.id}</Typography>
-                            {
-                                props.accountData.isVip && (
-                                    <Box
-                                        sx={{
-                                            ...flexStyle('flex-start', 'center'),
-                                            columnGap: '20px'
-                                        }}
-                                    >
-                                        <VipMedal />
-                                        <Typography
-                                            sx={{
-                                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.content2),
-                                                color: COLORS.contentIcon
-                                            }}
-                                        >
-                                            {`VIP (Còn ${Math.round((new Date(props.accountData.vipExpire) - new Date()) / (24 * 60 * 60 * 1000))} ngày)`}
-                                        </Typography>
-                                    </Box>
+                            >
+                                <Typography
+                                    sx={{
+                                        ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
+                                        color: COLORS.bg4
+                                    }}
+                                >ID: </Typography>
+                                <Typography
+                                    sx={{
+                                        ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
+                                        color: COLORS.bg4
+                                    }}
+                                >{accountData?.id}</Typography>
+                            </Box>
 
-                                )
-                            }
+                            <Box
+                                sx={{
+                                    ...flexStyle('flex-start', 'center'),
+                                    columnGap: '20px'
+                                }}
+                            >
+                                <VipMedal />
+                                <Typography
+                                    sx={{
+                                        ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.content2),
+                                        color: COLORS.contentIcon
+                                    }}
+                                >
+                                    {`${accountData?.promotion?.toUpperCase()} (Còn ${Math.floor(accountData?.user_resource?.remaining_minutes / 60)} ngày)`}
+                                </Typography>
+                            </Box>
+
                         </Box>
                     </Box>
                     <Box
@@ -117,7 +129,7 @@ export default function Info(props) {
                     >
                         <Box
                             sx={{
-                                width: isSm ? '100%' : '80%',
+                                width: '100%',
                                 paddingTop: '17px',
                                 paddingLeft: isSm ? '16px' : '37px',
                                 paddingBottom: '17px',
@@ -135,21 +147,28 @@ export default function Info(props) {
                                     color: COLORS.white
                                 }}
                             >Nâng cấp thành viên</Typography>
-                            <button
+                            <Link
+                                to='/up-vip'
                                 style={{
-                                    color: COLORS.error,
-                                    borderRadius: '20px',
-                                    border: 'none',
-                                    padding: '10px 20px',
-                                    backgroundColor: COLORS.white,
-                                    texTransform: 'none',
-                                    ...TEXT_STYLE.title2
+                                    textDecoration: 'none'
                                 }}
-                            >Nâng cấp</button>
+                            >
+                                <Button
+                                    style={{
+                                        color: COLORS.error,
+                                        borderRadius: '20px',
+                                        border: 'none',
+                                        backgroundColor: COLORS.white,
+                                        textTransform: 'none',
+                                        ...TEXT_STYLE.title2
+                                    }}
+                                >Nâng cấp
+                                </Button>
+                            </Link>
                         </Box>
                         <Box
                             sx={{
-                                width: isSm ? '100%' : '80%',
+                                width: '100%',
                                 paddingTop: '17px',
                                 paddingLeft: isSm ? '16px' : '37px',
                                 paddingBottom: '17px',
@@ -158,7 +177,7 @@ export default function Info(props) {
                                 backgroundColor: COLORS.main,
                                 borderRadius: '6px',
                                 height: '60px',
-                                boxSizing: 'border-box',
+                                boxSizing: 'border-box'
                             }}
                         >
                             <Typography
@@ -166,18 +185,18 @@ export default function Info(props) {
                                     ...TEXT_STYLE.h3,
                                     color: COLORS.white
                                 }}
-                            >Bạn đang có  {new Intl.NumberFormat('en-IN').format(props.accountData.coin)} xu</Typography>
-                            <button
+                            >Bạn đang có  {new Intl.NumberFormat('en-IN').format(accountData?.user_resource?.remaining_coins)} xu</Typography>
+                            <Button
                                 style={{
                                     color: COLORS.main,
                                     borderRadius: '20px',
                                     border: 'none',
-                                    padding: '10px 20px',
                                     backgroundColor: COLORS.white,
-                                    texTransform: 'none',
+                                    textTransform: 'none',
                                     ...TEXT_STYLE.title2
                                 }}
-                            >Nạp thêm</button>
+                            >Nạp thêm
+                            </Button>
                         </Box>
                     </Box>
                 </Box>
