@@ -164,7 +164,11 @@ export default function SidebarMenu() {
             open={open}
         >
             <div style={{ display: 'block' }}>
-                <Logo windowWidth={windowSize.width} />
+                <Link
+                    to='/'
+                >
+                    <Logo windowWidth={windowSize.width} />
+                </Link>
             </div>
             <Divider />
             <List>
