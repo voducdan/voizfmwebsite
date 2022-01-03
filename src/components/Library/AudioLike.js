@@ -90,9 +90,43 @@ export default function AudioLike() {
     useEffect(() => {
         async function fetchAudioLikes() {
             const res = await api.getAudioLikes(audioPage, pageLimit);
-            const data = await res.data;
-            const initDeleteList = data.map(i => ({ id: i.id, checked: false }))
-            setAudioLikes(data);
+            const data = await res.data.data;
+            const initDeleteList = data.map(i => ({ id: i.id, checked: false }));
+            // Mock data
+            const mockData = [
+                {
+                    "id": 2,
+                    "name": "Drinking hoodie neutra. #39b8ba",
+                    "published_at": "2021-03-20 00:28:55",
+                    "duration": 90,
+                    "avatar": {
+                        "id": 461,
+                        "original_url": "/uploads/avatar/filename/461/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/461/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "author": {
+                        "id": 158,
+                        "name": "Julia Cameron"
+                    }
+                },
+                {
+                    "id": 3,
+                    "name": "Drinking hoodie neutra. #39b8ba",
+                    "published_at": "2021-03-20 00:28:55",
+                    "duration": 90,
+                    "avatar": {
+                        "id": 461,
+                        "original_url": "/uploads/avatar/filename/461/a1f1cacc38c14c31.jpg",
+                        "thumb_url": "/uploads/avatar/filename/461/thumb_a1f1cacc38c14c31.jpg"
+                    },
+                    "author": {
+                        "id": 158,
+                        "name": "Julia Cameron"
+                    }
+                }
+            ]
+            setAudioLikes([...data, ...mockData]);
+            // setAudioLikes(data);
             setDeleteList(initDeleteList);
         }
 
@@ -120,11 +154,12 @@ export default function AudioLike() {
         setIsSelectDeleteAll(false);
         setDeleteList(initDeleteList);
         setAudioLikes(remainItems);
+        setIsDeleteMode(false);
         handleConfirmDeleteModalClose();
     }
 
     const handleClickDeleteSingleAudio = (e) => {
-        handleConfirmDeleteModalOpen('Bạn có chắc chắn muỗn xóa audio này không?');
+        handleConfirmDeleteModalOpen('Bạn có chắc chắn muốn xóa audio này không?');
         const id = Number(e.currentTarget.id);
         setSingleItemIdToDelete(id);
         e.stopPropagation();
@@ -218,13 +253,13 @@ export default function AudioLike() {
                 {
                     isDeleteMode && (
                         <Button
-                            onClick={() => { handleConfirmDeleteModalOpen('Bạn có chắc chắn muỗn xóa những audio này không?') }}
+                            onClick={() => { handleConfirmDeleteModalOpen('Bạn có chắc chắn muốn xóa những audio này không?') }}
                             sx={{
                                 ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                 color: COLORS.white,
                                 textTransform: 'none'
                             }}
-                        >Xóa</Button>
+                        >Hoàn thành</Button>
                     )
                 }
             </Box>
@@ -245,7 +280,7 @@ export default function AudioLike() {
                                     <Radio
                                         checked={deleteList[idx] ? deleteList[idx]['checked'] : false}
                                         onClick={handleSelectDeleteItem}
-                                        value={idx}
+                                        value={i?.id}
                                         sx={{
                                             color: COLORS.placeHolder,
                                             pl: 0,
@@ -256,11 +291,17 @@ export default function AudioLike() {
                                     />
                                 )
                             }
-                            <Box>
+                            <Box
+                                sx={{
+                                    width: '100%'
+                                }}
+                            >
                                 <PlaylistThumnail
-                                    id={i.id}
-                                    name={i.name}
-                                    src={i?.avatar?.thumb_url}
+                                    id={i?.id}
+                                    name={i?.name}
+                                    // src={i?.avatar?.thumb_url}
+                                    // Mock server images is currently error
+                                    src='https://picsum.photos/335/335?img=16'
                                     authors={i?.author?.name}
                                     hasDelete={true}
                                     handleConfirmDeleteModalOpen={handleClickDeleteSingleAudio}
