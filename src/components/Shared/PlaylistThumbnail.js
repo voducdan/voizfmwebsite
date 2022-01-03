@@ -1,3 +1,6 @@
+// import react router dom
+import { Link } from 'react-router-dom';
+
 // import MUI components
 import {
     Card,
@@ -108,19 +111,24 @@ export default function PlaylistThumnail(props) {
                             width: '50%'
                         }}
                     >
-                        <Typography
-                            sx={{
-                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                color: COLORS.white,
-                                display: '-webkit-box',
-                                textOverflow: 'ellipsis',
-                                WebkitLineClamp: 1,
-                                WebkitBoxOrient: 'vertical',
-                                overflow: 'hidden'
-                            }}
+                        <Link
+                            to={`/playlists/${id}`}
+                            style={{ textDecoration: 'none' }}
                         >
-                            {name}
-                        </Typography>
+                            <Typography
+                                sx={{
+                                    ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                    color: COLORS.white,
+                                    display: '-webkit-box',
+                                    textOverflow: 'ellipsis',
+                                    WebkitLineClamp: 1,
+                                    WebkitBoxOrient: 'vertical',
+                                    overflow: 'hidden'
+                                }}
+                            >
+                                {name}
+                            </Typography>
+                        </Link>
                         {
                             authorsString(authors) && (
                                 <Box
@@ -130,19 +138,24 @@ export default function PlaylistThumnail(props) {
                                     }}
                                 >
                                     <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
-                                    <Typography
-                                        sx={{
-                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                            color: COLORS.contentIcon,
-                                            display: '-webkit-box',
-                                            textOverflow: 'ellipsis',
-                                            WebkitLineClamp: 1,
-                                            WebkitBoxOrient: 'vertical',
-                                            overflow: 'hidden'
-                                        }}
+                                    <Link
+                                        to={`/authors/${authors[0].id}`}
+                                        style={{ textDecoration: 'none' }}
                                     >
-                                        {authorsString(authors)} {Array.isArray(authors) ? '(Tác giả)' : ''}
-                                    </Typography>
+                                        <Typography
+                                            sx={{
+                                                ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                                color: COLORS.contentIcon,
+                                                display: '-webkit-box',
+                                                textOverflow: 'ellipsis',
+                                                WebkitLineClamp: 1,
+                                                WebkitBoxOrient: 'vertical',
+                                                overflow: 'hidden'
+                                            }}
+                                        >
+                                            {authorsString(authors)} {Array.isArray(authors) ? '(Tác giả)' : ''}
+                                        </Typography>
+                                    </Link>
                                 </Box>
                             )
                         }

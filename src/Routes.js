@@ -12,6 +12,8 @@ import BookRequest from './components/BookRequest/BookRequest';
 import Search from './components/Search/Search';
 import Author from './components/Author/Author';
 import PlaylistRanking from './components/PlaylistRanking/PlaylistRanking';
+import Channel from './components/Channel/Channel';
+import ChannelDetail from './components/ChannelDetail/ChannelDetail';
 
 const ROUTES = [
     {
@@ -121,6 +123,18 @@ const ROUTES = [
         key: "APP_PLAYLIST_RANKING",
         exact: true,
         component: <PlaylistRanking />,
+    },
+    {
+        path: "channels",
+        key: "APP_CHANNEL",
+        exact: true,
+        component: <Channel />,
+    },
+    {
+        path: "channels/:id",
+        key: "APP_CHANNEL_DETAIL",
+        exact: true,
+        component: <ChannelDetail />,
     }
 ]
 
