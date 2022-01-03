@@ -108,6 +108,6 @@ export default function HistoryTransaction(props) {
     }, [])
 
     return (
-        <TabPanel value={props.value} index={0} children={<PanelContent isSm={isSm} transactions={transactions} />} ></TabPanel>
+        <TabPanel isSm={isSm} value={props.value} index={0} children={<PanelContent isSm={isSm} transactions={transactions} />} ></TabPanel>
     )
 }

@@ -47,7 +47,7 @@ import API from '../../services/api';
 
 const SearchBtn = (idx) => {
     return (
-        <IconButton aria-label="search">
+        <IconButton aria-label="search" key={idx}>
             <SearchIcon sx={{ color: COLORS.contentIcon }} />
         </IconButton>
     )
@@ -72,6 +72,7 @@ const CartIcon = (props) => {
     return (
         <Link
             to={`/cart`}
+            key={props}
         >
             <Badge badgeContent={props.numItemsInCart || 0} color="error">
                 <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />

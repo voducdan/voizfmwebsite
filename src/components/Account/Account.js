@@ -216,7 +216,7 @@ export default function Account() {
             <Info accountData={accountData} />
             <Box
                 sx={{
-                    width: '95%',
+                    width: isSm ? '100%' : '95%',
                     borderRadius: '10px'
                 }}
             >
@@ -274,7 +274,7 @@ export default function Account() {
                             <Menu
                                 sx={{
                                     '& .MuiMenu-paper': {
-                                        padding: '24px',
+                                        p: '24px',
                                         width: '360px',
                                         bgcolor: COLORS.bg2
                                     }

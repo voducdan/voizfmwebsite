@@ -1,3 +1,6 @@
+// import react
+import { useState, useEffect } from 'react';
+
 // import mui components
 import {
     Typography,
@@ -10,10 +13,18 @@ import {
     TextField,
     InputAdornment
 } from '@mui/material';
+import {
+    DatePicker,
+    LocalizationProvider
+} from '@mui/lab';
+import AdapterDateFns from '@mui/lab/AdapterDateFns';
 import CloseIcon from '@mui/icons-material/Close';
 
 // import icons
 import { Pencil, Birthday, Account, Mobile, Email } from '../Icons';
+
+// import date-fns
+import { format } from 'date-fns'
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
@@ -36,13 +47,45 @@ const textFieldStyle = {
 
 export default function EditProfileModal(props) {
 
-    const windowSize = useWindowSize()
-    const { accountData } = props
-    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm
+    const windowSize = useWindowSize();
+    const { accountData } = props;
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm;
+    const [userInfo, setUserInfo] = useState({});
 
+    useEffect(() => {
+        const user = {
+            firstName: accountData?.first_name,
+            lastName: accountData?.last_name,
+            email: accountData?.email,
+            phoneNumber: accountData?.phone_number,
+            birthday: accountData?.birthday,
+            avatarUrl: accountData?.avatar?.original_url,
+            avatar: null
+        };
+        setUserInfo(user);
+    }, [accountData])
 
     const handleClose = () => {
-        props.setOpen(false)
+        props.setOpen(false);
+    }
+
+    const handleChangeUserInfo = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        let user = { ...userInfo };
+        user[name] = value;
+        setUserInfo({ ...user });
+    }
+
+    const handleChangeBirthday = (birthday) => {
+        const formatedBirthday = format(new Date(birthday), 'yyyy-MM-dd');
+        let user = { ...userInfo };
+        user['birthday'] = formatedBirthday;
+        setUserInfo({ ...user });
+    }
+
+    const handleSubmitEditProfile = () => {
+        console.log(userInfo)
     }
 
     return (
@@ -85,18 +128,21 @@ export default function EditProfileModal(props) {
                     boxSizing: 'border-box'
                 }}
             >
-                <Typography sx={{
-                    marginTop: '40px',
-                    ...(isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h1),
-                    color: COLORS.white
-                }}>Thay đổi thông tin cá nhân</Typography>
+                <Typography
+                    sx={{
+                        ...(isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h1),
+                        color: COLORS.white
+                    }}
+                >
+                    Thay đổi thông tin cá nhân
+                </Typography>
 
                 <Box
                     sx={{
                         width: '100%',
                         ...flexStyle('center', 'center'),
                         flexDirection: 'column',
-                        rowGap: '45px',
+                        rowGap: '55px',
                         borderTop: `1px solid ${COLORS.blackStroker}`,
                         margin: '32px 0',
                         paddingTop: '32px',
@@ -129,7 +175,7 @@ export default function EditProfileModal(props) {
                             sx={{
                                 width: isSm ? '140px' : '210px',
                                 height: isSm ? '140px' : '210px'
-                            }} alt="Remy Sharp" src={accountData.avtImgSrc}
+                            }} alt="Remy Sharp" src={accountData?.avatar?.thumb_url}
                         />
                     </Box>
                 </Box>
@@ -138,10 +184,9 @@ export default function EditProfileModal(props) {
                         width: '100%',
                         ...flexStyle('center', 'center'),
                         flexDirection: 'column',
-                        rowGap: '45px',
+                        rowGap: '55px',
                         borderTop: `1px solid ${COLORS.blackStroker}`,
                         borderBottom: `1px solid ${COLORS.blackStroker}`,
-                        marginTop: '32px',
                         padding: '32px 0',
                         boxSizing: 'border-box'
                     }}
@@ -168,14 +213,15 @@ export default function EditProfileModal(props) {
                     </Box>
                     <Box
                         sx={{
-                            ...flexStyle('center', 'center')
+                            ...flexStyle('center', 'center'),
+                            width: '100%'
                         }}
                     >
                         <Avatar
                             sx={{
                                 width: isSm ? '100%' : '80%',
                                 height: isSm ? '140px' : '210px'
-                            }} variant="rounded" alt="Remy Sharp" src={accountData.avtImgSrc}
+                            }} variant="rounded" alt="Remy Sharp" src={accountData?.avatar?.original_url}
                         />
                     </Box>
                 </Box>
@@ -208,12 +254,18 @@ export default function EditProfileModal(props) {
                                     </InputAdornment>
                                 ),
                             }}
+                            name='firstName'
+                            onChange={handleChangeUserInfo}
+                            value={userInfo.firstName}
                             placeholder="Họ tên lót" variant="outlined"
                         />
                         <TextField
                             sx={{
                                 ...textFieldStyle
                             }}
+                            name='lastName'
+                            onChange={handleChangeUserInfo}
+                            value={userInfo.lastName}
                             placeholder="Tên" variant="outlined"
                         />
                     </Box>
@@ -235,6 +287,9 @@ export default function EditProfileModal(props) {
                                     </InputAdornment>
                                 ),
                             }}
+                            name='email'
+                            onChange={handleChangeUserInfo}
+                            value={userInfo.email}
                             placeholder="Địa chỉ email" variant="outlined"
                         />
                     </Box>
@@ -256,30 +311,57 @@ export default function EditProfileModal(props) {
                                     </InputAdornment>
                                 ),
                             }}
+                            name='phoneNumber'
+                            onChange={handleChangeUserInfo}
+                            value={userInfo.phoneNumber}
                             placeholder="Số điện thoại" variant="outlined"
                         />
                     </Box>
-                    <Box
-                        sx={{
-                            ...flexStyle('center', 'center'),
-                            width: '100%'
-                        }}
-                    >
-                        <TextField
-                            sx={{
-                                width: '100%',
-                                ...textFieldStyle
+                    <LocalizationProvider dateAdapter={AdapterDateFns}>
+                        <DatePicker
+                            InputAdornmentProps={{
+
                             }}
-                            InputProps={{
-                                startAdornment: (
-                                    <InputAdornment position="start">
-                                        <Birthday />
-                                    </InputAdornment>
-                                ),
+                            value={null}
+                            onChange={handleChangeBirthday}
+                            InputAdornmentProps={{
+                                position: 'start'
                             }}
-                            placeholder="Ngày tháng năm sinh" variant="outlined"
+                            components={{
+                                OpenPickerIcon: Birthday
+                            }}
+
+                            renderInput={({ inputRef, inputProps, InputProps }) => {
+                                return (
+                                    <Box
+                                        sx={{
+                                            ...flexStyle('center', 'center'),
+                                            width: '100%'
+                                        }}
+                                    >
+                                        <TextField
+                                            sx={{
+                                                width: '100%',
+                                                ...textFieldStyle,
+                                                '& .MuiButtonBase-root': {
+                                                    p: 0,
+                                                    ml: 0
+                                                }
+                                            }}
+                                            ref={inputRef}
+                                            InputProps={{
+                                                startAdornment: InputProps?.startAdornment
+                                            }}
+                                            name='birthday'
+                                            value={userInfo.birthday}
+                                            placeholder="Ngày tháng năm sinh" variant="outlined"
+                                        />
+                                    </Box>
+                                )
+                            }}
                         />
-                    </Box>
+                    </LocalizationProvider>
+
                 </FormControl>
                 <Button
                     sx={{
@@ -292,6 +374,7 @@ export default function EditProfileModal(props) {
                         borderRadius: '8px',
                         margin: '21px 0'
                     }}
+                    onClick={handleSubmitEditProfile}
                 >Lưu</Button>
             </Box>
         </Dialog>

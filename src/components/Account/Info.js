@@ -56,7 +56,7 @@ export default function Info(props) {
                         sx={{
                             ...flexStyle('flex-start', 'center'),
                             width: isSm ? '100%' : '50%',
-                            columnGap: '40px'
+                            columnGap: isSm ? '26px' : '40px'
                         }}
                     >
                         <Box>
@@ -102,7 +102,7 @@ export default function Info(props) {
                             <Box
                                 sx={{
                                     ...flexStyle('flex-start', 'center'),
-                                    columnGap: '20px'
+                                    columnGap: '18px'
                                 }}
                             >
                                 <VipMedal />
