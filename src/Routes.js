@@ -14,6 +14,7 @@ import Author from './components/Author/Author';
 import PlaylistRanking from './components/PlaylistRanking/PlaylistRanking';
 import Channel from './components/Channel/Channel';
 import ChannelDetail from './components/ChannelDetail/ChannelDetail';
+import Listening from './components/Listening/Listening';
 
 const ROUTES = [
     {
@@ -135,6 +136,12 @@ const ROUTES = [
         key: "APP_CHANNEL_DETAIL",
         exact: true,
         component: <ChannelDetail />,
+    },
+    {
+        path: "listenings",
+        key: "APP_LISTENING",
+        exact: true,
+        component: <Listening />,
     }
 ]
 

@@ -98,11 +98,18 @@ export default class API {
         return this.init().get(`/channel_bookmarks?${queryString}`);
     }
     getAudioLikes = (page, limit) => {
-        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
+        this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
-
-        return this.init().get(`/audio_likes?${queryString}`);
+        return this.init().get(`/profiles/audio_histories/likes?${queryString}`);
+    }
+    getListeningPlaylists = () => {
+        this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
+        return this.init().get(`/playlists/listenings`);
+    }
+    deleteListeningPlaylist = (id) => {
+        this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
+        return this.init().delete(`/playlists/listenings`, { id });
     }
     getCategories = (code, type) => {
         const params = { code, type };
