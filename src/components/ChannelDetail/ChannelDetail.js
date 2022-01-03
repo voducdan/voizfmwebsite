@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 // import react router dom
-import { Link, useParams } from "react-router-dom";
+import { useParams } from "react-router-dom";
 
 // import MUI components
 import {

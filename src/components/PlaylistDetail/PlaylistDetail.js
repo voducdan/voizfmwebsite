@@ -167,7 +167,7 @@ export default function PlatlistDetail() {
                 },
                 {
                     label: <InfoLabel title='Kênh' />,
-                    value: <InfoValue value={playlist?.channel?.name} />
+                    value: <Link to={`/channels/${playlist?.channel?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.channel?.name} /></Link>
                 },
                 {
                     label: <InfoLabel title='Người đọc' />,
