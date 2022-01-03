@@ -9,19 +9,50 @@ import {
     Typography,
     Box,
     Button,
-    IconButton
+    IconButton,
+    List,
+    ListItem,
+    ListItemButton,
+    ListItemText
 } from '@mui/material';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
+import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
+
+// import others components
+import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
 
 // import utils
 import { SCREEN_BREAKPOINTS, TEXT_STYLE, COLORS, DRAWER_WIDTH } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
-import { flexStyle } from '../../utils/flexStyle'
+import { flexStyle } from '../../utils/flexStyle';
+import formatDuration from '../../utils/formatDuration';
 
 // import service
 import API from '../../services/api';
+
+const PlaylistAudioCount = (props) => {
+    const { audioCount, isSm } = props;
+    return (
+        <Box
+            sx={{
+                ...flexStyle('flex-start', 'center'),
+                columnGap: '6px'
+            }}
+        >
+            <GraphicEqOutlinedIcon sx={{ color: COLORS.contentIcon, width: isSm ? '12px' : '16px', height: isSm ? '12px' : '16px' }} />
+            <Typography
+                sx={{
+                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                    color: COLORS.contentIcon
+                }}
+            >
+                {audioCount} audios
+            </Typography>
+        </Box>
+    )
+}
 
 export default function ChannelDetail() {
 
@@ -30,6 +61,8 @@ export default function ChannelDetail() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const { id } = useParams();
     const [channel, setChannel] = useState([]);
+    const [playlists, setPlaylists] = useState([]);
+    const [audios, setAudios] = useState([]);
 
     useEffect(() => {
         async function fetchChannel() {
@@ -37,9 +70,34 @@ export default function ChannelDetail() {
             const data = await res.data.data;
             setChannel(data);
         }
+        async function fetchPlaylists() {
+            const res = await api.getChannelPlaylists(id);
+            const data = await res.data.data;
+            setPlaylists(data);
+        }
+        async function fetchAudios() {
+            const res = await api.getChannelAudio(id);
+            const data = await res.data.data;
+            setAudios(data);
+        }
 
         fetchChannel();
+        fetchPlaylists();
+        fetchAudios();
     }, [])
+
+    const handleBookmark = (is_bookmark, channelId) => {
+        async function bookmarkChannel(channelId) {
+            const res = await api.bookmarkChannel(channelId);
+            const data = await res.data.data;
+            console.log(data);
+        }
+
+        bookmarkChannel();
+        const updatedChannel = { ...channel };
+        updatedChannel['is_bookmark'] = !is_bookmark;
+        setChannel({ ...updatedChannel });
+    }
 
     return (
         <Box
@@ -53,46 +111,54 @@ export default function ChannelDetail() {
                     minHeight: '40vh',
                     ...flexStyle('flex-end', 'center'),
                     background: '#222530',
-                    p: '50px 0',
-                    boxSizing: 'border-box'
+                    p: isSm ? '25px 21px' : '50px 0',
+                    boxSizing: 'border-box',
+                    mb: isSm ? '16px' : '40px'
                 }}
             >
                 <Box
                     sx={{
                         width: '95%',
-                        ...flexStyle('center', 'center'),
-                        columnGap: '48px',
-                        height: '210px',
-                        pr: '50px',
+                        ...flexStyle('flex-start', 'flex-start'),
+                        columnGap: isSm ? '30px' : '48px',
+                        height: '100%',
+                        pr: isSm ? 0 : '50px',
                         boxSizing: 'border-box'
                     }}
                 >
                     <img
                         style={{
-                            width: isSm ? '39px' : '210px',
-                            height: isSm ? '39px' : '100%',
+                            width: isSm ? '110px' : '210px',
+                            height: isSm ? '110px' : '100%',
                         }} alt={`image ${channel?.name}`} src={channel?.avatar?.thumb_url}
                     />
                     <Box
                         sx={{
                             height: '100%',
-                            width: 'calc(100% - 210px)',
+                            width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 210px)',
                             ...flexStyle('flex-start', 'flex-start'),
-                            columnGap: '20%'
+                            ...(isSm && { flexDirection: 'column', rowGap: '20px' }),
+                            columnGap: '10%'
                         }}
                     >
                         <Box
                             sx={{
                                 ...flexStyle('space-between', 'center'),
                                 flexDirection: 'column',
-                                height: '100%'
+                                height: '100%',
+                                minHeight: '210px'
                             }}
                         >
-                            <Box>
+                            <Box
+                                sx={{
+                                    width: '100%',
+                                    mb: '10px'
+                                }}
+                            >
                                 <Typography
                                     sx={{
                                         width: '100%',
-                                        ...TEXT_STYLE.h2,
+                                        ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                         color: COLORS.white
                                     }}
                                 >{channel?.name}</Typography>
@@ -107,13 +173,13 @@ export default function ChannelDetail() {
                                 >
                                     <Typography
                                         sx={{
-                                            ...TEXT_STYLE.h3,
+                                            ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
                                             color: COLORS.second
                                         }}
                                     >{channel?.channel_counter?.bookmarks_count}</Typography>
                                     <Typography
                                         sx={{
-                                            ...TEXT_STYLE.h3,
+                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
                                             color: COLORS.contentIcon
                                         }}
                                     >theo dõi</Typography>
@@ -126,7 +192,7 @@ export default function ChannelDetail() {
                             >
                                 <Typography
                                     sx={{
-                                        ...TEXT_STYLE.content1,
+                                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                         color: COLORS.VZ_Text_content
                                     }}
                                 >{channel?.description}</Typography>
@@ -142,9 +208,9 @@ export default function ChannelDetail() {
                                 <ShareOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                             </IconButton>
                             <Button
-                                // onClick={() => { handleBookmark(channel.is_bookmark, channel.id) }}
+                                onClick={() => { handleBookmark(channel.is_bookmark, channel.id) }}
                                 sx={{
-                                    ...TEXT_STYLE.title1,
+                                    ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                     color: COLORS.white,
                                     borderRadius: '22px',
                                     height: isSm ? '28px' : '48px',
@@ -163,6 +229,121 @@ export default function ChannelDetail() {
                     </Box>
                 </Box>
 
+            </Box>
+            <Box
+                sx={{
+                    width: '100%',
+                    p: isSm ? 0 : '0 48px',
+                    boxSizing: 'border-box',
+                    ...flexStyle('center', 'stretch'),
+                    ...(isSm && { flexDirection: 'column', rowGap: '16px' }),
+                    columnGap: '32px'
+                }}
+            >
+                <Box
+                    sx={{
+                        width: isSm ? '100%' : 'calc(40% - 16px)',
+                        bgcolor: COLORS.bg2
+                    }}
+                >
+                    <Box
+                        sx={{
+                            p: isSm ? '26px 16px' : '26px 32px',
+                            boxSizing: 'border-box'
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                                color: COLORS.white,
+                                marginBottom: '32px'
+                            }}
+                        >Danh sách album ({channel?.channel_counter?.playlists_count} albums)</Typography>
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'flex-start'),
+                                flexDirection: 'column',
+                                rowGap: '32px'
+                            }}
+                        >
+                            {
+                                playlists.map(i => (
+                                    <PlaylistThumnail
+                                        width='100%'
+                                        id={i?.id}
+                                        key={i?.id}
+                                        name={i.name}
+                                        src={i?.avatar?.thumb_url}
+                                        authors={i?.authors}
+                                        children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
+                                    />
+                                ))
+                            }
+                        </Box>
+                    </Box>
+                </Box>
+                <Box
+                    sx={{
+                        width: isSm ? '100%' : 'calc(60% - 16px)',
+                        bgcolor: COLORS.bg2
+                    }}
+                >
+                    <Box
+                        sx={{
+                            p: isSm ? '26px 16px' : '26px 32px',
+                            boxSizing: 'border-box'
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                                color: COLORS.white,
+                                marginBottom: isSm ? '26px' : '32px'
+                            }}
+                        >Danh sách audios</Typography>
+                        <Box>
+                            <List sx={{ width: '100%' }}>
+                                {audios.map(i => {
+                                    return (
+                                        <ListItem
+                                            sx={{
+                                                paddingLeft: 0,
+                                                paddingRight: '20px',
+                                                borderTop: `.5px solid ${COLORS.placeHolder}`,
+                                                height: '72px'
+                                            }}
+                                            key={i?.id}
+                                            secondaryAction={
+                                                <Typography
+                                                    sx={{
+                                                        ...TEXT_STYLE.content2,
+                                                        color: COLORS.bg4
+                                                    }}
+                                                >{formatDuration(i?.duration)}</Typography>
+                                            }
+                                        >
+                                            <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                                <ListItemText
+                                                    sx={{
+                                                        'span': {
+                                                            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                            color: COLORS.white,
+                                                            display: '-webkit-box',
+                                                            textOverflow: 'ellipsis',
+                                                            WebkitLineClamp: 2,
+                                                            WebkitBoxOrient: 'vertical',
+                                                            overflow: 'hidden'
+                                                        }
+                                                    }}
+                                                    id={`label-${i?.id}`} primary={i?.name} />
+                                            </ListItemButton>
+                                        </ListItem>
+                                    );
+                                })}
+                            </List>
+                        </Box>
+                    </Box>
+                </Box>
             </Box>
         </Box>
     )

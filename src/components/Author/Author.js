@@ -14,7 +14,7 @@ import PhotoLibraryOutlinedIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 
 // import others components
-import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
+import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';

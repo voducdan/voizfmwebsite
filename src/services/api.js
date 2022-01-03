@@ -186,4 +186,14 @@ export default class API {
     getChannel = (id) => {
         return this.init().get(`/channels/${id}`);
     }
+    getChannelPlaylists = (id, page = 1, limit = 5) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/channels/${id}/playlists?${queryString}`);
+    }
+    getChannelAudio = (id, page = 1, limit = 10) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/channels/${id}/audios?${queryString}`);
+    }
 }
