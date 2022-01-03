@@ -1,6 +1,9 @@
 // import react
 import { useEffect, useState } from 'react';
 
+// import react router dom
+import { useParams } from "react-router-dom";
+
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
 import { selectPlayAudio } from '../../redux/playAudio';
@@ -42,6 +45,7 @@ import convertSecondsToReadableString from '../../utils/convertSecondsToReadable
 
 export default function AudioPlay() {
     const playing = useSelector(selectPlayAudio);
+    const { id } = useParams();
     const [audioData, setAudio] = useState({})
     const [openShareModal, setOpenShareModal] = useState(false);
 

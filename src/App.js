@@ -58,7 +58,8 @@ function App() {
     }
 
     const openPlayBar = () => {
-        if (location.pathname === '/audio-play') {
+        const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+$');
+        if (playAudioPathRegex.test(location.pathname)) {
             if (windowSize.width > SCREEN_BREAKPOINTS.sm) {
                 return true
             }

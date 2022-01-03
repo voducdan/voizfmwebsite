@@ -35,7 +35,7 @@ const ROUTES = [
         component: <PlaylistDetail />,
     },
     {
-        path: "/audio-play",
+        path: "/audio-play/:id",
         key: "APP_AUDIO_PLAY",
         exact: true,
         component: <AudioPlay />,
