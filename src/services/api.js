@@ -175,4 +175,15 @@ export default class API {
         const queryString = this.buildQueryString(params)
         return this.init().get(`/playlists/new_contents?${queryString}`);
     }
+    getRecommendedChannels = (page = 1, limit = 6) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/channels/recommend?${queryString}`);
+    }
+    bookmarkChannel = (id) => {
+        return this.init().post(`/channels/${id}/bookmarks`);
+    }
+    getChannel = (id) => {
+        return this.init().get(`/channels/${id}`);
+    }
 }
