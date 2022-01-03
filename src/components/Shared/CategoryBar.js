@@ -4,8 +4,7 @@ import { useState } from 'react';
 // import MUI components
 import {
     Typography,
-    Box,
-    Chip
+    Box
 } from '@mui/material';
 
 // import swiper

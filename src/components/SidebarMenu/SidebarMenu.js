@@ -1,9 +1,10 @@
 // import react 
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // import redux
-import { useSelector, useDispatch } from 'react-redux'
-import { selectOpenSidebar, setOpen } from '../../redux/openSidebar'
+import { useSelector, useDispatch } from 'react-redux';
+import { selectOpenSidebar, setOpen } from '../../redux/openSidebar';
+import { selectToken } from '../../redux/token';
 
 // import react router dom
 import { useNavigate, useLocation, Link } from "react-router-dom";
@@ -20,6 +21,7 @@ import {
     Button,
     Box
 } from '@mui/material';
+import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 
 // import icons
 import {
@@ -37,7 +39,7 @@ import {
 } from '../Icons/index'
 
 // import images
-import Logo from '../Logo/Logo'
+import Logo from '../Logo/Logo';
 
 // import utils
 import { COLORS, TEXT_STYLE, FONT_COLOR, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
@@ -62,76 +64,128 @@ export default function SidebarMenu() {
     const windowSize = useWindowSize();
     const navigate = useNavigate();
     const location = useLocation();
-    const [current, setCurrent] = useState(null)
+    const [current, setCurrent] = useState(null);
+    const [navigatorLink, setNavigatorLink] = useState([]);
+    const [categories, setCategories] = useState([]);
     const openSidebar = useSelector(selectOpenSidebar);
+    const token = useSelector(selectToken);
     const dispatch = useDispatch();
 
     let open = windowSize.width > SCREEN_BREAKPOINTS.sm ? true : openSidebar
 
-    const navigatorLink = [
-        {
-            id: 1,
-            icon: Squircle,
-            text: 'Trang chủ',
-            url: '/'
-        },
-        {
-            id: 2,
-            icon: UpVip,
-            text: 'Up VIP',
-            url: '/up-vip'
-        },
-        {
-            id: 3,
-            icon: Discover,
-            text: 'Khám phá',
-            url: '/discoveries'
-        },
-        {
-            id: 4,
-            icon: Library,
-            text: 'Thư viện',
-            url: 'library'
-        },
-        {
-            id: 5,
-            icon: Adward,
-            text: 'Bảng xếp hạng',
-            url: '/playlists/rankings'
+    useEffect(() => {
+        let navigatorLink = [];
+        let categories = [];
+        if (!!token) {
+            navigatorLink = [
+                {
+                    id: 1,
+                    icon: Squircle,
+                    text: 'Trang chủ',
+                    url: '/'
+                },
+                {
+                    id: 2,
+                    icon: UpVip,
+                    text: 'Up VIP',
+                    url: '/up-vip'
+                },
+                {
+                    id: 3,
+                    icon: Discover,
+                    text: 'Khám phá',
+                    url: '/discoveries'
+                },
+                {
+                    id: 4,
+                    icon: Library,
+                    text: 'Thư viện',
+                    url: '/library'
+                },
+                {
+                    id: 5,
+                    icon: Adward,
+                    text: 'Bảng xếp hạng',
+                    url: '/playlists/rankings'
+                },
+                {
+                    id: 6,
+                    icon: () => (<HeadphonesOutlinedIcon />),
+                    text: 'Nội dung đang nghe',
+                    url: '/listenings'
+                }
+            ];
         }
-    ]
-    const categories = [
-        {
-            id: 6,
-            icon: <AudioBook />,
-            text: 'Sách nói',
-            url: '/audio-book'
-        },
-        {
-            id: 7,
-            icon: <AudioStory />,
-            text: 'Truyện nói',
-            url: '/story-book'
-        },
-        {
-            id: 8,
-            icon: <Podcast />,
-            text: 'Podcast',
-            url: '/podcast'
-        },
-        {
-            id: 9,
-            icon: <SummaryBook />,
-            text: 'Tóm tắt sách',
-            url: '/summary-book'
-        },
-        {
-            id: 10,
-            icon: <ChildrenBook />,
-            text: 'Thiếu nhi',
-            url: '/children-book'
+        else {
+            navigatorLink = [
+                {
+                    id: 1,
+                    icon: Squircle,
+                    text: 'Trang chủ',
+                    url: '/'
+                },
+                {
+                    id: 2,
+                    icon: UpVip,
+                    text: 'Up VIP',
+                    url: '/up-vip'
+                },
+                {
+                    id: 3,
+                    icon: Discover,
+                    text: 'Khám phá',
+                    url: '/discoveries'
+                },
+                {
+                    id: 4,
+                    icon: Library,
+                    text: 'Thư viện',
+                    url: 'library'
+                },
+                {
+                    id: 5,
+                    icon: Adward,
+                    text: 'Bảng xếp hạng',
+                    url: '/playlists/rankings'
+                }
+            ];
         }
-    ]
+
+        categories = [
+            {
+                id: 7,
+                icon: <AudioBook />,
+                text: 'Sách nói',
+                url: '/audio-book'
+            },
+            {
+                id: 8,
+                icon: <AudioStory />,
+                text: 'Truyện nói',
+                url: '/story-book'
+            },
+            {
+                id: 9,
+                icon: <Podcast />,
+                text: 'Podcast',
+                url: '/podcast'
+            },
+            {
+                id: 10,
+                icon: <SummaryBook />,
+                text: 'Tóm tắt sách',
+                url: '/summary-book'
+            },
+            {
+                id: 11,
+                icon: <ChildrenBook />,
+                text: 'Thiếu nhi',
+                url: '/children-book'
+            }
+        ];
+        setNavigatorLink(navigatorLink);
+        setCategories(categories);
+    }, [])
 
     const handleClickSidebar = (e) => {
         const id = Number(e.currentTarget.id);

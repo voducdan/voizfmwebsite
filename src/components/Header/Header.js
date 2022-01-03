@@ -25,10 +25,12 @@ import {
     InputAdornment,
     FormControl,
     Avatar,
-    Box
+    Box,
+    Badge
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
+import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 
 // Import utils
 import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
@@ -60,7 +62,7 @@ const ClearBtn = () => {
 
 const BookmarkIcon = (props) => {
     return (
-        <SvgIcon key={props.idx} style={{ marginTop: '3px' }}>
+        <SvgIcon key={props.idx}>
             {Bookmark()}
         </SvgIcon>
     )
@@ -68,9 +70,13 @@ const BookmarkIcon = (props) => {
 
 const CartIcon = (props) => {
     return (
-        <SvgIcon key={props.idx}>
-            {Cart()}
-        </SvgIcon>
+        <Link
+            to={`/cart`}
+        >
+            <Badge badgeContent={props.numItemsInCart || 0} color="error">
+                <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+            </Badge>
+        </Link>
     )
 }
 
@@ -81,6 +87,7 @@ const userAvt = (props) => {
             <Link
                 to="/account"
                 key={idx}
+                style={{ textDecoration: 'none' }}
             >
                 <Avatar alt="Remy Sharp" src={avtSrc} sx={{ width: 40, height: 40 }} />
             </Link>
@@ -88,7 +95,7 @@ const userAvt = (props) => {
     }
     return (
 
-        <AccountCircleIcon onClick={() => { onOpenLogin() }} key={idx} />
+        <AccountCircleIcon sx={{ width: 40, height: 40 }} onClick={() => { onOpenLogin() }} key={idx} />
     )
 }
 
@@ -118,6 +125,7 @@ export default function Header() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const navigate = useNavigate();
     const [avtSrc, setAvtSrc] = useState(null);
+    const [numItemsInCart, setNumItemsInCart] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchOnMb, setSearchOnMb] = useState(false);
     const [searchOnPC, setSearchOnPC] = useState(false);
@@ -129,7 +137,18 @@ export default function Header() {
 
 
     useEffect(() => {
-        setAvtSrc('https://picsum.photos/335/335?img=16');
+        // setAvtSrc('https://picsum.photos/335/335?img=16');
+        async function fetchUserInfo() {
+            const res = await api.getUserInfo();
+            const data = await res.data.data;
+            if (data.error) {
+                return;
+            }
+
+            setAvtSrc(data?.avatar?.thumb_url);
+        }
+
+        fetchUserInfo();
     }, []);
 
     useEffect(() => {
@@ -295,7 +314,7 @@ export default function Header() {
                                 }}
                             >
                                 {headerItems.map((item, idx) => (
-                                    item({ idx, avtSrc, onOpenLogin })
+                                    item({ numItemsInCart, idx, avtSrc, onOpenLogin })
                                 ))}
                             </Box>
                         )
