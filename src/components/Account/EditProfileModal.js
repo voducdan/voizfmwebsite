@@ -1,7 +1,8 @@
 // import react
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // import mui components
+import { styled } from '@mui/material/styles';
 import {
     Typography,
     Dialog,
@@ -31,6 +32,9 @@ import { flexStyle } from '../../utils/flexStyle';
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
+// import services
+import API from '../../services/api'
+
 const textFieldStyle = {
     width: '100%',
     '& .MuiOutlinedInput-input': {
@@ -45,22 +49,30 @@ const textFieldStyle = {
     }
 }
 
+const Input = styled('input')({
+    display: 'none',
+});
+
 export default function EditProfileModal(props) {
+    const api = new API();
 
     const windowSize = useWindowSize();
     const { accountData } = props;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm;
     const [userInfo, setUserInfo] = useState({});
+    const [avatarFilename, setAvatarFilename] = useState('');
+    const fileInput = useRef(null);
 
     useEffect(() => {
         const user = {
-            firstName: accountData?.first_name,
-            lastName: accountData?.last_name,
+            firstName: accountData?.first_name || "first_name",
+            lastName: accountData?.last_name || "last_name",
             email: accountData?.email,
             phoneNumber: accountData?.phone_number,
-            birthday: accountData?.birthday,
+            birthday: accountData?.birthday || format(new Date(), 'yyyy-MM-dd'),
             avatarUrl: accountData?.avatar?.original_url,
-            avatar: null
+            oauth2Id: 'oauth2Id',
+            oauth2: 'oauth2Id'
         };
         setUserInfo(user);
     }, [accountData])
@@ -84,8 +96,29 @@ export default function EditProfileModal(props) {
         setUserInfo({ ...user });
     }
 
-    const handleSubmitEditProfile = () => {
-        console.log(userInfo)
+    const handleSubmitEditProfile = async () => {
+        const userFormData = new FormData();
+        userFormData.append('avatar', fileInput.current.files[0]);
+        userFormData.append('first_name', userInfo.firstName);
+        userFormData.append('last_name', userInfo.lastName);
+        userFormData.append('email', userInfo.email);
+        userFormData.append('phone_number', userInfo.phoneNumber);
+        userFormData.append('birthday', userInfo.birthday);
+        userFormData.append('avatar_url', userInfo.avatarUrl);
+        userFormData.append('oauth2_id', userInfo.oauth2Id);
+        userFormData.append('oauth2', userInfo.oauth2);
+        const res = await api.updateUserInfo(userFormData);
+        const data = await res.data.data;
+        console.log(data);
+    }
+
+    const handleSelectAvatar = (e) => {
+        const file = e.target.files[0];
+        if (!/image\/\.*/g.test(file.type)) {
+            return;
+        }
+        const filename = file.name;
+        setAvatarFilename(filename);
     }
 
     return (
@@ -160,26 +193,45 @@ export default function EditProfileModal(props) {
                             ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
                             color: COLORS.white
                         }}>Ảnh đại diện</Typography>
-                        <Button
-                            sx={{
-                                bgcolor: COLORS.bg2,
-                                color: COLORS.contentIcon,
-                                textTransform: 'none',
-                                ...TEXT_STYLE.title2
-                            }}
-                            startIcon={<Pencil />}
-                        >Chỉnh sửa</Button>
+                        <label htmlFor="contained-button-file">
+                            <Input
+                                ref={fileInput}
+                                onChange={handleSelectAvatar}
+                                accept="image/*"
+                                id="contained-button-file"
+                                type="file"
+                            />
+                            <Button
+                                sx={{
+                                    bgcolor: COLORS.bg2,
+                                    color: COLORS.contentIcon,
+                                    textTransform: 'none',
+                                    ...TEXT_STYLE.title2
+                                }}
+                                startIcon={<Pencil />}
+                                component="span"
+                            >Chỉnh sửa</Button>
+                            <Typography
+                                sx={{
+                                    color: COLORS.contentIcon,
+                                    ...TEXT_STYLE.title2
+                                }}
+                            >{avatarFilename}</Typography>
+                        </label>
                     </Box>
                     <Box>
                         <Avatar
                             sx={{
                                 width: isSm ? '140px' : '210px',
                                 height: isSm ? '140px' : '210px'
-                            }} alt="Remy Sharp" src={accountData?.avatar?.thumb_url}
+                            }}
+                            alt="Remy Sharp"
+                            src={accountData?.avatar?.thumb_url}
                         />
                     </Box>
                 </Box>
-                <Box
+                {/* use avatar as banner */}
+                {/* <Box
                     sx={{
                         width: '100%',
                         ...flexStyle('center', 'center'),
@@ -224,7 +276,7 @@ export default function EditProfileModal(props) {
                             }} variant="rounded" alt="Remy Sharp" src={accountData?.avatar?.original_url}
                         />
                     </Box>
-                </Box>
+                </Box> */}
                 <FormControl
                     sx={{
                         width: isSm ? '100%' : '80%',
@@ -322,7 +374,7 @@ export default function EditProfileModal(props) {
                             InputAdornmentProps={{
 
                             }}
-                            value={null}
+                            value={userInfo.birthday}
                             onChange={handleChangeBirthday}
                             InputAdornmentProps={{
                                 position: 'start'
