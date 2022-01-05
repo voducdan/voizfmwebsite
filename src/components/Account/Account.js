@@ -115,33 +115,54 @@ const tabsList = [
     'Quét mã QR'
 ]
 
-const PopUpButton = (props) => (
-    <MenuItem
-        key={props.id}
-        onClick={() => { console.log(1) }}
-    >
-        <Button sx={{
-            ...TEXT_STYLE.content2,
-            color: COLORS.white,
-            textTransform: 'none',
-            width: '100%',
-            justifyContent: 'flex-start',
-            '& .MuiButton-endIcon': {
-                marginLeft: '113px',
-                position: 'absolute',
-                right: 0
-            },
-            '& .MuiButton-startIcon': {
-                marginRight: '34px'
-            }
-        }}
-            endIcon={<RightArrow fill={COLORS.contentIcon} />}
-            startIcon={props.startIcon}
-        >{props.text}
-        </Button>
-    </MenuItem>
+const PopUpButton = (props) => {
+    const { id, startIcon, text, setOpenInviteFriend, setValue } = props;
 
-)
+    const handleClickItem = () => {
+        switch (id) {
+            case 1:
+                window.open('https://voiz.vn/chinh-sach-quy-dinh-chung', '_blank').focus();
+                break;
+            case 2:
+                window.open('mailto:support@wewe.vn');
+                break;
+            case 3:
+                setValue(2);
+                setOpenInviteFriend(true);
+                break;
+            case 4:
+                window.open('https://play.google.com/store/apps/details?id=com.wewe.musicsounds', '_blank').focus();
+                break;
+        }
+    }
+    return (
+        <MenuItem
+            key={id}
+            onClick={handleClickItem}
+        >
+            <Button sx={{
+                ...TEXT_STYLE.content2,
+                color: COLORS.white,
+                textTransform: 'none',
+                width: '100%',
+                justifyContent: 'flex-start',
+                '& .MuiButton-endIcon': {
+                    marginLeft: '113px',
+                    position: 'absolute',
+                    right: 0
+                },
+                '& .MuiButton-startIcon': {
+                    marginRight: '34px'
+                }
+            }}
+                endIcon={<RightArrow fill={COLORS.contentIcon} />}
+                startIcon={startIcon}
+            >{text}
+            </Button>
+        </MenuItem>
+
+    )
+}
 
 export default function Account() {
     const api = new API();
@@ -289,7 +310,7 @@ export default function Account() {
                             >
                                 {
                                     PopUpContent.map((item) => (
-                                        PopUpButton(item)
+                                        <PopUpButton key={item.id} id={item.id} startIcon={item.startIcon} text={item.text} setOpenInviteFriend={setOpenInviteFriend} setValue={setValue} />
                                     ))
                                 }
                             </Menu>
@@ -298,7 +319,7 @@ export default function Account() {
                 </Box>
                 <HistoryTransaction value={value} isSm={isSm} />
                 <AppInfo value={value} />
-                <InviteFriend value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
+                <InviteFriend key={openInviteFriend} isSm={isSm} value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
                 <BeCreator value={value} isSm={isSm} />
                 <TabPanel value={value} index={4}>
                     Quét mã QR

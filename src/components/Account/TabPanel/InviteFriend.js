@@ -1,3 +1,6 @@
+// import react
+import { useEffect } from 'react';
+
 // import others component
 import TabPanel from '../../../components/TabPanel/TabPanel';
 
@@ -92,20 +95,25 @@ const socials = [
 ]
 
 const PanelContent = (props) => {
-
+    const { isSm, open, setOpen } = props;
     const handleClose = () => {
-        props.setOpen(false)
+        setOpen(false);
     }
     return (
         < Dialog
             sx={{
+                width: '100vw',
                 '& .MuiDialog-paper': {
                     bgcolor: COLORS.bg1,
-                    width: '512px',
-                    height: '646px'
+                    width: isSm ? '100%' : '40%',
+                    height: '80vh',
+                    maxWidth: '512px',
+                    maxHeight: '646px',
+                    margin: 0
                 }
             }}
-            open={props.open} onClose={handleClose}
+            open={open}
+            onClose={handleClose}
         >
             <IconButton
                 aria-label="close"
@@ -155,8 +163,8 @@ const PanelContent = (props) => {
 }
 
 export default function InviteFriend(props) {
-    const { open, setOpen } = props;
+    const { open, setOpen, isSm, value } = props;
     return (
-        <TabPanel value={props.value} index={2} children={PanelContent({ open, setOpen })}></TabPanel>
+        <TabPanel value={value} index={2} children={PanelContent({ isSm, open, setOpen })}></TabPanel>
     )
 }
