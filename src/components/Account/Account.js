@@ -115,46 +115,67 @@ const tabsList = [
     'Quét mã QR'
 ]
 
-const PopUpButton = (props) => (
-    <MenuItem
-        key={props.id}
-        onClick={() => { console.log(1) }}
-    >
-        <Button sx={{
-            ...TEXT_STYLE.content2,
-            color: COLORS.white,
-            textTransform: 'none',
-            width: '100%',
-            justifyContent: 'flex-start',
-            '& .MuiButton-endIcon': {
-                marginLeft: '113px',
-                position: 'absolute',
-                right: 0
-            },
-            '& .MuiButton-startIcon': {
-                marginRight: '34px'
-            }
-        }}
-            endIcon={<RightArrow fill={COLORS.contentIcon} />}
-            startIcon={props.startIcon}
-        >{props.text}
-        </Button>
-    </MenuItem>
+const PopUpButton = (props) => {
+    const { id, startIcon, text, setOpenInviteFriend, setValue } = props;
 
-)
+    const handleClickItem = () => {
+        switch (id) {
+            case 1:
+                window.open('https://voiz.vn/chinh-sach-quy-dinh-chung', '_blank').focus();
+                break;
+            case 2:
+                window.open('mailto:support@wewe.vn');
+                break;
+            case 3:
+                setValue(2);
+                setOpenInviteFriend(true);
+                break;
+            case 4:
+                window.open('https://play.google.com/store/apps/details?id=com.wewe.musicsounds', '_blank').focus();
+                break;
+        }
+    }
+    return (
+        <MenuItem
+            key={id}
+            onClick={handleClickItem}
+        >
+            <Button sx={{
+                ...TEXT_STYLE.content2,
+                color: COLORS.white,
+                textTransform: 'none',
+                width: '100%',
+                justifyContent: 'flex-start',
+                '& .MuiButton-endIcon': {
+                    marginLeft: '113px',
+                    position: 'absolute',
+                    right: 0
+                },
+                '& .MuiButton-startIcon': {
+                    marginRight: '34px'
+                }
+            }}
+                endIcon={<RightArrow fill={COLORS.contentIcon} />}
+                startIcon={startIcon}
+            >{text}
+            </Button>
+        </MenuItem>
+
+    )
+}
 
 export default function Account() {
+    const api = new API();
 
+    const windowSize = useWindowSize()
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const coverImgHeight = isSm ? 260 : 380
     const [value, setValue] = useState(0);
     const [accAnchorEl, setAccAnchorEl] = useState(null);
     const [openInviteFriend, setOpenInviteFriend] = useState(false);
     const [openEditProfile, setopenEditProfile] = useState(false);
     const openMore = Boolean(accAnchorEl);
-
-    // User id from params
-    const userId = '5ZOQS5'
-
-    let [accountData, setAccountData] = useState({})
+    let [accountData, setAccountData] = useState({});
 
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
@@ -179,22 +200,17 @@ export default function Account() {
 
 
     useEffect(() => {
-        const api = new API()
-
-        function getUser() {
-            api.getUser(userId)
-                .then(res => {
-                    setAccountData(res.data)
-                })
-                .catch(err => { console.log(err) })
+        async function fetchUserInfo() {
+            const res = await api.getUserInfo();
+            const data = await res.data.data;
+            if (data.error) {
+                return;
+            }
+            setAccountData(data);
         }
-        getUser()
-    }, [])
 
-    const windowSize = useWindowSize()
-    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm
-    const coverImgHeight = isSm ? 260 : 380
-
+        fetchUserInfo();
+    }, []);
 
     return (
         <Box
@@ -216,12 +232,12 @@ export default function Account() {
                     width: '100%',
                     height: '100%',
                     left: 0,
-                }} alt="cover img alt" src={accountData.coverImgSrc}></img>
+                }} alt="cover img alt" src={accountData?.avatar?.original_url}></img>
             </Box>
             <Info accountData={accountData} />
             <Box
                 sx={{
-                    width: '95%',
+                    width: isSm ? '100%' : '95%',
                     borderRadius: '10px'
                 }}
             >
@@ -279,7 +295,7 @@ export default function Account() {
                             <Menu
                                 sx={{
                                     '& .MuiMenu-paper': {
-                                        padding: '24px',
+                                        p: '24px',
                                         width: '360px',
                                         bgcolor: COLORS.bg2
                                     }
@@ -294,7 +310,7 @@ export default function Account() {
                             >
                                 {
                                     PopUpContent.map((item) => (
-                                        PopUpButton(item)
+                                        <PopUpButton key={item.id} id={item.id} startIcon={item.startIcon} text={item.text} setOpenInviteFriend={setOpenInviteFriend} setValue={setValue} />
                                     ))
                                 }
                             </Menu>
@@ -303,7 +319,7 @@ export default function Account() {
                 </Box>
                 <HistoryTransaction value={value} isSm={isSm} />
                 <AppInfo value={value} />
-                <InviteFriend value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
+                <InviteFriend key={openInviteFriend} isSm={isSm} value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
                 <BeCreator value={value} isSm={isSm} />
                 <TabPanel value={value} index={4}>
                     Quét mã QR

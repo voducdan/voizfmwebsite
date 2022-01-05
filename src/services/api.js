@@ -203,4 +203,16 @@ export default class API {
         const queryString = this.buildQueryString(params)
         return this.init().get(`/channels/${id}/audios?${queryString}`);
     }
+    getUserInfo = () => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().get('/profiles/me');
+    }
+    getUserTransactionHistory = () => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().get('/profiles/orders');
+    }
+    updateUserInfo = (data) => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().put('/profiles/me', data);
+    }
 }

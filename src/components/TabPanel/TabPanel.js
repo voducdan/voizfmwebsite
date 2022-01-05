@@ -2,7 +2,7 @@ import PropTypes from 'prop-types';
 import Box from '@mui/material/Box';
 
 export default function TabPanel(props) {
-    const { children, value, index, ...other } = props;
+    const { isSm, children, value, index, ...other } = props;
 
     return (
         <div
@@ -13,7 +13,7 @@ export default function TabPanel(props) {
             {...other}
         >
             {value === index && (
-                <Box sx={{ p: 3 }}>
+                <Box sx={{ p: isSm ? '24px 0' : 3 }}>
                     {children}
                 </Box>
             )}
