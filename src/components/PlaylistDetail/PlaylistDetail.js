@@ -94,6 +94,10 @@ export default function PlatlistDetail() {
     const [openRateModal, setOpenRateModal] = useState(false);
     const [openAfterRateModal, setOpenAfterRateModal] = useState(false);
     const [openShareModal, setOpenShareModal] = useState(false);
+    const [contentRating, setContentRating] = useState(0);
+    const [voiceRating, setVoiceRating] = useState(0);
+    const [rateContent, setRateContent] = useState('');
+    const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
     const infoPanelHeight = isSm ? 190 : 150;
@@ -212,10 +216,17 @@ export default function PlatlistDetail() {
         setOpenShareModal(true)
     }
 
-    const handleRatePlaylist = async (data) => {
-        const res = await api.ratePlaylist(id, data);
-        const result = await res.data.data;
-        console.log(result);
+    const handleRatePlaylist = async (cb) => {
+        const res = await api.ratePlaylist(id, {
+            content_stars: contentRating,
+            voice_stars: voiceRating,
+            content: rateContent
+        });
+        const result = await res.data;
+        if (result.code === 0) {
+            setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
+        }
+        cb();
     }
 
     return (
@@ -235,7 +246,6 @@ export default function PlatlistDetail() {
                 }}
             >
                 <img style={{
-                    objectFit: 'cover',
                     width: '100%',
                     height: '100%',
                     left: 0,
@@ -251,7 +261,7 @@ export default function PlatlistDetail() {
                 <Box
                     sx={{
                         backgroundColor: COLORS.bg2,
-                        height: `${infoPanelHeight}px`
+                        ...(!isSm && { height: '180px' })
                     }}
                 >
                     <Box sx={{
@@ -281,7 +291,7 @@ export default function PlatlistDetail() {
                                     sx={{
                                         width: isSm ? '40%' : '30%',
                                         minWidth: isSm ? '136px' : '250px',
-                                        transform: 'translateY(-60%)'
+                                        transform: 'translateY(-50%)'
                                     }}
                                 >
                                     <Avatar
@@ -322,7 +332,7 @@ export default function PlatlistDetail() {
                                                             color: COLORS.contentIcon
                                                         }
                                                     }}
-                                                    name="playlist-rate" value={playlist?.playlist_counter?.content_avg || 0} precision={0.5} readOnly />
+                                                    name="playlist-rate" value={contentRating} precision={1} readOnly />
                                             </Box>
                                         </Box>
                                     )
@@ -338,8 +348,20 @@ export default function PlatlistDetail() {
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
                                     <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
-                                    <RateModal isSm={isSm} open={openRateModal} setOpen={setOpenRateModal} setOpenAfterRate={setOpenAfterRateModal} handleRatePlaylist={handleRatePlaylist} />
-                                    <AfterRateModal isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
+                                    <RateModal
+                                        isSm={isSm}
+                                        open={openRateModal}
+                                        setOpen={setOpenRateModal}
+                                        setOpenAfterRate={setOpenAfterRateModal}
+                                        handleRatePlaylist={handleRatePlaylist}
+                                        setContentRating={setContentRating}
+                                        setVoiceRating={setVoiceRating}
+                                        contentRating={contentRating}
+                                        voiceRating={voiceRating}
+                                        rateContent={rateContent}
+                                        setRateContent={setRateContent}
+                                    />
+                                    <AfterRateModal content={afterRateContent} isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
                                     <Button
                                         sx={{
                                             textTransform: 'none',
@@ -376,7 +398,7 @@ export default function PlatlistDetail() {
                                                 sx={{
                                                     columnGap: '24px'
                                                 }}
-                                                name="playlist-rate" value={playlist?.playlist_counter?.content_avg || 0} precision={0.5} readOnly />
+                                                name="playlist-rate" value={contentRating} precision={1} readOnly />
                                         </Box>
                                     </Box>
                                 )

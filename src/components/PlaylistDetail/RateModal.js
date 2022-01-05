@@ -19,20 +19,16 @@ import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 
 function RateModal(props) {
+    const { contentRating, voiceRating, rateContent, setContentRating, setVoiceRating, setRateContent } = props;
     const [isFormValid, setIsFormValid] = useState(true);
-    const [contentRating, setContentRating] = useState(0);
-    const [voiceRating, setVoiceRating] = useState(0);
-    const [content, setContent] = useState('');
     const { open, setOpen, setOpenAfterRate, handleRatePlaylist, isSm } = props;
-
     const handleClose = () => {
         setOpen(false);
     }
 
     const handleSubmit = () => {
         handleClose();
-        handleRatePlaylist({ content_stars: contentRating, voice_stars: voiceRating, content: content })
-        handleOpenAfterRateModal();
+        handleRatePlaylist(handleOpenAfterRateModal);
     }
 
     const handleOpenAfterRateModal = () => {
@@ -46,7 +42,7 @@ function RateModal(props) {
         else {
             setIsFormValid(true);
         }
-        setContent(e.target.value);
+        setRateContent(e.target.value);
     }
 
     return (
@@ -89,7 +85,8 @@ function RateModal(props) {
                 >
                     <Box
                         sx={{
-                            ...flexStyle('center', 'center'),
+                            width: '100%',
+                            ...flexStyle('flex-start', 'center'),
                             columnGap: '15px'
                         }}
                     >
@@ -101,8 +98,6 @@ function RateModal(props) {
                         >Nội dung</Typography>
                         <Rating
                             sx={{
-                                columnGap: '24px',
-                                alignItem: 'center',
                                 '& .MuiRating-iconEmpty': {
                                     color: COLORS.contentIcon
                                 }
@@ -110,11 +105,13 @@ function RateModal(props) {
                             onChange={(event, newValue) => {
                                 setContentRating(newValue);
                             }}
-                            name="playlist-rate" value={contentRating} precision={0.5} />
+                            name="playlist-rate" value={contentRating} precision={1}
+                        />
                     </Box>
                     <Box
                         sx={{
-                            ...flexStyle('center', 'center'),
+                            width: '100%',
+                            ...flexStyle('flex-start', 'center'),
                             columnGap: '15px'
                         }}
                     >
@@ -126,8 +123,6 @@ function RateModal(props) {
                         >Giọng đọc</Typography>
                         <Rating
                             sx={{
-                                columnGap: '24px',
-                                alignItem: 'center',
                                 '& .MuiRating-iconEmpty': {
                                     color: COLORS.contentIcon
                                 }
@@ -135,7 +130,7 @@ function RateModal(props) {
                             onChange={(event, newValue) => {
                                 setVoiceRating(newValue);
                             }}
-                            name="playlist-rate" value={voiceRating} precision={0.5} />
+                            name="playlist-rate" value={voiceRating} precision={1} />
                     </Box>
                 </Box>
                 <TextField
@@ -151,7 +146,7 @@ function RateModal(props) {
                             border: `1px solid ${COLORS.blackStroker}`
                         }
                     }}
-                    value={content}
+                    value={rateContent}
                     onChange={onShareContentChange}
                     id="share text area" placeholder="Những đóng góp khác, ví dụ: Cảm nhận nội dung, góp ý nhạc nền, thắc mắc về sách,..." multiline rows={5} variant="outlined"
                 />
@@ -198,7 +193,7 @@ function RateModal(props) {
 }
 
 function AfterRateModal(props) {
-    const { open, setOpen, isSm } = props;
+    const { open, setOpen, isSm, content } = props;
     const handleClose = () => {
         setOpen(false)
     }
@@ -238,8 +233,7 @@ function AfterRateModal(props) {
                         marginBottom: '40px',
                         textAlign: 'center'
                     }}
-                >Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm
-                    đánh giá  bất cứ lúc nào.</Typography>
+                >{content}</Typography>
                 <Button
                     onClick={handleClose}
                     sx={{
