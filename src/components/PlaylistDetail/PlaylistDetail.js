@@ -571,7 +571,7 @@ export default function PlatlistDetail() {
                             className="truncated-text"
                             anchorClass="my-anchor-css-class"
                             expanded={false}
-                            width={isSm ? 400 : 1000}
+                            width={isSm ? 390 : 1000}
                             truncatedEndingComponent={"... "}
                         >
                             <Typography
