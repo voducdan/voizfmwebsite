@@ -1,3 +1,5 @@
+// import react
+import { useState, useEffect } from 'react';
 
 // import MUI components
 import {
@@ -19,60 +21,27 @@ import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import { flexStyle } from '../../utils/flexStyle';
 
-export default function AudioList(props) {
+// import services
+import API from '../../services/api';
 
-    const { anchorAudioList, onCloseAudioList, audioId } = props
+export default function AudioList(props) {
+    const api = new API();
+
+    const { playlistId, anchorAudioList, onCloseAudioList, audioId } = props;
     const open = Boolean(anchorAudioList);
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const [audiosList, setAudiosList] = useState([]);
 
-    const audiosList = [
-        {
-            id: 1,
-            title: 'Cách Nghĩ Để thành công trong cuộc sống thời hiện tại',
-            duration: '14.24'
-        },
-        {
-            id: 2,
-            title: 'Trở về thôn quê',
-            duration: '14.24'
-        },
-        {
-            id: 3,
-            title: '01.4 Tiến tới nghề nông Không-Làm-Gì-Cả',
-            duration: '14.24'
-        },
-        {
-            id: 4,
-            title: 'Cách Nghĩ Để thành công trong cuộc sống thời hiện tại',
-            duration: '14.24'
-        },
-        {
-            id: 5,
-            title: 'Trở về cuội nguồn',
-            duration: '14.24'
-        },
-        {
-            id: 6,
-            title: 'Một lý do kiến nông nghiệp tự nhiên chưa được tốt',
-            duration: '14.24'
-        },
-        {
-            id: 7,
-            title: 'Khi con người không hiểu được tự nhiên',
-            duration: '14.24'
-        },
-        {
-            id: 8,
-            title: 'Bốn nguyên tắc',
-            duration: '14.24'
-        },
-        {
-            id: 9,
-            title: 'Cách nghĩ để thành công trong cuộc sống hiện đại',
-            duration: '14.24'
-        }
-    ]
+    useEffect(() => {
+        async function fetchPlaylistAudios() {
+            const res = await api.getPlaylistAudios(playlistId);
+            const data = res.data.data;
+            setAudiosList(data);
+        };
+
+        fetchPlaylistAudios();
+    }, [audioId]);
 
     return (
         <Popover
@@ -150,22 +119,19 @@ export default function AudioList(props) {
                                     key={value.id}
                                 >
                                     <ListItemButton role={undefined} onClick={() => (1)} dense>
-                                        <ListItemIcon sx={{ minWidth: '22px' }}>
-                                            <Typography
-                                                sx={{
-                                                    ...TEXT_STYLE.title1,
-                                                    color: COLORS.bg4
-                                                }}
-                                            >{value.id}</Typography>
-                                        </ListItemIcon>
                                         <ListItemText
                                             sx={{
                                                 'span': {
                                                     ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                                    color: COLORS.white
+                                                    color: COLORS.white,
+                                                    display: '-webkit-box',
+                                                    textOverflow: 'ellipsis',
+                                                    WebkitLineClamp: 2,
+                                                    WebkitBoxOrient: 'vertical',
+                                                    overflow: 'hidden'
                                                 }
                                             }}
-                                            id={`label-${value.id}`} primary={value.title} />
+                                            id={`label-${value.id}`} primary={value.name} />
                                     </ListItemButton>
                                 </ListItem>
                             );

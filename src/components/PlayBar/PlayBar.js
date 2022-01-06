@@ -124,7 +124,7 @@ export default function PlayBar() {
                                 color: COLORS.contentIcon
                             }}
                         >
-                            Tác giả: {audioData?.author?.name}
+                            Tác giả: {audioData?.author_string}
                         </Typography>
                     </Box>
                     <FavoriteBorderIcon sx={{ color: COLORS.contentIcon }} />
@@ -194,7 +194,7 @@ export default function PlayBar() {
                     </Box>
                 )
             }
-            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} audioId={5} />
+            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} playlistId={audioData?.id} />
         </Box>
     )
 }

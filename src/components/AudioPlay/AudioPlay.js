@@ -44,7 +44,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
 export default function AudioPlay() {
-    const api = new API()
+    const api = new API();
 
     const playing = useSelector(selectPlayAudio);
     const { id } = useParams();
