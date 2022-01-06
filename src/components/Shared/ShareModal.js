@@ -13,6 +13,8 @@ import {
     IconButton
 } from "@mui/material";
 
+// import react QRcode
+import QRCode from 'qrcode.react';
 // import react share
 import {
     FacebookShareButton,
@@ -45,12 +47,12 @@ export default function ShareModal(props) {
         }, 500);
     };
 
-    const handleCloseQRCodeDialog = () => {
-
+    const handleCreateQR = () => {
+        setOpenQRcodeDialog(true);
     }
 
-    const handleCreateQR = () => {
-
+    const handleCloseQRCodeDialog = () => {
+        setOpenQRcodeDialog(false);
     }
 
     const shareItems = [
@@ -88,7 +90,15 @@ export default function ShareModal(props) {
         },
         {
             label: 'QR Code',
-            icon: <QR onClick={handleCreateQR} size={shareIconSize} />
+            icon: (
+                <IconButton
+                    onClick={handleCreateQR}
+                    sx={{
+                        p: 0
+                    }}>
+                    <QR size={shareIconSize} />
+                </IconButton>
+            )
         }
     ]
 
@@ -151,16 +161,23 @@ export default function ShareModal(props) {
             </Box>
             {/* QRCode dialog */}
             <Dialog
+                sx={{
+                    '& .MuiDialog-paper': {
+                        borderRadius: isSm ? '10px' : '30px',
+                        ...flexStyle('center', 'center'),
+                        width: isSm ? '95%' : '40%',
+                        margin: 0
+                    }
+                }}
                 open={openQRcodeDialog}
                 onClose={handleCloseQRCodeDialog}
             >
                 <DialogTitle >
-                    "Use Google's location service?"
+                    QR code
                 </DialogTitle>
                 <DialogContent>
                     <DialogContentText id="alert-dialog-description">
-                        Let Google help apps determine location. This means sending anonymous
-                        location data to Google, even when no apps are running.
+                        <QRCode value={url} />
                     </DialogContentText>
                 </DialogContent>
             </Dialog>
