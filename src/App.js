@@ -39,7 +39,7 @@ function App() {
 
     useEffect(() => {
         function checkIncludeFooter() {
-            if (EXCLUDE_FOOTER.includes(location.pathname)) {
+            if (EXCLUDE_FOOTER.some(e => e.test(location.pathname))) {
                 setIncludeFooter(false);
             } else {
                 setIncludeFooter(true);

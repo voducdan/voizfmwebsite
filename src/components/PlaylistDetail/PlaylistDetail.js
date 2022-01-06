@@ -445,18 +445,26 @@ export default function PlatlistDetail() {
                             margin: '16px 0'
                         }}
                     >
-                        <Button
-                            sx={{
-                                bgcolor: COLORS.main,
+                        <Link
+                            to='/audio-play/:id'
+                            style={{
+                                textDecoration: 'none',
                                 width: '50%',
-                                borderRadius: '6px',
-                                ...TEXT_STYLE.title1,
-                                color: COLORS.white,
-                                textTransform: 'none',
-                                height: '48px'
                             }}
-                            startIcon={<Play />}
-                        >Phát tất cả</Button>
+                        >
+                            <Button
+                                sx={{
+                                    bgcolor: COLORS.main,
+                                    width: '100%',
+                                    borderRadius: '6px',
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    height: '48px'
+                                }}
+                                startIcon={<Play />}
+                            >Phát tất cả</Button>
+                        </Link>
                         <Button
                             sx={{
                                 bgcolor: COLORS.second,
@@ -660,18 +668,26 @@ export default function PlatlistDetail() {
                                     borderRadius: '10px'
                                 }}
                             >
-                                <Button
-                                    sx={{
-                                        bgcolor: COLORS.main,
+                                <Link
+                                    to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}`}
+                                    style={{
+                                        textDecoration: 'none',
                                         width: '50%',
-                                        borderRadius: '6px',
-                                        ...TEXT_STYLE.title1,
-                                        color: COLORS.white,
-                                        textTransform: 'none',
-                                        height: '48px'
                                     }}
-                                    startIcon={<Play />}
-                                >Phát tất cả</Button>
+                                >
+                                    <Button
+                                        sx={{
+                                            bgcolor: COLORS.main,
+                                            width: '100%',
+                                            borderRadius: '6px',
+                                            ...TEXT_STYLE.title1,
+                                            color: COLORS.white,
+                                            textTransform: 'none',
+                                            height: '48px'
+                                        }}
+                                        startIcon={<Play />}
+                                    >Phát tất cả</Button>
+                                </Link>
                                 <Button
                                     sx={{
                                         bgcolor: COLORS.second,
@@ -709,39 +725,46 @@ export default function PlatlistDetail() {
                             <List sx={{ width: '100%' }}>
                                 {playlistAudios.map((value, idx) => {
                                     return (
-                                        <ListItem
-                                            sx={{
-                                                paddingLeft: 0,
-                                                paddingRight: '20px',
-                                                borderTop: `.5px solid ${COLORS.placeHolder}`,
-                                                height: '72px'
-                                            }}
+                                        <Link
+                                            to={`/audio-play/${value?.id}`}
                                             key={value.id}
-                                            secondaryAction={
-                                                <Typography
-                                                    sx={{
-                                                        ...TEXT_STYLE.content2,
-                                                        color: COLORS.bg4
-                                                    }}
-                                                >{formatDuration(value.duration)}</Typography>
-                                            }
+                                            style={{
+                                                textDecoration: 'none'
+                                            }}
                                         >
-                                            <ListItemButton role={undefined} onClick={() => (1)} dense>
-                                                <ListItemText
-                                                    sx={{
-                                                        'span': {
-                                                            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                                            color: COLORS.white,
-                                                            display: '-webkit-box',
-                                                            textOverflow: 'ellipsis',
-                                                            WebkitLineClamp: 2,
-                                                            WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden'
-                                                        }
-                                                    }}
-                                                    id={`label-${value.id}`} primary={value.name} />
-                                            </ListItemButton>
-                                        </ListItem>
+                                            <ListItem
+                                                sx={{
+                                                    paddingLeft: 0,
+                                                    paddingRight: '20px',
+                                                    borderTop: `.5px solid ${COLORS.placeHolder}`,
+                                                    height: '72px'
+                                                }}
+                                                secondaryAction={
+                                                    <Typography
+                                                        sx={{
+                                                            ...TEXT_STYLE.content2,
+                                                            color: COLORS.bg4
+                                                        }}
+                                                    >{formatDuration(value.duration)}</Typography>
+                                                }
+                                            >
+                                                <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                                    <ListItemText
+                                                        sx={{
+                                                            'span': {
+                                                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                                color: COLORS.white,
+                                                                display: '-webkit-box',
+                                                                textOverflow: 'ellipsis',
+                                                                WebkitLineClamp: 2,
+                                                                WebkitBoxOrient: 'vertical',
+                                                                overflow: 'hidden'
+                                                            }
+                                                        }}
+                                                        id={`label-${value.id}`} primary={value.name} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        </Link>
                                     );
                                 })}
                             </List>
@@ -771,17 +794,25 @@ export default function PlatlistDetail() {
                     }}
                     variant="outlined"
                 >Thêm vào giỏ hàng</Button>
-                <Button
-                    sx={{
-                        bgcolor: COLORS.main,
+                <Link
+                    to='/up-vip/'
+                    style={{
+                        textDecoration: 'none',
                         width: isSm ? '50%' : '20%',
-                        borderRadius: '6px',
-                        ...TEXT_STYLE.title1,
-                        color: COLORS.white,
-                        textTransform: 'none',
-                        height: '48px'
                     }}
-                >Mua gói VIP</Button>
+                >
+                    <Button
+                        sx={{
+                            bgcolor: COLORS.main,
+                            borderRadius: '6px',
+                            width: '100%',
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            height: '48px'
+                        }}
+                    >Mua gói VIP</Button>
+                </Link>
             </Box>
         </Box >
     )
