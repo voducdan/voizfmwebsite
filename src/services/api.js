@@ -187,6 +187,9 @@ export default class API {
     bookmarkChannel = (id) => {
         return this.init().post(`/channels/${id}/bookmarks`);
     }
+    bookmarkPlaylist = (id) => {
+        return this.init().post(`/playlists/${id}/bookmarks`);
+    }
     getChannel = (id) => {
         return this.init().get(`/channels/${id}`);
     }

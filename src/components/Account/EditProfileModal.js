@@ -16,7 +16,6 @@ import {
 } from '@mui/material';
 import {
     DesktopDatePicker,
-    MobileDatePicker,
     LocalizationProvider
 } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';

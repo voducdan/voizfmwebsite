@@ -39,6 +39,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
+
 // import icons
 import { Share, Play } from '../../components/Icons/index';
 
@@ -103,7 +106,6 @@ export default function PlatlistDetail() {
     const infoPanelHeight = isSm ? 190 : 150;
 
     useEffect(() => {
-        console.log(id)
         async function fetchPlaylist() {
             const res = await api.getPlaylistDetail(id);
             const data = res.data.data;
@@ -152,7 +154,20 @@ export default function PlatlistDetail() {
 
     useEffect(() => {
         setPaused(true);
-    }, [])
+    }, []);
+
+    const handleBookmark = () => {
+        async function bookmarkPlaylist() {
+            const res = await api.bookmarkPlaylist(playlist.id);
+            const data = await res.data.data;
+            console.log(data);
+        }
+
+        bookmarkPlaylist();
+        const playlistToBookmark = { ...playlist };
+        playlistToBookmark['is_bookmark'] = !playlist.is_bookmark;
+        setPlaylist({ ...playlistToBookmark })
+    }
 
     const onPlayClick = () => {
         setPaused(!paused)
@@ -347,7 +362,7 @@ export default function PlatlistDetail() {
                                     <Box onClick={handleOpenShareModal}>
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
-                                    <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
+                                    <ShareModal url={`http://13.251.106.4/playlists/${playlist?.id}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal
                                         isSm={isSm}
                                         open={openRateModal}
@@ -363,16 +378,25 @@ export default function PlatlistDetail() {
                                     />
                                     <AfterRateModal content={afterRateContent} isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
                                     <Button
+                                        onClick={handleBookmark}
                                         sx={{
-                                            textTransform: 'none',
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white,
-                                            bgcolor: COLORS.main,
-                                            height: '48px',
                                             borderRadius: '22px',
-                                            padding: '13px 23px'
+                                            height: isSm ? '28px' : '48px',
+                                            width: 'max-content',
+                                            minWidth: 'auto',
+                                            whiteSpace: 'nowrap',
+                                            textTransform: 'none',
+                                            bgcolor: playlist?.is_bookmark ? COLORS.bg3 : COLORS.main,
+                                            pl: '14px',
+                                            pr: '14px',
+                                            ':hover': {
+                                                bgcolor: playlist?.is_bookmark ? COLORS.bg3 : COLORS.main
+                                            }
                                         }}
-                                    >+ Đánh dấu</Button>
+                                        startIcon={playlist?.is_bookmark ? <CheckIcon /> : <AddIcon />}
+                                    >{playlist?.is_bookmark ? 'Hủy đánh dấu' : 'Đánh dấu'}</Button>
                                 </Box>
                             </Box>
                             {

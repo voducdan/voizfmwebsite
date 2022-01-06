@@ -1,10 +1,23 @@
+// import react
+import { useState } from "react";
 
 // import MUI components
 import {
     Typography,
     Dialog,
-    Box
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    Box,
+    Tooltip,
+    IconButton
 } from "@mui/material";
+
+// import react share
+import {
+    FacebookShareButton,
+    FacebookMessengerShareButton
+} from "react-share";
 
 // import icons
 import { FacebookClassic, MessengerClassic, Hyperlink, QR } from '../../components/Icons/index';
@@ -16,28 +29,66 @@ import { flexStyle } from '../../utils/flexStyle';
 
 export default function ShareModal(props) {
 
-    const { open, setOpen, isSm } = props;
-    const shareIconSize = isSm ? 40 : 48
+    const { url, open, setOpen, isSm } = props;
+    const shareIconSize = isSm ? 40 : 48;
+    const [openCopyLinkTooltop, setOpenCopyLinkTooltop] = useState(false);
+    const [openQRcodeDialog, setOpenQRcodeDialog] = useState(false);
     const handleClose = () => {
         setOpen(false)
+    }
+
+    const handleCopyLink = () => {
+        navigator.clipboard.writeText(url);
+        setOpenCopyLinkTooltop(true);
+        setTimeout(() => {
+            setOpenCopyLinkTooltop(false);
+        }, 500);
+    };
+
+    const handleCloseQRCodeDialog = () => {
+
+    }
+
+    const handleCreateQR = () => {
+
     }
 
     const shareItems = [
         {
             label: 'Facebook',
-            icon: <FacebookClassic size={shareIconSize} />
+            icon: <FacebookShareButton url={url}><FacebookClassic size={shareIconSize} /> </FacebookShareButton>
         },
         {
             label: 'Messenger',
-            icon: <MessengerClassic size={shareIconSize} />
+            icon: <FacebookMessengerShareButton url={url}><MessengerClassic size={shareIconSize} /></FacebookMessengerShareButton>
         },
         {
             label: 'Link',
-            icon: <Hyperlink size={shareIconSize} />
+            icon: (
+                <Tooltip
+                    PopperProps={{
+                        disablePortal: true,
+                    }}
+                    open={openCopyLinkTooltop}
+                    disableFocusListener
+                    disableHoverListener
+                    disableTouchListener
+                    title="Sao chép link thành công!"
+                >
+                    <IconButton
+                        sx={{
+                            p: 0
+                        }}
+                        onClick={handleCopyLink}
+                    >
+                        <Hyperlink size={shareIconSize} />
+                    </IconButton>
+                </Tooltip>
+            )
         },
         {
             label: 'QR Code',
-            icon: <QR size={shareIconSize} />
+            icon: <QR onClick={handleCreateQR} size={shareIconSize} />
         }
     ]
 
@@ -98,7 +149,21 @@ export default function ShareModal(props) {
                     }
                 </Box>
             </Box>
-
+            {/* QRCode dialog */}
+            <Dialog
+                open={openQRcodeDialog}
+                onClose={handleCloseQRCodeDialog}
+            >
+                <DialogTitle >
+                    "Use Google's location service?"
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText id="alert-dialog-description">
+                        Let Google help apps determine location. This means sending anonymous
+                        location data to Google, even when no apps are running.
+                    </DialogContentText>
+                </DialogContent>
+            </Dialog>
         </Dialog>
     )
 }

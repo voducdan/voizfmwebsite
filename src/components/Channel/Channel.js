@@ -119,7 +119,7 @@ export default function Channel() {
         const channelToBookmarkIdx = recommandedChannels.findIndex(i => i.id === channelId);
         const updatedRecommandedChannels = [...recommandedChannels];
         updatedRecommandedChannels[channelToBookmarkIdx]['is_bookmark'] = !is_bookmark;
-        setRecommandedChannels([...updatedRecommandedChannels])
+        setRecommandedChannels([...updatedRecommandedChannels]);
     }
 
     return (
