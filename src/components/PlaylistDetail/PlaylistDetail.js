@@ -39,6 +39,9 @@ import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
+import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
+
 // import icons
 import { Share, Play } from '../../components/Icons/index';
 
@@ -94,12 +97,15 @@ export default function PlatlistDetail() {
     const [openRateModal, setOpenRateModal] = useState(false);
     const [openAfterRateModal, setOpenAfterRateModal] = useState(false);
     const [openShareModal, setOpenShareModal] = useState(false);
+    const [contentRating, setContentRating] = useState(0);
+    const [voiceRating, setVoiceRating] = useState(0);
+    const [rateContent, setRateContent] = useState('');
+    const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
     const infoPanelHeight = isSm ? 190 : 150;
 
     useEffect(() => {
-        console.log(id)
         async function fetchPlaylist() {
             const res = await api.getPlaylistDetail(id);
             const data = res.data.data;
@@ -148,7 +154,20 @@ export default function PlatlistDetail() {
 
     useEffect(() => {
         setPaused(true);
-    }, [])
+    }, []);
+
+    const handleBookmark = () => {
+        async function bookmarkPlaylist() {
+            const res = await api.bookmarkPlaylist(playlist.id);
+            const data = await res.data.data;
+            console.log(data);
+        }
+
+        bookmarkPlaylist();
+        const playlistToBookmark = { ...playlist };
+        playlistToBookmark['is_bookmark'] = !playlist.is_bookmark;
+        setPlaylist({ ...playlistToBookmark })
+    }
 
     const onPlayClick = () => {
         setPaused(!paused)
@@ -212,10 +231,17 @@ export default function PlatlistDetail() {
         setOpenShareModal(true)
     }
 
-    const handleRatePlaylist = async (data) => {
-        const res = await api.ratePlaylist(id, data);
-        const result = await res.data.data;
-        console.log(result);
+    const handleRatePlaylist = async (cb) => {
+        const res = await api.ratePlaylist(id, {
+            content_stars: contentRating,
+            voice_stars: voiceRating,
+            content: rateContent
+        });
+        const result = await res.data;
+        if (result.code === 0) {
+            setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
+        }
+        cb();
     }
 
     return (
@@ -235,7 +261,6 @@ export default function PlatlistDetail() {
                 }}
             >
                 <img style={{
-                    objectFit: 'cover',
                     width: '100%',
                     height: '100%',
                     left: 0,
@@ -251,7 +276,7 @@ export default function PlatlistDetail() {
                 <Box
                     sx={{
                         backgroundColor: COLORS.bg2,
-                        height: `${infoPanelHeight}px`
+                        ...(!isSm && { height: '180px' })
                     }}
                 >
                     <Box sx={{
@@ -281,7 +306,7 @@ export default function PlatlistDetail() {
                                     sx={{
                                         width: isSm ? '40%' : '30%',
                                         minWidth: isSm ? '136px' : '250px',
-                                        transform: 'translateY(-60%)'
+                                        transform: 'translateY(-50%)'
                                     }}
                                 >
                                     <Avatar
@@ -322,7 +347,7 @@ export default function PlatlistDetail() {
                                                             color: COLORS.contentIcon
                                                         }
                                                     }}
-                                                    name="playlist-rate" value={playlist?.playlist_counter?.content_avg || 0} precision={0.5} readOnly />
+                                                    name="playlist-rate" value={contentRating} precision={1} readOnly />
                                             </Box>
                                         </Box>
                                     )
@@ -337,20 +362,41 @@ export default function PlatlistDetail() {
                                     <Box onClick={handleOpenShareModal}>
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
-                                    <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
-                                    <RateModal isSm={isSm} open={openRateModal} setOpen={setOpenRateModal} setOpenAfterRate={setOpenAfterRateModal} handleRatePlaylist={handleRatePlaylist} />
-                                    <AfterRateModal isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
+                                    <ShareModal url={`http://13.251.106.4/playlists/${playlist?.id}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
+                                    <RateModal
+                                        isSm={isSm}
+                                        open={openRateModal}
+                                        setOpen={setOpenRateModal}
+                                        setOpenAfterRate={setOpenAfterRateModal}
+                                        handleRatePlaylist={handleRatePlaylist}
+                                        setContentRating={setContentRating}
+                                        setVoiceRating={setVoiceRating}
+                                        contentRating={contentRating}
+                                        voiceRating={voiceRating}
+                                        rateContent={rateContent}
+                                        setRateContent={setRateContent}
+                                    />
+                                    <AfterRateModal content={afterRateContent} isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
                                     <Button
+                                        onClick={handleBookmark}
                                         sx={{
-                                            textTransform: 'none',
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white,
-                                            bgcolor: COLORS.main,
-                                            height: '48px',
                                             borderRadius: '22px',
-                                            padding: '13px 23px'
+                                            height: isSm ? '28px' : '48px',
+                                            width: 'max-content',
+                                            minWidth: 'auto',
+                                            whiteSpace: 'nowrap',
+                                            textTransform: 'none',
+                                            bgcolor: playlist?.is_bookmark ? COLORS.bg3 : COLORS.main,
+                                            pl: '14px',
+                                            pr: '14px',
+                                            ':hover': {
+                                                bgcolor: playlist?.is_bookmark ? COLORS.bg3 : COLORS.main
+                                            }
                                         }}
-                                    >+ Đánh dấu</Button>
+                                        startIcon={playlist?.is_bookmark ? <CheckIcon /> : <AddIcon />}
+                                    >{playlist?.is_bookmark ? 'Hủy đánh dấu' : 'Đánh dấu'}</Button>
                                 </Box>
                             </Box>
                             {
@@ -376,7 +422,7 @@ export default function PlatlistDetail() {
                                                 sx={{
                                                     columnGap: '24px'
                                                 }}
-                                                name="playlist-rate" value={playlist?.playlist_counter?.content_avg || 0} precision={0.5} readOnly />
+                                                name="playlist-rate" value={contentRating} precision={1} readOnly />
                                         </Box>
                                     </Box>
                                 )
@@ -399,18 +445,26 @@ export default function PlatlistDetail() {
                             margin: '16px 0'
                         }}
                     >
-                        <Button
-                            sx={{
-                                bgcolor: COLORS.main,
+                        <Link
+                            to='/audio-play/:id'
+                            style={{
+                                textDecoration: 'none',
                                 width: '50%',
-                                borderRadius: '6px',
-                                ...TEXT_STYLE.title1,
-                                color: COLORS.white,
-                                textTransform: 'none',
-                                height: '48px'
                             }}
-                            startIcon={<Play />}
-                        >Phát tất cả</Button>
+                        >
+                            <Button
+                                sx={{
+                                    bgcolor: COLORS.main,
+                                    width: '100%',
+                                    borderRadius: '6px',
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    height: '48px'
+                                }}
+                                startIcon={<Play />}
+                            >Phát tất cả</Button>
+                        </Link>
                         <Button
                             sx={{
                                 bgcolor: COLORS.second,
@@ -517,7 +571,7 @@ export default function PlatlistDetail() {
                             className="truncated-text"
                             anchorClass="my-anchor-css-class"
                             expanded={false}
-                            width={isSm ? 400 : 1000}
+                            width={isSm ? 390 : 1000}
                             truncatedEndingComponent={"... "}
                         >
                             <Typography
@@ -614,18 +668,26 @@ export default function PlatlistDetail() {
                                     borderRadius: '10px'
                                 }}
                             >
-                                <Button
-                                    sx={{
-                                        bgcolor: COLORS.main,
+                                <Link
+                                    to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}`}
+                                    style={{
+                                        textDecoration: 'none',
                                         width: '50%',
-                                        borderRadius: '6px',
-                                        ...TEXT_STYLE.title1,
-                                        color: COLORS.white,
-                                        textTransform: 'none',
-                                        height: '48px'
                                     }}
-                                    startIcon={<Play />}
-                                >Phát tất cả</Button>
+                                >
+                                    <Button
+                                        sx={{
+                                            bgcolor: COLORS.main,
+                                            width: '100%',
+                                            borderRadius: '6px',
+                                            ...TEXT_STYLE.title1,
+                                            color: COLORS.white,
+                                            textTransform: 'none',
+                                            height: '48px'
+                                        }}
+                                        startIcon={<Play />}
+                                    >Phát tất cả</Button>
+                                </Link>
                                 <Button
                                     sx={{
                                         bgcolor: COLORS.second,
@@ -663,39 +725,46 @@ export default function PlatlistDetail() {
                             <List sx={{ width: '100%' }}>
                                 {playlistAudios.map((value, idx) => {
                                     return (
-                                        <ListItem
-                                            sx={{
-                                                paddingLeft: 0,
-                                                paddingRight: '20px',
-                                                borderTop: `.5px solid ${COLORS.placeHolder}`,
-                                                height: '72px'
-                                            }}
+                                        <Link
+                                            to={`/audio-play/${value?.id}`}
                                             key={value.id}
-                                            secondaryAction={
-                                                <Typography
-                                                    sx={{
-                                                        ...TEXT_STYLE.content2,
-                                                        color: COLORS.bg4
-                                                    }}
-                                                >{formatDuration(value.duration)}</Typography>
-                                            }
+                                            style={{
+                                                textDecoration: 'none'
+                                            }}
                                         >
-                                            <ListItemButton role={undefined} onClick={() => (1)} dense>
-                                                <ListItemText
-                                                    sx={{
-                                                        'span': {
-                                                            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                                            color: COLORS.white,
-                                                            display: '-webkit-box',
-                                                            textOverflow: 'ellipsis',
-                                                            WebkitLineClamp: 2,
-                                                            WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden'
-                                                        }
-                                                    }}
-                                                    id={`label-${value.id}`} primary={value.name} />
-                                            </ListItemButton>
-                                        </ListItem>
+                                            <ListItem
+                                                sx={{
+                                                    paddingLeft: 0,
+                                                    paddingRight: '20px',
+                                                    borderTop: `.5px solid ${COLORS.placeHolder}`,
+                                                    height: '72px'
+                                                }}
+                                                secondaryAction={
+                                                    <Typography
+                                                        sx={{
+                                                            ...TEXT_STYLE.content2,
+                                                            color: COLORS.bg4
+                                                        }}
+                                                    >{formatDuration(value.duration)}</Typography>
+                                                }
+                                            >
+                                                <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                                    <ListItemText
+                                                        sx={{
+                                                            'span': {
+                                                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                                color: COLORS.white,
+                                                                display: '-webkit-box',
+                                                                textOverflow: 'ellipsis',
+                                                                WebkitLineClamp: 2,
+                                                                WebkitBoxOrient: 'vertical',
+                                                                overflow: 'hidden'
+                                                            }
+                                                        }}
+                                                        id={`label-${value.id}`} primary={value.name} />
+                                                </ListItemButton>
+                                            </ListItem>
+                                        </Link>
                                     );
                                 })}
                             </List>
@@ -725,17 +794,25 @@ export default function PlatlistDetail() {
                     }}
                     variant="outlined"
                 >Thêm vào giỏ hàng</Button>
-                <Button
-                    sx={{
-                        bgcolor: COLORS.main,
+                <Link
+                    to='/up-vip/'
+                    style={{
+                        textDecoration: 'none',
                         width: isSm ? '50%' : '20%',
-                        borderRadius: '6px',
-                        ...TEXT_STYLE.title1,
-                        color: COLORS.white,
-                        textTransform: 'none',
-                        height: '48px'
                     }}
-                >Mua gói VIP</Button>
+                >
+                    <Button
+                        sx={{
+                            bgcolor: COLORS.main,
+                            borderRadius: '6px',
+                            width: '100%',
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            height: '48px'
+                        }}
+                    >Mua gói VIP</Button>
+                </Link>
             </Box>
         </Box >
     )

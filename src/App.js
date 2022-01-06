@@ -29,7 +29,8 @@ function App() {
     const location = useLocation({});
     const [includeFooter, setIncludeFooter] = useState(null);
 
-    let windowSize = useWindowSize()
+    let windowSize = useWindowSize();
+    const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const openSidebar = useSelector(selectOpenSidebar);
     const [anchorEl, setAnchorEl] = useState(null);
     const anchorSearchElId = useSelector(selectAnchorEl);
@@ -38,7 +39,7 @@ function App() {
 
     useEffect(() => {
         function checkIncludeFooter() {
-            if (EXCLUDE_FOOTER.includes(location.pathname)) {
+            if (EXCLUDE_FOOTER.some(e => e.test(location.pathname))) {
                 setIncludeFooter(false);
             } else {
                 setIncludeFooter(true);
@@ -53,14 +54,14 @@ function App() {
         getSearchAnchorEl();
     }, [anchorSearchElId]);
 
-    if (windowSize.width > SCREEN_BREAKPOINTS.sm && !openSidebar) {
+    if (!isSm && !openSidebar) {
         dispatch(setOpen(true))
     }
 
     const openPlayBar = () => {
         const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+$');
         if (playAudioPathRegex.test(location.pathname)) {
-            if (windowSize.width > SCREEN_BREAKPOINTS.sm) {
+            if (!isSm) {
                 return true
             }
             if (!openSidebar) {
@@ -88,9 +89,9 @@ function App() {
             <Box sx={{
                 flexGrow: 1,
                 height: `calc(100% - ${HEADER_HEIGHT})`,
-                marginTop: windowSize.width > SCREEN_BREAKPOINTS.sm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
+                marginTop: !isSm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
                 width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-                ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
+                ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
             }}>
                 <Routes>
                     {
@@ -106,7 +107,7 @@ function App() {
                 )
             }
             {includeFooter && <Footer />}
-        </div>
+        </div >
     )
 }
 

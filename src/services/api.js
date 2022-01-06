@@ -137,9 +137,6 @@ export default class API {
     getPlaylistAudios = (id) => {
         return this.init().get(`/playlists/${id}/audios`);
     }
-    ratePlaylist = (id, body) => {
-        return this.init().post(`/playlists/${id}/ratings`, body);
-    }
     getRequestedBook = () => {
         // Hardcode api for testing
         this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
@@ -190,6 +187,9 @@ export default class API {
     bookmarkChannel = (id) => {
         return this.init().post(`/channels/${id}/bookmarks`);
     }
+    bookmarkPlaylist = (id) => {
+        return this.init().post(`/playlists/${id}/bookmarks`);
+    }
     getChannel = (id) => {
         return this.init().get(`/channels/${id}`);
     }
@@ -214,5 +214,9 @@ export default class API {
     updateUserInfo = (data) => {
         this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().put('/profiles/me', data);
+    }
+    ratePlaylist = (id, data) => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().post(`/playlists/${id}/ratings`, data);
     }
 }
