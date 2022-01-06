@@ -108,7 +108,12 @@ export default function PlayBar() {
                             sx={{
                                 ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                 color: COLORS.white,
-                                marginBottom: `${isSm ? 4 : 8}px`
+                                marginBottom: `${isSm ? 4 : 8}px`,
+                                display: '-webkit-box',
+                                textOverflow: 'ellipsis',
+                                WebkitLineClamp: 2,
+                                WebkitBoxOrient: 'vertical',
+                                overflow: 'hidden'
                             }}
                         >
                             {audioData?.name}
