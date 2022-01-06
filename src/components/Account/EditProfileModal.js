@@ -15,7 +15,8 @@ import {
     InputAdornment
 } from '@mui/material';
 import {
-    DatePicker,
+    DesktopDatePicker,
+    MobileDatePicker,
     LocalizationProvider
 } from '@mui/lab';
 import AdapterDateFns from '@mui/lab/AdapterDateFns';
@@ -125,7 +126,6 @@ export default function EditProfileModal(props) {
         < Dialog
             sx={{
                 left: '50%',
-                top: isSm ? HEADER_HEIGHT_MB : 0,
                 width: isSm ? '100%' : '920px',
                 transform: 'translateX(-50%)',
                 '& .MuiDialog-paper': {
@@ -230,53 +230,6 @@ export default function EditProfileModal(props) {
                         />
                     </Box>
                 </Box>
-                {/* use avatar as banner */}
-                {/* <Box
-                    sx={{
-                        width: '100%',
-                        ...flexStyle('center', 'center'),
-                        flexDirection: 'column',
-                        rowGap: '55px',
-                        borderTop: `1px solid ${COLORS.blackStroker}`,
-                        borderBottom: `1px solid ${COLORS.blackStroker}`,
-                        padding: '32px 0',
-                        boxSizing: 'border-box'
-                    }}
-                >
-                    <Box
-                        sx={{
-                            ...flexStyle('space-between', 'center'),
-                            width: '100%'
-                        }}
-                    >
-                        <Typography sx={{
-                            ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
-                            color: COLORS.white
-                        }}>Ảnh bìa</Typography>
-                        <Button
-                            sx={{
-                                bgcolor: COLORS.bg2,
-                                color: COLORS.contentIcon,
-                                textTransform: 'none',
-                                ...TEXT_STYLE.title2
-                            }}
-                            startIcon={<Pencil />}
-                        >Chỉnh sửa</Button>
-                    </Box>
-                    <Box
-                        sx={{
-                            ...flexStyle('center', 'center'),
-                            width: '100%'
-                        }}
-                    >
-                        <Avatar
-                            sx={{
-                                width: isSm ? '100%' : '80%',
-                                height: isSm ? '140px' : '210px'
-                            }} variant="rounded" alt="Remy Sharp" src={accountData?.avatar?.original_url}
-                        />
-                    </Box>
-                </Box> */}
                 <FormControl
                     sx={{
                         width: isSm ? '100%' : '80%',
@@ -370,10 +323,7 @@ export default function EditProfileModal(props) {
                         />
                     </Box>
                     <LocalizationProvider dateAdapter={AdapterDateFns}>
-                        <DatePicker
-                            InputAdornmentProps={{
-
-                            }}
+                        <DesktopDatePicker
                             value={userInfo.birthday}
                             onChange={handleChangeBirthday}
                             InputAdornmentProps={{
@@ -412,6 +362,7 @@ export default function EditProfileModal(props) {
                                 )
                             }}
                         />
+
                     </LocalizationProvider>
 
                 </FormControl>
