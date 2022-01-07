@@ -190,6 +190,10 @@ export default class API {
     bookmarkPlaylist = (id) => {
         return this.init().post(`/playlists/${id}/bookmarks`);
     }
+    likeAudio = (id) => {
+        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        return this.init().post(`/audios/${id}/likes`);
+    }
     getChannel = (id) => {
         return this.init().get(`/channels/${id}`);
     }

@@ -2,9 +2,8 @@
 import { useState } from 'react';
 
 // import redux
-import { useSelector } from 'react-redux';
-import { selectAudioData } from '../../redux/audio';
-
+import { useSelector, useDispatch } from 'react-redux';
+import { selectAudioData, setAudioData } from '../../redux/audio';
 
 // import MUI components
 import {
@@ -17,7 +16,7 @@ import {
     Divider
 } from '@mui/material';
 import VolumeUp from '@mui/icons-material/VolumeUp';
-import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
+import FavoriteIcon from '@mui/icons-material/Favorite';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 // import others components
@@ -29,22 +28,38 @@ import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
+// import services
+import API from '../../services/api';
 
 export default function PlayBar() {
+    const api = new API();
 
     const windowSize = useWindowSize();
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const audioData = useSelector(selectAudioData);
     const [volume, setVolume] = useState(40);
     const [anchorAudioList, setAnchorAudioList] = useState(null);
-
-    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-
-    const audioData = useSelector(selectAudioData);
+    const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
+    const dispatch = useDispatch();
     const openAudioList = (event) => {
         setAnchorAudioList(event.currentTarget);
     }
 
     const onCloseAudioList = () => {
         setAnchorAudioList(null);
+    }
+
+    const handleLikeAudio = () => {
+        async function likeAudio() {
+            const audioId = audioData.id;
+            const res = await api.likeAudio(audioId);
+            const data = await res.data;
+            if (!data.error) {
+                setIsLiked(data.data['is_liked']);
+            }
+        }
+
+        likeAudio();
     }
 
     return (
@@ -127,7 +142,12 @@ export default function PlayBar() {
                             Tác giả: {audioData?.playlist?.author_string}
                         </Typography>
                     </Box>
-                    <FavoriteBorderIcon sx={{ color: COLORS.contentIcon }} />
+                    <FavoriteIcon
+                        onClick={handleLikeAudio}
+                        sx={{
+                            color: isLiked ? COLORS.main : COLORS.contentIcon
+                        }}
+                    />
                 </Box>
             </Box>
             {isSm && (<Divider sx={{ borderColor: COLORS.blackStroker, margin: '5px 0', width: '100%', borderWidth: '1px' }} />)}

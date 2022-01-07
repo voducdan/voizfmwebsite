@@ -46,10 +46,6 @@ export default function AudioList(props) {
         fetchPlaylistAudios();
     }, [playlistId]);
 
-    useEffect(() => {
-        console.log(11111)
-    }, [audioId]);
-
     const handleSelectAudio = (id) => {
         navigate(`/audio-play/${id}`);
     }

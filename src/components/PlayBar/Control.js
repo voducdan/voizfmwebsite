@@ -56,12 +56,11 @@ export default function Control(props) {
     const [paused, setPaused] = useState(true);
     const [audio, setAudio] = useState(new Audio(''));
 
-    useEffect(() => {
-        if (audioData) {
-            setPosition(audioData.position);
-
-        }
-    }, [audioData]);
+    // useEffect(() => {
+    //     if (audioData) {
+    //         setPosition(audioData.position);
+    //     }
+    // }, [audioData]);
 
     useEffect(() => {
         !paused ? audio.play() : audio.pause();
