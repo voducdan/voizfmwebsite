@@ -95,7 +95,7 @@ export default function PlayBar() {
                 <Avatar
                     sx={{ width: isSm ? '65px' : '65px', height: isSm ? '65px' : '65px' }}
                     alt="audio avt"
-                    src={audioData?.avatar?.thumb_url}
+                    src={audioData?.playlist?.avatar?.thumb_url}
                 />
                 <Box
                     sx={{
@@ -116,7 +116,7 @@ export default function PlayBar() {
                                 overflow: 'hidden'
                             }}
                         >
-                            {audioData?.name}
+                            {audioData?.playlist?.name}
                         </Typography>
                         <Typography
                             sx={{
@@ -124,7 +124,7 @@ export default function PlayBar() {
                                 color: COLORS.contentIcon
                             }}
                         >
-                            Tác giả: {audioData?.author_string}
+                            Tác giả: {audioData?.playlist?.author_string}
                         </Typography>
                     </Box>
                     <FavoriteBorderIcon sx={{ color: COLORS.contentIcon }} />
@@ -194,7 +194,7 @@ export default function PlayBar() {
                     </Box>
                 )
             }
-            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} playlistId={audioData?.id} />
+            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} playlistId={audioData?.playlist?.id} audioId={audioData?.id} />
         </Box>
     )
 }

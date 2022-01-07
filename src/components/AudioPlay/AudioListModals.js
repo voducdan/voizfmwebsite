@@ -1,13 +1,15 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import react router dom
+import { useNavigate, useParams } from 'react-router-dom';
+
 // import MUI components
 import {
     Box,
     Typography,
     List,
     ListItem,
-    ListItemIcon,
     ListItemText,
     ListItemButton,
     Popover,
@@ -28,6 +30,7 @@ export default function AudioList(props) {
     const api = new API();
 
     const { playlistId, anchorAudioList, onCloseAudioList, audioId } = props;
+    const navigate = useNavigate();
     const open = Boolean(anchorAudioList);
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -41,7 +44,15 @@ export default function AudioList(props) {
         };
 
         fetchPlaylistAudios();
+    }, [playlistId]);
+
+    useEffect(() => {
+        console.log(11111)
     }, [audioId]);
+
+    const handleSelectAudio = (id) => {
+        navigate(`/audio-play/${id}`);
+    }
 
     return (
         <Popover
@@ -88,7 +99,17 @@ export default function AudioList(props) {
                             marginBottom: isSm ? '26px' : '32px'
                         }}
                     >Danh sách audios</Typography>
-                    <CloseIcon sx={{ color: COLORS.white }} onClick={onCloseAudioList} />
+                    <IconButton
+                        aria-label="close"
+                        onClick={onCloseAudioList}
+                        sx={{
+                            p: 0,
+                            color: COLORS.white,
+                            bgcolor: COLORS.bg2
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
                 </Box>
                 <Box>
                     <List sx={{ width: '100%' }}>
@@ -118,7 +139,7 @@ export default function AudioList(props) {
                                     }
                                     key={value.id}
                                 >
-                                    <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                    <ListItemButton role={undefined} onClick={() => { handleSelectAudio(value.id) }} dense>
                                         <ListItemText
                                             sx={{
                                                 'span': {

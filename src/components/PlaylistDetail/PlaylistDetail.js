@@ -732,7 +732,7 @@ export default function PlatlistDetail() {
                                 {playlistAudios.map((value, idx) => {
                                     return (
                                         <Link
-                                            to={`/audio-play/${value?.id}?playlist=${playlist?.id}`}
+                                            to={`/audio-play/${value?.id}`}
                                             key={value.id}
                                             style={{
                                                 textDecoration: 'none'
