@@ -1,3 +1,6 @@
+// import react
+import { useState } from 'react';
+
 // import MUI components
 import {
     Box,
@@ -15,7 +18,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
 
 const VipPackageBenefitItem = (props) => {
-    const { benefit, idx, isSm } = props
+    const { benefit, idx, isSm } = props;
     return (
         <Box
             sx={{
@@ -27,7 +30,7 @@ const VipPackageBenefitItem = (props) => {
             <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.caption10Regular : TEXT_STYLE.content1),
-                    color: idx >= 2 ? COLORS.second : COLORS.contentIcon
+                    color: idx > 2 ? COLORS.second : COLORS.contentIcon
                 }}
             >{benefit}</Typography>
         </Box >
@@ -35,14 +38,15 @@ const VipPackageBenefitItem = (props) => {
 }
 
 const VipPackageBaper = (props) => {
-    const { bgcolor, elevation, height, name, price, time, benefit, isSm } = props
+    const { idx, bgcolor, elevation, height, name, price, time, benefit, isSm, selectedPackage, handleSelectPackage } = props;
     return (
         <Paper
+            onClick={() => { handleSelectPackage(idx) }}
             sx={{
                 bgcolor: bgcolor,
                 height: `${height}px`,
                 borderRadius: '10px',
-                ...((height === 378 || height === 202) && { border: '2px solid #F68C2D' })
+                ...(idx === selectedPackage && { border: '2px solid #F68C2D' })
             }}
             elevation={elevation}>
             {
@@ -134,6 +138,11 @@ export default function VipPackage() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const [selectedPackage, setSelectedPackage] = useState(0);
+
+    const handleSelectPackage = (idx) => {
+        setSelectedPackage(idx);
+    }
 
     return (
         <Box>
@@ -172,15 +181,18 @@ export default function VipPackage() {
                     {
                         vipPackages.map((p, idx) => (
                             <VipPackageBaper
+                                handleSelectPackage={handleSelectPackage}
                                 isSm={isSm}
                                 key={idx}
-                                bgcolor={idx === 1 ? COLORS.bg3 : COLORS.bg2}
-                                elevation={idx === 1 ? 1 : 2}
-                                height={isSm ? (idx === 1 ? 202 : 194) : (idx === 1 ? 378 : 348)}
+                                idx={idx}
+                                bgcolor={idx === selectedPackage ? COLORS.bg3 : COLORS.bg2}
+                                elevation={idx === selectedPackage ? 1 : 2}
+                                height={isSm ? (idx === selectedPackage ? 202 : 194) : (idx === selectedPackage ? 378 : 348)}
                                 name={p.name}
                                 price={p.price}
                                 time={p.time}
                                 benefit={p.benefit}
+                                selectedPackage={selectedPackage}
                             />
                         ))
                     }

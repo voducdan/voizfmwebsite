@@ -66,7 +66,8 @@ const VipComboItem = (props) => {
                         sx={{
                             ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.title1),
                             textTransform: 'uppercase',
-                            color: COLORS.white
+                            color: COLORS.white,
+                            textAlign: 'center'
                         }}
                     >{name}</Typography>
                 </Box>
@@ -138,17 +139,12 @@ export default function VipCombo() {
     useEffect(() => {
         const api = new API()
         async function fetchCombo() {
-            const res = await api.getComboPackage()
-            const data = await res.data.data
-            // Change img for test
-            data.forEach(i => {
-                i.avatar.thumb_url = 'https://picsum.photos/1190/420?img=3'
-            })
-
-            setCombo(data)
+            const res = await api.getComboPackage();
+            const data = await res.data.data;
+            setCombo(data);
         }
 
-        fetchCombo()
+        fetchCombo();
     }, []);
 
     return (
