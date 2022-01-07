@@ -2,7 +2,7 @@
 import { useEffect, useState } from 'react';
 
 // import react router dom
-import { useParams } from "react-router-dom";
+import { useParams, useLocation } from "react-router-dom";
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -44,52 +44,41 @@ import useWindowSize from '../../utils/useWindowSize';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
 export default function AudioPlay() {
+    const api = new API();
+
     const playing = useSelector(selectPlayAudio);
     const { id } = useParams();
-    const [audioData, setAudio] = useState({})
+
+    const [audio, setAudio] = useState({})
     const [openShareModal, setOpenShareModal] = useState(false);
 
     const windowSize = useWindowSize()
-    const audioId = 1;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     const dispatch = useDispatch();
 
     useEffect(() => {
-        const api = new API()
-
-        async function getAudio() {
+        async function fetchAudio() {
             try {
-                const res = await api.getAudio(audioId)
+                const res = await api.getAudio(id)
                 if (res.status === 200) {
-                    const data = await res.data.data
-                    // fake missing data
-                    data.avatar.original_url = 'https://picsum.photos/335/335?img=16'
-                    data.avatar.thumb_url = 'https://picsum.photos/65/65?img=16'
-                    data.voicer = 'Ngyễn lan Anh'
-                    data.channel = {
-                        id: 38,
-                        name: "NXB Tổng Hợp TP.HCM"
-                    }
-                    setAudio(data)
-                    dispatch(setAudioData(data))
+                    const data = await res.data.data;
+                    setAudio(data);
+                    dispatch(setAudioData(data));
                 }
             }
             catch (err) {
-                console.log(err)
+                console.log(err);
             }
         }
-        getAudio()
-    }, [])
+
+        fetchAudio();
+    }, [id]);
 
     const handleOpenShareModal = () => {
-        setOpenShareModal(true)
+        setOpenShareModal(true);
     }
 
-    const getPlayBarHeight = () => {
-        const playbarEl = document.querySelector('#play-audio-bar');
-        return playbarEl?.clientHeight || 0
-    }
 
     return (
         <Box
@@ -97,7 +86,7 @@ export default function AudioPlay() {
                 ...(isSm ? flexStyle('center', 'center') : flexStyle('flex-start', 'center')),
                 flexDirection: 'column',
                 width: '95%',
-                margin: isSm ? `0px auto ${getPlayBarHeight()}px auto` : 'auto',
+                margin: isSm ? `0px auto 302px auto` : 'auto',
             }}
         >
             <Box
@@ -112,7 +101,7 @@ export default function AudioPlay() {
                 <Box onClick={handleOpenShareModal}>
                     <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
                 </Box>
-                <ShareModal isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
+                <ShareModal url={`${window.location.protocol}//${window.location.hostname}:${window.location.port}/audio-play/${id}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                 <ExpandMoreIcon sx={{ color: COLORS.contentIcon }} />
             </Box>
             <Box
@@ -125,9 +114,13 @@ export default function AudioPlay() {
             >
                 <Box>
                     <Avatar sx={{ width: isSm ? '235px' : '335px', height: isSm ? '235px' : '335px', borderRadius: '15px' }}
-                        variant="rounded" alt="audio avt" src={audioData?.avatar?.original_url} />
+                        variant="rounded" alt="playlist avt" src={audio?.playlist?.avatar?.original_url} />
                 </Box>
-                <Box>
+                <Box
+                    sx={{
+                        width: '90%'
+                    }}
+                >
                     <Typography
                         sx={{
                             ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
@@ -136,14 +129,13 @@ export default function AudioPlay() {
                             ...(isSm && { textAlign: 'center' })
                         }}
                     >
-                        {audioData.name}
+                        {audio?.playlist?.name}
                     </Typography>
                     <TableContainer
                         sx={{
                             width: '100%',
                             bgcolor: 'transparent',
-                            boxShadow: 'none',
-                            ...(isSm && { ml: '36px' })
+                            boxShadow: 'none'
                         }}
                         component={Paper}>
                         <Table
@@ -169,7 +161,7 @@ export default function AudioPlay() {
                                         }}
                                         align="right"
                                     >
-                                        <InfoValue value={audioData?.author?.name} />
+                                        <InfoValue value={audio?.playlist?.author_string} />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow
@@ -192,7 +184,7 @@ export default function AudioPlay() {
                                         }}
                                         align="right"
                                     >
-                                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{convertSecondsToReadableString(audioData?.duration)}</Typography>
+                                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{convertSecondsToReadableString(audio?.playlist?.total_duration)}</Typography>
                                     </TableCell>
                                 </TableRow>
                                 <TableRow
@@ -215,7 +207,7 @@ export default function AudioPlay() {
                                         }}
                                         align="right"
                                     >
-                                        <InfoValue value={audioData?.channel?.name} />
+                                        <InfoValue value={audio?.playlist?.channel?.name} />
                                     </TableCell>
                                 </TableRow>
                                 <TableRow
@@ -238,7 +230,7 @@ export default function AudioPlay() {
                                         }}
                                         align="right"
                                     >
-                                        <InfoValue value={audioData?.voicer} />
+                                        <InfoValue value={audio && audio?.playlist?.voicers[0]?.name} />
                                     </TableCell>
                                 </TableRow>
                             </TableBody>

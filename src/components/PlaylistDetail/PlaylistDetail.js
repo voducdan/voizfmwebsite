@@ -446,7 +446,7 @@ export default function PlatlistDetail() {
                         }}
                     >
                         <Link
-                            to='/audio-play/:id'
+                            to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}?playlist=${playlist?.id}`}
                             style={{
                                 textDecoration: 'none',
                                 width: '50%',
@@ -631,13 +631,19 @@ export default function PlatlistDetail() {
                                 <Swiper slidesPerView='auto' spaceBetween={10} >
                                     {recommendedPlaylist.map((item, idx) => (
                                         <SwiperSlide key={idx} style={{ width: 'auto' }}>
-                                            <Thumbnail
+                                            <Link
+                                                to={`/playlists/${item?.id}`}
                                                 key={idx}
-                                                style={{
-                                                    width: '96px',
-                                                    height: '96px'
-                                                }}
-                                                avtSrc={item?.avatar?.thumb_url} alt={item.alt} />
+                                            >
+                                                <Thumbnail
+                                                    key={idx}
+                                                    style={{
+                                                        width: '96px',
+                                                        height: '96px'
+                                                    }}
+                                                    avtSrc={item?.avatar?.thumb_url} alt={item.alt}
+                                                />
+                                            </Link>
                                         </SwiperSlide>
                                     ))}
                                 </Swiper>
@@ -669,7 +675,7 @@ export default function PlatlistDetail() {
                                 }}
                             >
                                 <Link
-                                    to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}`}
+                                    to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}?playlist=${playlist?.id}`}
                                     style={{
                                         textDecoration: 'none',
                                         width: '50%',

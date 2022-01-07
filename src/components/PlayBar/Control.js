@@ -1,10 +1,11 @@
+// import react
 import { useState, useEffect } from 'react';
 
 // import redux
 import { useDispatch } from 'react-redux';
 import { togglePlayAudio } from '../../redux/playAudio';
 
-
+// import MUI component
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
@@ -18,6 +19,9 @@ import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
 import { Loop, Clock } from '../Icons';
+
+// import services
+import API from '../../services/api';
 
 const WallPaper = styled('div')({
     width: '100%',
@@ -43,18 +47,20 @@ const TinyText = styled(Typography)({
 });
 
 export default function Control(props) {
+    const api = new API();
 
-    const { audioData } = props
-    const audioUrl = 'https://assets.coderrocketfuel.com/pomodoro-times-up.mp3';
-
-    // audioData.meta_data.remaining_minutes
-    const remainingTime = 19;
-
+    const { audioData } = props;
     const theme = useTheme();
     const dispatch = useDispatch();
-    const [position, setPosition] = useState(audioData.duration - remainingTime);
+    const [position, setPosition] = useState(0);
     const [paused, setPaused] = useState(true);
-    const [audio] = useState(new Audio(audioUrl));
+    const [audio, setAudio] = useState(new Audio(''));
+
+    // useEffect(() => {
+    //     if (audioData) {
+    //         setPosition(audioData.position);
+    //     }
+    // }, [audioData]);
 
     useEffect(() => {
         !paused ? audio.play() : audio.pause();
