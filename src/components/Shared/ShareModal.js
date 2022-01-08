@@ -35,12 +35,18 @@ export default function ShareModal(props) {
     const shareIconSize = isSm ? 40 : 48;
     const [openCopyLinkTooltop, setOpenCopyLinkTooltop] = useState(false);
     const [openQRcodeDialog, setOpenQRcodeDialog] = useState(false);
+    const [tooltipTitle, setTooltipTitle] = useState('Sao chép link thành công!');
     const handleClose = () => {
         setOpen(false)
     }
 
     const handleCopyLink = () => {
-        navigator.clipboard.writeText(url);
+        if (navigator.clipboard) {
+            navigator.clipboard.writeText(url);
+        }
+        else {
+            setTooltipTitle('Đã xảy ra lỗi khi sao chép link!')
+        }
         setOpenCopyLinkTooltop(true);
         setTimeout(() => {
             setOpenCopyLinkTooltop(false);
@@ -75,7 +81,7 @@ export default function ShareModal(props) {
                     disableFocusListener
                     disableHoverListener
                     disableTouchListener
-                    title="Sao chép link thành công!"
+                    title={tooltipTitle}
                 >
                     <IconButton
                         sx={{
