@@ -58,7 +58,7 @@ export default function CategoryBar(props) {
                         }}
                     >
                         {
-                            (item?.code !== activeCategory) && (
+                            (String(item?.code) !== activeCategory) && (
                                 <Typography
                                     id={item?.code}
                                     onClick={handleSelectCategory}
@@ -74,7 +74,7 @@ export default function CategoryBar(props) {
                             )
                         }
                         {
-                            (item?.code === activeCategory) && (
+                            (String(item?.code) === activeCategory) && (
                                 <Typography
                                     id={item.code}
                                     onClick={handleSelectCategory}
