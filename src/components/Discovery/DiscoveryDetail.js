@@ -1,5 +1,5 @@
 // import react
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // import react router dom
 import { useParams, Link } from 'react-router-dom';
@@ -28,7 +28,27 @@ import useWindowSize from '../../utils/useWindowSize';
 import API from '../../services/api';
 
 const CommentItem = (props) => {
-    const { data } = props
+    const { data, api, commentInputRef } = props;
+
+    const handleLikeComment = async (id) => {
+        const res = await api.likeComment(id);
+        try {
+            const data = await res.data;
+            if (data.error) {
+                console.timeLog(data.error);
+                return;
+            }
+            console.log(data.data)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleResponseComment = () => {
+        commentInputRef.current.children[1].focus();
+    }
+
     return (
         <Box
             sx={{
@@ -37,8 +57,7 @@ const CommentItem = (props) => {
             }}
         >
             <Box>
-                {/* src = data.avatar.thumb_url */}
-                <Avatar sx={{ width: '35px', height: '35px' }} alt='img alt' src='https://picsum.photos/1190/420?img=8' />
+                <Avatar sx={{ width: '35px', height: '35px' }} alt='img alt' src={data.user.avatar.thumb_url} />
             </Box>
             <Box
                 sx={{
@@ -79,14 +98,16 @@ const CommentItem = (props) => {
                     <Box
                         sx={{
                             ...flexStyle('center', 'center'),
-                            columnGap: '8px'
+                            columnGap: '8px',
+                            cursor: 'pointer'
                         }}
                     >
                         <CommentOutlinedIcon sx={{ color: COLORS.contentIcon, width: '14px', height: '14px' }} />
                         <Typography
+                            onClick={handleResponseComment}
                             sx={{
                                 ...TEXT_STYLE.content3,
-                                color: COLORS.contentIcon,
+                                color: COLORS.contentIcon
                             }}
                         >
                             Trả lời
@@ -95,14 +116,22 @@ const CommentItem = (props) => {
                     <Box
                         sx={{
                             ...flexStyle('center', 'center'),
-                            columnGap: '8px'
+                            columnGap: '8px',
+                            cursor: 'pointer'
                         }}
                     >
-                        <ThumbUpAltOutlinedIcon sx={{ color: COLORS.contentIcon, width: '14px', height: '14px' }} />
+                        <ThumbUpAltOutlinedIcon
+                            onClick={() => { handleLikeComment(data.id) }}
+                            sx={{
+                                color: data.is_liked ? COLORS.main : COLORS.contentIcon,
+                                width: '14px',
+                                height: '14px'
+                            }}
+                        />
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.content3,
-                                color: COLORS.contentIcon,
+                                color: COLORS.contentIcon
                             }}
                         >
                             {data.comment_likes_count}
@@ -130,12 +159,14 @@ const CommentItem = (props) => {
 }
 
 export default function DiscoveryDetail() {
-    const windowSize = useWindowSize();
+    const api = new API();
 
-    const [discovery, setDiscovery] = useState({})
-    const [comments, setComments] = useState([])
-    const [commentContent, setCommentContent] = useState('')
-    const [commentPage, setCommentPage] = useState(0)
+    const windowSize = useWindowSize();
+    const commentInputRef = useRef();
+    const [discovery, setDiscovery] = useState({});
+    const [comments, setComments] = useState([]);
+    const [commentContent, setCommentContent] = useState('');
+    const [commentPage, setCommentPage] = useState(0);
     const { id } = useParams();
 
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -145,9 +176,8 @@ export default function DiscoveryDetail() {
     useEffect(() => {
 
         async function fetchDiscoveryDetail() {
-            const api = new API();
             const res = await api.getDiscovery(id, commentPage, pageLimit);
-            const data = await res.data;
+            const data = await res.data.data;
             setDiscovery(data);
         };
 
@@ -156,7 +186,6 @@ export default function DiscoveryDetail() {
 
     useEffect(() => {
         async function fetchDiscoveryComment() {
-            const api = new API();
             const res = await api.getDiscoveryComment(id);
             const data = await res.data.data;
             setComments(data);
@@ -167,7 +196,33 @@ export default function DiscoveryDetail() {
 
     const handleWriteComment = (e) => {
         const content = e.target.value;
-        setCommentContent(content)
+        setCommentContent(content);
+    }
+
+    const handleCommentKeyUp = async (e) => {
+        const { keyCode } = e;
+        if (keyCode === 13) {
+            await sendComment(discovery.id, { content: commentContent });
+        }
+    }
+
+    const handleComment = async () => {
+        await sendComment(discovery.id, { content: commentContent });
+    }
+
+    async function sendComment(discoveryId, data) {
+        const res = await api.commentDiscovery(discoveryId, data);
+        try {
+            const data = await res.data;
+            if (data.error) {
+                console.log(data.error);
+                return;
+            }
+            console.log(data.data)
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
     return (
@@ -189,7 +244,7 @@ export default function DiscoveryDetail() {
                     width: '100%',
                     height: '100%',
                     left: 0,
-                }} alt="cover img alt" src="https://picsum.photos/1190/420?img=3"></img>
+                }} alt="cover img alt" src={discovery?.image?.original_url}></img>
             </Box>
             <Box
                 sx={{
@@ -212,7 +267,7 @@ export default function DiscoveryDetail() {
                         }}
                     >
                         <Box>
-                            <Avatar sx={{ width: '48px', height: '48px' }} alt="https://picsum.photos/1190/420?img=3" src="https://picsum.photos/1190/420?img=3" />
+                            <Avatar sx={{ width: '48px', height: '48px' }} alt="discovery avt alt" src={discovery?.channel?.avatar?.thumb_url} />
                         </Box>
                         <Box
                             sx={{
@@ -247,74 +302,79 @@ export default function DiscoveryDetail() {
                     </Typography>
                 </Box>
             </Box>
-            <Box
-                sx={{
-                    width: isSm ? '90%' : '60%',
-                    margin: '0 auto'
-                }}
-            >
-                <Typography
-                    sx={{
-                        ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h2),
-                        color: COLORS.white,
-                        margin: isSm ? '33px auto 24px auto' : '48px auto'
-                    }}
-                >
-                    {discovery.discovery_contents ? discovery.discovery_contents[0].title : ''}
-                </Typography>
-                <Box
-                    sx={{
-                        height: '329px',
-                        width: '100%',
-                        top: 0,
-                        position: 'relative'
-                    }}
-                >
-                    <img style={{
-                        objectFit: 'cover',
-                        width: '100%',
-                        height: '100%',
-                        left: 0,
-                    }} alt="cover img alt" src="https://picsum.photos/1190/420?img=3"></img>
-                    <Link
-                        style={{
-                            position: 'absolute',
-                            bottom: '10px',
-                            right: '10px',
-                            textDecoration: 'none'
+            {
+                discovery.discovery_contents && discovery.discovery_contents.map(i => (
+                    <Box
+                        key={i?.id}
+                        sx={{
+                            width: isSm ? '90%' : '60%',
+                            margin: '0 auto'
                         }}
-                        to={`/playlists/${discovery.discovery_contents ? discovery.discovery_contents[0].playlist_id : undefined}`}
                     >
-                        <Button
+                        <Typography
                             sx={{
-                                ...TEXT_STYLE.title2,
+                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h2),
                                 color: COLORS.white,
-                                bgcolor: COLORS.main,
-                                textTransform: 'none',
-                                height: '48px',
-                                width: '150px',
-                                borderRadius: '48px',
-                                ':hover': {
-                                    bgcolor: 'rgb(56 57 68 / 93%)'
-                                }
+                                margin: isSm ? '33px auto 24px auto' : '48px auto'
                             }}
-                            startIcon={<HeadphonesIcon sx={{ color: COLORS.white }} />}
                         >
-                            Nghe sách
-                        </Button>
-                    </Link>
-                </Box>
-                <Typography
-                    sx={{
-                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                        color: COLORS.VZ_Text_content,
-                        margin: isSm ? '23px auto 16px auto' : '48px auto 32px auto',
-                        whiteSpace: 'pre-wrap'
-                    }}
-                >
-                    {discovery.discovery_contents ? discovery.discovery_contents[0].content : ''}
-                </Typography>
-            </Box>
+                            {i?.title}
+                        </Typography>
+                        <Box
+                            sx={{
+                                height: '329px',
+                                width: '100%',
+                                top: 0,
+                                position: 'relative'
+                            }}
+                        >
+                            <img style={{
+                                objectFit: 'cover',
+                                width: '100%',
+                                height: '100%',
+                                left: 0,
+                            }} alt="cover img alt" src={i.avatar && i?.avatar.thumb_url}></img>
+                            <Link
+                                style={{
+                                    position: 'absolute',
+                                    bottom: '10px',
+                                    right: '10px',
+                                    textDecoration: 'none'
+                                }}
+                                to={`/playlists/${i?.playlist?.id}`}
+                            >
+                                <Button
+                                    sx={{
+                                        ...TEXT_STYLE.title2,
+                                        color: COLORS.white,
+                                        bgcolor: COLORS.main,
+                                        textTransform: 'none',
+                                        height: '48px',
+                                        width: '150px',
+                                        borderRadius: '48px',
+                                        ':hover': {
+                                            bgcolor: 'rgb(56 57 68 / 93%)'
+                                        }
+                                    }}
+                                    startIcon={<HeadphonesIcon sx={{ color: COLORS.white }} />}
+                                >
+                                    Nghe sách
+                                </Button>
+                            </Link>
+                        </Box>
+                        <Typography
+                            sx={{
+                                ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                color: COLORS.VZ_Text_content,
+                                margin: isSm ? '23px auto 16px auto' : '48px auto 32px auto',
+                                whiteSpace: 'pre-wrap'
+                            }}
+                        >
+                            {i?.content}
+                        </Typography>
+                    </Box>
+                ))
+            }
             <Box
                 sx={{
                     width: isSm ? '100%' : '60%',
@@ -378,7 +438,7 @@ export default function DiscoveryDetail() {
                 >
                     {
                         comments.map(item => (
-                            <CommentItem key={id} data={item} />
+                            <CommentItem commentInputRef={commentInputRef} api={api} key={item.id} data={item} />
                         ))
                     }
                 </Box>
@@ -403,15 +463,18 @@ export default function DiscoveryDetail() {
                                     ...TEXT_STYLE.caption12
                                 }
                             }}
+                            ref={commentInputRef}
                             disableUnderline={true}
                             id="discovery-comment"
                             value={commentContent}
                             placeholder='Gửi góp ý cho nội dung này'
                             onChange={handleWriteComment}
+                            onKeyUp={handleCommentKeyUp}
                             startAdornment={<BorderColorOutlinedIcon sx={{ color: COLORS.placeHolder }} position="start">$</BorderColorOutlinedIcon>}
                         />
                     </FormControl>
                     <Button
+                        onClick={handleComment}
                         sx={{
                             ...TEXT_STYLE.title3,
                             color: COLORS.VZ_Text_content,

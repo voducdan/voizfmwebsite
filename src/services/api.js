@@ -60,16 +60,18 @@ export default class API {
         return this.init().get(`/discoveries`)
     }
     getDiscovery = (id, page, limit = 10) => {
-        // reset base url for test
-        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
-
         const params = { page, limit };
         const queryString = this.buildQueryString(params)
-        // return this.init().get(`/discoveries/${id}?${queryString}`)
-        return this.init().get(`/discoveryDetail/${id}?${queryString}`)
+        return this.init().get(`/discoveries/${id}?${queryString}`)
     }
     getDiscoveryComment = (discoveryId) => {
         return this.init().get(`/discoveries/${discoveryId}/comments`)
+    }
+    commentDiscovery = (discoveryId, data) => {
+        return this.init().post(`/discoveries/${discoveryId}/comments`, data)
+    }
+    likeComment = (commentId) => {
+        return this.init().post(`/comments/${commentId}/likes`)
     }
     getPlaylistHistory = () => {
         this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
