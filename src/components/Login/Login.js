@@ -1,10 +1,10 @@
 // import react module
-import { useState } from 'react'
+import { useState } from 'react';
 
 // import redux reducer, actions
-import { useSelector, useDispatch } from 'react-redux'
-import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin'
-import { setToken } from '../../redux/token'
+import { useSelector, useDispatch } from 'react-redux';
+import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin';
+import { setToken } from '../../redux/token';
 
 // import MUI component
 import {
@@ -18,26 +18,25 @@ import {
     TextField,
     Stack,
     Button,
-} from '@mui/material'
+} from '@mui/material';
 
 // import others components
-import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton'
+import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton';
 
 // import icons
-import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index'
+import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index';
 
 // import utils
-import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants'
-import useWindowSize from '../../utils/useWindowSize'
-import { validatePhoneNumber, validateOTP } from '../../utils/validate'
-
+import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
+import useWindowSize from '../../utils/useWindowSize';
+import { validatePhoneNumber, validateOTP } from '../../utils/validate';
 
 
 const flexCenter = {
     display: 'flex',
     justifyContent: 'center',
     alignItems: 'center'
-}
+};
 
 const loginInfo = (content) => (
     <Box key={content} sx={{
@@ -50,57 +49,57 @@ const loginInfo = (content) => (
             color: COLORS.contentIcon
         }}>{content}</Typography>
     </Box>
-)
+);
 
 
 
 export default function Login() {
 
-    let windowSize = useWindowSize()
+    let windowSize = useWindowSize();
     const openLogin = useSelector(selectOpenLogin);
-    const [isPhoneValid, setIsPhoneValid] = useState(false)
-    const [isOTPValid, setIsOTPValid] = useState(false)
-    const [waitForOTP, setWaitForOTP] = useState(false)
-    const [loginSuccess, setLoginSuccess] = useState(false)
+    const [isPhoneValid, setIsPhoneValid] = useState(false);
+    const [isOTPValid, setIsOTPValid] = useState(false);
+    const [waitForOTP, setWaitForOTP] = useState(false);
+    const [loginSuccess, setLoginSuccess] = useState(false);
 
     const dispatch = useDispatch();
 
-    const phonePrefix = 84
-    const phonePrefixList = [84, 32, 27]
+    const phonePrefix = 84;
+    const phonePrefixList = [84, 32, 27];
 
     const onClose = () => {
-        dispatch(handleCloseLogin())
-        setLoginSuccess(false)
-        setIsPhoneValid(false)
-        setIsOTPValid(false)
-        setWaitForOTP(false)
+        dispatch(handleCloseLogin());
+        setLoginSuccess(false);
+        setIsPhoneValid(false);
+        setIsOTPValid(false);
+        setWaitForOTP(false);
     };
     const onPhoneChange = (event) => {
         if (validatePhoneNumber(event.target.value)) {
-            setIsPhoneValid(true)
+            setIsPhoneValid(true);
         }
         else {
-            setIsPhoneValid(false)
+            setIsPhoneValid(false);
         }
     }
 
     const onOTPChange = (event) => {
         if (validateOTP(event.target.value)) {
-            setIsOTPValid(true)
+            setIsOTPValid(true);
         }
         else {
-            setIsOTPValid(false)
+            setIsOTPValid(false);
         }
     }
 
     const onEnterPhone = () => {
         // Post phone to server here
-        setWaitForOTP(true)
+        setWaitForOTP(true);
     }
     const onEnterOTP = () => {
         // Post OTP to server here
-        setLoginSuccess(true)
-        dispatch(setToken('token'))
+        setLoginSuccess(true);
+        dispatch(setToken('token'));
     }
 
     return (
@@ -117,7 +116,7 @@ export default function Login() {
                         borderRadius: '30px',
                         margin: 0,
                         width: windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100%',
-                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? 'auto' : '100%',
+                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? 'auto' : '70%',
                         paddingTop: '40px',
                         paddingBottom: '56px',
                         display: flexCenter.display,
@@ -126,7 +125,7 @@ export default function Login() {
                 }}
                 sx={{
                     '& .MuiDialog-container': {
-                        alignItems: windowSize.width > SCREEN_BREAKPOINTS.sm ? 'center' : 'flex-end'
+                        alignItems: 'center'
                     }
                 }}
             >
@@ -287,7 +286,8 @@ export default function Login() {
                                     height: '48px'
                                 }} content={'Tiếp tục'} />
                         </Box>
-                    </Box>'
+                    </Box>
+
                     <Box
                         sx={{
                             display: loginSuccess ? flexCenter.display : 'none',
@@ -310,7 +310,6 @@ export default function Login() {
                             hãy trải nghiệm ứng dụng ngay bây giờ </Typography>
                     </Box>
                 </FormControl>
-
             </Dialog>
         </div >
     )

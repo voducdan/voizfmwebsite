@@ -82,10 +82,11 @@ const CartIcon = (props) => {
 }
 
 const userAvt = (props) => {
-    const { avtSrc, idx, onOpenLogin } = props;
+    const { avtSrc, idx, onOpenLogin, handleCloseSidebarWhenClickAccountIcon } = props;
     if (avtSrc) {
         return (
             <Link
+                onClick={handleCloseSidebarWhenClickAccountIcon}
                 to="/account"
                 key={idx}
                 style={{ textDecoration: 'none' }}
@@ -95,7 +96,6 @@ const userAvt = (props) => {
         )
     }
     return (
-
         <AccountCircleIcon sx={{ width: 40, height: 40 }} onClick={() => { onOpenLogin() }} key={idx} />
     )
 }
@@ -138,14 +138,12 @@ export default function Header() {
 
 
     useEffect(() => {
-        // setAvtSrc('https://picsum.photos/335/335?img=16');
         async function fetchUserInfo() {
             const res = await api.getUserInfo();
             const data = await res.data.data;
             if (data.error) {
                 return;
             }
-
             setAvtSrc(data?.avatar?.thumb_url);
         }
 
@@ -247,6 +245,10 @@ export default function Header() {
         dispatch(setPlaylistResult(data));
     }, 300), []);
 
+    const handleCloseSidebarWhenClickAccountIcon = () => {
+        dispatch(setOpen(false));
+    }
+
     return (
         <AppBar position="fixed" open={openSidebar} windowwidth={windowSize.width}>
             <Toolbar>
@@ -315,7 +317,7 @@ export default function Header() {
                                 }}
                             >
                                 {headerItems.map((item, idx) => (
-                                    item({ numItemsInCart, idx, avtSrc, onOpenLogin })
+                                    item({ numItemsInCart, idx, avtSrc, onOpenLogin, handleCloseSidebarWhenClickAccountIcon })
                                 ))}
                             </Box>
                         )
