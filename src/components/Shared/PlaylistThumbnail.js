@@ -25,7 +25,7 @@ export default function PlaylistThumnail(props) {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     const { id, src, name, authors, isBookmark, hasDelete, handleConfirmDeleteModalOpen, children, width } = props;
-
+    console.log(id)
     const clientWidth = width ? width : (isSm || hasDelete) ? '100%' : '45%'
 
     const authorsString = (authors) => {

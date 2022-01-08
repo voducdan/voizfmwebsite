@@ -153,6 +153,8 @@ export default function Control(props) {
                         columnGap: '10px',
                         width: '100%',
                         mt: -2,
+                        p: '0 25px',
+                        boxSizing: 'border-box'
                     }}
                 >
                     <TinyText>{formatDuration(position)}</TinyText>
