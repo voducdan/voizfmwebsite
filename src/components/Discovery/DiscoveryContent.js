@@ -33,7 +33,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import API from '../../services/api';
 
 const DiscoveryItem = (props) => {
-    const { isSm, discoveryList } = props
+    const { isSm, discoveryList, idx } = props;
     return (
         <Box>
             <Masonry
@@ -45,10 +45,10 @@ const DiscoveryItem = (props) => {
                 }}
             >
                 {discoveryList.map((item, index) => (
-                    <Stack key={index}>
+                    <Stack key={index} key={item.id}>
                         <Link
                             to={`/discoveries/${item.id}`}
-                            key={props.idx}
+                            key={idx}
                             style={{
                                 textDecoration: 'none'
                             }}
@@ -86,7 +86,7 @@ const DiscoveryItem = (props) => {
                                                 ...TEXT_STYLE.content3,
                                                 color: COLORS.contentIcon
                                             }}
-                                        >{item.time}</Typography>
+                                        >{item.published_at}</Typography>
                                     </Box>
                                 </Box>
                                 <Divider sx={{ border: `1px solid ${COLORS.blackStroker}`, margin: 'auto 24px' }} />
@@ -103,10 +103,10 @@ const DiscoveryItem = (props) => {
                                             mb: '16px'
                                         }}
                                     >
-                                        {item.description}
+                                        {item.summary}
                                     </Typography>
                                     {
-                                        item.channel.tags.map((i, idx) => (
+                                        item.channel.tags && item.channel.tags.map((i, idx) => (
                                             <span
                                                 key={idx}
                                                 style={{
@@ -120,22 +120,22 @@ const DiscoveryItem = (props) => {
                                         ))
                                     }
                                     {
-                                        item.channel.status && (
+                                        item.title && (
                                             <Typography
                                                 sx={{
                                                     ...TEXT_STYLE.h3,
                                                     color: COLORS.white
                                                 }}
                                             >
-                                                {item.channel.status}
+                                                {item.title}
                                             </Typography>
                                         )
                                     }
                                 </CardContent>
                                 <CardMedia
                                     component="img"
-                                    image={`${item.avatar.thumb_url}?w=162&auto=format`}
-                                    alt="green iguana"
+                                    image={`${item.image.thumb_url}`}
+                                    alt="img"
                                 />
                                 <CardActions
                                     sx={{
@@ -157,7 +157,7 @@ const DiscoveryItem = (props) => {
                                                 color: COLORS.white
                                             }}
                                         >
-                                            {item.discovery_counter.comment_count} góp ý
+                                            {item.discovery_counter.comments_count} góp ý
                                         </Typography>
                                     </Box>
                                     <Box
@@ -173,7 +173,7 @@ const DiscoveryItem = (props) => {
                                                 color: COLORS.white
                                             }}
                                         >
-                                            {item.discovery_counter.like_count} thích
+                                            {item.discovery_counter.likes_count} thích
                                         </Typography>
                                     </Box>
                                 </CardActions>
@@ -191,26 +191,38 @@ export default function DiscoveryContent() {
     const windowSize = useWindowSize();
     const [categoryList, setCategoryList] = useState([]);
     const [discoveryList, setDiscoveryList] = useState([]);
+    const [showedDiscoveryList, setShowedDiscoveryList] = useState([]);
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     useEffect(() => {
         function getChannelFromDiscovery(data) {
             const arrayUniqueByKey = [...new Map(data.map(item =>
-                [item['channel']['id'], { id: item['channel']['id'], name: item['channel']['name'] }])).values()];
+                [item['channel']['id'], { code: item['channel']['id'], name: item['channel']['name'] }])).values()];
             return arrayUniqueByKey
         };
 
         async function fetchDiscoveries() {
             const api = new API();
             const res = await api.getDiscoveries();
-            const data = await res.data;
+            const data = await res.data.data;
             const categories = getChannelFromDiscovery(data);
             setDiscoveryList(data);
-            setCategoryList([...[{ name: 'Tất cả', channelId: null }], ...categories]);
+            setShowedDiscoveryList(data);
+            setCategoryList([...categories]);
         }
 
         fetchDiscoveries()
-    }, [])
+    }, []);
+
+    const onSelectCategory = async (parent, code) => {
+        if (code === '') {
+            setShowedDiscoveryList([...discoveryList]);
+        }
+        else {
+            const tmpPlaylists = discoveryList.filter(i => i.channel.id === Number(code));
+            setShowedDiscoveryList([...tmpPlaylists]);
+        }
+    }
 
     return (
         <Box
@@ -223,10 +235,10 @@ export default function DiscoveryContent() {
                     pt: '5px'
                 }}
             >
-                <CategoryBar categoryList={categoryList} isSm={isSm} onSelectCategory={() => { console.log(1) }} />
+                {categoryList.length > 0 && (<CategoryBar categoryList={categoryList} isSm={isSm} parent='' onSelectCategory={onSelectCategory} />)}
             </Box>
             <Divider sx={{ borderColor: COLORS.bg2, margin: '28px 0' }} />
-            <DiscoveryItem isSm={isSm} discoveryList={discoveryList} />
+            {showedDiscoveryList.length > 0 && (<DiscoveryItem isSm={isSm} discoveryList={showedDiscoveryList} />)}
         </Box>
     )
 }
