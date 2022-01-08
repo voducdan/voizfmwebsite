@@ -160,7 +160,6 @@ export default function PlatlistDetail() {
         async function bookmarkPlaylist() {
             const res = await api.bookmarkPlaylist(playlist.id);
             const data = await res.data.data;
-            console.log(data);
         }
 
         bookmarkPlaylist();

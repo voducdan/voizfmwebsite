@@ -34,8 +34,6 @@ export default function CategoryBarWithoutSwiper(props) {
             numItems *= 2;
         }
         const itemsList = newCategoryList.slice(0, numItems - 2);
-        console.log(itemsList)
-        console.log(newCategoryList)
         setShowedItems(itemsList);
     }
 

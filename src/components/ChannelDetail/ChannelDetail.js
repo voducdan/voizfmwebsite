@@ -90,7 +90,6 @@ export default function ChannelDetail() {
         async function bookmarkChannel(channelId) {
             const res = await api.bookmarkChannel(channelId);
             const data = await res.data.data;
-            console.log(data);
         }
 
         bookmarkChannel();
