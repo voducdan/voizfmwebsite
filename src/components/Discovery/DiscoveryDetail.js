@@ -57,7 +57,7 @@ const CommentItem = (props) => {
             }}
         >
             <Box>
-                <Avatar sx={{ width: '35px', height: '35px' }} alt='img alt' src={data.user.avatar.thumb_url} />
+                <Avatar sx={{ width: '35px', height: '35px' }} alt='img alt' src={data.user ? data.user.avatar.thumb_url : ''} />
             </Box>
             <Box
                 sx={{
@@ -76,12 +76,16 @@ const CommentItem = (props) => {
                         borderRadius: '10px'
                     }}
                 >
-                    <Typography
-                        sx={{
-                            ...TEXT_STYLE.title1,
-                            color: COLORS.white
-                        }}
-                    >{data.user.first_name} {data.user.last_name}</Typography>
+                    {
+                        data.user && (
+                            <Typography
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white
+                                }}
+                            >{data.user.first_name} {data.user.last_name}</Typography>
+                        )
+                    }
                     <Typography
                         style={{
                             ...TEXT_STYLE.content1,

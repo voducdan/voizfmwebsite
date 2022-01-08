@@ -40,6 +40,7 @@ const DiscoveryItem = (props) => {
                 columns={isSm ? 1 : 3}
                 spacing={isSm ? 0 : 4}
                 sx={{
+                    alignContent: 'flex-start',
                     overflow: 'hidden',
                     margin: 0
                 }}
@@ -66,7 +67,10 @@ const DiscoveryItem = (props) => {
                                     }}
                                 >
                                     <Box>
-                                        <Avatar alt={`${item.channel.name} alt`} src={item.channel.avatar.thumb_url} />
+                                        <Avatar
+                                            alt={`${item.channel.name} alt`}
+                                            src={item.channel.avatar.thumb_url}
+                                        />
                                     </Box>
                                     <Box
                                         sx={{
