@@ -215,10 +215,12 @@ export default function Author() {
                                             <PlaylistThumnail
                                                 width='100%'
                                                 key={i?.id}
+                                                id={i?.id}
                                                 name={i.name}
                                                 src={i?.avatar?.thumb_url}
                                                 authors={i?.authors}
-                                                children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
+                                                children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />
+                                                }
                                             />
                                         ))
                                     }
@@ -336,6 +338,7 @@ export default function Author() {
                                             <PlaylistThumnail
                                                 width='100%'
                                                 key={i?.id}
+                                                id={i?.id}
                                                 name={i.name}
                                                 src={i?.avatar?.thumb_url}
                                                 authors={i?.authors}

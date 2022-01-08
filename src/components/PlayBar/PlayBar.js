@@ -70,7 +70,7 @@ export default function PlayBar() {
                 ...flexStyle('center', 'center'),
                 columnGap: '3%',
                 boxSizing: 'border-box',
-                padding: `${isSm ? 24 : 0}px ${isSm ? 25 : 50}px`,
+                padding: `${isSm ? 24 : 0}px 0`,
                 width: '100%',
                 zIndex: 1201,
                 position: 'fixed',
