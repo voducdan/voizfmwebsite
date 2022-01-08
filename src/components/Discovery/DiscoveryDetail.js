@@ -35,10 +35,9 @@ const CommentItem = (props) => {
         try {
             const data = await res.data;
             if (data.error) {
-                console.timeLog(data.error);
+                console.log(data.error);
                 return;
             }
-            console.log(data.data)
         }
         catch (err) {
             console.log(err)

@@ -483,6 +483,8 @@ export default function Search() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const [type, setType] = useState('playlists');
     const [searchResults, setSearchResults] = useState([]);
+    const [searchMeta, setSearchMeta] = useState({});
+    const [resetStateFlag, setResetStateFlag] = useState(false);
     const queryParams = useQuery();
     const searchKey = queryParams.get('searchKey');
     const NUMBER_ITEMS_PER_LINE = isSm ? 3 : 5;
@@ -490,19 +492,51 @@ export default function Search() {
     const SPACE_BETWEEN = isSm ? 16 : 24;
 
     useEffect(() => {
-        async function fetchSearchResult() {
-            const res = await api.getSearchResults(type, searchKey);
-            const data = await res.data.data;
-            setSearchResults(data);
-        }
+        const params = {
+            type,
+            searchKey,
+            nextOffset: null,
+            language: null,
+            nextQueryType: null
+        };
 
         updateRecentlyKeywords();
-        fetchSearchResult();
+        fetchSearchResult(params);
+    }, [resetStateFlag]);
+
+    useEffect(() => {
+        setSearchResults([]);
+        setSearchMeta({});
+        setResetStateFlag(!resetStateFlag);
     }, [type, searchKey]);
 
     useEffect(() => {
         updateRecentlyKeywords();
     }, []);
+
+    const fetchSearchResult = async (params) => {
+        try {
+            const res = await api.getSearchResults(
+                params.type,
+                params.searchKey,
+                params.nextOffset,
+                params.language,
+                params.nextQueryType
+            );
+            const data = await res.data;
+            if (data.error) {
+                console.log(data.error);
+                return;
+            }
+            setSearchResults([...searchResults, ...data.data]);
+            if (['playlists', 'audios'].includes(type)) {
+                setSearchMeta({ ...data.meta });
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
 
     const handleClickSearchTab = (type) => {
         setType(type);
@@ -526,6 +560,22 @@ export default function Search() {
             recentlyKeywork = recentlyKeywork.slice(1);
         }
         setRecentlyKeywork(recentlyKeywork)
+    }
+
+    const handleLoadMoreSearch = () => {
+        const params = {
+            type: type,
+            searchKey: searchKey,
+            nextOffset: null,
+            language: null,
+            nextQueryType: null
+        }
+        if (['playlists', 'audios'].includes(type)) {
+            params['nextOffset'] = searchMeta.next_offset;
+            params['nextQueryType'] = searchMeta.next_query_type;
+            params['language'] = searchMeta.language;
+        }
+        fetchSearchResult(params);
     }
 
     return (
@@ -622,7 +672,7 @@ export default function Search() {
                 }
             </Box>
             {
-                (searchResults.length > 0) && (
+                (searchMeta?.next_offset) && (
                     <Box
                         sx={{
                             width: '100%',
@@ -630,6 +680,7 @@ export default function Search() {
                         }}
                     >
                         <Button
+                            onClick={handleLoadMoreSearch}
                             sx={{
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,

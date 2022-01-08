@@ -109,7 +109,6 @@ export default function EditProfileModal(props) {
         userFormData.append('oauth2', userInfo.oauth2);
         const res = await api.updateUserInfo(userFormData);
         const data = await res.data.data;
-        console.log(data);
     }
 
     const handleSelectAvatar = (e) => {

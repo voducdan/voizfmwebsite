@@ -44,7 +44,6 @@ export default function BookRequest() {
             const data = res.data.data;
             setRequestedBooks(data);
         }
-
         fetchRequestedBook();
     }, [])
 
@@ -54,7 +53,7 @@ export default function BookRequest() {
                 setRequestSuccess(false);
             }, 3000)
         }
-    }, [requestSuccess])
+    }, [requestSuccess]);
 
     const handleChange = (e) => {
         if (e.target.value !== '') {
@@ -224,8 +223,9 @@ export default function BookRequest() {
                         }}
                     >
                         {
-                            requestedBooks.map(item => (
+                            requestedBooks.map((item, idx) => (
                                 <Box
+                                    key={idx}
                                     sx={{
                                         width: '100%',
                                         ...flexStyle('space-between', 'center'),
@@ -233,7 +233,6 @@ export default function BookRequest() {
                                     }}
                                 >
                                     <Box
-                                        key={item.id}
                                         sx={{
                                             width: '100%',
                                             ...flexStyle('flex-start', 'flex-start'),

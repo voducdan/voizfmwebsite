@@ -153,7 +153,7 @@ export default class API {
     getPlaylistRecommendation = () => {
         return this.init().get(`/playlists/recommendation`);
     }
-    getSearchResults = (type, keyword, limit = 20, next_offset = 1, language = '', next_query_type = '') => {
+    getSearchResults = (type, keyword, next_offset = null, language = null, next_query_type = null, limit = 20) => {
         const params = { keyword, limit, next_offset, language, next_query_type };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/search/${type}?${queryString}`);
