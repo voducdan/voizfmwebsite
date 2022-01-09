@@ -9,20 +9,25 @@ const paymentSlice = createSlice({
             totalPrice: 0,
             finalPrice: 0
         },
-        cart: []
+        cart: [],
+        addToCartFlag: 0
     },
     reducers: {
         setItems: (state, action) => {
-            state.data = { ...action.payload }
+            state.data = { ...action.payload };
         },
         setCart: (state, action) => {
-            state.cart = [...action.payload]
-        }
+            state.cart = [...action.payload];
+        },
+        setAddToCartFlag: (state, action) => {
+            state.addToCartFlag = action.payload;
+        },
     }
 });
 
-export const { setItems, setCart } = paymentSlice.actions;
+export const { setItems, setCart, setAddToCartFlag } = paymentSlice.actions;
 export const selectPaymentData = (state) => state.payment.data;
 export const selectCart = (state) => state.payment.cart;
+export const selectAddToCartFlag = (state) => state.payment.addToCartFlag;
 
 export default paymentSlice.reducer;

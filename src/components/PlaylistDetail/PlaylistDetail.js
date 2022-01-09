@@ -4,6 +4,12 @@ import { useState, useEffect } from 'react';
 // import react router dom
 import { useParams, Link } from 'react-router-dom';
 
+// import redux
+import { useSelector, useDispatch } from 'react-redux';
+
+// import reducer, actions
+import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
+
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
@@ -33,7 +39,8 @@ import {
     List,
     ListItem,
     ListItemText,
-    ListItemButton
+    ListItemButton,
+    Tooltip
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -87,6 +94,7 @@ export default function PlatlistDetail() {
 
     const windowSize = useWindowSize();
     const { id } = useParams();
+    const cart = useSelector(selectCart);
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
     const [playlistAudios, setPlaylistAudios] = useState([]);
@@ -100,10 +108,13 @@ export default function PlatlistDetail() {
     const [contentRating, setContentRating] = useState(0);
     const [voiceRating, setVoiceRating] = useState(0);
     const [rateContent, setRateContent] = useState('');
+    const [addToCartError, setAddToCartError] = useState(false);
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
     const infoPanelHeight = isSm ? 190 : 150;
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         async function fetchPlaylist() {
@@ -241,6 +252,24 @@ export default function PlatlistDetail() {
             setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
         }
         cb();
+    }
+
+    const handleAddToCart = () => {
+        // handle api call to add to cart
+
+        // add to cart store
+        const isItemExists = cart.some(i => i.id === playlist.id);
+        if (!isItemExists) {
+            const tmpCart = [...cart, playlist];
+            dispatch(setCart(tmpCart));
+            dispatch(setAddToCartFlag(1));
+        }
+        else {
+            setAddToCartError(true);
+            setTimeout(() => {
+                setAddToCartError(false);
+            }, 1500)
+        }
     }
 
     return (
@@ -787,18 +816,21 @@ export default function PlatlistDetail() {
                     columnGap: '24px'
                 }}
             >
-                <Button
-                    sx={{
-                        border: '1px solid rgba(255, 255, 255, 0.1)',
-                        width: isSm ? '50%' : '20%',
-                        borderRadius: '6px',
-                        ...TEXT_STYLE.title1,
-                        color: COLORS.white,
-                        textTransform: 'none',
-                        height: '48px'
-                    }}
-                    variant="outlined"
-                >Thêm vào giỏ hàng</Button>
+                <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line' }}>{'Sản phẩm đã được thêm vào.\n Vui lòng kiểm tra lại giỏ hàng!'}</div>}>
+                    <Button
+                        onClick={handleAddToCart}
+                        sx={{
+                            border: '1px solid rgba(255, 255, 255, 0.1)',
+                            width: isSm ? '50%' : '20%',
+                            borderRadius: '6px',
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            height: '48px'
+                        }}
+                        variant="outlined"
+                    >Thêm vào giỏ hàng</Button>
+                </Tooltip>
                 <Link
                     to='/up-vip/'
                     style={{

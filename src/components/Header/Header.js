@@ -8,7 +8,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
-import { selectCart, setCart } from '../../redux/payment';
+import { selectCart, setCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
 
 // import react router component
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -27,7 +27,8 @@ import {
     FormControl,
     Avatar,
     Box,
-    Badge
+    Badge,
+    Tooltip
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -70,16 +71,18 @@ const BookmarkIcon = (props) => {
 }
 
 const CartIcon = (props) => {
-    const { handleCloseSidebarWhenClickAccountIcon, numItemsInCart, idx } = props;
+    const { handleCloseSidebarWhenClickAccountIcon, numItemsInCart, idx, addToCartFlag } = props;
     return (
         <Link
             onClick={handleCloseSidebarWhenClickAccountIcon}
             to={`/cart`}
             key={idx}
         >
-            <Badge badgeContent={numItemsInCart || 0} color="error">
-                <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />
-            </Badge>
+            <Tooltip open={Boolean(addToCartFlag)} title="Thêm vào giỏ hàng thành công!">
+                <Badge badgeContent={numItemsInCart || 0} color="error">
+                    <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+                </Badge>
+            </Tooltip>
         </Link>
     )
 }
@@ -130,6 +133,7 @@ export default function Header() {
     const navigate = useNavigate();
     const openSidebar = useSelector(selectOpenSidebar);
     const cart = useSelector(selectCart);
+    const addToCartFlag = useSelector(selectAddToCartFlag);
     const [avtSrc, setAvtSrc] = useState(null);
     const [numItemsInCart, setNumItemsInCart] = useState(cart.length);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -168,6 +172,14 @@ export default function Header() {
     useEffect(() => {
         setNumItemsInCart(cart.length);
     }, [cart]);
+
+    useEffect(() => {
+        if (addToCartFlag === 1) {
+            setTimeout(() => {
+                dispatch(setAddToCartFlag(0));
+            }, 1000)
+        }
+    }, [addToCartFlag]);
 
     useEffect(() => {
         setShowHeaderItems(true);
@@ -332,7 +344,7 @@ export default function Header() {
                                 }}
                             >
                                 {headerItems.map((item, idx) => (
-                                    item({ numItemsInCart, idx, avtSrc, onOpenLogin, handleCloseSidebarWhenClickAccountIcon })
+                                    item({ numItemsInCart, idx, avtSrc, addToCartFlag, onOpenLogin, handleCloseSidebarWhenClickAccountIcon })
                                 ))}
                             </Box>
                         )
