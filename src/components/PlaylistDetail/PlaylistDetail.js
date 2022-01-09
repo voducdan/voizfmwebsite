@@ -2,7 +2,7 @@
 import { useState, useEffect } from 'react';
 
 // import react router dom
-import { useParams, Link } from 'react-router-dom';
+import { useParams, Link, useNavigate } from 'react-router-dom';
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -40,7 +40,11 @@ import {
     ListItem,
     ListItemText,
     ListItemButton,
-    Tooltip
+    Tooltip,
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogActions
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -95,6 +99,7 @@ export default function PlatlistDetail() {
     const windowSize = useWindowSize();
     const { id } = useParams();
     const cart = useSelector(selectCart);
+    const navigate = useNavigate();
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
     const [playlistAudios, setPlaylistAudios] = useState([]);
@@ -109,6 +114,7 @@ export default function PlatlistDetail() {
     const [voiceRating, setVoiceRating] = useState(0);
     const [rateContent, setRateContent] = useState('');
     const [addToCartError, setAddToCartError] = useState(false);
+    const [playAudioError, setPlayAudioError] = useState(false);
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
@@ -270,6 +276,14 @@ export default function PlatlistDetail() {
                 setAddToCartError(false);
             }, 1500)
         }
+    }
+
+    const handlePlayAudio = (audioId) => {
+        if (playlist.promotion === 'free') {
+            navigate(`/audio-play/${audioId ? audioId : playlistAudios[0].id}`)
+            return;
+        }
+        setPlayAudioError(true);
     }
 
     return (
@@ -473,26 +487,19 @@ export default function PlatlistDetail() {
                             margin: '16px 0'
                         }}
                     >
-                        <Link
-                            to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}?playlist=${playlist?.id}`}
-                            style={{
-                                textDecoration: 'none',
+                        <Button
+                            onClick={handlePlayAudio}
+                            sx={{
+                                bgcolor: COLORS.main,
                                 width: '50%',
+                                borderRadius: '6px',
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                textTransform: 'none',
+                                height: '48px'
                             }}
-                        >
-                            <Button
-                                sx={{
-                                    bgcolor: COLORS.main,
-                                    width: '100%',
-                                    borderRadius: '6px',
-                                    ...TEXT_STYLE.title1,
-                                    color: COLORS.white,
-                                    textTransform: 'none',
-                                    height: '48px'
-                                }}
-                                startIcon={<Play />}
-                            >Phát tất cả</Button>
-                        </Link>
+                            startIcon={<Play />}
+                        >Phát tất cả</Button>
                         <Button
                             sx={{
                                 bgcolor: COLORS.second,
@@ -717,7 +724,10 @@ export default function PlatlistDetail() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white,
                                             textTransform: 'none',
-                                            height: '48px'
+                                            height: '48px',
+                                            ':hover': {
+                                                bgcolor: COLORS.main
+                                            }
                                         }}
                                         startIcon={<Play />}
                                     >Phát tất cả</Button>
@@ -759,46 +769,40 @@ export default function PlatlistDetail() {
                             <List sx={{ width: '100%' }}>
                                 {playlistAudios.map((value, idx) => {
                                     return (
-                                        <Link
-                                            to={`/audio-play/${value?.id}`}
+                                        <ListItem
                                             key={value.id}
-                                            style={{
-                                                textDecoration: 'none'
+                                            onClick={() => { handlePlayAudio(value?.id) }}
+                                            sx={{
+                                                paddingLeft: 0,
+                                                paddingRight: '20px',
+                                                borderTop: `.5px solid ${COLORS.placeHolder}`,
+                                                height: '72px'
                                             }}
+                                            secondaryAction={
+                                                <Typography
+                                                    sx={{
+                                                        ...TEXT_STYLE.content2,
+                                                        color: COLORS.bg4
+                                                    }}
+                                                >{formatDuration(value.duration)}</Typography>
+                                            }
                                         >
-                                            <ListItem
-                                                sx={{
-                                                    paddingLeft: 0,
-                                                    paddingRight: '20px',
-                                                    borderTop: `.5px solid ${COLORS.placeHolder}`,
-                                                    height: '72px'
-                                                }}
-                                                secondaryAction={
-                                                    <Typography
-                                                        sx={{
-                                                            ...TEXT_STYLE.content2,
-                                                            color: COLORS.bg4
-                                                        }}
-                                                    >{formatDuration(value.duration)}</Typography>
-                                                }
-                                            >
-                                                <ListItemButton role={undefined} onClick={() => (1)} dense>
-                                                    <ListItemText
-                                                        sx={{
-                                                            'span': {
-                                                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                                                                color: COLORS.white,
-                                                                display: '-webkit-box',
-                                                                textOverflow: 'ellipsis',
-                                                                WebkitLineClamp: 2,
-                                                                WebkitBoxOrient: 'vertical',
-                                                                overflow: 'hidden'
-                                                            }
-                                                        }}
-                                                        id={`label-${value.id}`} primary={value.name} />
-                                                </ListItemButton>
-                                            </ListItem>
-                                        </Link>
+                                            <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                                <ListItemText
+                                                    sx={{
+                                                        'span': {
+                                                            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                            color: COLORS.white,
+                                                            display: '-webkit-box',
+                                                            textOverflow: 'ellipsis',
+                                                            WebkitLineClamp: 2,
+                                                            WebkitBoxOrient: 'vertical',
+                                                            overflow: 'hidden'
+                                                        }
+                                                    }}
+                                                    id={`label-${value.id}`} primary={value.name} />
+                                            </ListItemButton>
+                                        </ListItem>
                                     );
                                 })}
                             </List>
@@ -851,6 +855,62 @@ export default function PlatlistDetail() {
                     >Mua gói VIP</Button>
                 </Link>
             </Box>
+            <Dialog
+                open={playAudioError}
+                onClose={() => { setPlayAudioError(false) }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        bgcolor: COLORS.bg1,
+                        p: '40px 56px',
+                        boxSizing: 'border-box',
+                        borderRadius: isSm ? '10px' : '30px',
+                        ...(isSm && { m: '0 16px' })
+                    }
+                }}
+            >
+                <DialogContent>
+                    <DialogContentText
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.contentIcon,
+                            textAlign: 'center',
+                            whiteSpace: 'pre-line'
+                        }}
+                    >
+                        Vui lòng đăng nhập tài khoản VIP hoặc nâng cấp tài khoản để được nghe!
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center'),
+                        columnGap: '16px'
+                    }}
+                >
+                    <Link
+                        to={`/up-vip`}
+                        style={{
+                            textDecoration: 'none',
+                            maxWidth: '192px',
+                            width: 'calc(50% - 8px)',
+                        }}
+                    >
+                        <Button
+                            sx={{
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                textTransform: 'none',
+                                borderRadius: '8px',
+                                width: '100%',
+                                height: '48px',
+                                bgcolor: COLORS.main
+                            }}
+                            autoFocus
+                        >
+                            UP VIP
+                        </Button>
+                    </Link>
+                </DialogActions>
+            </Dialog>
         </Box >
     )
 }

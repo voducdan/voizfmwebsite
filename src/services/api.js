@@ -36,19 +36,13 @@ export default class API {
         return queryString
     }
 
-    getUser = (id) => {
-        // reset base url for test
-        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
-        return this.init().get(`/accounts/${id}`)
-    }
-
     getAudio = (id) => {
         return this.init().get(`/audios/${id}`)
     }
 
     getCart = () => {
         // reset base url for test
-        this.base_url = `http://localhost:3333`;
+        // this.base_url = `http://localhost:3333`;
         return this.init().get(`/cart`);
     }
 
@@ -257,7 +251,7 @@ export default class API {
     }
 
     getUserInfo = () => {
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        // this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().get('/profiles/me');
     }
 
