@@ -107,6 +107,15 @@ export default class API {
         this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         return this.init().get(`/playlists/listenings`);
     }
+    addListeningPlaylists = (audioId, lastDuration, playlistId) => {
+        const data = {
+            last_audio_id: audioId,
+            last_duration: lastDuration,
+            playlist_id: playlistId
+        }
+        // this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
+        return this.init().post(`/playlists/listenings`, data);
+    }
     deleteListeningPlaylist = (id) => {
         this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         return this.init().delete(`/playlists/listenings`, { id });

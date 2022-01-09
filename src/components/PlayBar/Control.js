@@ -63,10 +63,17 @@ export default function Control(props) {
     // }, [audioData]);
 
     useEffect(() => {
-        !paused ? audio.play() : audio.pause();
+        if (paused) {
+            audio.pause();
+            addAudioToListening(audioData.id, position, audioData.playlist.id);
+        }
+        else {
+            audio.play();
+        }
     }, [paused]);
 
     useEffect(() => {
+        addAudioToListening(audioData.id, position, audioData.playlist.id);
         audio.addEventListener('ended', () => setPaused(true));
         // audio.addEventListener('timeupdate', (e) => {
         //     const currentTime = e.target.currentTime;
@@ -78,11 +85,27 @@ export default function Control(props) {
     }, []);
 
     const onPlayClick = () => {
-        setPaused(!paused)
-        dispatch(togglePlayAudio())
+        setPaused(!paused);
+        dispatch(togglePlayAudio());
     }
 
-    const mainIconColor = COLORS.white
+    const addAudioToListening = async (audioId, lastDuration, playlistId) => {
+        try {
+            const res = await api.addListeningPlaylists(audioData.id, position, audioData.playlist.id);
+            const data = await res.data;
+            if (data.error) {
+                console.log(data.error);
+                return;
+            }
+
+            console.log(data.data);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const mainIconColor = COLORS.white;
 
     return (
         <Box sx={{ width: '100%', overflow: 'hidden' }}>
