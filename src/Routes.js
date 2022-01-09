@@ -2,7 +2,8 @@ import Home from './pages/Home/Home';
 import Account from './components/Account/Account';
 import PlaylistDetail from './components/PlaylistDetail/PlaylistDetail';
 import AudioPlay from './components/AudioPlay/AudioPlay';
-import Payment from './components/Payment/Payment';
+import Cart from './components/Payment/Cart';
+import Checkout from './components/Payment/Checkout';
 import UpVip from './components/UpVip/UpVip';
 import Discovery from './components/Discovery/Discovery';
 import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
@@ -45,7 +46,13 @@ const ROUTES = [
         path: "/cart",
         key: "APP_CART",
         exact: true,
-        component: <Payment />,
+        component: <Cart />,
+    },
+    {
+        path: "/checkout",
+        key: "APP_CHECKOUT",
+        exact: true,
+        component: <Checkout />,
     },
     {
         path: "/up-vip",

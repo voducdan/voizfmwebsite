@@ -4,13 +4,14 @@ import { useEffect, useState, useCallback } from 'react';
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
 
-// import react router component
-import { Link, useNavigate, useLocation } from 'react-router-dom';
-
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
+import { selectCart, setCart } from '../../redux/payment';
+
+// import react router component
+import { Link, useNavigate, useLocation } from 'react-router-dom';
 
 // Import MUI component
 import { styled } from '@mui/material/styles';
@@ -69,12 +70,14 @@ const BookmarkIcon = (props) => {
 }
 
 const CartIcon = (props) => {
+    const { handleCloseSidebarWhenClickAccountIcon, numItemsInCart, idx } = props;
     return (
         <Link
+            onClick={handleCloseSidebarWhenClickAccountIcon}
             to={`/cart`}
-            key={props}
+            key={idx}
         >
-            <Badge badgeContent={props.numItemsInCart || 0} color="error">
+            <Badge badgeContent={numItemsInCart || 0} color="error">
                 <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />
             </Badge>
         </Link>
@@ -125,19 +128,26 @@ export default function Header() {
     const search = location.search;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const navigate = useNavigate();
+    const openSidebar = useSelector(selectOpenSidebar);
+    const cart = useSelector(selectCart);
     const [avtSrc, setAvtSrc] = useState(null);
-    const [numItemsInCart, setNumItemsInCart] = useState(0);
+    const [numItemsInCart, setNumItemsInCart] = useState(cart.length);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchOnMb, setSearchOnMb] = useState(false);
     const [searchOnPC, setSearchOnPC] = useState(false);
     const [showHeaderItems, setShowHeaderItems] = useState(true);
-    const openSidebar = useSelector(selectOpenSidebar);
     const headerItems = [BookmarkIcon, CartIcon, userAvt];
 
     const dispatch = useDispatch();
 
 
     useEffect(() => {
+        async function fetchCart() {
+            const res = await api.getCart();
+            const data = await res.data;
+            dispatch(setCart(data));
+        };
+
         async function fetchUserInfo() {
             const res = await api.getUserInfo();
             const data = await res.data.data;
@@ -148,11 +158,16 @@ export default function Header() {
         }
 
         fetchUserInfo();
+        fetchCart();
     }, []);
 
     useEffect(() => {
         setSearchStatus();
     }, [isSm]);
+
+    useEffect(() => {
+        setNumItemsInCart(cart.length);
+    }, [cart]);
 
     useEffect(() => {
         setShowHeaderItems(true);

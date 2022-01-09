@@ -8,6 +8,7 @@ import tokenSlice from './token';
 import playAudioReducer from './playAudio';
 import audioReducer from './audio';
 import openSearchReducer from './OpenSearch';
+import paymentReducer from './payment';
 
 export default configureStore({
   reducer: {
@@ -16,7 +17,8 @@ export default configureStore({
     token: tokenSlice,
     playAudio: playAudioReducer,
     audio: audioReducer,
-    openSearch: openSearchReducer
+    openSearch: openSearchReducer,
+    payment: paymentReducer
   },
 })
 

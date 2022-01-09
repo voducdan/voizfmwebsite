@@ -1,6 +1,15 @@
 // import react
 import { useState } from 'react';
 
+// import react router component
+import { useNavigate } from 'react-router-dom';
+
+// import redux
+import { useDispatch } from 'react-redux';
+
+// Import redux reducer, actions
+import { setItems } from '../../redux/payment';
+
 // import MUI components
 import {
     Box,
@@ -30,7 +39,7 @@ const VipPackageBenefitItem = (props) => {
             <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.caption10Regular : TEXT_STYLE.content1),
-                    color: idx > 2 ? COLORS.second : COLORS.contentIcon
+                    color: idx >= 2 ? COLORS.second : COLORS.contentIcon
                 }}
             >{benefit}</Typography>
         </Box >
@@ -113,8 +122,8 @@ const vipPackages = [
     },
     {
         name: 'Tiết kiệm',
-        price: 199000,
-        time: '3 tháng',
+        price: 699000,
+        time: '12 tháng',
         benefit: [
             'Nghe thoải mái',
             'Được tải về đt',
@@ -138,10 +147,23 @@ export default function VipPackage() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const [selectedPackage, setSelectedPackage] = useState(0);
+    const [selectedPackage, setSelectedPackage] = useState(1);
+    const dispatch = useDispatch();
 
     const handleSelectPackage = (idx) => {
         setSelectedPackage(idx);
+    };
+
+    const handleRegisterVip = () => {
+        // const paymentData = {
+        //     selectedItems: [
+
+        //     ],
+        //     totalPrice: vipPackages[selectedPackage]['price'],
+        //     finalPrice: vipPackages[selectedPackage]['price']
+        // };
+        // dispatch(setItems(paymentData));
+        // navigate('/checkout', { replace: true });
     }
 
     return (
@@ -199,6 +221,7 @@ export default function VipPackage() {
                 </Box>
 
                 <Button
+                    onClick={handleRegisterVip}
                     sx={{
                         textTransform: 'none',
                         bgcolor: COLORS.error,
