@@ -64,7 +64,7 @@ const paymentMethods = [
     {
         code: 'appota',
         name: 'Appota',
-        src: '/imagesappota.png'
+        src: '/images/appota.png'
     },
     // {
     //     code: 'zalopay',
