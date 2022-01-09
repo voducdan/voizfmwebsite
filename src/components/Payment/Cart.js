@@ -1,6 +1,15 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import react router component
+import { useNavigate } from 'react-router-dom';
+
+// import redux
+import { useDispatch, useSelector } from 'react-redux';
+
+// Import redux reducer, actions
+import { setItems, setCart, selectPaymentData, selectCart } from '../../redux/payment';
+
 // import MUI components
 import {
     Typography,
@@ -18,7 +27,12 @@ import {
     Select,
     InputBase,
     Paper,
-    Button
+    Button,
+    Dialog,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions
 } from '@mui/material';
 import DeleteIcon from '@mui/icons-material/Delete';
 
@@ -31,80 +45,146 @@ import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
 
-export default function Cart(props) {
+// import service
+import API from '../../services/api';
 
-    const { setStep, cart, setTotalPrice, setFinalPrice, totalPrice, finalPrice, selectedItem, setSelectedItem } = props
+export default function Cart() {
+    const api = new API();
+
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-
+    const navigate = useNavigate();
+    const paymentData = useSelector(selectPaymentData);
+    const cart = useSelector(selectCart);
+    console.log(cart)
+    const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
+    const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
+    const [isDiscountCodeValid, setIsDiscountCodeValidsetDiscountCode] = useState(true);
+    const [totalPrice, setTotalPrice] = useState(0);
+    const [finalPrice, setFinalPrice] = useState(0);
     const [checkControl, setCheckControl] = useState({});
     const [checkAllControl, setCheckAllControl] = useState(false);
+    const [confirmDeleteCartItemModal, setConfirmDeleteCartItemModal] = useState(false);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
+
         function initCheckControl(cart) {
-            const init = {}
+            const init = {};
             cart.forEach(i => {
-                const id = i.id
-                init[id] = false
+                const id = i.id;
+                init[id] = false;
             })
             selectedItem.forEach(i => {
-                const id = i.id
-                init[id] = true
+                const id = i.id;
+                init[id] = true;
             })
-
-            setCheckControl(init)
+            setCheckControl(init);
         }
 
-        initCheckControl(cart)
+        initCheckControl(cart);
     }, []);
 
     useEffect(() => {
+        setSelectedItem(paymentData.selectedItem);
+        setDiscountCode(paymentData.discountCode);
+    }, [paymentData]);
+
+    useEffect(() => {
         function calculatePrice() {
-            const price = selectedItem.reduce((a, b) => ({ sale_coin_price: (a.sale_coin_price + b.sale_coin_price) }), { sale_coin_price: 0 })['sale_coin_price']
-            setTotalPrice(price)
-            // wait for handle discount code
-            setFinalPrice(price)
+            if (selectedItem.length > 0) {
+                const price = selectedItem.reduce((a, b) => ({ sale_coin_price: (a.sale_coin_price + b.sale_coin_price) }), { sale_coin_price: 0 })['sale_coin_price'];
+                setTotalPrice(price);
+                // wait for handle discount code
+                setFinalPrice(price);
+            }
         }
-        calculatePrice()
-    }, [selectedItem])
+        calculatePrice();
+    }, [selectedItem]);
 
     const handleSelectAllItem = (event) => {
-        const checked = event.target.checked
-        const checkAll = {}
+        const checked = event.target.checked;
+        const checkAll = {};
         cart.forEach(i => {
-            const id = i.id
-            checkAll[id] = checked
+            const id = i.id;
+            checkAll[id] = checked;
         })
         if (checked) {
-            setSelectedItem(cart)
+            setSelectedItem(cart);
         }
         else {
-            setSelectedItem([])
+            setSelectedItem([]);
         }
-        setCheckAllControl(checked)
-        setCheckControl(checkAll)
+        setCheckAllControl(checked);
+        setCheckControl(checkAll);
     }
     const handleSelectCartItem = (event, id) => {
-        const checked = event.target.checked
-        const copyCheckedControl = { ...checkControl }
-        copyCheckedControl[id] = checked
-        setCheckControl(copyCheckedControl)
+        const checked = event.target.checked;
+        const copyCheckedControl = { ...checkControl };
+        copyCheckedControl[id] = checked;
+        setCheckControl(copyCheckedControl);
         if (checked) {
-            const item = cart.filter(i => i.id === id)
-            const currentSelect = [...selectedItem, ...item]
-            const isCheckAll = currentSelect.length === cart.length
-            setCheckAllControl(isCheckAll)
-            setSelectedItem(currentSelect)
+            const item = cart.filter(i => i.id === id);
+            const currentSelect = [...selectedItem, ...item];
+            const isCheckAll = currentSelect.length === cart.length;
+            setCheckAllControl(isCheckAll);
+            setSelectedItem(currentSelect);
         }
         else {
-            const remainedItem = selectedItem.filter(i => i.id !== id)
-            setSelectedItem(remainedItem)
-            setCheckAllControl(false)
+            const remainedItem = selectedItem.filter(i => i.id !== id);
+            setSelectedItem(remainedItem);
+            setCheckAllControl(false);
         }
-    }
+    };
 
     const handlePayment = () => {
-        setStep(2)
+        const paymentData = {
+            selectedItem: selectedItem,
+            discountCode: discountCode,
+            totalPrice: totalPrice,
+            finalPrice: totalPrice
+        };
+        dispatch(setItems(paymentData));
+        navigate('/checkout', { replace: true });
+    };
+
+    const handleRemoveItem = (id) => {
+        // handle api call
+
+        // handle remove item local
+        const cartItems = [...cart];
+        const remainedItems = cartItems.filter(i => i.id !== id);
+        const remainedSelectedItems = selectedItem.filter(i => i.id !== id)
+        dispatch(setCart([...remainedItems]));
+        setSelectedItem([...remainedSelectedItems]);
+    }
+
+    const handleConfirmDeleteModalClose = () => {
+        setConfirmDeleteCartItemModal(false);
+    }
+
+    const handleSubmitDeleteCartItem = () => {
+        // handle api call
+
+        // handle remove item in local
+        const selectedItemId = selectedItem.map(i => i.id);
+        const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
+        dispatch(setCart([...remainedItems]));
+        setSelectedItem([]);
+        setConfirmDeleteCartItemModal(false);
+    }
+
+    const handleInputDiscountCode = (e) => {
+        setDiscountCode(e.target.value);
+        setIsDiscountCodeValidsetDiscountCode(true);
+    }
+
+    const handleValidateDiscountCode = () => {
+        // call api to validate
+
+        // if discountCode is not valid, reset to ''
+        setIsDiscountCodeValidsetDiscountCode(false);
     }
 
     return (
@@ -158,6 +238,7 @@ export default function Cart(props) {
                                         }}
                                     >Chọn tất cả (4 sản phẩm)</ListItemText>
                                     <ListItemIcon
+                                        onClick={() => { setConfirmDeleteCartItemModal(true) }}
                                         sx={{
                                             alignItems: 'center',
                                             columnGap: '14px'
@@ -255,7 +336,7 @@ export default function Cart(props) {
                                                         color: COLORS.contentIcon
                                                     }}
                                                 >{formatPrice(item.sale_coin_price)}đ</Typography>
-                                                <DeleteIcon sx={{ color: COLORS.contentIcon }} />
+                                                <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />
                                             </ListItemIcon>
                                         </MenuItem>
                                     ))
@@ -367,10 +448,13 @@ export default function Cart(props) {
                                                         padding: '13px 18px'
                                                     }
                                                 }}
+                                                value={discountCode}
+                                                onChange={handleInputDiscountCode}
                                                 placeholder="Nhập mã giảm giá (Nếu có)"
                                                 inputProps={{ 'aria-label': 'discount-code' }}
                                             />
                                             <Button
+                                                onClick={handleValidateDiscountCode}
                                                 sx={{
                                                     width: '20%',
                                                     textTransform: 'none',
@@ -382,6 +466,17 @@ export default function Cart(props) {
                                                 }}
                                             >Sử dụng</Button>
                                         </Paper>
+                                        {
+                                            !isDiscountCodeValid && (
+                                                <Typography
+                                                    sx={{
+                                                        color: COLORS.error,
+                                                        ...TEXT_STYLE.content1,
+                                                        mt: '10px'
+                                                    }}
+                                                >Mã giảm giá {discountCode} không hợp lệ</Typography>
+                                            )
+                                        }
                                     </Box>
                                 )
                             }
@@ -425,6 +520,7 @@ export default function Cart(props) {
                                     </Box>
                                 </Box>
                                 <Button
+                                    disabled={selectedItem.length === 0}
                                     sx={{
                                         width: '100%',
                                         textTransform: 'none',
@@ -480,7 +576,78 @@ export default function Cart(props) {
                     </Box>
                 )
             }
-
+            <Dialog
+                open={confirmDeleteCartItemModal}
+                onClose={handleConfirmDeleteModalClose}
+                sx={{
+                    '& .MuiPaper-root': {
+                        bgcolor: COLORS.bg1,
+                        p: '40px 56px',
+                        boxSizing: 'border-box',
+                        borderRadius: isSm ? '10px' : '30px',
+                        ...(isSm && { m: '0 16px' })
+                    }
+                }}
+            >
+                <DialogTitle
+                    sx={{
+                        ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
+                        color: COLORS.white,
+                        textAlign: 'center'
+                    }}
+                >
+                    Voiz FM
+                </DialogTitle>
+                <DialogContent>
+                    <DialogContentText
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.contentIcon,
+                            textAlign: 'center'
+                        }}
+                    >
+                        Bạn có muốn xóa những sản phẩm này ra khỏi giỏ hàng?
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center'),
+                        columnGap: '16px'
+                    }}
+                >
+                    <Button
+                        onClick={handleConfirmDeleteModalClose}
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            borderRadius: '8px',
+                            maxWidth: '192px',
+                            width: 'calc(50% - 8px)',
+                            height: '48px',
+                            bgcolor: COLORS.bg3
+                        }}
+                    >
+                        Hủy
+                    </Button>
+                    <Button
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            borderRadius: '8px',
+                            maxWidth: '192px',
+                            width: 'calc(50% - 8px)',
+                            height: '48px',
+                            bgcolor: COLORS.main
+                        }}
+                        onClick={handleSubmitDeleteCartItem}
+                        autoFocus
+                    >
+                        Đồng ý
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }

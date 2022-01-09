@@ -7,28 +7,28 @@ export default function HomeCarousel(props) {
 
     const images = [
         {
-            imgSrc: '/images/carousel_1.png',
-            thumbnailSrc: '/images/carousel_1.png',
+            imgSrc: 'https://picsum.photos/1190/420?img=2',
+            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
             alt: "image 1"
         },
         {
             imgSrc: 'https://picsum.photos/1190/420?img=2',
-            thumbnailSrc: '/images/carousel_2.png',
+            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
             alt: "image 1"
         },
         {
             imgSrc: 'https://picsum.photos/1190/420?img=3',
-            thumbnailSrc: '/images/carousel_3.png',
+            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
             alt: "image 1"
         },
         {
             imgSrc: 'https://picsum.photos/1190/420?img=4',
-            thumbnailSrc: '/images/carousel_4.png',
+            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
             alt: "image 1"
         },
         {
             imgSrc: 'https://picsum.photos/1190/420?img=5',
-            thumbnailSrc: '/images/carousel_5.png',
+            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
             alt: "image 1"
         }
     ]

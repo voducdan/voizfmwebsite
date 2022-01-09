@@ -50,7 +50,7 @@ export default function ShareModal(props) {
         setOpenCopyLinkTooltop(true);
         setTimeout(() => {
             setOpenCopyLinkTooltop(false);
-        }, 500);
+        }, 1000);
     };
 
     const handleCreateQR = () => {
