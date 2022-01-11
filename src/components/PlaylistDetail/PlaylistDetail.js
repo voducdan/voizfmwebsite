@@ -9,6 +9,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // import reducer, actions
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
+import { selectUser } from '../../redux/user';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
@@ -101,6 +102,7 @@ export default function PlatlistDetail() {
     const windowSize = useWindowSize();
     const { id } = useParams();
     const cart = useSelector(selectCart);
+    const user = useSelector(selectUser);
     const navigate = useNavigate();
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
@@ -306,11 +308,10 @@ export default function PlatlistDetail() {
     }
 
     const handlePlayAudio = (audioId) => {
-        if (playlist.promotion === 'free') {
-            navigate(`/audio-play/${audioId ? audioId : playlistAudios[0].id}`)
+        if (playlist.promotion === 'free' || user.promotion === 'vip') {
+            navigate(`/audio-play/${audioId ? audioId : playlistAudios[0].id}`);
             return;
         }
-        setPlayAudioError(true);
     }
 
     return (
