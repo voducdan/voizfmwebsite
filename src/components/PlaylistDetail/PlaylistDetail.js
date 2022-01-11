@@ -312,6 +312,7 @@ export default function PlatlistDetail() {
             navigate(`/audio-play/${audioId ? audioId : playlistAudios[0].id}`);
             return;
         }
+        setPlayAudioError(true);
     }
 
     return (

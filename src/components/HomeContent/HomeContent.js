@@ -29,7 +29,7 @@ import PublisherComponent from '../../components/Shared/PublisherComponent';
 import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/index';
 
 // import utils
-import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants';
+import { SCREEN_BREAKPOINTS, TEXT_STYLE, FONT_FAMILY, COLORS, DRAWER_WIDTH } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import { flexStyle } from '../../utils/flexStyle'
 
@@ -159,7 +159,9 @@ export default function HomeContent() {
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
 
-    const num_items_per_line = !isSm ? 5 : 2.5;
+    const NUMBER_ITEMS_PER_LINE = !isSm ? 5 : 2.5;
+    const SPACE_BETWEEN = isSm ? 8 : 20;
+    const SIDE_PADDING = isSm ? 20 : 48;
 
     useEffect(() => {
         async function fetchRandomPlaylists() {
@@ -228,6 +230,17 @@ export default function HomeContent() {
         setPlaylistsBycategory([...tmpPlaylists]);
     }
 
+    const getPlaylistImgWidth = () => {
+        const width = windowSize.width;
+        let innerWidth = width - SIDE_PADDING * 2;
+        const spaceToBeSubstrcted = ((NUMBER_ITEMS_PER_LINE - 1) * SPACE_BETWEEN) / NUMBER_ITEMS_PER_LINE;
+        if (!isSm) {
+            innerWidth -= DRAWER_WIDTH;
+        }
+        return (innerWidth / NUMBER_ITEMS_PER_LINE) - spaceToBeSubstrcted;
+    }
+
+
     return (
         <Main>
             <HomeCarousel windowWidth={windowSize.width}></HomeCarousel>
@@ -235,11 +248,11 @@ export default function HomeContent() {
                 m: isSm ? '40px 20px' : '56px 48px'
             }}>
                 {<Title content="Gợi ý cho người chưa bắt đầu" isSm={isSm} />}
-                <Swiper slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20} style={{ marginTop: 35, height: isSm ? '145px' : '200px' }}>
+                <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN} style={{ marginTop: 35, height: `${getPlaylistImgWidth()}px` }}>
                     {randomPlaylists.map(item => (
                         <SwiperSlide key={item?.id}>
                             <Link to={`/playlists/${item?.id}`}>
-                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                             </Link>
                         </SwiperSlide>
                     ))}
@@ -249,19 +262,19 @@ export default function HomeContent() {
                 playlistsBycategory.map(data => (
                     <Box
                         sx={{
-                            margin: isSm ? '0 20px 56px 20px' : '0 48px 56px 48px'
+                            margin: isSm ? `0 ${SIDE_PADDING}px 56px ${SIDE_PADDING}px` : `0 ${SIDE_PADDING}px 56px ${SIDE_PADDING}px`
                         }}
                         key={data.code}
                     >
                         {<Title content={data.name} isSm={isSm} />}
                         {data?.categories && <CategoryBar categoryList={data.categories} isSm={isSm} active={0} onSelectCategory={onSelectCategory} parent={data.code} />}
-                        <Swiper slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}
-                            style={{ marginTop: !isSm ? 35 : 20, height: isSm ? '145px' : '200px' }}
+                        <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN}
+                            style={{ marginTop: !isSm ? 35 : 20, height: `${getPlaylistImgWidth()}px` }}
                         >
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
                                     <Link to={`/playlists/${item?.id}`}>
-                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                     </Link>
                                 </SwiperSlide>
                             ))}
@@ -286,15 +299,15 @@ export default function HomeContent() {
                         swiper.params.navigation.prevEl = navigationNewContentPrevRef.current;
                         swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
                     }}
-                    slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}
+                    slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN}
                     style={{
-                        height: isSm ? '145px' : '200px'
+                        height: `${getPlaylistImgWidth()}px`
                     }}
                 >
                     {newContents.map((item) => (
                         <SwiperSlide key={item.id} >
                             <Link to={`/playlists/${item?.id}`}>
-                                <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                             </Link>
                         </SwiperSlide>
                     ))}
@@ -312,8 +325,8 @@ export default function HomeContent() {
             }}>
                 {<Title content="Tác giả nổi bật" isSm={isSm} />}
                 <Swiper
-                    slidesPerView={num_items_per_line}
-                    spaceBetween={isSm ? 8 : 20}
+                    slidesPerView={NUMBER_ITEMS_PER_LINE}
+                    spaceBetween={SPACE_BETWEEN}
                 >
                     {featuredsAuthors.map((item) => (
                         <SwiperSlide
@@ -324,7 +337,7 @@ export default function HomeContent() {
                             key={item.id}
                         >
                             <Link to={`/authors/${item?.id}`} style={{ textDecoration: 'none', textAlign: 'center' }}>
-                                <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                 <Typography sx={{
                                     ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
                                     color: COLORS.white,
@@ -351,18 +364,18 @@ export default function HomeContent() {
                 playlistsBycategoryLevel2.map(data => (
                     <Box
                         sx={{
-                            margin: isSm ? '0 20px 56px 20px' : '0 48px 56px 48px'
+                            margin: isSm ? `0 ${SIDE_PADDING}px 56px ${SIDE_PADDING}px` : `0 ${SIDE_PADDING}px 56px ${SIDE_PADDING}px`
                         }}
                         key={data.code}
                     >
                         {<Title content={data.name} isSm={isSm} />}
-                        <Swiper slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}
-                            style={{ marginTop: !isSm ? 35 : 20, height: isSm ? '145px' : '200px' }}
+                        <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN}
+                            style={{ marginTop: !isSm ? 35 : 20, height: `${getPlaylistImgWidth()}px` }}
                         >
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
                                     <Link to={`/playlists/${item?.id}`}>
-                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} ></Thumbnail>
+                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                     </Link>
                                 </SwiperSlide>
                             ))}
