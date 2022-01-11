@@ -267,7 +267,6 @@ export default class API {
     }
 
     ratePlaylist = (id, data) => {
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().post(`/playlists/${id}/ratings`, data);
     }
 }

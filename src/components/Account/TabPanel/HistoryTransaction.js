@@ -65,7 +65,7 @@ const PanelContent = (props) => {
                                     Đơn giá:
                                 </Typography>
                                 <Typography sx={{ ...TEXT_STYLE.title1, color: COLORS.white, marginLeft: '7px' }}>
-                                    {item?.amount ? `${new Intl.NumberFormat('de-DE', { maximumSignificantDigits: 3 }).format(item?.amount)} VND` : item?.coin}
+                                    {item?.amount ? item.amount : item?.coin}
                                 </Typography>
                             </Box>
                             <Box sx={{ display: 'flex' }}>
