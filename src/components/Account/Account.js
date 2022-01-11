@@ -1,5 +1,12 @@
 // import react module
-import { useEffect, useState } from 'react';
+import { useState } from 'react';
+
+// import redux
+import { useSelector } from 'react-redux';
+
+// import redux action
+import { selectUser } from '../../redux/user';
+
 
 // import MUI package 
 import { styled } from '@mui/material/styles';
@@ -170,12 +177,12 @@ export default function Account() {
     const windowSize = useWindowSize()
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 260 : 380
+    const accountData = useSelector(selectUser);
     const [value, setValue] = useState(0);
     const [accAnchorEl, setAccAnchorEl] = useState(null);
     const [openInviteFriend, setOpenInviteFriend] = useState(false);
     const [openEditProfile, setopenEditProfile] = useState(false);
     const openMore = Boolean(accAnchorEl);
-    let [accountData, setAccountData] = useState({});
 
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
@@ -197,20 +204,6 @@ export default function Account() {
     const handleClose = () => {
         setAccAnchorEl(null);
     };
-
-
-    useEffect(() => {
-        async function fetchUserInfo() {
-            const res = await api.getUserInfo();
-            const data = await res.data.data;
-            if (data.error) {
-                return;
-            }
-            setAccountData(data);
-        }
-
-        fetchUserInfo();
-    }, []);
 
     return (
         <Box
@@ -272,7 +265,7 @@ export default function Account() {
                                 onClick={handleEditProfileOpen}
                             >Thay đổi thông tin cá nhân</Button>
                         </Box>
-                        <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} accountData={accountData} />
+                        <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} />
                         <Box
                             sx={{
                                 width: '81px',

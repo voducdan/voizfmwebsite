@@ -9,6 +9,7 @@ import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
 import { selectCart, setCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
+import { setUser } from '../../redux/user';
 
 // import react router component
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -159,6 +160,7 @@ export default function Header() {
                 return;
             }
             setAvtSrc(data?.avatar?.thumb_url);
+            dispatch(setUser(data));
         }
 
         fetchUserInfo();

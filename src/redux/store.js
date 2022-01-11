@@ -9,6 +9,7 @@ import playAudioReducer from './playAudio';
 import audioReducer from './audio';
 import openSearchReducer from './OpenSearch';
 import paymentReducer from './payment';
+import userReducer from './user';
 
 export default configureStore({
   reducer: {
@@ -18,7 +19,8 @@ export default configureStore({
     playAudio: playAudioReducer,
     audio: audioReducer,
     openSearch: openSearchReducer,
-    payment: paymentReducer
+    payment: paymentReducer,
+    user: userReducer
   },
 })
 
