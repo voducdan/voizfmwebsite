@@ -71,8 +71,6 @@ export default function EditProfileModal(props) {
             phoneNumber: accountData?.phone_number,
             birthday: accountData?.birthday || format(new Date(), 'yyyy-MM-dd'),
             avatarUrl: accountData?.avatar?.original_url,
-            oauth2Id: 'oauth2Id',
-            oauth2: 'oauth2Id'
         };
         setUserInfo(user);
     }, [accountData])
@@ -105,8 +103,6 @@ export default function EditProfileModal(props) {
         userFormData.append('phone_number', userInfo.phoneNumber);
         userFormData.append('birthday', userInfo.birthday);
         userFormData.append('avatar_url', userInfo.avatarUrl);
-        userFormData.append('oauth2_id', userInfo.oauth2Id);
-        userFormData.append('oauth2', userInfo.oauth2);
         const res = await api.updateUserInfo(userFormData);
         const data = await res.data.data;
     }

@@ -12,7 +12,10 @@ export default class API {
     init = () => {
         // this.api_token = getToken();
         // Hardcode
-        this.api_token = 'wjfQexJRdn9tK7Xza-UKag';
+        // this.api_token = 'wjfQexJRdn9tK7Xza-UKag';
+        this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
+        this.oauth2 = null;
+        this.oauth2_id = null;
         let headers = {
             'Content-type': 'application/json',
             'Accept': 'application/json'
@@ -76,7 +79,6 @@ export default class API {
     }
 
     getPlaylistHistory = () => {
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().get(`/profiles/playlist_histories`)
     }
 
@@ -251,7 +253,6 @@ export default class API {
     }
 
     getUserInfo = () => {
-        // this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().get('/profiles/me');
     }
 
@@ -261,7 +262,8 @@ export default class API {
     }
 
     updateUserInfo = (data) => {
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
+        data.append('oauth2', this.oauth2);
+        data.append('oauth2_id', this.oauth2_id);
         return this.init().put('/profiles/me', data);
     }
 
