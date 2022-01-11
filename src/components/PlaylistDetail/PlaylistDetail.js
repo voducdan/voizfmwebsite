@@ -44,7 +44,9 @@ import {
     Dialog,
     DialogContent,
     DialogContentText,
-    DialogActions
+    DialogActions,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -115,6 +117,8 @@ export default function PlatlistDetail() {
     const [rateContent, setRateContent] = useState('');
     const [addToCartError, setAddToCartError] = useState(false);
     const [playAudioError, setPlayAudioError] = useState(false);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
@@ -128,6 +132,7 @@ export default function PlatlistDetail() {
             const data = res.data.data;
             const playlistTrailer = data.playlist_trailers.length > 0 ? data.playlist_trailers[0]['file_url'] : '';
             setPlaylist(data);
+            setContentRating(data.playlist_rating.content_stars);
             setAudioTrailerUrl(playlistTrailer);
         }
 
@@ -175,14 +180,25 @@ export default function PlatlistDetail() {
 
     const handleBookmark = () => {
         async function bookmarkPlaylist() {
-            const res = await api.bookmarkPlaylist(playlist.id);
-            const data = await res.data.data;
+            try {
+                const res = await api.bookmarkPlaylist(playlist.id);
+                const data = await res.data;
+                if (data.error) {
+                    setOpenSnackbar(true);
+                    setErrorMessage('Bookmark playlist không thành công!');
+                    return;
+                }
+                const playlistToBookmark = { ...playlist };
+                playlistToBookmark['is_bookmark'] = !playlist.is_bookmark;
+                setPlaylist({ ...playlistToBookmark })
+            }
+            catch (err) {
+                setErrorMessage('Bookmark playlist không thành công!')
+                setOpenSnackbar(true);
+            }
         }
 
         bookmarkPlaylist();
-        const playlistToBookmark = { ...playlist };
-        playlistToBookmark['is_bookmark'] = !playlist.is_bookmark;
-        setPlaylist({ ...playlistToBookmark })
     }
 
     const onPlayClick = () => {
@@ -248,16 +264,27 @@ export default function PlatlistDetail() {
     }
 
     const handleRatePlaylist = async (cb) => {
-        const res = await api.ratePlaylist(id, {
-            content_stars: contentRating,
-            voice_stars: voiceRating,
-            content: rateContent
-        });
-        const result = await res.data;
-        if (result.code === 0) {
+        try {
+            const res = await api.ratePlaylist(id, {
+                content_stars: contentRating,
+                voice_stars: voiceRating,
+                content: rateContent
+            });
+            const result = await res.data;
+            if (result.code === 0) {
+                setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
+                return;
+            }
+            const data = result.data;
+            const tmpPlaylist = { ...playlist };
+            tmpPlaylist['playlist_counter'] = data.playlist_counter;
+            tmpPlaylist['playlist_rating'] = data.playlist_rating;
+            setPlaylist({ ...tmpPlaylist });
+            cb();
+        }
+        catch (err) {
             setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
         }
-        cb();
     }
 
     const handleAddToCart = () => {
@@ -439,6 +466,15 @@ export default function PlatlistDetail() {
                                         }}
                                         startIcon={playlist?.is_bookmark ? <CheckIcon /> : <AddIcon />}
                                     >{playlist?.is_bookmark ? 'Hủy đánh dấu' : 'Đánh dấu'}</Button>
+                                    <Snackbar
+                                        open={openSnackbar}
+                                        autoHideDuration={6000}
+                                        onClose={() => { setOpenSnackbar(false) }}
+                                    >
+                                        <Alert onClose={() => { setOpenSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                                            {errorMessage}
+                                        </Alert>
+                                    </Snackbar>
                                 </Box>
                             </Box>
                             {
