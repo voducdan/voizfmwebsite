@@ -1,3 +1,9 @@
+// import redux
+import { useSelector } from 'react-redux';
+
+// import redux action
+import { selectUser } from '../../redux/user';
+
 // import MUI package 
 import {
     Box,
@@ -21,11 +27,21 @@ import useWindowSize from '../../utils/useWindowSize';
 
 export default function Info(props) {
 
-    const { accountData } = props;
     const windowSize = useWindowSize()
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const coverImgHeight = isSm ? 260 : 380
-    const infoPanelHeight = isSm ? 340 : 200
+    const coverImgHeight = isSm ? 260 : 380;
+    const infoPanelHeight = isSm ? 340 : 200;
+    const accountData = useSelector(selectUser);
+
+    const getRemainingDays = (accountData) => {
+        if (!accountData) {
+            return 0;
+        }
+        if (accountData.user_resource.remaining_seconds) {
+            return Math.floor(accountData.user_resource.remaining_seconds / 86400);
+        }
+        return Math.floor(accountData.user_resource.remaining_minutes / 1440);
+    }
 
     return (
         <Box
@@ -82,7 +98,7 @@ export default function Info(props) {
                             <Box
                                 sx={{
                                     ...flexStyle('flex-start', 'center'),
-                                    columnGap: '20px'
+                                    columnGap: '18px'
                                 }}
                             >
                                 <Typography
@@ -96,7 +112,7 @@ export default function Info(props) {
                                         ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
                                         color: COLORS.bg4
                                     }}
-                                >{accountData?.id}</Typography>
+                                >{accountData?.introductory_code}</Typography>
                             </Box>
 
                             <Box
@@ -112,7 +128,7 @@ export default function Info(props) {
                                         color: COLORS.contentIcon
                                     }}
                                 >
-                                    {`${accountData?.promotion?.toUpperCase()} (Còn ${Math.floor(accountData?.user_resource?.remaining_minutes / 60)} ngày)`}
+                                    {`${accountData?.promotion?.toUpperCase()} (Còn ${getRemainingDays(accountData)} ngày)`}
                                 </Typography>
                             </Box>
 

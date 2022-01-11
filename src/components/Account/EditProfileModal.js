@@ -1,6 +1,12 @@
 // import react
 import { useState, useEffect, useRef } from 'react';
 
+// import redux
+import { useSelector, useDispatch } from 'react-redux';
+
+// import redux action
+import { selectUser, setUser } from '../../redux/user';
+
 // import mui components
 import { styled } from '@mui/material/styles';
 import {
@@ -12,7 +18,10 @@ import {
     Avatar,
     FormControl,
     TextField,
-    InputAdornment
+    InputAdornment,
+    DialogContent,
+    DialogContentText,
+    DialogActions
 } from '@mui/material';
 import {
     DesktopDatePicker,
@@ -57,10 +66,13 @@ export default function EditProfileModal(props) {
     const api = new API();
 
     const windowSize = useWindowSize();
-    const { accountData } = props;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm;
+    const accountData = useSelector(selectUser);
     const [userInfo, setUserInfo] = useState({});
     const [avatarFilename, setAvatarFilename] = useState('');
+    const [updatedInfoMessage, setUpdatedInfoMessage] = useState('');
+    const [openUpdateInfoResultModal, setOpenUpdateInfoResultModal] = useState(false);
+    const dispatch = useDispatch();
     const fileInput = useRef(null);
 
     useEffect(() => {
@@ -96,15 +108,33 @@ export default function EditProfileModal(props) {
 
     const handleSubmitEditProfile = async () => {
         const userFormData = new FormData();
-        userFormData.append('avatar', fileInput.current.files[0]);
+        if (fileInput.current.files[0]) {
+            userFormData.append('avatar', fileInput.current.files[0]);
+        }
+        else {
+            userFormData.append('avatar', null);
+        }
         userFormData.append('first_name', userInfo.firstName);
         userFormData.append('last_name', userInfo.lastName);
         userFormData.append('email', userInfo.email);
         userFormData.append('phone_number', userInfo.phoneNumber);
         userFormData.append('birthday', userInfo.birthday);
         userFormData.append('avatar_url', userInfo.avatarUrl);
-        const res = await api.updateUserInfo(userFormData);
-        const data = await res.data.data;
+        try {
+            const res = await api.updateUserInfo(userFormData);
+            const data = await res.data;
+            setOpenUpdateInfoResultModal(true);
+            if (data.error) {
+                setUpdatedInfoMessage(data.error);
+                return;
+            }
+            setUpdatedInfoMessage('Đã cập nhật thông tin trên hệ thống!');
+            dispatch(setUser(data.data));
+        }
+        catch (err) {
+            setUpdatedInfoMessage('Cập nhật thông tin không thành công!');
+            setOpenUpdateInfoResultModal(true);
+        }
     }
 
     const handleSelectAvatar = (e) => {
@@ -374,6 +404,29 @@ export default function EditProfileModal(props) {
                     onClick={handleSubmitEditProfile}
                 >Lưu</Button>
             </Box>
+            <Dialog
+
+                sx={{
+                    '& .MuiDialog-paper': {
+                        bgcolor: COLORS.bg1
+                    }
+                }}
+                open={openUpdateInfoResultModal}
+                onClose={() => { setOpenUpdateInfoResultModal(false) }}
+            >
+                <DialogContent>
+                    <DialogContentText
+                        sx={{
+                            color: COLORS.error
+                        }}
+                    >
+                        {updatedInfoMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions>
+                    <Button onClick={() => { setOpenUpdateInfoResultModal(false) }}>Đóng</Button>
+                </DialogActions>
+            </Dialog>
         </Dialog>
     )
 }

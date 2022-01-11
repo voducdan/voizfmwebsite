@@ -14,7 +14,7 @@ export default class API {
         // Hardcode
         // this.api_token = 'wjfQexJRdn9tK7Xza-UKag';
         this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
-        this.oauth2 = null;
+        this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         let headers = {
             'Content-type': 'application/json',
@@ -257,7 +257,6 @@ export default class API {
     }
 
     getUserTransactionHistory = () => {
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().get('/profiles/orders');
     }
 
