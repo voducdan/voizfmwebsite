@@ -72,11 +72,11 @@ const paymentMethods = [
     //     name: 'Ví Zalo Pay',
     //     src: '/images/zalopay.png'
     // },
-    {
-        code: 'vnpay',
-        name: 'Thanh toán qua VNPay QR Code',
-        src: '/images/vnpay.png'
-    }
+    // {
+    //     code: 'vnpay',
+    //     name: 'Thanh toán qua VNPay QR Code',
+    //     src: '/images/vnpay.png'
+    // }
 ]
 
 
@@ -136,12 +136,21 @@ export default function Checkout() {
     const handleCheckout = async () => {
         try {
             const packageIds = selectedItem.map(i => i.id);
+            // const payload = {
+            //     "discount_code": discountCode,
+            //     "package_type": "playlist",
+            //     "package_id": packageIds,
+            //     "platform_type": "website",
+            //     "redirect_url": "http://voiz.test/payment/appota"
+            // }
             const payload = {
-                "discount_code": discountCode,
-                "package_type": "playlist",
-                "package_id": packageIds,
-                "platform_type": "website",
-                "redirect_url": "/cart"
+                discount_code: null,
+                package_type: "playlist",
+                platform_type: "website",
+                package_id: [
+                    1768
+                ],
+                redirect_url: "http://voiz.test/payment/appota"
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
@@ -153,11 +162,15 @@ export default function Checkout() {
             const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
             dispatch(setCart([...remainedItems]));
             dispatch(setPaymentInfo({ ...data.data }));
+            if (['momo', 'appota'].includes(paymentMethod)) {
+                window.location = data.data.url;
+                return;
+            }
             navigate(`/payment/${paymentMethod}`, { replace: true });
         }
         catch (err) {
             console.log(err);
-            setPaymentMethod(true);
+            setIsPaymentError(true);
         }
     }
 
