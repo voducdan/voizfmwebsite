@@ -417,7 +417,7 @@ export default function EditProfileModal(props) {
                 <DialogContent>
                     <DialogContentText
                         sx={{
-                            color: COLORS.error
+                            color: updatedInfoMessage === 'Đã cập nhật thông tin trên hệ thống!' ? COLORS.success : COLORS.error
                         }}
                     >
                         {updatedInfoMessage}
