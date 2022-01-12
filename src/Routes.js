@@ -4,6 +4,7 @@ import PlaylistDetail from './components/PlaylistDetail/PlaylistDetail';
 import AudioPlay from './components/AudioPlay/AudioPlay';
 import Cart from './components/Payment/Cart';
 import Checkout from './components/Payment/Checkout';
+import Payment from './components/Payment/Payment';
 import UpVip from './components/UpVip/UpVip';
 import Discovery from './components/Discovery/Discovery';
 import DiscoveryDetail from './components/Discovery/DiscoveryDetail';
@@ -53,6 +54,12 @@ const ROUTES = [
         key: "APP_CHECKOUT",
         exact: true,
         component: <Checkout />,
+    },
+    {
+        path: "/payment/:method",
+        key: "APP_PAYMENT",
+        exact: true,
+        component: <Payment />,
     },
     {
         path: "/up-vip",

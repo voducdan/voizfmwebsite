@@ -56,10 +56,9 @@ export default function Cart() {
     const navigate = useNavigate();
     const paymentData = useSelector(selectPaymentData);
     const cart = useSelector(selectCart);
-    console.log(cart)
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
-    const [isDiscountCodeValid, setIsDiscountCodeValidsetDiscountCode] = useState(true);
+    const [isDiscountCodeValid, setIsDiscountCodeValid] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
     const [finalPrice, setFinalPrice] = useState(0);
     const [checkControl, setCheckControl] = useState({});
@@ -141,7 +140,7 @@ export default function Cart() {
     const handlePayment = () => {
         const paymentData = {
             selectedItem: selectedItem,
-            discountCode: discountCode,
+            discountCode: isDiscountCodeValid ? discountCode : null,
             totalPrice: totalPrice,
             finalPrice: totalPrice
         };
@@ -177,14 +176,14 @@ export default function Cart() {
 
     const handleInputDiscountCode = (e) => {
         setDiscountCode(e.target.value);
-        setIsDiscountCodeValidsetDiscountCode(true);
+        setIsDiscountCodeValid(true);
     }
 
     const handleValidateDiscountCode = () => {
         // call api to validate
 
         // if discountCode is not valid, reset to ''
-        setIsDiscountCodeValidsetDiscountCode(false);
+        setIsDiscountCodeValid(false);
     }
 
     return (
@@ -335,7 +334,7 @@ export default function Cart() {
                                                         ...TEXT_STYLE.content1,
                                                         color: COLORS.contentIcon
                                                     }}
-                                                >{formatPrice(item.sale_coin_price)}đ</Typography>
+                                                >{formatPrice(item.sale_coin_price)} xu</Typography>
                                                 <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />
                                             </ListItemIcon>
                                         </MenuItem>
@@ -467,7 +466,7 @@ export default function Cart() {
                                             >Sử dụng</Button>
                                         </Paper>
                                         {
-                                            !isDiscountCodeValid && (
+                                            (!isDiscountCodeValid && discountCode) && (
                                                 <Typography
                                                     sx={{
                                                         color: COLORS.error,

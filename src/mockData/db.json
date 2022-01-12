@@ -13,303 +13,159 @@
     "cart": [
         {
             "type": "voiz",
-            "id": 5,
-            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
-            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
-            "description": "Corrupti possimus adipisci.",
-            "promotion": "coin",
-            "total_duration": 96,
-            "coin_price": 19999,
+            "id": 1768,
+            "name": "Tam Quốc Diễn Nghĩa 1",
+            "description": "\"Ta thường ngẫm cuộc chiến tranh thiên hạ đời Tam Quốc mà than rằng: Vận trời biến chuyện thật có chỗ không thể nào lường được. Như cái lúc Hiến Đế nhà Hán bó tay, Đổng Trác lạm quyền, các tay anh hùng nổi dậy một loạt, bốn bể chia lìa. Giả sử Lưu Hoàng Thúc sớm gặp tình cá nước Nam Dương, được đất Kinh Châu rồi kéo thẳng lên Hà Bắc, truyền hịch ra Hoài Nam, kế đến bình định Giang Đông, Tần Ung.... thì có phải là một Quang Vũ thứ hai khôi phục nhà Hán không? Thế mà cơ trời không thiện biến như vậy cho! Đổng Trác bị giết, thì lại có Tào Tháo hiếp thiên sử để sai khiến chư hầu.\r\n\r\nDanh vị nhà vua tuy là hư hão, nhưng chính sóc vẫn được để nguyên. Lưu Hoàng Thúc phải chạy nạn loanh quanh chưa gặp dịp để tỏ rõ đại nghĩa cùng thiên hạ thì khắp quốc thổ hai bên bờ nam bắc Trường Giang đã về tay Nguỵ, Ngô nắm giữ. Họ Lưu chỉ còn một khoảnh nhỏ ở phía tây nam làm chỗ trú chân. Đã vậy, nếu không được Khổng Minh ra đời, giúp cho một trận Xích Bích phía đông, vung tay choán một vùng Hán Trung phía tây, thì các đất Lương, Ích ắt cũng lọt tay Tào, mà Ngô cũng không đứng nổi làm một nước độc lập. Như thế có phải Tào Tháo lại là một Vương Mãng thứ hai cướp hết thiên hạ nhà Hán không? Nhưng cơ trời cũng chẳng biến đổi giản dị như thế. Sau khi Tháo trốn thoát Hoa Dung, gặp lại \"gân gà\" mà bỏ Hán Trung thì đành ngồi giữ có một phần thiên hạ, và cái thế \"ba chân vạc\" mới thành từ đó.....\"\r\n\r\n(Đời Thuận Trị, năm Giáp Thân Ngày mùng 1 tháng Chạp Kim Nhân Thuỵ, Thánh Thán đề)",
+            "promotion": "vip",
+            "total_duration": 29970,
+            "coin_price": 833,
             "is_bookmark": false,
-            "sale_coin_price": 19999,
-            "order": "desc",
-            "voicers": [
-                {
-                    "id": 1,
-                    "name": "Maria Corkery Ebert"
-                },
-                {
-                    "id": 23,
-                    "name": "Camie Leannon Ferry"
-                }
-            ],
-            "playlist_rating": {
-                "type": "voiz",
-                "id": 1,
-                "content_stars": 5,
-                "voice_stars": 5,
-                "content": "Good Boook"
-            },
-            "authors": [
-                {
-                    "id": 55,
-                    "name": "Daniel Coyle"
-                }
-            ],
-            "avatar": {
-                "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
-            },
+            "is_purchased": false,
+            "playlist_listening": null,
+            "sale_coin_price": 833,
+            "order": "asc",
+            "author_string": "La Quán Trung",
+            "slug": "tam-quoc-dien-nghia-1",
+            "pay_coin_price": 833,
             "channel": {
-                "id": 2,
-                "name": "PamCast - Nghe Phim",
-                "description": "PamCast - Nghe Phim",
+                "id": 70,
+                "name": "NXB Văn Học",
+                "description": "Ra đời trong những ngày tháng khói lửa của cuộc kháng chiến chống Pháp, trưởng thành qua các thời kỳ chiến tranh, hơn 70 năm qua, NXB Văn học luôn đồng hành cùng phong trào văn nghệ cả nước. NXB tập trung giới thiệu những tinh hoa văn học của Việt Nam và thế giới, có thể kể đến sách của các tác giả: Nguyễn Công Hoan, Hoài Thanh, Tô Hoài,... và đặc biệt là văn học dịch những tác phẩm kinh điển thế giới.",
                 "avatar": {
-                    "id": 4,
-                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
-                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
+                    "id": 257,
+                    "original_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/257/173f83573e87b945d7f28bee44a9e9a270aa1352.png",
+                    "thumb_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/257/thumb_173f83573e87b945d7f28bee44a9e9a270aa1352.png",
+                    "small_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/257/small_173f83573e87b945d7f28bee44a9e9a270aa1352.png",
+                    "width": 225,
+                    "height": 225
                 }
             },
             "category": {
-                "id": 13,
-                "code": "tam-linh",
-                "name": "Tâm linh",
-                "sub_name": "Bình an tâm hồn",
-                "type": "Audiobook"
+                "id": 4,
+                "code": "story_book",
+                "name": "Truyện nói",
+                "sub_name": null
             },
+            "authors": [
+                {
+                    "id": 772,
+                    "name": "La Quán Trung"
+                }
+            ],
             "playlist_trailers": [
                 {
-                    "id": 5,
-                    "file_size": "154062",
+                    "id": 1105,
+                    "file_size": "969504",
                     "file_extension": "mp3",
-                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
+                    "file_url": "https://voiz-stg.s3.cloud.cmctelecom.vn/uploads/playlist_trailer/filename/1105/9de26abc2d4a4eeeea38baafef6dc009b994095a.mp3?X-Amz-Expires=3600&X-Amz-Date=20220112T160804Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=QSNI5PDG05QMOWG13EHE%2F20220112%2Fhcm%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=0e51d2636fa390063bf0e6893976ffbe51692d6094f3ba6185d2cab623df5b45"
                 }
             ],
             "playlist_counter": {
-                "id": 5,
-                "bookmarks_count": 0,
-                "downloads_count": 0,
-                "ratings_count": 0,
-                "content_avg": 0,
-                "voice_avg": 0,
-                "audios_count": 0
-            }
+                "id": 1768,
+                "bookmarks_count": 2372,
+                "downloads_count": 1966,
+                "ratings_count": 44,
+                "content_avg": 4.5,
+                "voice_avg": 4.6,
+                "audios_count": 19
+            },
+            "avatar": {
+                "id": 2057,
+                "original_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/2057/eb9c9f06847585a316eadb68fa91944e1c6453d3.jpg",
+                "thumb_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/2057/thumb_eb9c9f06847585a316eadb68fa91944e1c6453d3.jpg",
+                "small_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/2057/small_eb9c9f06847585a316eadb68fa91944e1c6453d3.jpg",
+                "width": 900,
+                "height": 900
+            },
+            "playlist_rating": {
+                "content_stars": 5,
+                "voice_stars": 5,
+                "content": "hay vkl"
+            },
+            "voicers": [
+                {
+                    "id": 74,
+                    "name": "Bình Nguyên - Kẻ Trộm Hương"
+                }
+            ]
         },
         {
             "type": "voiz",
-            "id": 6,
-            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
-            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
-            "description": "Corrupti possimus adipisci.",
-            "promotion": "coin",
-            "total_duration": 96,
-            "coin_price": 19999,
+            "id": 628,
+            "name": "Truyện Hay Dành Cho Thiếu Nhi 4",
+            "description": "Bộ sách gồm 4 tập này bao gồm những câu chuyện cổ tích từ khắp nơi trên thế giới.; những chuyện kể trong kinh sách hay trong các sử thi nổi tiếng; chuyện kể về các danh nhân hay một số tác phẩm của các nhà văn tên tuổi. Đặc điểm chung của những câu chuyện này là ca ngợi tình yêu thương; tình bạn, tình thân cao đẹp cùng những con người sẵn sàng hy sinh cho nhau. Qua những câu chuyện hấp dẫn và lý thú, trẻ sẽ được khơi gợi những đức tính tốt đẹp như lòng dũng cảm, sự trung thực, chân thành…\r\n\r\nTập hợp truyện cổ tích và những câu chuyện mang màu sắc thần tiên của nhiều nước trên thế giới. Nó sẽ mở ra trước mắt các em một thế giới tốt đẹp với những điều kỳ diệu – nơi người tốt luôn được chở che, giúp đỡ còn kẻ độc ác, gian dối luôn bị trừng trị. Thế giới ấy được soi sáng bằng những đức tính tốt đẹp của con người. Tập sách đề cập đến các mối quan hệ trong cuộc sống con người như cha mẹ - con cái, vợ chồng, anh chị em, bạn bè…",
+            "promotion": "free",
+            "total_duration": 9035,
+            "coin_price": 288,
             "is_bookmark": false,
-            "sale_coin_price": 19999,
-            "order": "desc",
-            "voicers": [
-                {
-                    "id": 1,
-                    "name": "Maria Corkery Ebert"
-                },
-                {
-                    "id": 23,
-                    "name": "Camie Leannon Ferry"
-                }
-            ],
-            "playlist_rating": {
-                "type": "voiz",
-                "id": 1,
-                "content_stars": 5,
-                "voice_stars": 5,
-                "content": "Good Boook"
-            },
-            "authors": [
-                {
-                    "id": 55,
-                    "name": "Daniel Coyle"
-                }
-            ],
-            "avatar": {
-                "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
-            },
+            "is_purchased": false,
+            "playlist_listening": null,
+            "sale_coin_price": 288,
+            "order": "asc",
+            "author_string": "William J. Bennett",
+            "slug": "truyen-hay-danh-cho-thieu-nhi-4",
+            "pay_coin_price": 288,
             "channel": {
-                "id": 2,
-                "name": "PamCast - Nghe Phim",
-                "description": "PamCast - Nghe Phim",
+                "id": 52,
+                "name": "First News - Trí Việt",
+                "description": "Kênh sách nói của Công ty Phát hành First News Trí Việt",
                 "avatar": {
-                    "id": 4,
-                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
-                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
+                    "id": 218,
+                    "original_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/218/de489c4894de7a8c7d3d73ea38a31143a5b6be52.jpg",
+                    "thumb_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/218/thumb_de489c4894de7a8c7d3d73ea38a31143a5b6be52.jpg",
+                    "small_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/218/small_de489c4894de7a8c7d3d73ea38a31143a5b6be52.jpg",
+                    "width": 900,
+                    "height": 900
                 }
             },
             "category": {
-                "id": 13,
-                "code": "tam-linh",
-                "name": "Tâm linh",
-                "sub_name": "Bình an tâm hồn",
-                "type": "Audiobook"
-            },
-            "playlist_trailers": [
-                {
-                    "id": 5,
-                    "file_size": "154062",
-                    "file_extension": "mp3",
-                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
-                }
-            ],
-            "playlist_counter": {
                 "id": 5,
-                "bookmarks_count": 0,
-                "downloads_count": 0,
-                "ratings_count": 0,
-                "content_avg": 0,
-                "voice_avg": 0,
-                "audios_count": 0
-            }
-        },
-        {
-            "type": "voiz",
-            "id": 7,
-            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
-            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
-            "description": "Corrupti possimus adipisci.",
-            "promotion": "coin",
-            "total_duration": 96,
-            "coin_price": 19999,
-            "is_bookmark": false,
-            "sale_coin_price": 19999,
-            "order": "desc",
-            "voicers": [
-                {
-                    "id": 1,
-                    "name": "Maria Corkery Ebert"
-                },
-                {
-                    "id": 23,
-                    "name": "Camie Leannon Ferry"
-                }
-            ],
-            "playlist_rating": {
-                "type": "voiz",
-                "id": 1,
-                "content_stars": 5,
-                "voice_stars": 5,
-                "content": "Good Boook"
+                "code": "children_book",
+                "name": "Thiếu nhi",
+                "sub_name": null
             },
             "authors": [
                 {
-                    "id": 55,
-                    "name": "Daniel Coyle"
+                    "id": 671,
+                    "name": "William J. Bennett"
                 }
             ],
-            "avatar": {
-                "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
-            },
-            "channel": {
-                "id": 2,
-                "name": "PamCast - Nghe Phim",
-                "description": "PamCast - Nghe Phim",
-                "avatar": {
-                    "id": 4,
-                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
-                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
-                }
-            },
-            "category": {
-                "id": 13,
-                "code": "tam-linh",
-                "name": "Tâm linh",
-                "sub_name": "Bình an tâm hồn",
-                "type": "Audiobook"
-            },
             "playlist_trailers": [
                 {
-                    "id": 5,
-                    "file_size": "154062",
+                    "id": 463,
+                    "file_size": "964682",
                     "file_extension": "mp3",
-                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
+                    "file_url": "https://voiz-stg.s3.cloud.cmctelecom.vn/uploads/playlist_trailer/filename/463/c2b7ab5adfa2a493fd9e3db31886bcf223d2653f.mp3?X-Amz-Expires=3600&X-Amz-Date=20220112T160918Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=QSNI5PDG05QMOWG13EHE%2F20220112%2Fhcm%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=e5dc1bfd67e7ad5aacdf9d289a20c0a188784c3948388f2a6f9b1ccf02d69069"
                 }
             ],
             "playlist_counter": {
-                "id": 5,
-                "bookmarks_count": 0,
-                "downloads_count": 0,
-                "ratings_count": 0,
-                "content_avg": 0,
-                "voice_avg": 0,
-                "audios_count": 0
-            }
-        },
-        {
-            "type": "voiz",
-            "id": 8,
-            "name": "Pork belly cold-pressed master microdosing sriracha deep v. #e305a5",
-            "slug": "pork-belly-cold-pressed-master-microdosing-sriracha-deep-v-e305a5",
-            "description": "Corrupti possimus adipisci.",
-            "promotion": "coin",
-            "total_duration": 96,
-            "coin_price": 19999,
-            "is_bookmark": false,
-            "sale_coin_price": 19999,
-            "order": "desc",
+                "id": 628,
+                "bookmarks_count": 669,
+                "downloads_count": 115,
+                "ratings_count": 5,
+                "content_avg": 4.25,
+                "voice_avg": 4.88,
+                "audios_count": 15
+            },
+            "avatar": {
+                "id": 917,
+                "original_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/917/dc6bcaedaa49e98e220eb9f3b2d5bb12a700b6f6.PNG",
+                "thumb_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/917/thumb_dc6bcaedaa49e98e220eb9f3b2d5bb12a700b6f6.PNG",
+                "small_url": "https://s3.cloud.cmctelecom.vn/voiz-stg/uploads/avatar/filename/917/small_dc6bcaedaa49e98e220eb9f3b2d5bb12a700b6f6.PNG",
+                "width": 247,
+                "height": 375
+            },
+            "playlist_rating": {
+                "content_stars": null,
+                "voice_stars": 0,
+                "content": null
+            },
             "voicers": [
                 {
-                    "id": 1,
-                    "name": "Maria Corkery Ebert"
-                },
-                {
-                    "id": 23,
-                    "name": "Camie Leannon Ferry"
+                    "id": 10,
+                    "name": "First News"
                 }
-            ],
-            "playlist_rating": {
-                "type": "voiz",
-                "id": 1,
-                "content_stars": 5,
-                "voice_stars": 5,
-                "content": "Good Boook"
-            },
-            "authors": [
-                {
-                    "id": 55,
-                    "name": "Daniel Coyle"
-                }
-            ],
-            "avatar": {
-                "id": 380,
-                "original_url": "https://picsum.photos/1190/420?img=100",
-                "thumb_url": "https://picsum.photos/1190/420?img=100"
-            },
-            "channel": {
-                "id": 2,
-                "name": "PamCast - Nghe Phim",
-                "description": "PamCast - Nghe Phim",
-                "avatar": {
-                    "id": 4,
-                    "original_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=743160af43f17bfde202ff4a9aa14a7bb37c0dcae80ad1ad1c2e2832f6c777ac",
-                    "thumb_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/avatar/filename/4/thumb_a1f1cacc38c14c31.jpg?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=10ae6e5e62a7a3f0ae918ef0b4847008d722f9da6ec8132295ac48c5e282a3d3"
-                }
-            },
-            "category": {
-                "id": 13,
-                "code": "tam-linh",
-                "name": "Tâm linh",
-                "sub_name": "Bình an tâm hồn",
-                "type": "Audiobook"
-            },
-            "playlist_trailers": [
-                {
-                    "id": 5,
-                    "file_size": "154062",
-                    "file_extension": "mp3",
-                    "file_url": "https://staging-wewe-voiz.s3.ap-southeast-1.amazonaws.com/uploads/playlist_trailer/filename/5/ed6e3c74fef9a937.mp3?X-Amz-Expires=3600&X-Amz-Date=20210619T105235Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=AKIAQ62DMRSHHQ26OT7H%2F20210619%2Fap-southeast-1%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=d9353b39fd4cce6eabf21862b0473580682d91e638813b668319172b00de1464"
-                }
-            ],
-            "playlist_counter": {
-                "id": 5,
-                "bookmarks_count": 0,
-                "downloads_count": 0,
-                "ratings_count": 0,
-                "content_avg": 0,
-                "voice_avg": 0,
-                "audios_count": 0
-            }
+            ]
         }
     ],
     "discoveries": [

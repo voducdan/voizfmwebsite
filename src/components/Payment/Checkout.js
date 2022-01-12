@@ -2,10 +2,10 @@
 import { useState } from 'react';
 
 // import redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // Import redux reducer, actions
-import { selectPaymentData } from '../../redux/payment';
+import { selectPaymentData, selectCart, setCart, setPaymentInfo } from '../../redux/payment';
 
 // import react router component
 import { useNavigate } from 'react-router-dom';
@@ -23,6 +23,7 @@ import {
     ListItemButton,
     ListItemText,
     Collapse,
+    Snackbar
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -112,8 +113,11 @@ export default function Checkout() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const navigate = useNavigate();
     const [expandBill, setExpandBill] = useState(false);
+    const [isPaymentError, setIsPaymentError] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('shopee');
     const paymentData = useSelector(selectPaymentData);
+    const cart = useSelector(selectCart);
+    const dispatch = useDispatch();
     const {
         selectedItem,
         discountCode,
@@ -136,14 +140,24 @@ export default function Checkout() {
                 "discount_code": discountCode,
                 "package_type": "playlist",
                 "package_id": packageIds,
-                "platform_type": "website"
+                "platform_type": "website",
+                "redirect_url": "/cart"
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
-            console.log(data);
+            if (data.err) {
+                setIsPaymentError(true);
+                return;
+            }
+            const selectedItemId = selectedItem.map(i => i.id);
+            const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
+            dispatch(setCart([...remainedItems]));
+            dispatch(setPaymentInfo({ ...data.data }));
+            navigate(`/payment/${paymentMethod}`, { replace: true });
         }
         catch (err) {
-            console.log(err)
+            console.log(err);
+            setPaymentMethod(true);
         }
     }
 
@@ -286,7 +300,7 @@ export default function Checkout() {
                                                     color: COLORS.contentIcon
                                                 }}
 
-                                            >2 sản phẩm</Typography>
+                                            >{selectedItem.length} sản phẩm</Typography>
                                             <ListItemButton
                                                 sx={{
                                                     padding: 0
@@ -346,7 +360,7 @@ export default function Checkout() {
                                                         ...TEXT_STYLE.content3,
                                                         color: COLORS.contentIcon
                                                     }}
-                                                >{formatPrice(i.sale_coin_price)}đ</Typography>
+                                                >{formatPrice(i.sale_coin_price)} xu</Typography>
                                             </Box>
                                         ))
                                     }
@@ -374,7 +388,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(totalPrice)}đ</Typography>
+                                    >{formatPrice(totalPrice)} xu</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -393,7 +407,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(totalPrice - finalPrice)}đ</Typography>
+                                    >{formatPrice(totalPrice - finalPrice)} xu</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -419,7 +433,7 @@ export default function Checkout() {
                                                 ...TEXT_STYLE.h2,
                                                 color: COLORS.white
                                             }}
-                                        >{formatPrice(finalPrice)}đ</Typography>
+                                        >{formatPrice(finalPrice)} xu</Typography>
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.caption12,
@@ -468,6 +482,13 @@ export default function Checkout() {
                     </Box>
                 )
             }
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={isPaymentError}
+                onClose={() => { setIsPaymentError(false) }}
+                message="Đã xảy ra lỗi trong quá trình thanh toán, vui lòng thử lại sau!"
+                key='bottomcenter'
+            />
         </Box>
     )
 }

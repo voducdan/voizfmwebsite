@@ -45,7 +45,7 @@ export default class API {
 
     getCart = () => {
         // reset base url for test
-        // this.base_url = `http://localhost:3333`;
+        this.base_url = `http://localhost:3333`;
         return this.init().get(`/cart`);
     }
 
