@@ -12,7 +12,8 @@ import {
     Divider,
     FormControl,
     Input,
-    Button
+    Button,
+    Snackbar
 } from '@mui/material';
 import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
 import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
@@ -28,19 +29,23 @@ import useWindowSize from '../../utils/useWindowSize';
 import API from '../../services/api';
 
 const CommentItem = (props) => {
-    const { data, api, commentInputRef } = props;
+    const { data, api, updateLike, commentInputRef } = props;
+
+    const [isLikeError, setIsLikeError] = useState(false);
 
     const handleLikeComment = async (id) => {
         const res = await api.likeComment(id);
         try {
             const data = await res.data;
             if (data.error) {
-                console.log(data.error);
+                setIsLikeError(true);
                 return;
             }
+            updateLike(data.data);
         }
         catch (err) {
-            console.log(err)
+            setIsLikeError(true);
+            console.log(err);
         }
     }
 
@@ -157,6 +162,13 @@ const CommentItem = (props) => {
                     </Box>
                 </Box>
             </Box>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={isLikeError}
+                onClose={() => { setIsLikeError(false) }}
+                message="Thích đánh giá không thành công, vui lòng thử lại!"
+                key='bottomcenter'
+            />
         </Box>
     )
 }
@@ -170,6 +182,7 @@ export default function DiscoveryDetail() {
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState('');
     const [commentPage, setCommentPage] = useState(0);
+    const [isCommentError, setIsCommentError] = useState(false);
     const { id } = useParams();
 
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -213,18 +226,31 @@ export default function DiscoveryDetail() {
         await sendComment(discovery.id, { content: commentContent });
     }
 
+    const updateLike = (data) => {
+        const commentsTmp = [...comments];
+        const cmtIdx = commentsTmp.findIndex(i => i.id === data.id);
+        commentsTmp[cmtIdx] = data;
+        setComments(commentsTmp);
+    }
+
+    const appendComment = (comment) => {
+        setComments([comment, ...comments]);
+    }
+
     async function sendComment(discoveryId, data) {
         const res = await api.commentDiscovery(discoveryId, data);
         try {
             const data = await res.data;
             if (data.error) {
+                setIsCommentError(true);
                 console.log(data.error);
                 return;
             }
-            console.log(data.data)
+            appendComment(data.data);
         }
         catch (err) {
-            console.log(err)
+            setIsCommentError(true);
+            console.log(err);
         }
     }
 
@@ -441,7 +467,7 @@ export default function DiscoveryDetail() {
                 >
                     {
                         comments.map(item => (
-                            <CommentItem commentInputRef={commentInputRef} api={api} key={item.id} data={item} />
+                            <CommentItem commentInputRef={commentInputRef} updateLike={updateLike} api={api} key={item.id} data={item} />
                         ))
                     }
                 </Box>
@@ -486,6 +512,13 @@ export default function DiscoveryDetail() {
                     >Gửi</Button>
                 </Box>
             </Box>
+            <Snackbar
+                anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
+                open={isCommentError}
+                onClose={() => { setIsCommentError(false) }}
+                message="Đánh giá không thành công, vui lòng thử lại sau!"
+                key='bottomcenter'
+            />
         </Box>
     )
 }

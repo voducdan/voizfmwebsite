@@ -113,14 +113,12 @@ export default class API {
     }
 
     getAudioLikes = (page, limit) => {
-        this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
         return this.init().get(`/profiles/audio_histories/likes?${queryString}`);
     }
 
     getListeningPlaylists = () => {
-        this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         return this.init().get(`/playlists/listenings`);
     }
 
@@ -130,12 +128,10 @@ export default class API {
             last_duration: lastDuration,
             playlist_id: playlistId
         }
-        // this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         return this.init().post(`/playlists/listenings`, data);
     }
 
     deleteListeningPlaylist = (id) => {
-        this.base_url = 'https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954';
         return this.init().delete(`/playlists/listenings`, { id });
     }
 
@@ -172,14 +168,10 @@ export default class API {
     }
 
     getRequestedBook = () => {
-        // Hardcode api for testing
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().get(`/book_request`);
     }
 
     requestedBook = (body) => {
-        // Hardcode api for testing
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().post(`/book_request`, body);
     }
 
@@ -238,7 +230,6 @@ export default class API {
     }
 
     likeAudio = (id) => {
-        this.base_url = `https://stoplight.io/mocks/wewe-jsc/voiz-api/26913954`;
         return this.init().post(`/audios/${id}/likes`);
     }
 
