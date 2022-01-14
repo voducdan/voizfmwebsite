@@ -26,7 +26,7 @@ import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCL
 
 function App() {
 
-    const location = useLocation({});
+    const location = useLocation();
     const [includeFooter, setIncludeFooter] = useState(null);
 
     let windowSize = useWindowSize();
@@ -36,6 +36,12 @@ function App() {
     const anchorSearchElId = useSelector(selectAnchorEl);
     const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!isSm && !openSidebar) {
+            dispatch(setOpen(true))
+        }
+    }, [isSm, openSidebar]);
 
     useEffect(() => {
         function checkIncludeFooter() {
@@ -53,10 +59,6 @@ function App() {
     useEffect(() => {
         getSearchAnchorEl();
     }, [anchorSearchElId]);
-
-    if (!isSm && !openSidebar) {
-        dispatch(setOpen(true))
-    }
 
     const openPlayBar = () => {
         const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+$');

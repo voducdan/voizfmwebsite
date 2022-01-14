@@ -121,6 +121,7 @@ export default function Checkout() {
     const {
         selectedItem,
         discountCode,
+        package_type,
         totalPrice,
         finalPrice
     } = paymentData;
@@ -136,21 +137,12 @@ export default function Checkout() {
     const handleCheckout = async () => {
         try {
             const packageIds = selectedItem.map(i => i.id);
-            // const payload = {
-            //     "discount_code": discountCode,
-            //     "package_type": "playlist",
-            //     "package_id": packageIds,
-            //     "platform_type": "website",
-            //     "redirect_url": "http://voiz.test/payment/appota"
-            // }
             const payload = {
-                discount_code: null,
-                package_type: "playlist",
-                platform_type: "website",
-                package_id: [
-                    1768
-                ],
-                redirect_url: "http://voiz.test/payment/appota"
+                "discount_code": discountCode,
+                "package_type": package_type,
+                "package_id": packageIds,
+                "platform_type": "website",
+                "redirect_url": "http://voiz.test/payment/appota"
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
@@ -368,12 +360,13 @@ export default function Checkout() {
                                                         color: COLORS.white
                                                     }}
                                                 >{i.name}</Typography>
-                                                <Typography
+                                                {i.sale_coin_price && (<Typography
                                                     sx={{
                                                         ...TEXT_STYLE.content3,
                                                         color: COLORS.contentIcon
                                                     }}
                                                 >{formatPrice(i.sale_coin_price)} xu</Typography>
+                                                )}
                                             </Box>
                                         ))
                                     }
