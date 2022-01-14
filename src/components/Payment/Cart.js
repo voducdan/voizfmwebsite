@@ -141,6 +141,7 @@ export default function Cart() {
         const paymentData = {
             selectedItem: selectedItem,
             discountCode: isDiscountCodeValid ? discountCode : null,
+            package_type: '',
             totalPrice: totalPrice,
             finalPrice: totalPrice
         };

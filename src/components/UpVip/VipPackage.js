@@ -1,5 +1,5 @@
 // import react
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // import react router component
 import { useNavigate } from 'react-router-dom';
@@ -26,6 +26,9 @@ import { TEXT_STYLE, COLORS, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
 
+// import services
+import API from '../../services/api';
+
 const VipPackageBenefitItem = (props) => {
     const { benefit, idx, isSm } = props;
     return (
@@ -39,7 +42,7 @@ const VipPackageBenefitItem = (props) => {
             <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.caption10Regular : TEXT_STYLE.content1),
-                    color: idx >= 2 ? COLORS.second : COLORS.contentIcon
+                    color: idx === 2 ? COLORS.second : COLORS.contentIcon
                 }}
             >{benefit}</Typography>
         </Box >
@@ -47,7 +50,7 @@ const VipPackageBenefitItem = (props) => {
 }
 
 const VipPackageBaper = (props) => {
-    const { idx, bgcolor, elevation, height, name, price, time, benefit, isSm, selectedPackage, handleSelectPackage } = props;
+    const { data, idx, bgcolor, elevation, height, isSm, selectedPackage, handleSelectPackage } = props;
     return (
         <Paper
             onClick={() => { handleSelectPackage(idx) }}
@@ -67,25 +70,25 @@ const VipPackageBaper = (props) => {
                             textAlign: 'center',
                             mt: '26px'
                         }}
-                    >{name}</Typography>
+                    >{data.name}</Typography>
                 )
             }
-            <Typography
+            {/* <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.title0),
                     color: COLORS.white,
                     textAlign: 'center',
                     mt: isSm ? '23px' : '32px'
                 }}
-            >{formatPrice(price)}đ</Typography>
-            <Typography
+            >{formatPrice(price)}đ</Typography> */}
+            {/* <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.VZ_Text_content : TEXT_STYLE.h2),
                     color: isSm ? COLORS.white : COLORS.contentIcon,
                     textAlign: 'center',
                     mt: isSm ? '5px' : '16px'
                 }}
-            >{time}</Typography>
+            >{data.name}</Typography> */}
             <Divider
                 sx={{
                     borderColor: COLORS.placeHolder,
@@ -102,68 +105,61 @@ const VipPackageBaper = (props) => {
                     mb: '22px'
                 }}
             >
-                {
-                    benefit.map((item, idx) => (<VipPackageBenefitItem isSm={isSm} key={idx} benefit={item} idx={idx} />))
-                }
+                {data.ui.text_top_description && (< VipPackageBenefitItem isSm={isSm} key={0} benefit={data.ui.text_top_description} idx={0} />)}
+                {data.ui.text_middle_description && (< VipPackageBenefitItem isSm={isSm} key={1} benefit={data.ui.text_middle_description} idx={1} />)}
+                {data.ui.text_bottom_description && (<VipPackageBenefitItem isSm={isSm} key={2} benefit={data.ui.text_bottom_description} idx={2} />)}
             </Box>
         </Paper>
     )
 }
 
-const vipPackages = [
-    {
-        name: 'Tiêu chuẩn',
-        price: 99000,
-        time: '1 tháng',
-        benefit: [
-            'Nghe thoải mái',
-            'Được tải về đt'
-        ]
-    },
-    {
-        name: 'Tiết kiệm',
-        price: 699000,
-        time: '12 tháng',
-        benefit: [
-            'Nghe thoải mái',
-            'Được tải về đt',
-            'Tiết kiệm 33%'
-        ]
-    },
-    {
-        name: 'Tiết kiệm',
-        price: 9000,
-        time: '60 phút',
-        benefit: [
-            'Nghe thoải mái',
-            'Được tải về đt',
-            'Tiết kiệm 33%'
-        ]
-    }
-
-]
 
 export default function VipPackage() {
+    const api = new API();
 
     const windowSize = useWindowSize();
+    const navigate = useNavigate();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const [selectedPackage, setSelectedPackage] = useState(1);
+    const [vipPackages, setVipPackages] = useState([]);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        async function fetchVipPackages() {
+            try {
+                const res = await api.getVipPackage();
+                const data = await res.data;
+                if (data.error) {
+                    // handle error, maybe redirect to error page
+                    console.log(data.data);
+                    return;
+                }
+                setVipPackages(data.data);
+            }
+            catch (err) {
+                // handle error, maybe redirect to error page
+                console.log(err);
+            }
+        }
+
+        fetchVipPackages();
+    }, []);
 
     const handleSelectPackage = (idx) => {
         setSelectedPackage(idx);
     };
 
     const handleRegisterVip = () => {
-        // const paymentData = {
-        //     selectedItems: [
-
-        //     ],
-        //     totalPrice: vipPackages[selectedPackage]['price'],
-        //     finalPrice: vipPackages[selectedPackage]['price']
-        // };
-        // dispatch(setItems(paymentData));
-        // navigate('/checkout', { replace: true });
+        const paymentData = {
+            selectedItem: [{
+                id: vipPackages[selectedPackage]['code'],
+                name: vipPackages[selectedPackage]['name']
+            }],
+            discountCode: vipPackages[selectedPackage]['sale_code'] || null,
+            package_type: vipPackages[selectedPackage]['package_type']
+        };
+        dispatch(setItems(paymentData));
+        navigate('/checkout', { replace: true });
     }
 
     return (
@@ -210,10 +206,7 @@ export default function VipPackage() {
                                 bgcolor={idx === selectedPackage ? COLORS.bg3 : COLORS.bg2}
                                 elevation={idx === selectedPackage ? 1 : 2}
                                 height={isSm ? (idx === selectedPackage ? 202 : 194) : (idx === selectedPackage ? 378 : 348)}
-                                name={p.name}
-                                price={p.price}
-                                time={p.time}
-                                benefit={p.benefit}
+                                data={p}
                                 selectedPackage={selectedPackage}
                             />
                         ))

@@ -125,7 +125,6 @@ const AppBar = styled(MuiAppBar, {
 
 export default function Header() {
     const api = new API();
-
     const windowSize = useWindowSize();
     const location = useLocation();
     const pathname = location.pathname;

@@ -57,6 +57,12 @@ export default class API {
         return this.init().get(`/combo_packages`)
     }
 
+    getVipPackage = (is_sale = '') => {
+        const params = { is_sale };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/plans/packages?${queryString}`)
+    }
+
     getDiscoveries = () => {
         return this.init().get(`/discoveries`)
     }
