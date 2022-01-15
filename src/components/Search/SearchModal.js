@@ -91,7 +91,7 @@ export default function Search() {
                 width: isSm ? '100%' : '40%',
                 borderRadius: '4px',
                 p: isSm ? '32px 23px' : '32px',
-                position: 'absolute',
+                position: 'fixed',
                 top: '70px',
                 left: isSm ? 0 : '300px',
                 zIndex: '1300',
