@@ -13,7 +13,9 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle
+    DialogTitle,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -104,6 +106,8 @@ export default function Listening() {
     const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
     const [singleItemIdToDelete, setSingleItemIdToDelete] = useState(null);
     const [confirmDeleteModalText, setConfirmDeleteModalText] = useState('');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
 
@@ -111,7 +115,7 @@ export default function Listening() {
         async function fetchListeningPlaylists() {
             const res = await api.getListeningPlaylists();
             const data = await res.data.data;
-            const initDeleteList = data.map(i => ({ id: i.id, checked: false }));
+            const initDeleteList = data.map(i => ({ id: i.playlist.id, checked: false }));
             setListeningPlaylists(data);
             setDeleteList(initDeleteList);
         }
@@ -128,22 +132,44 @@ export default function Listening() {
         let remainItems = null;
         let initDeleteList = null;
         if (singleItemIdToDelete) {
-            remainItems = listeningPlaylists.filter(i => i.id !== singleItemIdToDelete);
+            remainItems = listeningPlaylists.filter(i => i.playlist.id !== singleItemIdToDelete);
             initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            handleApiDelete([singleItemIdToDelete]);
             setSingleItemIdToDelete(null);
         }
         else {
             const selectdItems = deleteList.filter(i => i.checked === true).map(i => i.id);
-            remainItems = listeningPlaylists.filter(i => !(selectdItems.includes(i.id)));
+            console.log(selectdItems)
+            remainItems = listeningPlaylists.filter(i => !(selectdItems.includes(i.playlist.id)));
             initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            handleApiDelete(selectdItems);
         }
-        // handle delete
-
+        if (!openSnackbar) {
+            setDeleteList(initDeleteList);
+            setListeningPlaylists([...remainItems]);
+        }
         setIsSelectDeleteAll(false);
-        setDeleteList(initDeleteList);
-        setListeningPlaylists(remainItems);
         setIsDeleteMode(false);
         handleConfirmDeleteModalClose();
+    }
+
+    const handleApiDelete = async (deletedList) => {
+        try {
+            for (let i of deletedList) {
+                const res = await api.deleteListeningPlaylist(i);
+                const data = await res.data;
+                if (data.error) {
+                    setOpenSnackbar(true);
+                    setErrorMessage('Xóa playlist không thành công!');
+                    return;
+                }
+            }
+        }
+        catch (err) {
+            setErrorMessage('Xóa playlist không thành công!')
+            setOpenSnackbar(true);
+            console.log(err);
+        }
     }
 
     const handleClickDeleteSingleAudio = (e) => {
@@ -181,7 +207,7 @@ export default function Listening() {
         let isDeleteAll = numCheckItems === deleteList.length ? true : false;
 
         setIsSelectDeleteAll(isDeleteAll);
-        setDeleteList(tmpDeleteList);
+        setDeleteList([...tmpDeleteList]);
     }
 
     return (
@@ -267,7 +293,7 @@ export default function Listening() {
                     {
                         listeningPlaylists.map((i, idx) => (
                             <Box
-                                key={i?.id}
+                                key={idx}
                                 sx={{
                                     width: isSm ? '100%' : '45%',
                                     ...flexStyle('flex-start', 'center')
@@ -291,11 +317,9 @@ export default function Listening() {
                                 }
                                 <Box>
                                     <PlaylistThumnail
-                                        id={i?.id}
+                                        id={i?.playlist?.id}
                                         name={i?.playlist?.name}
-                                        // src={i?.avatar?.thumb_url}
-                                        // Mock server images is currently error
-                                        src='https://picsum.photos/335/335?img=16'
+                                        src={i?.playlist?.avatar?.thumb_url}
                                         authors={i?.playlist?.authors}
                                         hasDelete={true}
                                         handleConfirmDeleteModalOpen={handleClickDeleteSingleAudio}
@@ -379,6 +403,15 @@ export default function Listening() {
                     </DialogActions>
                 </Dialog>
             </Box>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => { setOpenSnackbar(false) }}
+            >
+                <Alert onClose={() => { setOpenSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

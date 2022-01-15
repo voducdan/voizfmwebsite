@@ -73,7 +73,7 @@ export default function Control(props) {
     }, [paused]);
 
     useEffect(() => {
-        addAudioToListening(audioData.id, position, audioData.playlist.id);
+        // addAudioToListening(audioData.id, position, audioData.playlist.id);
         audio.addEventListener('ended', () => setPaused(true));
         // audio.addEventListener('timeupdate', (e) => {
         //     const currentTime = e.target.currentTime;
@@ -89,7 +89,7 @@ export default function Control(props) {
         dispatch(togglePlayAudio());
     }
 
-    const addAudioToListening = async (audioId, lastDuration, playlistId) => {
+    const addAudioToListening = async () => {
         try {
             const res = await api.addListeningPlaylists(audioData.id, position, audioData.playlist.id);
             const data = await res.data;

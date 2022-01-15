@@ -130,7 +130,7 @@ export default class API {
     }
 
     deleteListeningPlaylist = (id) => {
-        return this.init().delete(`/playlists/listenings`, { id });
+        return this.init().delete(`/playlists/listenings/${id}`);
     }
 
     getCategories = (code, type) => {
