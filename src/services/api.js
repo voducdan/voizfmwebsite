@@ -97,19 +97,17 @@ export default class API {
     }
 
     getPlaylistBookmarks = (page, limit) => {
-        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
         const params = { page, limit };
         const queryString = this.buildQueryString(params)
 
-        return this.init().get(`/playlist_bookmarks?${queryString}`)
+        return this.init().get(`/profiles/playlist_histories/bookmarks?${queryString}`)
     }
 
     getChannelBookmarks = (page, limit) => {
-        this.base_url = `${process.env.REACT_APP_API_PROTOCAL_LOCAL}://${process.env.REACT_APP_BASE_URL_LOCAL}`;
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
 
-        return this.init().get(`/channel_bookmarks?${queryString}`);
+        return this.init().get(`/profiles/channel_histories/bookmarks?${queryString}`);
     }
 
     getAudioLikes = (page, limit) => {

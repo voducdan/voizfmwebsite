@@ -13,7 +13,9 @@ import {
     List,
     ListItem,
     ListItemButton,
-    ListItemText
+    ListItemText,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import AddIcon from '@mui/icons-material/Add';
@@ -60,9 +62,11 @@ export default function ChannelDetail() {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const { id } = useParams();
-    const [channel, setChannel] = useState([]);
+    const [channel, setChannel] = useState({});
     const [playlists, setPlaylists] = useState([]);
     const [audios, setAudios] = useState([]);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         async function fetchChannel() {
@@ -86,15 +90,32 @@ export default function ChannelDetail() {
         fetchAudios();
     }, [])
 
-    const handleBookmark = (is_bookmark, channelId) => {
-        async function bookmarkChannel(channelId) {
-            const res = await api.bookmarkChannel(channelId);
-            const data = await res.data.data;
+    const handleBookmark = () => {
+        async function bookmarkChannel(cb) {
+            try {
+                const res = await api.bookmarkChannel(id);
+                const data = await res.data;
+                if (data.error) {
+                    setOpenSnackbar(true);
+                    setErrorMessage('Đánh dấu playlist không thành công!');
+                    return;
+                }
+                cb(data.data);
+            }
+            catch (err) {
+                setErrorMessage('Đánh dấu kênh không thành công!')
+                setOpenSnackbar(true);
+                console.log(err);
+            }
         }
 
-        bookmarkChannel();
+        bookmarkChannel(updatedBookmarkStatus);
+    }
+
+    const updatedBookmarkStatus = (data) => {
         const updatedChannel = { ...channel };
-        updatedChannel['is_bookmark'] = !is_bookmark;
+        updatedChannel['is_bookmark'] = !updatedChannel['is_bookmark'];
+        updatedChannel['channel_counter']['bookmarks_count'] = data['bookmarks_count'];
         setChannel({ ...updatedChannel });
     }
 
@@ -207,7 +228,7 @@ export default function ChannelDetail() {
                                 <ShareOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                             </IconButton>
                             <Button
-                                onClick={() => { handleBookmark(channel.is_bookmark, channel.id) }}
+                                onClick={handleBookmark}
                                 sx={{
                                     ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                     color: COLORS.white,
@@ -344,6 +365,15 @@ export default function ChannelDetail() {
                     </Box>
                 </Box>
             </Box>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => { setOpenSnackbar(false) }}
+            >
+                <Alert onClose={() => { setOpenSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

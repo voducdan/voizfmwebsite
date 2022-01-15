@@ -92,41 +92,7 @@ export default function AudioLike() {
             const res = await api.getAudioLikes(audioPage, pageLimit);
             const data = await res.data.data;
             const initDeleteList = data.map(i => ({ id: i.id, checked: false }));
-            // Mock data
-            const mockData = [
-                {
-                    "id": 2,
-                    "name": "Drinking hoodie neutra. #39b8ba",
-                    "published_at": "2021-03-20 00:28:55",
-                    "duration": 90,
-                    "avatar": {
-                        "id": 461,
-                        "original_url": "/uploads/avatar/filename/461/a1f1cacc38c14c31.jpg",
-                        "thumb_url": "/uploads/avatar/filename/461/thumb_a1f1cacc38c14c31.jpg"
-                    },
-                    "author": {
-                        "id": 158,
-                        "name": "Julia Cameron"
-                    }
-                },
-                {
-                    "id": 3,
-                    "name": "Drinking hoodie neutra. #39b8ba",
-                    "published_at": "2021-03-20 00:28:55",
-                    "duration": 90,
-                    "avatar": {
-                        "id": 461,
-                        "original_url": "/uploads/avatar/filename/461/a1f1cacc38c14c31.jpg",
-                        "thumb_url": "/uploads/avatar/filename/461/thumb_a1f1cacc38c14c31.jpg"
-                    },
-                    "author": {
-                        "id": 158,
-                        "name": "Julia Cameron"
-                    }
-                }
-            ]
-            setAudioLikes([...data, ...mockData]);
-            // setAudioLikes(data);
+            setAudioLikes([...data]);
             setDeleteList(initDeleteList);
         }
 

@@ -187,7 +187,7 @@ export default function PlatlistDetail() {
                 const data = await res.data;
                 if (data.error) {
                     setOpenSnackbar(true);
-                    setErrorMessage('Bookmark playlist không thành công!');
+                    setErrorMessage('Đánh dấu playlist không thành công!');
                     return;
                 }
                 const playlistToBookmark = { ...playlist };
@@ -195,7 +195,7 @@ export default function PlatlistDetail() {
                 setPlaylist({ ...playlistToBookmark })
             }
             catch (err) {
-                setErrorMessage('Bookmark playlist không thành công!')
+                setErrorMessage('Đánh dấu playlist không thành công!')
                 setOpenSnackbar(true);
             }
         }
