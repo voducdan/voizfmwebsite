@@ -30,6 +30,7 @@ import { SCREEN_BREAKPOINTS, TEXT_STYLE, COLORS, DRAWER_WIDTH } from '../../util
 import useWindowSize from '../../utils/useWindowSize';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
+import ShareModal from '../../components/Shared/ShareModal';
 
 // import service
 import API from '../../services/api';
@@ -67,6 +68,7 @@ export default function ChannelDetail() {
     const [audios, setAudios] = useState([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [openShareModal, setOpenShareModal] = useState(false);
 
     useEffect(() => {
         async function fetchChannel() {
@@ -117,6 +119,10 @@ export default function ChannelDetail() {
         updatedChannel['is_bookmark'] = !updatedChannel['is_bookmark'];
         updatedChannel['channel_counter']['bookmarks_count'] = data['bookmarks_count'];
         setChannel({ ...updatedChannel });
+    }
+
+    const handleOpenShareModal = () => {
+        setOpenShareModal(true)
     }
 
     return (
@@ -224,9 +230,10 @@ export default function ChannelDetail() {
                                 columnGap: '10%'
                             }}
                         >
-                            <IconButton>
+                            <IconButton onClick={handleOpenShareModal}>
                                 <ShareOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                             </IconButton>
+                            <ShareModal url={`${window.location.href}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                             <Button
                                 onClick={handleBookmark}
                                 sx={{
