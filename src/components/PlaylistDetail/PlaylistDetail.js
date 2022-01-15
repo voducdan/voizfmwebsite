@@ -433,7 +433,7 @@ export default function PlatlistDetail() {
                                     <Box onClick={handleOpenShareModal}>
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
-                                    <ShareModal url={`http://13.251.106.4/playlists/${playlist?.id}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
+                                    <ShareModal url={`${window.location.href}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal
                                         isSm={isSm}
                                         open={openRateModal}
