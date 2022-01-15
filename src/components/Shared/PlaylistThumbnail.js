@@ -12,6 +12,7 @@ import {
 } from '@mui/material';
 import PersonOutlineOutlinedIcon from '@mui/icons-material/PersonOutlineOutlined';
 import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
 import DeleteIcon from '@mui/icons-material/Delete';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
@@ -21,12 +22,10 @@ import { TEXT_STYLE, COLORS, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
 export default function PlaylistThumnail(props) {
+    const { id, src, name, authors, isBookmark, hasBookmark, hasDelete, handleConfirmDeleteModalOpen, handleBookmark, children, width } = props;
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-
-    const { id, src, name, authors, isBookmark, hasDelete, handleConfirmDeleteModalOpen, children, width } = props;
-    console.log(id)
-    const clientWidth = width ? width : (isSm || hasDelete) ? '100%' : '45%'
+    const clientWidth = width ? width : (isSm || hasDelete) ? '100%' : '45%';
 
     const authorsString = (authors) => {
         if (Array.isArray(authors)) {
@@ -37,6 +36,7 @@ export default function PlaylistThumnail(props) {
         }
         return authors
     }
+
     return (
         <Card
             sx={{
@@ -172,25 +172,26 @@ export default function PlaylistThumnail(props) {
                             )
                         }
                     </Box>
-                    {
-                        isBookmark && (
-                            <Button
-                                sx={{
-                                    ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.title2),
-                                    textTransform: 'none',
-                                    color: COLORS.white,
-                                    bgcolor: COLORS.bg3,
-                                    borderRadius: '22px',
-                                    maxWidth: '144px',
-                                    width: '50%',
-                                    height: '32px',
-                                    '& .MuiButton-startIcon': {
-                                        mr: '2px'
-                                    }
-                                }}
-                                startIcon={<CheckIcon sx={{ color: COLORS.white, ...(isSm && { width: '12px', height: '12px' }) }} />}
-                            >Hủy đánh dấu</Button>
-                        )
+                    {hasBookmark && (
+                        <Button
+                            onClick={() => { handleBookmark(id) }}
+                            sx={{
+                                ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.title1),
+                                ...(isSm && { whiteSpace: 'nowrap' }),
+                                color: COLORS.white,
+                                borderRadius: '22px',
+                                height: isSm ? '28px' : '48px',
+                                width: 'max-content',
+                                textTransform: 'none',
+                                bgcolor: isBookmark ? COLORS.bg3 : COLORS.main,
+                                pl: '14px',
+                                pr: '14px',
+                                ':hover': {
+                                    bgcolor: isBookmark ? COLORS.bg3 : COLORS.main
+                                }
+                            }}
+                            startIcon={isBookmark ? <CheckIcon /> : <AddIcon />}
+                        >{isBookmark ? 'Hủy đánh dấu' : 'Đánh dấu'}</Button>)
                     }
                     {
                         hasDelete && (

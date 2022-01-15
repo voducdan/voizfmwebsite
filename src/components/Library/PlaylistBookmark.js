@@ -1,6 +1,9 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import react router dom
+import { Link } from 'react-router-dom';
+
 // import MUI component
 import {
     Box,
@@ -8,10 +11,13 @@ import {
     Tab,
     Typography,
     Avatar,
-    Button
+    Button,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 import CheckIcon from '@mui/icons-material/Check';
+import AddIcon from '@mui/icons-material/Add';
 import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 // import swiper
@@ -85,7 +91,7 @@ const PlaylistAudioCount = (props) => {
 }
 
 const ChannelBookmark = (props) => {
-    const { data, isSm } = props;
+    const { data, isSm, handleBookmarkChannel } = props;
     const playlists = data.playlists;
     return (
         <Box
@@ -112,8 +118,7 @@ const ChannelBookmark = (props) => {
                             height: isSm ? '32px' : '40px'
                         }}
                         alt="img"
-                        // src={data.avatar.thumb_url}
-                        src="https://picsum.photos/420/420?img=4"
+                        src={data.avatar.thumb_url}
                     />
                     <Typography
                         sx={{
@@ -126,32 +131,41 @@ const ChannelBookmark = (props) => {
                     <ChevronRightIcon sx={{ color: COLORS.white }} />
                 </Box>
                 <Button
+                    onClick={() => { handleBookmarkChannel(data.id) }}
                     sx={{
-                        ...(isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.title2),
-                        textTransform: 'none',
+                        ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.title1),
+                        ...(isSm && { whiteSpace: 'nowrap' }),
                         color: COLORS.white,
-                        bgcolor: COLORS.bg3,
                         borderRadius: '22px',
-                        maxWidth: '144px',
-                        width: '50%',
-                        height: '32px',
-                        '& .MuiButton-startIcon': {
-                            mr: '2px'
+                        height: isSm ? '28px' : '48px',
+                        width: 'max-content',
+                        textTransform: 'none',
+                        bgcolor: data['is_bookmark'] ? COLORS.bg3 : COLORS.main,
+                        pl: '14px',
+                        pr: '14px',
+                        ':hover': {
+                            bgcolor: data['is_bookmark'] ? COLORS.bg3 : COLORS.main
                         }
                     }}
-                    startIcon={<CheckIcon sx={{ color: COLORS.white, ...(isSm && { width: '12px', height: '12px' }) }} />}
-                >Hủy theo dõi</Button>
+                    startIcon={data['is_bookmark'] ? <CheckIcon /> : <AddIcon />}
+                >{data['is_bookmark'] ? 'Hủy theo dõi' : 'Theo dõi'}</Button>
             </Box>
 
             <Swiper slidesPerView={isSm ? 2.5 : 5} spaceBetween={isSm ? 8 : 22} style={{ marginTop: '10px' }}>
                 {playlists.map((item) => (
                     <SwiperSlide key={item.id}>
-                        <Thumbnail
-                            style={{ width: '100%', height: isSm ? '145px' : '186px', borderRadius: '4px' }}
-                            // avtSrc={item.avatar.thumb_url}
-                            avtSrc={`https://picsum.photos/420/420?img=${item.id}`}
-                            alt={`images ${item.id}`}
-                        />
+                        <Link
+                            to={`/playlists/${item.id}`}
+                            style={{
+                                height: isSm ? '145px' : '186px'
+                            }}
+                        >
+                            <Thumbnail
+                                style={{ width: '100%', height: '100%', borderRadius: '4px' }}
+                                avtSrc={item.avatar.thumb_url}
+                                alt={`images ${item.id}`}
+                            />
+                        </Link>
                     </SwiperSlide>
                 ))}
             </Swiper>
@@ -189,16 +203,20 @@ export default function PlaylistBookmark() {
     const [playlistPage, setPlaylistPage] = useState(0);
     const [channelPage, setChannelPage] = useState(0);
     const [value, setValue] = useState(0);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         async function fetchPlaylistBookmarks() {
             const res = await api.getPlaylistBookmarks(playlistPage, pageLimit);
-            const data = await res.data;
+            const data = await res.data.data;
+            data.forEach(i => i['is_bookmark'] = true);
             setPlaylistBookmarks(data)
         }
         async function fetchChannelBookmarks() {
             const res = await api.getChannelBookmarks(channelPage, pageLimit);
-            const data = await res.data;
+            const data = await res.data.data;
+            data.forEach(i => i['is_bookmark'] = true);
             setChannelBookmarks(data)
         }
 
@@ -209,6 +227,56 @@ export default function PlaylistBookmark() {
     const handleChange = (event, newValue) => {
         setValue(newValue);
     };
+
+    const handleBookmark = (id) => {
+        async function bookmarkPlaylist() {
+            try {
+                const res = await api.bookmarkPlaylist(id);
+                const data = await res.data;
+                if (data.error) {
+                    setOpenSnackbar(true);
+                    setErrorMessage('Đánh dấu playlist không thành công!');
+                    return;
+                }
+                const playlistBookmarksTmp = [...playlistBookmarks];
+                const playlistId = playlistBookmarksTmp.findIndex(i => i.id === id);
+                playlistBookmarksTmp[playlistId]['is_bookmark'] = !playlistBookmarksTmp[playlistId]['is_bookmark'];
+                setPlaylistBookmarks([...playlistBookmarksTmp]);
+            }
+            catch (err) {
+                setErrorMessage('Đánh dấu playlist không thành công!')
+                setOpenSnackbar(true);
+                console.log(err);
+            }
+        }
+
+        bookmarkPlaylist();
+    }
+
+    const handleBookmarkChannel = (id) => {
+        async function bookmarkChannel() {
+            try {
+                const res = await api.bookmarkChannel(id);
+                const data = await res.data;
+                if (data.error) {
+                    setOpenSnackbar(true);
+                    setErrorMessage('Đánh dấu kênh không thành công!');
+                    return;
+                }
+                const channelBookmarksTmp = [...channelBookmarks];
+                const channelId = channelBookmarksTmp.findIndex(i => i.id === id);
+                channelBookmarksTmp[channelId]['is_bookmark'] = !channelBookmarksTmp[channelId]['is_bookmark'];
+                setChannelBookmarks([...channelBookmarksTmp]);
+            }
+            catch (err) {
+                setErrorMessage('Đánh dấu kênh không thành công!')
+                setOpenSnackbar(true);
+                console.log(err);
+            }
+        }
+
+        bookmarkChannel();
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -240,10 +308,13 @@ export default function PlaylistBookmark() {
                     playlistBookmarks.map(i => (
                         <PlaylistThumnail
                             key={i?.id}
+                            id={i?.id}
                             name={i.name}
                             src={i?.avatar?.thumb_url}
                             authors={i?.author_string}
-                            isBookmark={true}
+                            isBookmark={i.is_bookmark}
+                            hasBookmark={true}
+                            handleBookmark={handleBookmark}
                             children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
                         />
                     ))
@@ -252,10 +323,19 @@ export default function PlaylistBookmark() {
             <TabPanel value={value} index={1} isSm={isSm}>
                 {
                     channelBookmarks.map(i => (
-                        <ChannelBookmark key={i.id} isSm={isSm} data={i} />
+                        <ChannelBookmark key={i.id} isSm={isSm} data={i} handleBookmarkChannel={handleBookmarkChannel} />
                     ))
                 }
             </TabPanel>
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => { setOpenSnackbar(false) }}
+            >
+                <Alert onClose={() => { setOpenSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

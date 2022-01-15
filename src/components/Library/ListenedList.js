@@ -119,6 +119,8 @@ export default function PlaylistHistory() {
     const [playlistHistories, setPlaylistHistories] = useState([]);
     const [audiotHistories, setAudioHistories] = useState([]);
     const [value, setValue] = useState(0);
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
 
     useEffect(() => {
         async function fetchPlaylistHistories() {
@@ -186,6 +188,7 @@ export default function PlaylistHistory() {
                             name={i.name}
                             src={i?.avatar?.thumb_url}
                             authors={i?.author?.name}
+                            hasBookmark={false}
                             children={<AudioDuration isSm={isSm} duration={i?.duration} />}
                         />
                     ))
