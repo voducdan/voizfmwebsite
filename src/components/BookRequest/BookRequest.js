@@ -234,7 +234,7 @@ export default function BookRequest() {
                                 >
                                     <Box
                                         sx={{
-                                            width: '100%',
+                                            width: '60%%',
                                             ...flexStyle('flex-start', 'flex-start'),
                                             columnGap: '11px'
                                         }}
@@ -276,7 +276,7 @@ export default function BookRequest() {
                                     </Box>
                                     <Box
                                         sx={{
-                                            width: '100%'
+                                            width: '40%'
                                         }}
                                     >
                                         <Typography
