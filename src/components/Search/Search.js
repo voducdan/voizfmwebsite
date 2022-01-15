@@ -524,17 +524,13 @@ export default function Search() {
                 params.nextQueryType
             );
             const data = await res.data;
-            if (data.error) {
-                console.log(data.error);
-                return;
-            }
             setSearchResults([...searchResults, ...data.data]);
             if (['playlists', 'audios'].includes(type)) {
                 setSearchMeta({ ...data.meta });
             }
         }
         catch (err) {
-            console.log(err)
+            console.log(err);
         }
     }
 
