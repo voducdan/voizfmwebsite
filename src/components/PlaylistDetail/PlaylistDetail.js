@@ -538,23 +538,26 @@ export default function PlatlistDetail() {
                             }}
                             startIcon={<Play />}
                         >Phát tất cả</Button>
-                        <Button
-                            sx={{
-                                bgcolor: COLORS.second,
-                                width: '50%',
-                                borderRadius: '6px',
-                                ...TEXT_STYLE.title1,
-                                color: COLORS.white,
-                                textTransform: 'none',
-                                height: '48px',
-                                ':hover': {
-                                    bgcolor: COLORS.second
-                                }
-                            }}
-                            disabled={!!!audioTrailerUrl}
-                            startIcon={paused ? <VolumeMuteIcon sx={{ color: !!audioTrailerUrl ? COLORS.white : 'rgba(0, 0, 0, 0.26)' }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
-                            onClick={onPlayClick}
-                        >Nghe thử</Button>
+                        {
+                            !!audioTrailerUrl && (
+                                <Button
+                                    sx={{
+                                        bgcolor: COLORS.second,
+                                        width: '50%',
+                                        borderRadius: '6px',
+                                        ...TEXT_STYLE.title1,
+                                        color: COLORS.white,
+                                        textTransform: 'none',
+                                        height: '48px',
+                                        ':hover': {
+                                            bgcolor: COLORS.second
+                                        }
+                                    }}
+                                    startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                                    onClick={onPlayClick}
+                                >Nghe thử</Button>
+                            )
+                        }
                     </Box>
                 )
             }
@@ -770,20 +773,23 @@ export default function PlatlistDetail() {
                                         startIcon={<Play />}
                                     >Phát tất cả</Button>
                                 </Link>
-                                <Button
-                                    sx={{
-                                        bgcolor: COLORS.second,
-                                        width: '50%',
-                                        borderRadius: '6px',
-                                        ...TEXT_STYLE.title1,
-                                        color: COLORS.white,
-                                        textTransform: 'none',
-                                        height: '48px'
-                                    }}
-                                    disabled={!!!audioTrailerUrl}
-                                    startIcon={paused ? <VolumeMuteIcon sx={{ color: !!audioTrailerUrl ? COLORS.white : 'rgba(0, 0, 0, 0.26)' }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
-                                    onClick={onPlayClick}
-                                >Nghe thử</Button>
+                                {
+                                    !!audioTrailerUrl && (
+                                        <Button
+                                            sx={{
+                                                bgcolor: COLORS.second,
+                                                width: '50%',
+                                                borderRadius: '6px',
+                                                ...TEXT_STYLE.title1,
+                                                color: COLORS.white,
+                                                textTransform: 'none',
+                                                height: '48px'
+                                            }}
+                                            startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                                            onClick={onPlayClick}
+                                        >Nghe thử</Button>
+                                    )
+                                }
                             </Box>
                         )
                     }
