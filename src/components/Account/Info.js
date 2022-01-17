@@ -65,7 +65,7 @@ export default function Info(props) {
                         flexDirection: 'column'
 
                     } : {
-                        ...flexStyle('flex-start', 'center')
+                        ...flexStyle('flex-start', 'flex-start')
                     })
                 }}>
                     <Box
@@ -146,6 +146,7 @@ export default function Info(props) {
                         <Box
                             sx={{
                                 width: '100%',
+                                maxWidth: '400px',
                                 paddingTop: '17px',
                                 paddingLeft: isSm ? '16px' : '37px',
                                 paddingBottom: '17px',
@@ -181,38 +182,6 @@ export default function Info(props) {
                                 >Nâng cấp
                                 </Button>
                             </Link>
-                        </Box>
-                        <Box
-                            sx={{
-                                width: '100%',
-                                paddingTop: '17px',
-                                paddingLeft: isSm ? '16px' : '37px',
-                                paddingBottom: '17px',
-                                paddingRight: '20px',
-                                ...flexStyle('space-between', 'center'),
-                                backgroundColor: COLORS.main,
-                                borderRadius: '6px',
-                                height: '60px',
-                                boxSizing: 'border-box'
-                            }}
-                        >
-                            <Typography
-                                sx={{
-                                    ...TEXT_STYLE.h3,
-                                    color: COLORS.white
-                                }}
-                            >Bạn đang có  {new Intl.NumberFormat('en-IN').format(accountData?.user_resource?.remaining_coins)} xu</Typography>
-                            <Button
-                                style={{
-                                    color: COLORS.main,
-                                    borderRadius: '20px',
-                                    border: 'none',
-                                    backgroundColor: COLORS.white,
-                                    textTransform: 'none',
-                                    ...TEXT_STYLE.title2
-                                }}
-                            >Nạp thêm
-                            </Button>
                         </Box>
                     </Box>
                 </Box>
