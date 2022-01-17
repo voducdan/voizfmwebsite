@@ -35,6 +35,7 @@ import {
 import TabPanel from '../../components/TabPanel/TabPanel';
 import Info from './Info';
 import HistoryTransaction from './TabPanel/HistoryTransaction';
+import QRUpload from './TabPanel/QRUpload';
 import AppInfo from './TabPanel/AppInfo';
 import InviteFriend from './TabPanel/InviteFriend';
 import BeCreator from './TabPanel/BeCreator';
@@ -314,9 +315,7 @@ export default function Account() {
                 <AppInfo value={value} />
                 <InviteFriend key={openInviteFriend} isSm={isSm} value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
                 <BeCreator value={value} isSm={isSm} />
-                <TabPanel value={value} index={4}>
-                    Quét mã QR
-                </TabPanel>
+                <QRUpload value={value} isSm={isSm} />
                 <Box />
             </Box >
         </Box >
