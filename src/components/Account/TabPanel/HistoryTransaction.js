@@ -18,17 +18,17 @@ import { COLORS, TEXT_STYLE } from '../../../utils/constants';
 import API from '../../../services/api'
 
 const PanelContent = (props) => {
-    const { transactions } = props;
+    const { transactions, isSm } = props;
     return (
         <Box
             sx={{
                 ...flexStyle('center', 'flex-start'),
                 flexDirection: 'column',
                 backgroundColor: COLORS.bg2,
-                rowGap: props.isSm ? '24px' : '32px',
-                padding: props.isSm ? '16px' : '32px'
+                rowGap: isSm ? '24px' : '32px',
+                padding: isSm ? '16px' : '32px'
             }}>
-            <Typography sx={{ ...(props.isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2), color: COLORS.white }}>Lịch sử giao dịch</Typography>
+            <Typography sx={{ ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2), color: COLORS.white }}>Lịch sử giao dịch</Typography>
             <Box
                 sx={{
                     ...flexStyle('center', 'center'),
@@ -53,10 +53,10 @@ const PanelContent = (props) => {
                             }}
                         >
                             <Box sx={{ display: 'flex' }}>
-                                <Typography sx={{ ...(props.isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1), color: COLORS.VZ_Text_content }} >
+                                <Typography sx={{ ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1), color: COLORS.VZ_Text_content }} >
                                     Tên:
                                 </Typography>
-                                <Typography sx={{ ...(props.isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1), color: COLORS.white, marginLeft: '7px' }}>
+                                <Typography sx={{ ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1), color: COLORS.white, marginLeft: '7px' }}>
                                     {item?.name}
                                 </Typography>
                             </Box>
@@ -94,7 +94,7 @@ const PanelContent = (props) => {
 
 export default function HistoryTransaction(props) {
     const api = new API();
-    const { isSm } = props
+    const { isSm, value } = props
     const [transactions, setTransactions] = useState([]);
 
     useEffect(() => {
@@ -108,6 +108,6 @@ export default function HistoryTransaction(props) {
     }, [])
 
     return (
-        <TabPanel isSm={isSm} value={props.value} index={0} children={<PanelContent isSm={isSm} transactions={transactions} />} ></TabPanel>
+        <TabPanel isSm={isSm} value={value} index={0} children={<PanelContent isSm={isSm} transactions={transactions} />} ></TabPanel>
     )
 }
