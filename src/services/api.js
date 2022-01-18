@@ -1,28 +1,34 @@
 import * as axios from 'axios';
 
 import { getToken } from './authentication';
+import Sha256Encrypt from '../utils/sha256';
+import token from '../redux/token';
 
 export default class API {
     constructor() {
-        this.api_token = null;
+        // this.api_token = getToken();
+        this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.client = null;
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL}://${process.env.REACT_APP_BASE_URL}`;
     }
 
-    init = () => {
+    init = (xSignature) => {
         // this.api_token = getToken();
         // Hardcode
-        // this.api_token = 'wjfQexJRdn9tK7Xza-UKag';
-        this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
+        this.xSignature = xSignature;
         let headers = {
             'Content-type': 'application/json',
             'Accept': 'application/json'
         };
 
         if (!!this.api_token) {
-            headers['X-Authorization'] = this.api_token
+            headers['X-Authorization'] = this.api_token;
+        };
+
+        if (!!this.xSignature) {
+            headers['X-Signature'] = this.xSignature;
         };
 
         this.client = axios.create({
@@ -41,6 +47,15 @@ export default class API {
 
     getAudio = (id) => {
         return this.init().get(`/audios/${id}`)
+    }
+
+    getAudioFile = (id) => {
+        let content = `audio_id=${id}`
+        if (this.api_token) {
+            content += `&access_token=${this.api_token}`
+        }
+        const xSignature = Sha256Encrypt(content);
+        return this.init(xSignature).get(`/audios/${id}/files`)
     }
 
     getCart = () => {

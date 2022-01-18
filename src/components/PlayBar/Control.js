@@ -97,8 +97,6 @@ export default function Control(props) {
                 console.log(data.error);
                 return;
             }
-
-            console.log(data.data);
         }
         catch (err) {
             console.log(err)
