@@ -27,10 +27,12 @@ import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDi
 import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index';
 
 // import utils
-import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
+import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS, COUNTRY_CODES } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import { validatePhoneNumber, validateOTP } from '../../utils/validate';
 
+// import service
+import API from '../../services/api';
 
 const flexCenter = {
     display: 'flex',
@@ -54,6 +56,7 @@ const loginInfo = (content) => (
 
 
 export default function Login() {
+    const api = new API();
 
     let windowSize = useWindowSize();
     const openLogin = useSelector(selectOpenLogin);
@@ -61,11 +64,12 @@ export default function Login() {
     const [isOTPValid, setIsOTPValid] = useState(false);
     const [waitForOTP, setWaitForOTP] = useState(false);
     const [loginSuccess, setLoginSuccess] = useState(false);
+    const [countryCode, setCountryCode] = useState('84');
+    const [phoneNumber, setPhoneNumber] = useState('');
 
     const dispatch = useDispatch();
 
-    const phonePrefix = 84;
-    const phonePrefixList = [84, 32, 27];
+    const phonePrefixList = COUNTRY_CODES;
 
     const onClose = () => {
         dispatch(handleCloseLogin());
@@ -75,8 +79,10 @@ export default function Login() {
         setWaitForOTP(false);
     };
     const onPhoneChange = (event) => {
-        if (validatePhoneNumber(event.target.value)) {
+        const value = event.target.value
+        if (validatePhoneNumber(value)) {
             setIsPhoneValid(true);
+            setPhoneNumber(value);
         }
         else {
             setIsPhoneValid(false);
@@ -92,14 +98,30 @@ export default function Login() {
         }
     }
 
-    const onEnterPhone = () => {
+    const onEnterPhone = async () => {
         // Post phone to server here
-        setWaitForOTP(true);
+        try {
+            const res = await api.getOTP(phoneNumber, countryCode);
+            const data = await res.data;
+            setWaitForOTP(true);
+            if (data.error) {
+                console.log(data.error);
+                return;
+            }
+            console.log(data.data)
+        }
+        catch (err) {
+            console.log(err);
+        }
     }
     const onEnterOTP = () => {
         // Post OTP to server here
         setLoginSuccess(true);
         dispatch(setToken('token'));
+    }
+
+    const handleChangeCountryCode = (e) => {
+        setCountryCode(e.target.value);
     }
 
     return (
@@ -196,8 +218,9 @@ export default function Login() {
                                 }}>
                                     <Select
                                         id="select-phone-prefix"
-                                        value={phonePrefix}
-                                        label="phonePrefix"
+                                        value={countryCode}
+                                        onChange={handleChangeCountryCode}
+                                        label="countryCode"
                                         sx={{
                                             border: '1px solid #353535',
                                             borderRadius: '4px',
@@ -211,8 +234,8 @@ export default function Login() {
                                         }}
                                     >
                                         {
-                                            phonePrefixList.map(prefix => (
-                                                <MenuItem key={prefix} value={prefix}>+{prefix}</MenuItem>
+                                            phonePrefixList.map((prefix, idx) => (
+                                                <MenuItem key={idx} value={prefix}>+{prefix}</MenuItem>
                                             ))
                                         }
                                     </Select>
@@ -261,7 +284,8 @@ export default function Login() {
                             <Typography sx={{
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,
-                            }}>Nhập số điện thoại của bạn để tiếp tục</Typography>
+                                mt: '32px'
+                            }}>Nhập mã số gồm 6 chữ số đã gửi tới</Typography>
                             <TextField
                                 sx={{
                                     borderRadius: '4px',

@@ -12,7 +12,6 @@ export default class API {
     init = () => {
         // this.api_token = getToken();
         // Hardcode
-        // this.api_token = 'wjfQexJRdn9tK7Xza-UKag';
         this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
@@ -45,7 +44,7 @@ export default class API {
 
     getCart = () => {
         // reset base url for test
-        // this.base_url = `http://localhost:3333`;
+        this.base_url = `http://localhost:3333`;
         return this.init().get(`/cart`);
     }
 
@@ -263,5 +262,13 @@ export default class API {
 
     ratePlaylist = (id, data) => {
         return this.init().post(`/playlists/${id}/ratings`, data);
+    }
+
+    getOTP = (phoneNumber, countryCode) => {
+        const data = {
+            phone_number: phoneNumber,
+            country_code: countryCode
+        }
+        return this.init().post(`/auth/otps`, data);
     }
 }

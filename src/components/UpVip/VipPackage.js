@@ -156,7 +156,7 @@ export default function VipPackage() {
                 name: vipPackages[selectedPackage]['name']
             }],
             discountCode: vipPackages[selectedPackage]['sale_code'] || null,
-            package_type: vipPackages[selectedPackage]['package_type']
+            package_type: 'plan_package'
         };
         dispatch(setItems(paymentData));
         navigate('/checkout', { replace: true });

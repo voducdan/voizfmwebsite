@@ -142,8 +142,9 @@ export default function Checkout() {
                 "package_type": package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
-                "redirect_url": "http://voiz.test/payment/appota"
+                "redirect_url": "http://13.251.106.4/"
             }
+            console.log(payload)
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
             if (data.err) {
