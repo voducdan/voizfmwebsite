@@ -10,6 +10,15 @@ export default class API {
         this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.client = null;
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL}://${process.env.REACT_APP_BASE_URL}`;
+        axios.interceptors.response.use(response => {
+            // Do something with response data
+            console.log(response)
+            return response;
+        }, (error) => {
+            // Do something with response error
+            // Here "error.response" is undefined. 
+            console.log(error);
+        });
     }
 
     init = (xSignature) => {
@@ -36,6 +45,8 @@ export default class API {
             timeout: 10000,
             headers: headers
         });
+
+
 
         return this.client
     }

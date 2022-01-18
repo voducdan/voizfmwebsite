@@ -316,7 +316,8 @@ export default function PlatlistDetail() {
         }
     }
 
-    const handleClickPlayAll = async () => {
+    const handleClickPlayAll = async (e) => {
+        e.preventDefault();
         if (playlistAudios.length <= 0) {
             return;
         }
@@ -324,7 +325,7 @@ export default function PlatlistDetail() {
             var res = await api.getAudioFile(playlistAudios[0].id);
         }
         catch (err) {
-            console.log(err);
+            console.log(err)
         }
     }
 
