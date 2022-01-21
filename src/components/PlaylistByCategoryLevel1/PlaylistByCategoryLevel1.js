@@ -106,7 +106,7 @@ const RandomPlayList = (props) => {
                             color: COLORS.contentIcon
                         }}
                     >
-                        Author
+                        {data.author_string}
                     </Typography>
                 </Box>
                 <Typography
@@ -148,24 +148,25 @@ export default function AudioBook() {
     const [initPlaylists, setInitPlaylists] = useState([]);
 
     useEffect(() => {
+        const code = pathname.replace('-', '_').slice(1);
         async function fetchCategories() {
-            const code = pathname.replace('-', '_').slice(1);
             const res = await api.getCategories(code);
             const data = await res.data.data;
             setCategoryies(data)
         };
+
         async function fetchPlaylistsRandom() {
-            const res = await api.getPlaylistsRandom(NUM_PLAYLIST_RANDOM);
+            const res = await api.getCategoryPlaylists(code, NUM_PLAYLIST_RANDOM, [], 'latest', 1);
             const data = await res.data.data;
             setPlaylistsRandom(data);
         }
 
-        fetchCategories();
         fetchPlaylistsRandom();
+        fetchCategories();
     }, [pathname]);
 
     useEffect(() => {
-        async function initPlaylists() {
+        async function initPlaylist() {
             const initCategories = categories.filter(i => i.sub_name !== '');
             const resultPromise = [];
             initCategories.forEach(i => {
@@ -176,7 +177,8 @@ export default function AudioBook() {
             const results = data.map((i, idx) => ({ name: initCategories[idx]['sub_name'], data: i.data.data }));
             setInitPlaylists(results);
         }
-        initPlaylists();
+
+        initPlaylist();
     }, [categories]);
 
     useEffect(() => {
