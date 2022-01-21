@@ -16,7 +16,7 @@ export default class API {
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         let headers = {
-            'Content-type': 'application/json',
+            'Content-Type': 'application/json',
             'Accept': 'application/json'
         };
 
@@ -44,7 +44,7 @@ export default class API {
 
     getCart = () => {
         // reset base url for test
-        this.base_url = `http://localhost:3333`;
+        // this.base_url = `http://localhost:3333`;
         return this.init().get(`/cart`);
     }
 

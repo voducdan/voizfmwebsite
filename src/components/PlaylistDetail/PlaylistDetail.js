@@ -307,12 +307,30 @@ export default function PlatlistDetail() {
         }
     }
 
-    const handlePlayAudio = (audioId) => {
-        if (playlist.promotion === 'free' || user.promotion === 'vip') {
-            navigate(`/audio-play/${audioId ? audioId : playlistAudios[0].id}`);
+    const handlePlayAudio = async (audioId) => {
+        try {
+            var res = await api.getAudioFile(audioId);
+        }
+        catch (err) {
+            console.log(err);
+        }
+    }
+
+    const handleClickPlayAll = async (e) => {
+        if (!playlistAudios) {
             return;
         }
-        setPlayAudioError(true);
+        try {
+            var res = await api.getAudioFile(playlistAudios[0].id);
+            console.log(res)
+        }
+        catch (err) {
+            console.log(err)
+            console.log(err.request)
+            console.log(err.response)
+            console.log(err.config)
+            console.log(err.isAxiosError)
+        }
     }
 
     return (
@@ -750,29 +768,22 @@ export default function PlatlistDetail() {
                                     borderRadius: '10px'
                                 }}
                             >
-                                <Link
-                                    to={`/audio-play/${(playlistAudios.length > 0) && playlistAudios[0].id}?playlist=${playlist?.id}`}
-                                    style={{
-                                        textDecoration: 'none',
-                                        width: '50%',
+                                <Button
+                                    onClick={handleClickPlayAll}
+                                    sx={{
+                                        bgcolor: COLORS.main,
+                                        width: '100%',
+                                        borderRadius: '6px',
+                                        ...TEXT_STYLE.title1,
+                                        color: COLORS.white,
+                                        textTransform: 'none',
+                                        height: '48px',
+                                        ':hover': {
+                                            bgcolor: COLORS.main
+                                        }
                                     }}
-                                >
-                                    <Button
-                                        sx={{
-                                            bgcolor: COLORS.main,
-                                            width: '100%',
-                                            borderRadius: '6px',
-                                            ...TEXT_STYLE.title1,
-                                            color: COLORS.white,
-                                            textTransform: 'none',
-                                            height: '48px',
-                                            ':hover': {
-                                                bgcolor: COLORS.main
-                                            }
-                                        }}
-                                        startIcon={<Play />}
-                                    >Phát tất cả</Button>
-                                </Link>
+                                    startIcon={<Play />}
+                                >Phát tất cả</Button>
                                 {
                                     !!audioTrailerUrl && (
                                         <Button
