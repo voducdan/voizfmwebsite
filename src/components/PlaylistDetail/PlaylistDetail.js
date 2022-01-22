@@ -317,19 +317,15 @@ export default function PlatlistDetail() {
     }
 
     const handleClickPlayAll = async (e) => {
-        if (!playlistAudios) {
+        e.preventDefault();
+        if (playlistAudios) {
             return;
         }
         try {
             var res = await api.getAudioFile(playlistAudios[0].id);
-            console.log(res)
         }
         catch (err) {
             console.log(err)
-            console.log(err.request)
-            console.log(err.response)
-            console.log(err.config)
-            console.log(err.isAxiosError)
         }
     }
 

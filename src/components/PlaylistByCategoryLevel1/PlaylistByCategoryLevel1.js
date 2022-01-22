@@ -146,10 +146,9 @@ export default function AudioBook() {
     const [playlists, setPlaylists] = useState([]);
     const [playlistsRandom, setPlaylistsRandom] = useState([]);
     const [initPlaylists, setInitPlaylists] = useState([]);
-    const [code, setCode] = useState('audio_book');
 
     useEffect(() => {
-        const codeTmp = pathname.replace('-', '_').slice(1);
+        const code = pathname.replace('-', '_').slice(1);
         async function fetchCategories() {
             const res = await api.getCategories(code);
             const data = await res.data.data;
@@ -161,7 +160,6 @@ export default function AudioBook() {
             const data = await res.data.data;
             setPlaylistsRandom(data);
         }
-        setCode(codeTmp);
         fetchPlaylistsRandom();
         fetchCategories();
     }, [pathname]);
@@ -226,6 +224,7 @@ export default function AudioBook() {
     }
 
     const handleLoadMoreRandomPlaylist = async () => {
+        const code = pathname.replace('-', '_').slice(1);
         const ignore_ids = playlistsRandom.map(i => i.id).join(',')
         const res = await api.getCategoryPlaylists(code, NUM_PLAYLIST_RANDOM, ignore_ids, 'latest', 1);
         const data = await res.data.data;

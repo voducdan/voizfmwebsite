@@ -62,6 +62,7 @@ const RequestsBook = () => (
 export default function SidebarMenu() {
 
     const windowSize = useWindowSize();
+    const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const navigate = useNavigate();
     const location = useLocation();
     const [current, setCurrent] = useState(null);
@@ -71,7 +72,7 @@ export default function SidebarMenu() {
     const token = useSelector(selectToken);
     const dispatch = useDispatch();
 
-    let open = windowSize.width > SCREEN_BREAKPOINTS.sm ? true : openSidebar
+    let open = !isSm ? true : openSidebar
 
     useEffect(() => {
         let navigatorLink = [];
@@ -192,7 +193,9 @@ export default function SidebarMenu() {
         const allItems = [...navigatorLink, ...categories];
         const item = allItems.filter(i => i.id === id);
         setCurrent(id);
-        dispatch(setOpen(false));
+        if (isSm) {
+            dispatch(setOpen(false));
+        }
         navigate(`../${item[0].url}`, { replace: true });
         e.stopPropagation();
     }
