@@ -243,7 +243,7 @@ export default function HomeContent() {
 
     return (
         <Main>
-            <HomeCarousel windowWidth={windowSize.width}></HomeCarousel>
+            <HomeCarousel isSm={isSm}></HomeCarousel>
             <Box sx={{
                 m: isSm ? '40px 20px' : '56px 48px'
             }}>
