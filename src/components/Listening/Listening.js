@@ -139,7 +139,6 @@ export default function Listening() {
         }
         else {
             const selectdItems = deleteList.filter(i => i.checked === true).map(i => i.id);
-            console.log(selectdItems)
             remainItems = listeningPlaylists.filter(i => !(selectdItems.includes(i.playlist.id)));
             initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
             handleApiDelete(selectdItems);

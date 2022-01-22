@@ -318,7 +318,7 @@ export default function PlatlistDetail() {
 
     const handleClickPlayAll = async (e) => {
         e.preventDefault();
-        if (playlistAudios.length <= 0) {
+        if (playlistAudios) {
             return;
         }
         try {
