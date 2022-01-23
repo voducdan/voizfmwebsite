@@ -122,6 +122,7 @@ export default function PlatlistDetail() {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
+    const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
     const infoPanelHeight = isSm ? 190 : 150;
@@ -289,22 +290,54 @@ export default function PlatlistDetail() {
         }
     }
 
-    const handleAddToCart = () => {
-        // handle api call to add to cart
-
+    const handleAddToCart = async () => {
         // add to cart store
-        const isItemExists = cart.some(i => i.id === playlist.id);
+        const isItemExists = cart.length > 0 && cart.some(i => i.id === playlist.id);
         if (!isItemExists) {
-            const tmpCart = [...cart, playlist];
-            dispatch(setCart(tmpCart));
-            dispatch(setAddToCartFlag(1));
+            try {
+                const res = await api.addToCart(playlist.id);
+                const result = await res.data;
+                if (result.code === 0) {
+                    setAddToCartError(true);
+                    setAddToCartErrorMessage(result.error);
+                    setTimeout(() => {
+                        setAddToCartError(false);
+                    }, 1500)
+                    return;
+                }
+                const tmpCart = [...cart, playlist];
+                dispatch(setCart(tmpCart));
+                dispatch(setAddToCartFlag(1));
+            }
+            catch (err) {
+                const errList = err.response.data.error;
+                if (errList instanceof Object) {
+                    let errMessage = '';
+                    for (let e in errList) {
+                        const key = Object.keys(errList[e])[0];
+                        const value = errList[e][key]
+                        errMessage += `${value} \n`
+                    }
+                    setAddToCartErrorMessage(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                    setAddToCartError(true);
+                    setTimeout(() => {
+                        setAddToCartError(false);
+                    }, 1500);
+                    return;
+                }
+                setAddToCartErrorMessage(errList);
+                setAddToCartError(true);
+                setTimeout(() => {
+                    setAddToCartError(false);
+                }, 1500);
+            }
+            return;
         }
-        else {
-            setAddToCartError(true);
-            setTimeout(() => {
-                setAddToCartError(false);
-            }, 1500)
-        }
+        setAddToCartErrorMessage('Sản phẩm đã được thêm vào.\n Vui lòng kiểm tra lại giỏ hàng!');
+        setAddToCartError(true);
+        setTimeout(() => {
+            setAddToCartError(false);
+        }, 1500);
     }
 
     const handlePlayAudio = async (audioId) => {
@@ -871,7 +904,7 @@ export default function PlatlistDetail() {
                     columnGap: '24px'
                 }}
             >
-                <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line' }}>{'Sản phẩm đã được thêm vào.\n Vui lòng kiểm tra lại giỏ hàng!'}</div>}>
+                <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
                     <Button
                         onClick={handleAddToCart}
                         sx={{

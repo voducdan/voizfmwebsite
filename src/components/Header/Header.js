@@ -137,7 +137,7 @@ export default function Header() {
     const token = useSelector(selectToken);
     const addToCartFlag = useSelector(selectAddToCartFlag);
     const [avtSrc, setAvtSrc] = useState(null);
-    const [numItemsInCart, setNumItemsInCart] = useState(cart.length);
+    const [numItemsInCart, setNumItemsInCart] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchOnMb, setSearchOnMb] = useState(false);
     const [searchOnPC, setSearchOnPC] = useState(false);
@@ -148,13 +148,7 @@ export default function Header() {
 
 
     useEffect(() => {
-        async function fetchCart() {
-            const res = await api.getCart();
-            const data = await res.data;
-            dispatch(setCart(data));
-        };
-
-        fetchCart();
+        fetchNumItemsInCart();
     }, []);
 
     useEffect(() => {
@@ -166,7 +160,7 @@ export default function Header() {
     }, [isSm]);
 
     useEffect(() => {
-        setNumItemsInCart(cart.length);
+        fetchNumItemsInCart();
     }, [cart]);
 
     useEffect(() => {
@@ -181,6 +175,12 @@ export default function Header() {
         setShowHeaderItems(true);
         setSearchStatus();
     }, [pathname, search]);
+
+    const fetchNumItemsInCart = async () => {
+        const res = await api.getNumItemsInCart();
+        const data = await res.data.data;
+        setNumItemsInCart(data.badge);
+    };
 
     function setSearchStatus() {
         if (isSm) {

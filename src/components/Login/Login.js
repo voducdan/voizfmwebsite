@@ -157,7 +157,6 @@ export default function Login() {
         catch (err) {
             setHasError(true);
             const errList = err.response.data.error;
-            console.log(errList)
             if (errList instanceof Object) {
                 let errMessage = '';
                 for (let e in errList) {

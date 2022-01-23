@@ -68,9 +68,22 @@ export default class API {
     }
 
     getCart = () => {
-        // reset base url for test
-        // this.base_url = `http://localhost:3333`;
-        return this.init().get(`/cart`);
+        return this.init().get('/web/carts');
+    }
+
+    getNumItemsInCart = () => {
+        return this.init().get('/web/carts/badge');
+    }
+
+    addToCart = (playlistId) => {
+        const data = {
+            playlist_id: playlistId
+        }
+        return this.init().post('/web/carts', data);
+    }
+
+    removeCartItem = (playlistId) => {
+        return this.init().delete(`web/carts/${playlistId}`);
     }
 
     payment = (method, data) => {
