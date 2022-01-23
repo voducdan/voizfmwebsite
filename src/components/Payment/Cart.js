@@ -68,7 +68,6 @@ export default function Cart() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-
         function initCheckControl(cart) {
             const init = {};
             cart.forEach(i => {
@@ -81,8 +80,15 @@ export default function Cart() {
             })
             setCheckControl(init);
         }
+        async function fetchCart(cb) {
+            const res = await api.getCart();
+            const data = await res.data.data;
+            dispatch(setCart([...data]));
+            console.log(cart)
+            cb(data);
+        }
 
-        initCheckControl(cart);
+        fetchCart(initCheckControl);
     }, []);
 
     useEffect(() => {
@@ -254,7 +260,6 @@ export default function Cart() {
                                     </ListItemIcon>
                                 </MenuItem>
                                 <Divider sx={{ borderColor: COLORS.bg3 }} />
-
                                 {
                                     cart.map((item) => (
                                         <MenuItem key={item.id}
@@ -308,7 +313,7 @@ export default function Cart() {
                                                                 color: COLORS.contentIcon
                                                             }}
                                                         >
-                                                            Tác giả: {item.authors.map(author => author.name).join(',')}
+                                                            Tác giả: {item?.author_string}
                                                         </Typography>
                                                         <Typography
                                                             sx={{
@@ -330,18 +335,21 @@ export default function Cart() {
                                                     justifyContent: 'flex-end'
                                                 }}
                                             >
-                                                <Typography
-                                                    sx={{
-                                                        ...TEXT_STYLE.content1,
-                                                        color: COLORS.contentIcon
-                                                    }}
-                                                >{formatPrice(item.sale_coin_price)} xu</Typography>
+                                                {
+                                                    item.sale_coin_price && (
+                                                        <Typography
+                                                            sx={{
+                                                                ...TEXT_STYLE.content1,
+                                                                color: COLORS.contentIcon
+                                                            }}
+                                                        >{formatPrice(item.sale_coin_price)} xu</Typography>
+                                                    )
+                                                }
                                                 <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />
                                             </ListItemIcon>
                                         </MenuItem>
                                     ))
                                 }
-
                             </MenuList>
                         </Box>
                         <Box
