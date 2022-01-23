@@ -6,8 +6,7 @@ import token from '../redux/token';
 
 export default class API {
     constructor() {
-        // this.api_token = getToken();
-        this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
+        this.api_token = getToken();
         this.client = null;
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL}://${process.env.REACT_APP_BASE_URL}`;
         axios.interceptors.response.use(response => {
@@ -23,8 +22,6 @@ export default class API {
 
     init = (token, xSignature) => {
         this.api_token = token || getToken();
-        // Hardcode
-        // this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         this.xSignature = xSignature;
@@ -298,6 +295,23 @@ export default class API {
             country_code: countryCode
         }
         return this.init().post(`/auth/otps`, data);
+    }
+
+    getOTPOnUpdateProfile = (phoneNumber, countryCode) => {
+        const data = {
+            phone_number: phoneNumber,
+            country_code: countryCode
+        }
+        return this.init().post(`/profiles/otps`, data);
+    }
+
+    updatePhoneNumber = (phoneNumber, countryCode, otp) => {
+        const data = {
+            phone_number: phoneNumber,
+            country_code: countryCode,
+            otp: otp
+        }
+        return this.init().put(`/profiles/phone_number`, data);
     }
 
     loginByPhone = (phoneNumber, countryCode, otp) => {
