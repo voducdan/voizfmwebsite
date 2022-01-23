@@ -133,14 +133,14 @@ export default function Listening() {
         let initDeleteList = null;
         if (singleItemIdToDelete) {
             remainItems = listeningPlaylists.filter(i => i.playlist.id !== singleItemIdToDelete);
-            initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            initDeleteList = remainItems.map(i => ({ id: i.playlist.id, checked: false }));
             handleApiDelete([singleItemIdToDelete]);
             setSingleItemIdToDelete(null);
         }
         else {
             const selectdItems = deleteList.filter(i => i.checked === true).map(i => i.id);
             remainItems = listeningPlaylists.filter(i => !(selectdItems.includes(i.playlist.id)));
-            initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            initDeleteList = remainItems.map(i => ({ id: i.playlist.id, checked: false }));
             handleApiDelete(selectdItems);
         }
         if (!openSnackbar) {
