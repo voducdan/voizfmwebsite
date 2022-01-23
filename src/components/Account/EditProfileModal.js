@@ -179,9 +179,10 @@ export default function EditProfileModal(props) {
                 for (let e in errList) {
                     const key = Object.keys(errList[e])[0];
                     const value = errList[e][key]
-                    errMessage += `${key} ${value} \n`
+                    errMessage += `${value} \n`
                 }
                 setUpdatedInfoMessage(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                setOpenUpdateInfoResultModal(true);
                 return;
             }
             setUpdatedInfoMessage(errList);
@@ -207,9 +208,10 @@ export default function EditProfileModal(props) {
                 for (let e in errList) {
                     const key = Object.keys(errList[e])[0];
                     const value = errList[e][key]
-                    errMessage += `${key} ${value} \n`
+                    errMessage += `${value} \n`
                 }
                 setUpdatedInfoMessage(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                setOpenUpdateInfoResultModal(true);
                 return;
             }
             setUpdatedInfoMessage(errList);
@@ -523,7 +525,7 @@ export default function EditProfileModal(props) {
                     </DialogContentText>
                 </DialogContent>
                 <DialogActions>
-                    <Button onClick={() => { setOpenUpdateInfoResultModal(false) }}>Đóng</Button>
+                    <Button onClick={() => { setOpenUpdateInfoResultModal(false); setUpdatedInfoMessage('') }}>Đóng</Button>
                 </DialogActions>
             </Dialog>
             <Dialog
@@ -534,7 +536,7 @@ export default function EditProfileModal(props) {
                     }
                 }}
                 open={step === 2}
-                onClose={() => { setStep(0) }}
+                onClose={() => { setStep(0); setUpdatedInfoMessage('') }}
             >
                 <Box sx={{
                     width: '80%',
@@ -584,7 +586,7 @@ export default function EditProfileModal(props) {
                     }
                 }}
                 open={step === 1}
-                onClose={() => { setStep(0) }}
+                onClose={() => { setStep(0); setUpdatedInfoMessage('') }}
             >
                 <Box sx={{
                     marginTop: '32px',
