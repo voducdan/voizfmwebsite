@@ -125,13 +125,14 @@ export default function Login() {
             setError(err.message);
         }
     }
+
     const onEnterOTP = async () => {
         try {
             const res = await api.loginByPhone(phoneNumber, countryCode, otp);
             const data = await res.data;
             if (data.error) {
                 setHasError(true);
-                setError(data[0].error);
+                setError(data.error);
                 return;
             }
             const user = {
@@ -343,7 +344,7 @@ export default function Login() {
                                                 color: COLORS.white,
                                                 ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                             }
-                                        }} id="phone-number" placeholder="098775432" variant="outlined" onChange={onPhoneChange} />
+                                        }} id="phone-number" placeholder="986754523" variant="outlined" onChange={onPhoneChange} />
                                 </Box>
                                 <CustomDisabledButton
                                     disabled={!isPhoneValid}
