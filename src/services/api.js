@@ -82,6 +82,10 @@ export default class API {
         return this.init().post('/web/carts', data);
     }
 
+    removeCartItem = (playlistId) => {
+        return this.init().delete(`web/carts/${playlistId}`);
+    }
+
     payment = (method, data) => {
         return this.init().post(`/payment/${method}`, data);
     }

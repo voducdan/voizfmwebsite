@@ -155,9 +155,9 @@ export default function Cart() {
         navigate('/checkout', { replace: true });
     };
 
-    const handleRemoveItem = (id) => {
+    const handleRemoveItem = async (id) => {
         // handle api call
-
+        const res = await api.removeCartItem(id);
         // handle remove item local
         const cartItems = [...cart];
         const remainedItems = cartItems.filter(i => i.id !== id);
@@ -170,11 +170,16 @@ export default function Cart() {
         setConfirmDeleteCartItemModal(false);
     }
 
-    const handleSubmitDeleteCartItem = () => {
-        // handle api call
-
-        // handle remove item in local
+    const handleSubmitDeleteCartItem = async () => {
         const selectedItemId = selectedItem.map(i => i.id);
+        // handle api call
+        let promises = [];
+        for (let i of selectedItemId) {
+            let res = api.removeCartItem(i);
+            promises.push(res);
+        }
+        await Promise.all(promises);
+        // handle remove item in local
         const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
         dispatch(setCart([...remainedItems]));
         setSelectedItem([]);
