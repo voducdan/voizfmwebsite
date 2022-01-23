@@ -27,7 +27,7 @@ import useWindowSize from '../../utils/useWindowSize';
 
 export default function Info(props) {
 
-    const windowSize = useWindowSize()
+    const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 260 : 380;
     const infoPanelHeight = isSm ? 340 : 200;
@@ -37,7 +37,7 @@ export default function Info(props) {
         if (!accountData) {
             return 0;
         }
-        if (accountData.user_resource.remaining_seconds) {
+        if (accountData.user_resource.remaining_seconds === 0 || accountData.user_resource.remaining_seconds) {
             return Math.floor(accountData.user_resource.remaining_seconds / 86400);
         }
         return Math.floor(accountData.user_resource.remaining_minutes / 1440);

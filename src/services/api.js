@@ -9,10 +9,10 @@ export default class API {
         this.base_url = `${process.env.REACT_APP_API_PROTOCAL}://${process.env.REACT_APP_BASE_URL}`;
     }
 
-    init = () => {
-        // this.api_token = getToken();
+    init = (token) => {
+        this.api_token = token || getToken();
         // Hardcode
-        this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
+        // this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         let headers = {
@@ -270,5 +270,17 @@ export default class API {
             country_code: countryCode
         }
         return this.init().post(`/auth/otps`, data);
+    }
+
+    loginByPhone = (phoneNumber, countryCode, otp) => {
+        const data = {
+            phone_number: phoneNumber,
+            country_code: countryCode,
+            otp
+        }
+        return this.init().post(`/web/auth/phone_number`, data);
+    }
+    createProfile = (data, accessToken) => {
+        return this.init(accessToken).post(`/auth/profiles`, data);
     }
 }

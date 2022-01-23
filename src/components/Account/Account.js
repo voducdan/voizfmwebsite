@@ -1,5 +1,5 @@
 // import react module
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // import redux
 import { useSelector } from 'react-redux';
