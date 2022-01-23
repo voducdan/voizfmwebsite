@@ -4,7 +4,7 @@ import { useState } from 'react';
 // import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin';
-import { setToken } from '../../redux/token';
+import { setToken, removeToken } from '../../redux/token';
 
 // import MUI component
 import {
@@ -18,6 +18,10 @@ import {
     TextField,
     Stack,
     Button,
+    DialogTitle,
+    DialogContent,
+    DialogContentText,
+    DialogActions
 } from '@mui/material';
 
 // import others components
@@ -30,6 +34,7 @@ import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../component
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS, COUNTRY_CODES } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import { validatePhoneNumber, validateOTP } from '../../utils/validate';
+import { flexStyle } from '../../utils/flexStyle';
 
 // import service
 import API from '../../services/api';
@@ -59,24 +64,28 @@ export default function Login() {
     const api = new API();
 
     let windowSize = useWindowSize();
+    const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
+
     const openLogin = useSelector(selectOpenLogin);
     const [isPhoneValid, setIsPhoneValid] = useState(false);
     const [isOTPValid, setIsOTPValid] = useState(false);
-    const [waitForOTP, setWaitForOTP] = useState(false);
-    const [loginSuccess, setLoginSuccess] = useState(false);
+    const [step, setStep] = useState(1);
     const [countryCode, setCountryCode] = useState('84');
     const [phoneNumber, setPhoneNumber] = useState('');
+    const [otp, setOtp] = useState('');
+    const [hasError, setHasError] = useState(false);
+    const [error, setError] = useState('');
+    const [userInfo, setUserInfo] = useState({});
+    const [accessToken, setAccessToken] = useState(null);
 
     const dispatch = useDispatch();
 
     const phonePrefixList = COUNTRY_CODES;
-
     const onClose = () => {
         dispatch(handleCloseLogin());
-        setLoginSuccess(false);
         setIsPhoneValid(false);
         setIsOTPValid(false);
-        setWaitForOTP(false);
+        setStep(1);
     };
     const onPhoneChange = (event) => {
         const value = event.target.value
@@ -92,6 +101,7 @@ export default function Login() {
     const onOTPChange = (event) => {
         if (validateOTP(event.target.value)) {
             setIsOTPValid(true);
+            setOtp(event.target.value);
         }
         else {
             setIsOTPValid(false);
@@ -103,25 +113,108 @@ export default function Login() {
         try {
             const res = await api.getOTP(phoneNumber, countryCode);
             const data = await res.data;
-            setWaitForOTP(true);
             if (data.error) {
-                console.log(data.error);
+                setHasError(true);
+                setError(data.error);
                 return;
             }
-            console.log(data.data)
+            setStep(2);
         }
         catch (err) {
-            console.log(err);
+            setHasError(true);
+            setError(err.message);
         }
     }
-    const onEnterOTP = () => {
-        // Post OTP to server here
-        setLoginSuccess(true);
-        dispatch(setToken('token'));
+    const onEnterOTP = async () => {
+        try {
+            const res = await api.loginByPhone(phoneNumber, countryCode, otp);
+            const data = await res.data;
+            if (data.error) {
+                setHasError(true);
+                setError(data[0].error);
+                return;
+            }
+            const user = {
+                "first_name": null,
+                "last_name": null,
+                "birthday": null,
+                "avatar_url": null,
+                "oauth2": data.data.oauth2,
+                "email": null,
+                "oauth2_id": data.data.oauth2_id
+            }
+            const accessToken = data.data.access_token;
+            setUserInfo({ ...user });
+            setAccessToken(accessToken);
+            if (data.data['verification']) {
+                dispatch(setToken(accessToken));
+                setStep(4);
+                return;
+            }
+            setStep(3);
+        }
+        catch (err) {
+            setHasError(true);
+            const errList = err.response.data.error;
+            console.log(errList)
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${key} ${value} \n`
+                }
+                setError(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                return;
+            }
+            setError(errList);
+        }
     }
 
     const handleChangeCountryCode = (e) => {
         setCountryCode(e.target.value);
+    }
+
+    const onUpdateProfile = async () => {
+        try {
+            const res = await api.createProfile(userInfo, accessToken);
+            const data = await res.data;
+            if (data.error) {
+                setHasError(true);
+                setError(data.error);
+                return;
+            }
+            setStep(4);
+            dispatch(setToken(accessToken));
+        }
+        catch (err) {
+            setHasError(true);
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${key} ${value} \n`
+                }
+                setError(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                return;
+            }
+            setError(errList);
+        }
+    }
+
+    const handleChangeUserInfo = (e) => {
+        const name = e.target.name;
+        const value = e.target.value;
+        let user = { ...userInfo };
+        user[name] = value;
+        setUserInfo({ ...user });
+    }
+
+    const handleCloseErrorDialog = () => {
+        setHasError(false);
+        setError('');
     }
 
     return (
@@ -129,16 +222,14 @@ export default function Login() {
             <Dialog
                 open={openLogin}
                 onClose={onClose}
-                aria-labelledby="login-form-modal"
-                aria-describedby="login-form-modal"
                 PaperProps={{
                     style: {
                         backgroundColor: COLORS.bg1,
                         boxShadow: 'none',
                         borderRadius: '30px',
                         margin: 0,
-                        width: windowSize.width > SCREEN_BREAKPOINTS.sm ? '512px' : '100%',
-                        height: windowSize.width > SCREEN_BREAKPOINTS.sm ? 'auto' : '70%',
+                        width: !isSm ? '512px' : '100%',
+                        height: !isSm ? 'auto' : '70%',
                         paddingTop: '40px',
                         paddingBottom: '56px',
                         display: flexCenter.display,
@@ -162,10 +253,10 @@ export default function Login() {
                         ...flexCenter,
                         flexDirection: 'column',
                         width: '80%',
-                        ...(loginSuccess && { display: 'none' })
+                        ...(step > 2 && { display: 'none' })
                     }}>
                         <Typography sx={{
-                            ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h1 : TEXT_STYLE.h2),
+                            ...(!isSm ? TEXT_STYLE.h1 : TEXT_STYLE.h2),
                             color: COLORS.white
                         }}>
                             Đăng nhập hoặc đăng ký
@@ -194,7 +285,7 @@ export default function Login() {
                             width: '100%'
                         }} />
                         <Box sx={{
-                            display: waitForOTP ? 'none' : flexCenter.display,
+                            display: step === 1 ? flexCenter.display : 'none',
                             alignItems: flexCenter.alignItems,
                             flexDirection: 'column',
                         }}>
@@ -250,7 +341,7 @@ export default function Login() {
                                             },
                                             '& .MuiOutlinedInput-input': {
                                                 color: COLORS.white,
-                                                ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                                ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                             }
                                         }} id="phone-number" placeholder="098775432" variant="outlined" onChange={onPhoneChange} />
                                 </Box>
@@ -260,9 +351,9 @@ export default function Login() {
                                     style={{
                                         width: '100%',
                                         textTransform: 'none',
-                                        marginBottom: windowSize.width > SCREEN_BREAKPOINTS.sm ? '20px' : '30px',
+                                        marginBottom: !isSm ? '20px' : '30px',
                                         height: '48px',
-                                        ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+                                        ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
                                     }} content={'Tiếp tục'} />
                             </Box>
                             <Typography sx={{
@@ -276,7 +367,7 @@ export default function Login() {
                             </Stack>
                         </Box>
                         <Box sx={{
-                            display: waitForOTP ? flexCenter.display : 'none',
+                            display: step === 2 ? flexCenter.display : 'none',
                             alignItems: flexCenter.alignItems,
                             flexDirection: 'column',
                             rowGap: '25px'
@@ -297,7 +388,7 @@ export default function Login() {
                                     },
                                     '& .MuiOutlinedInput-input': {
                                         color: COLORS.white,
-                                        ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                     }
                                 }} id="phone-number" placeholder="123456" variant="outlined" onChange={onOTPChange} />
                             <CustomDisabledButton
@@ -306,15 +397,14 @@ export default function Login() {
                                 style={{
                                     width: '100%',
                                     textTransform: 'none',
-                                    marginBottom: windowSize.width > SCREEN_BREAKPOINTS.sm ? '50px' : '40px',
+                                    marginBottom: !isSm ? '50px' : '40px',
                                     height: '48px'
                                 }} content={'Tiếp tục'} />
                         </Box>
                     </Box>
-
                     <Box
                         sx={{
-                            display: loginSuccess ? flexCenter.display : 'none',
+                            display: step === 4 ? flexCenter.display : 'none',
                             alignItems: flexCenter.alignItems,
                             flexDirection: 'column',
                             rowGap: '25px'
@@ -322,11 +412,11 @@ export default function Login() {
                     >
                         <img src="/images/login_success.png" alt="login success img" />
                         <Typography sx={{
-                            ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.h2 : TEXT_STYLE.h3),
+                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3),
                             color: COLORS.white,
                         }}>Chúc mừng bạn!</Typography>
                         <Typography sx={{
-                            ...(windowSize.width > SCREEN_BREAKPOINTS.sm ? TEXT_STYLE.content1 : TEXT_STYLE.content2),
+                            ...(!isSm ? TEXT_STYLE.content1 : TEXT_STYLE.content2),
                             color: COLORS.contentIcon,
                             textAlign: 'center',
                             width: '277px'
@@ -334,6 +424,178 @@ export default function Login() {
                             hãy trải nghiệm ứng dụng ngay bây giờ </Typography>
                     </Box>
                 </FormControl>
+                <FormControl
+                    sx={{
+                        display: step === 3 ? flexCenter.display : 'none',
+                        width: isSm ? '100%' : '80%',
+                        ...flexStyle('center', 'center'),
+                        flexDirection: 'column',
+                        rowGap: '24px',
+                        marginTop: '32px',
+                        paddingBottom: '48px'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            display: step === 3 ? flexCenter.display : 'none',
+                            alignItems: flexCenter.alignItems,
+                            flexDirection: 'column',
+                        }}>
+                        <Box sx={{
+                            marginTop: '32px',
+                            width: '100%',
+                            ...flexCenter,
+                            flexDirection: 'column',
+                            rowGap: '24px',
+                            marginBottom: '24px',
+                        }}>
+                            <Typography sx={{
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                            }}>Cập nhật thông tin cá nhân</Typography>
+                            <Box
+                                sx={{
+                                    width: '100%',
+                                    display: flexCenter.display,
+                                    flexDirection: 'column',
+                                    rowGap: '10px'
+                                }}
+                            >
+                                <TextField
+                                    sx={{
+                                        borderRadius: '4px',
+                                        border: '1px solid #353535',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '100%'
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: COLORS.white,
+                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        }
+                                    }}
+                                    name='first_name'
+                                    onChange={handleChangeUserInfo}
+                                    placeholder="Họ tên lót"
+                                />
+                                <TextField
+                                    sx={{
+                                        borderRadius: '4px',
+                                        border: '1px solid #353535',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '100%'
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: COLORS.white,
+                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        }
+                                    }}
+                                    name='last_name'
+                                    onChange={handleChangeUserInfo}
+                                    placeholder="Tên"
+                                />
+                                <TextField
+                                    sx={{
+                                        borderRadius: '4px',
+                                        border: '1px solid #353535',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '100%'
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: COLORS.white,
+                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        }
+                                    }}
+                                    placeholder="Ngày sinh"
+                                    name='birthday'
+                                    onChange={handleChangeUserInfo}
+                                />
+                                <TextField
+                                    sx={{
+                                        borderRadius: '4px',
+                                        border: '1px solid #353535',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '100%'
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: COLORS.white,
+                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        }
+                                    }}
+                                    placeholder="Avatar url"
+                                    name='avatar_url'
+                                    onChange={handleChangeUserInfo}
+                                />
+                                <TextField
+                                    sx={{
+                                        borderRadius: '4px',
+                                        border: '1px solid #353535',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '100%'
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: COLORS.white,
+                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        }
+                                    }}
+                                    name='email'
+                                    onChange={handleChangeUserInfo}
+                                    placeholder="Email"
+                                />
+                            </Box>
+                            <Button
+                                onClick={onUpdateProfile}
+                                sx={{
+                                    width: '100%',
+                                    textTransform: 'none',
+                                    marginBottom: !isSm ? '20px' : '30px',
+                                    height: '48px',
+                                    ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+                                }}
+                            >
+                                Tiếp tục
+                            </Button>
+                        </Box>
+                    </Box>
+                </FormControl>
+                <Dialog
+                    open={hasError}
+                    onClose={handleCloseErrorDialog}
+                    PaperProps={{
+                        style: {
+                            backgroundColor: COLORS.bg1
+                        }
+                    }}
+                >
+                    <DialogContent>
+                        <DialogContentText
+                            sx={{
+                                color: COLORS.white
+                            }}
+                        >
+                            {error}
+                        </DialogContentText>
+                    </DialogContent>
+                    <DialogActions
+                        sx={{
+                            ...flexStyle('center', 'center'),
+                            'whiteSpace': 'pre-line'
+                        }}
+                    >
+                        <Button onClick={handleCloseErrorDialog} autoFocus>
+                            Đóng
+                        </Button>
+                    </DialogActions>
+                </Dialog>
             </Dialog>
         </div >
     )

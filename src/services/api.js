@@ -21,9 +21,10 @@ export default class API {
         });
     }
 
-    init = (xSignature) => {
-        // this.api_token = getToken();
+    init = (token, xSignature) => {
+        this.api_token = token || getToken();
         // Hardcode
+        // this.api_token = '0lmlAI5Rr6BZuWdS7BCtdA';
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         this.xSignature = xSignature;
@@ -66,7 +67,7 @@ export default class API {
             content += `&access_token=${this.api_token}`
         }
         const xSignature = Sha256Encrypt(content);
-        return this.init(xSignature).get(`/audios/${id}/files`)
+        return this.init(null, xSignature).get(`/audios/${id}/files`)
     }
 
     getCart = () => {
@@ -297,5 +298,17 @@ export default class API {
             country_code: countryCode
         }
         return this.init().post(`/auth/otps`, data);
+    }
+
+    loginByPhone = (phoneNumber, countryCode, otp) => {
+        const data = {
+            phone_number: phoneNumber,
+            country_code: countryCode,
+            otp
+        }
+        return this.init().post(`/web/auth/phone_number`, data);
+    }
+    createProfile = (data, accessToken) => {
+        return this.init(accessToken).post(`/auth/profiles`, data);
     }
 }

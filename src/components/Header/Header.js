@@ -10,6 +10,7 @@ import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
 import { selectCart, setCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
 import { setUser } from '../../redux/user';
+import { selectToken } from '../../redux/token';
 
 // import react router component
 import { Link, useNavigate, useLocation } from 'react-router-dom';
@@ -133,6 +134,7 @@ export default function Header() {
     const navigate = useNavigate();
     const openSidebar = useSelector(selectOpenSidebar);
     const cart = useSelector(selectCart);
+    const token = useSelector(selectToken);
     const addToCartFlag = useSelector(selectAddToCartFlag);
     const [avtSrc, setAvtSrc] = useState(null);
     const [numItemsInCart, setNumItemsInCart] = useState(cart.length);
@@ -152,19 +154,12 @@ export default function Header() {
             dispatch(setCart(data));
         };
 
-        async function fetchUserInfo() {
-            const res = await api.getUserInfo();
-            const data = await res.data.data;
-            if (data.error) {
-                return;
-            }
-            setAvtSrc(data?.avatar?.thumb_url);
-            dispatch(setUser(data));
-        }
-
-        fetchUserInfo();
         fetchCart();
     }, []);
+
+    useEffect(() => {
+        fetchUserInfo();
+    }, [token]);
 
     useEffect(() => {
         setSearchStatus();
@@ -196,6 +191,16 @@ export default function Header() {
             setSearchOnMb(false);
             setSearchOnPC(true)
         }
+    }
+
+    const fetchUserInfo = async () => {
+        const res = await api.getUserInfo();
+        const data = await res.data.data;
+        if (data.error) {
+            return;
+        }
+        setAvtSrc(data?.avatar?.thumb_url);
+        dispatch(setUser(data));
     }
 
     const onOpenLogin = (e) => {
