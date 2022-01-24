@@ -1,8 +1,11 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router dom
-import { useParams, Link, useNavigate } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
+
+// import next router
+import { useRouter } from 'next/router';
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -13,11 +16,7 @@ import { selectUser } from '../../redux/user';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 // import css
 import './PlaylistDetail.css'
@@ -100,10 +99,10 @@ export default function PlatlistDetail() {
     const api = new API();
 
     const windowSize = useWindowSize();
-    const { id } = useParams();
+    const { id } = useRouter().query;
     const cart = useSelector(selectCart);
     const user = useSelector(selectUser);
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
     const [playlistAudios, setPlaylistAudios] = useState([]);
@@ -213,7 +212,7 @@ export default function PlatlistDetail() {
             const playlistInfo = [
                 {
                     label: <InfoLabel title='Tác giả' />,
-                    value: <Link to={`/authors/${playlist?.authors[0]?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.author_string} /></Link>
+                    value: <Link href={`/authors/${playlist?.authors[0]?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.author_string} /></Link>
                 },
                 {
                     label: <InfoLabel title='Thời lượng' />,
@@ -221,7 +220,7 @@ export default function PlatlistDetail() {
                 },
                 {
                     label: <InfoLabel title='Kênh' />,
-                    value: <Link to={`/channels/${playlist?.channel?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.channel?.name} /></Link>
+                    value: <Link href={`/channels/${playlist?.channel?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.channel?.name} /></Link>
                 },
                 {
                     label: <InfoLabel title='Người đọc' />,
@@ -730,7 +729,7 @@ export default function PlatlistDetail() {
                                     {
                                         recommendedPlaylist.map((item, idx) => (
                                             <Link
-                                                to={`/playlists/${item?.id}`}
+                                                href={`/playlists/${item?.id}`}
                                                 key={idx}
                                                 style={{
                                                     width: 'calc(100% / 3 - 3.5px)',
@@ -755,7 +754,7 @@ export default function PlatlistDetail() {
                                     {recommendedPlaylist.map((item, idx) => (
                                         <SwiperSlide key={idx} style={{ width: 'auto' }}>
                                             <Link
-                                                to={`/playlists/${item?.id}`}
+                                                href={`/playlists/${item?.id}`}
                                                 key={idx}
                                             >
                                                 <Thumbnail
@@ -920,7 +919,7 @@ export default function PlatlistDetail() {
                     >Thêm vào giỏ hàng</Button>
                 </Tooltip>
                 <Link
-                    to='/up-vip/'
+                    href='/up-vip/'
                     style={{
                         textDecoration: 'none',
                         width: isSm ? '50%' : '20%',
@@ -971,7 +970,7 @@ export default function PlatlistDetail() {
                     }}
                 >
                     <Link
-                        to={`/up-vip`}
+                        href={`/up-vip`}
                         style={{
                             textDecoration: 'none',
                             maxWidth: '192px',

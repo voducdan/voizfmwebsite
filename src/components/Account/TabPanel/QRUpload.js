@@ -1,8 +1,8 @@
 // import react
 import { useState } from 'react';
 
-// import react router dom
-import { useNavigate } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
 
 // import others component
 import TabPanel from '../../../components/TabPanel/TabPanel';
@@ -28,7 +28,7 @@ const PanelContent = (props) => {
 
     const [parseQRError, setError] = useState(false);
     const [errorMsg, setErrorMsg] = useState('');
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const qr = new QrCode();
     const fileTypes = ['JPG', 'PNG'];
 
@@ -52,7 +52,7 @@ const PanelContent = (props) => {
                     const data = result.result;
                     try {
                         const url = new URL(data);
-                        navigate(url.pathname, { replace: true });
+                        navigate.push(url.pathname);
                     }
                     catch (error) {
                         console.log(error);

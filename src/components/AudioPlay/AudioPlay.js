@@ -1,8 +1,8 @@
 // import react
 import { useEffect, useState } from 'react';
 
-// import react router dom
-import { useParams, useLocation } from "react-router-dom";
+// import next router
+import { useRouter } from 'next/router';
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -47,7 +47,7 @@ export default function AudioPlay() {
     const api = new API();
 
     const playing = useSelector(selectPlayAudio);
-    const { id } = useParams();
+    const { id } = useRouter().query;
 
     const [audio, setAudio] = useState({})
     const [openShareModal, setOpenShareModal] = useState(false);

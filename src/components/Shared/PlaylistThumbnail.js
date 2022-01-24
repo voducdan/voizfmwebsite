@@ -1,5 +1,5 @@
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -112,7 +112,7 @@ export default function PlaylistThumnail(props) {
                         }}
                     >
                         <Link
-                            to={`/playlists/${id}`}
+                            href={`/playlists/${id}`}
                             style={{ textDecoration: 'none' }}
                         >
                             <Typography
@@ -139,7 +139,7 @@ export default function PlaylistThumnail(props) {
                                 >
                                     <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                                     <Link
-                                        to={`/authors/${authors[0].id}`}
+                                        href={`/authors/${authors[0].id}`}
                                         style={{ textDecoration: 'none' }}
                                     >
                                         <Typography

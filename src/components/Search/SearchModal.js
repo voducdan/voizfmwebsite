@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { selectSearchStatus, selectPlaylistResults, handleCloseSearch } from '../../redux/OpenSearch';
 
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -115,7 +115,7 @@ export default function Search() {
                             {
                                 recentlyKeywords.map((i, idx) => (
                                     <Link
-                                        to={`/search?searchKey=${i}`}
+                                        href={`/search?searchKey=${i}`}
                                         key={idx}
                                         style={{
                                             textDecoration: 'none'
@@ -160,7 +160,7 @@ export default function Search() {
                                 {
                                     commonKeywords.map((i, idx) => (
                                         <Link
-                                            to={`/search?searchKey=${i.name}`}
+                                            href={`/search?searchKey=${i.name}`}
                                             style={{
                                                 textDecoration: 'none'
                                             }}
@@ -206,7 +206,7 @@ export default function Search() {
                                     playlistRecommendation.map(i => (
                                         <Link
                                             className="playlist-recommendation-item"
-                                            to={`/playlists/${i?.id}`}
+                                            href={`/playlists/${i?.id}`}
                                             style={{
                                                 textDecoration: 'none',
                                                 width: 'calc(100% / 5 - 6.4px)'
@@ -237,7 +237,7 @@ export default function Search() {
                             playlistResults.map(i => (
                                 <Link
                                     key={i.id}
-                                    to={`/playlists/${i.id}`}
+                                    href={`/playlists/${i.id}`}
                                     style={{
                                         textDecoration: 'none'
                                     }}

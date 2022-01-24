@@ -1,8 +1,8 @@
 // import react
 import { useEffect, useState } from 'react';
 
-// import react router dom
-import { useParams } from "react-router-dom";
+// import next router
+import { useRouter } from 'next/router';
 
 // import MUI components
 import {
@@ -62,7 +62,7 @@ export default function ChannelDetail() {
     const api = new API();
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const { id } = useParams();
+    const { id } = useRouter().query;
     const [channel, setChannel] = useState({});
     const [playlists, setPlaylists] = useState([]);
     const [audios, setAudios] = useState([]);

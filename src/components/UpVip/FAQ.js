@@ -1,5 +1,5 @@
-// import react router
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -139,7 +139,7 @@ export default function FAQ() {
                         ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.content1),
                         color: COLORS.bg4
                     }}
-                    to="/"
+                    href="/"
                 >
                     Chính sách bảo mật
                 </Link>
@@ -148,7 +148,7 @@ export default function FAQ() {
                         ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.content1),
                         color: COLORS.bg4
                     }}
-                    to="/"
+                    href="/"
                 >
                     Điều khoản sử dụng
                 </Link>

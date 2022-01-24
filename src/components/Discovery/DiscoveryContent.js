@@ -1,8 +1,8 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router component
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -48,7 +48,7 @@ const DiscoveryItem = (props) => {
                 {discoveryList.map((item, index) => (
                     <Stack key={index} key={item.id}>
                         <Link
-                            to={`/discoveries/${item.id}`}
+                            href={`/discoveries/${item.id}`}
                             key={idx}
                             style={{
                                 textDecoration: 'none'

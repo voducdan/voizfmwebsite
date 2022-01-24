@@ -1,16 +1,12 @@
 // import react
 import { useEffect, useState } from 'react';
 
-// import react router dom
-import { Link } from "react-router-dom";
+// import next link
+import Link from 'next/link';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 // import MUI components
 import {
@@ -38,7 +34,7 @@ const Title = (props) => {
     const { id, avatar, isSm, content, haveArrow } = props
     return (
         <Link
-            to={`/channels/${id}`}
+            href={`/channels/${id}`}
             style={{ textDecoration: 'none' }}
         >
             < Box sx={{
@@ -185,7 +181,7 @@ export default function Channel() {
                                 {i?.playlists.map(item => (
                                     <SwiperSlide key={item?.id}>
                                         <Link
-                                            to={`/playlists/${item?.id}`}
+                                            href={`/playlists/${item?.id}`}
                                             tyle={{ width: '100%', height: `${getPlaylistImgWidth()}px` }}
                                         >
                                             <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.name}`} ></Thumbnail>

@@ -1,8 +1,8 @@
 // import react
 import { useRef, useState, useEffect } from 'react';
 
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import { styled } from '@mui/material/styles';
@@ -13,11 +13,7 @@ import {
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 // import others components
 import HomeCarousel from '../../components/HomeCarousel/HomeCarousel';
@@ -251,7 +247,7 @@ export default function HomeContent() {
                 <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN} style={{ marginTop: 35, height: `${getPlaylistImgWidth()}px` }}>
                     {randomPlaylists.map(item => (
                         <SwiperSlide key={item?.id}>
-                            <Link to={`/playlists/${item?.id}`}>
+                            <Link href={`/playlists/${item?.id}`}>
                                 <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                             </Link>
                         </SwiperSlide>
@@ -273,7 +269,7 @@ export default function HomeContent() {
                         >
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
-                                    <Link to={`/playlists/${item?.id}`}>
+                                    <Link href={`/playlists/${item?.id}`}>
                                         <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                     </Link>
                                 </SwiperSlide>
@@ -306,7 +302,7 @@ export default function HomeContent() {
                 >
                     {newContents.map((item) => (
                         <SwiperSlide key={item.id} >
-                            <Link to={`/playlists/${item?.id}`}>
+                            <Link href={`/playlists/${item?.id}`}>
                                 <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                             </Link>
                         </SwiperSlide>
@@ -336,7 +332,7 @@ export default function HomeContent() {
                             }}
                             key={item.id}
                         >
-                            <Link to={`/authors/${item?.id}`} style={{ textDecoration: 'none', textAlign: 'center' }}>
+                            <Link href={`/authors/${item?.id}`} style={{ textDecoration: 'none', textAlign: 'center' }}>
                                 <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                 <Typography sx={{
                                     ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
@@ -374,7 +370,7 @@ export default function HomeContent() {
                         >
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
-                                    <Link to={`/playlists/${item?.id}`}>
+                                    <Link href={`/playlists/${item?.id}`}>
                                         <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                     </Link>
                                 </SwiperSlide>

@@ -8,7 +8,7 @@ export default class API {
     constructor() {
         this.api_token = getToken();
         this.client = null;
-        this.base_url = `${process.env.REACT_APP_API_PROTOCAL}://${process.env.REACT_APP_BASE_URL}`;
+        this.base_url = `${process.env.NEXT_PUBLIC_API_PROTOCAL}://${process.env.NEXT_PUBLIC_BASE_URL}`;
         axios.interceptors.response.use(response => {
             // Do something with response data
             console.log(response)

@@ -22,11 +22,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
 
 // import others components
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'

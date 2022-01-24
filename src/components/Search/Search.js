@@ -2,8 +2,11 @@
 // import react
 import { useState, useEffect, useMemo } from 'react';
 
-// import react router dom
-import { Link, useLocation } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -33,7 +36,7 @@ import formatDuration from '../../utils/formatDuration';
 import API from '../../services/api';
 
 function useQuery() {
-    const { search } = useLocation();
+    const { search } = useRouter();
     return useMemo(() => new URLSearchParams(search), [search]);
 }
 
@@ -74,7 +77,7 @@ const SearchResult = (props) => {
                     {searchResults.map((item) => (
                         <Link
                             key={item.id}
-                            to={`/${type}/${item.id}`}
+                            href={`/${type}/${item.id}`}
                             style={{ width: `calc(100% / ${isSm ? numItemPerLine : 5} - ${((numItemPerLine - 1) * playlistRowGap) / numItemPerLine}px)`, height: `${playlistImgWidth}px` }}
                         >
                             <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item.name}`} />
@@ -106,7 +109,7 @@ const SearchResult = (props) => {
                                 }}
                             >
                                 <Link
-                                    to={`/audio-play/${i?.id}`}
+                                    href={`/audio-play/${i?.id}`}
                                     style={{ textDecoration: 'none', height: '100%', width: '100%' }}
                                 >
                                     <Card
@@ -263,7 +266,7 @@ const SearchResult = (props) => {
                                 }}
                             >
                                 <Link
-                                    to={`/authors/${i?.id}`}
+                                    href={`/authors/${i?.id}`}
                                     style={{ textDecoration: 'none', height: '100%', width: '100%' }}
                                 >
                                     <Card
@@ -390,7 +393,7 @@ const SearchResult = (props) => {
                             >
                                 <Link
                                     key={i?.id}
-                                    to={`/${type}/${i?.id}`}
+                                    href={`/${type}/${i?.id}`}
                                     style={{ textDecoration: 'none', height: '100%', width: '100%' }}
                                 >
                                     <Card
@@ -477,7 +480,7 @@ const SearchResult = (props) => {
     }
 }
 
-export default function Search() {
+function Search() {
     const api = new API();
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -694,3 +697,5 @@ export default function Search() {
         </Box>
     )
 }
+
+export default withRouter(Search)

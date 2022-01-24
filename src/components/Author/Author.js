@@ -1,8 +1,11 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router dom
-import { useParams, Link } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -50,7 +53,7 @@ export default function Author() {
     const api = new API();
 
     const windowSize = useWindowSize();
-    const { id } = useParams();
+    const { id } = useRouter().query;
     const [author, setAuthor] = useState({});
     const [featuredAuthors, setFeaturedAuthors] = useState([]);
     const [playlists, setPlaylists] = useState([]);
@@ -265,7 +268,7 @@ export default function Author() {
                                             }}
                                         >
                                             <Link
-                                                to={`/authors/${i?.id}`}
+                                                href={`/authors/${i?.id}`}
                                                 style={{
                                                     textDecoration: 'none'
                                                 }}

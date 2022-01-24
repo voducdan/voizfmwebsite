@@ -1,8 +1,11 @@
 // import react
 import { useState, useEffect, useRef } from 'react';
 
-// import react router dom
-import { useParams, Link } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -183,7 +186,7 @@ export default function DiscoveryDetail() {
     const [commentContent, setCommentContent] = useState('');
     const [commentPage, setCommentPage] = useState(0);
     const [isCommentError, setIsCommentError] = useState(false);
-    const { id } = useParams();
+    const { id } = useRouter().query;
 
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 200 : 380;
@@ -370,7 +373,7 @@ export default function DiscoveryDetail() {
                                     right: '10px',
                                     textDecoration: 'none'
                                 }}
-                                to={`/playlists/${i?.playlist?.id}`}
+                                href={`/playlists/${i?.playlist?.id}`}
                             >
                                 <Button
                                     sx={{

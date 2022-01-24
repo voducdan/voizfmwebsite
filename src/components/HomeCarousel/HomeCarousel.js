@@ -5,11 +5,8 @@ import { useRef, useState } from 'react';
 import Box from '@mui/material/Box';
 
 // import swiper
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
 
 // import icons
 import { CarouselNext, CarouselPrev } from '../../components/Icons/index';

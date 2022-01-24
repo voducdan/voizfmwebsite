@@ -6,8 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenSidebar, setOpen } from '../../redux/openSidebar';
 import { selectToken } from '../../redux/token';
 
-// import react router dom
-import { useNavigate, useLocation, Link } from "react-router-dom";
+// import next router
+import { useRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -63,8 +66,7 @@ export default function SidebarMenu() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
-    const navigate = useNavigate();
-    const location = useLocation();
+    const navigate = useRouter();
     const [current, setCurrent] = useState(null);
     const [navigatorLink, setNavigatorLink] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -196,7 +198,7 @@ export default function SidebarMenu() {
         if (isSm) {
             dispatch(setOpen(false));
         }
-        navigate(`../${item[0].url}`, { replace: true });
+        navigate.push(`../${item[0].url}`);
         e.stopPropagation();
     }
 
@@ -222,7 +224,7 @@ export default function SidebarMenu() {
         >
             <div style={{ display: 'block' }}>
                 <Link
-                    to='/'
+                    href='/'
                 >
                     <Logo windowWidth={windowSize.width} />
                 </Link>
@@ -234,7 +236,7 @@ export default function SidebarMenu() {
                         key={icon.id}
                         sx={{
                             m: '8px 0',
-                            ...((icon.id === current || location.pathname === icon.url) && {
+                            ...((icon.id === current || navigate.pathname === icon.url) && {
                                 bgcolor: COLORS.bg2
                             })
                         }}
@@ -254,12 +256,12 @@ export default function SidebarMenu() {
                                 ...TEXT_STYLE.content1,
                             }}
                             >
-                                {icon.icon({ stroke: (icon.id === current || location.pathname === icon.url) ? '#FFFFFF' : '#ACACAC', fill: (icon.id === current || location.pathname === icon.url) ? '#FFFFFF' : '#ACACAC' })}
+                                {icon.icon({ stroke: (icon.id === current || navigate.pathname === icon.url) ? '#FFFFFF' : '#ACACAC', fill: (icon.id === current || navigate.pathname === icon.url) ? '#FFFFFF' : '#ACACAC' })}
                             </ListItemIcon>
                             <ListItemText disableTypography primary={<Typography sx={{
                                 color: FONT_COLOR,
                                 ...TEXT_STYLE.content1,
-                                ...((icon.id === current || location.pathname === icon.url) && {
+                                ...((icon.id === current || navigate.pathname === icon.url) && {
                                     color: COLORS.white
                                 })
                             }}>{icon.text}</Typography>} />
@@ -274,7 +276,7 @@ export default function SidebarMenu() {
                         key={icon.id}
                         sx={{
                             m: '8px 0',
-                            ...((icon.id === current || location.pathname === icon.url) && {
+                            ...((icon.id === current || navigate.pathname === icon.url) && {
                                 bgcolor: COLORS.bg2
                             })
                         }}
@@ -298,7 +300,7 @@ export default function SidebarMenu() {
                             <ListItemText disableTypography primary={<Typography style={{
                                 color: FONT_COLOR,
                                 ...TEXT_STYLE.content1,
-                                ...((icon.id === current || location.pathname === icon.url) && {
+                                ...((icon.id === current || navigate.pathname === icon.url) && {
                                     color: COLORS.white
                                 })
                             }}>{icon.text}</Typography>} />
@@ -307,7 +309,7 @@ export default function SidebarMenu() {
                 ))}
             </List>
             <Link
-                to='/book-request'
+                href='/book-request'
                 style={{ textDecoration: 'none' }}
             >
                 <RequestsBook />

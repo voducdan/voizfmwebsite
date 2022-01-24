@@ -1,11 +1,19 @@
+const ISSERVER = typeof window === "undefined";
+
 export const getToken = () => {
-    return localStorage.getItem('token');
+    if (!ISSERVER) {
+        return localStorage.getItem('token');
+    }
 }
 
 export const removeToken = () => {
-    localStorage.removeItem('token');
+    if (!ISSERVER) {
+        localStorage.removeItem('token');
+    }
 }
 
 export const saveToken = (token) => {
-    localStorage.setItem('token', token);
+    if (!ISSERVER) {
+        localStorage.setItem('token', token);
+    }
 }
