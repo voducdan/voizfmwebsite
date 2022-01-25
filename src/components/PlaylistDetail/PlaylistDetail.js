@@ -1,5 +1,5 @@
 // import next
-import Head from 'next/Head';
+import Head from 'next/head';
 
 // import react
 import { useState, useEffect } from 'react';
