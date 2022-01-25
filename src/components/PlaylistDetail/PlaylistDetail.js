@@ -1,3 +1,6 @@
+// import next
+import Head from 'next/Head';
+
 // import react
 import { useState, useEffect } from 'react';
 
@@ -99,8 +102,6 @@ export default function PlatlistDetail() {
     const router = useRouter();
     const { asPath } = router;
     const cart = useSelector(selectCart);
-    const user = useSelector(selectUser);
-    const navigate = useRouter();
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
@@ -397,6 +398,17 @@ export default function PlatlistDetail() {
                 position: 'relative'
             }}
         >
+            <Head>
+                <title>{playlist?.name}</title>
+                <meta property="og:url" content={asPath} />
+                <meta property="og:type" content="website" />
+                <meta property="og:title" content={playlist?.name} />
+                <meta
+                    property="og:description"
+                    content={playlist?.description}
+                />
+                <meta property="og:image" content={playlist?.avatar?.thumb_url} />
+            </Head>
             <Box
                 sx={{
                     position: 'absolute',
