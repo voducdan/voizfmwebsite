@@ -22,11 +22,7 @@ import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/i
 import { TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle'
 
-// import fake data
-import { newContent } from '../../mockData/HomeData';
-
 SwiperCore.use([Navigation]);
-
 
 const SwiperBtnNext = (props) => {
     const { isSm } = props;
@@ -79,6 +75,7 @@ const Title = (props) => {
 
 export default function PublisherComponent(props) {
     const { isSm } = props;
+    const newContent = [];
     const num_items_per_line = !isSm ? 5 : 2.5;
 
     const navigationPublisherPrevRef = useRef(null);
@@ -105,7 +102,9 @@ export default function PublisherComponent(props) {
                 slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}>
                 {newContent.map((item) => (
                     <SwiperSlide key={item.id}>
-                        <Thumbnail style={{ borderRadius: '6px', width: '100%', height: isSm ? '81px' : '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                        <a>
+                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: isSm ? '81px' : '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                        </a>
                     </SwiperSlide>
                 ))}
             </Swiper>

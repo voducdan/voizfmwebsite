@@ -18,9 +18,6 @@ import { selectUser } from '../../redux/user';
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
-// import css
-import './PlaylistDetail.css'
-
 import ShowMoreText from "react-show-more-text";
 
 // import MUI components
@@ -99,16 +96,18 @@ export default function PlatlistDetail() {
     const api = new API();
 
     const windowSize = useWindowSize();
-    const { id } = useRouter().query;
+    const router = useRouter();
+    const { asPath } = router;
     const cart = useSelector(selectCart);
     const user = useSelector(selectUser);
     const navigate = useRouter();
+    const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
     const [playlistAudios, setPlaylistAudios] = useState([]);
     const [recommendedPlaylist, setRecommendedPlaylist] = useState([]);
     const [audioTrailerUrl, setAudioTrailerUrl] = useState('');
-    const [audio, setAudio] = useState(new Audio(audioTrailerUrl));
+    const [audio, setAudio] = useState(typeof Audio !== "undefined" ? new Audio(audioTrailerUrl) : undefined);
     const [paused, setPaused] = useState(true);
     const [openRateModal, setOpenRateModal] = useState(false);
     const [openAfterRateModal, setOpenAfterRateModal] = useState(false);
@@ -124,7 +123,6 @@ export default function PlatlistDetail() {
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 380;
-    const infoPanelHeight = isSm ? 190 : 150;
 
     const dispatch = useDispatch();
 
@@ -149,11 +147,18 @@ export default function PlatlistDetail() {
             const data = res.data.data;
             setPlaylistAudios(data);
         }
-        fetchPlaylist();
-        fetchRecommendedPlaylist();
-        fetchPlaylistAudios();
-        setPlaylistInfo(createPlaylistInfo());
+        if (id) {
+            fetchPlaylist();
+            fetchRecommendedPlaylist();
+            fetchPlaylistAudios();
+            setPlaylistInfo(createPlaylistInfo());
+        }
     }, [id]);
+
+    useEffect(() => {
+        const { id } = router.query;
+        setId(id);
+    }, [router.query]);
 
     useEffect(() => {
         const p = createPlaylistInfo();
@@ -212,7 +217,15 @@ export default function PlatlistDetail() {
             const playlistInfo = [
                 {
                     label: <InfoLabel title='Tác giả' />,
-                    value: <Link href={`/authors/${playlist?.authors[0]?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.author_string} /></Link>
+                    value: <Link href={`/authors/${playlist?.authors[0]?.id}`} >
+                        <Box
+                            sx={{
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <InfoValue value={playlist?.author_string} />
+                        </Box>
+                    </Link>
                 },
                 {
                     label: <InfoLabel title='Thời lượng' />,
@@ -220,7 +233,15 @@ export default function PlatlistDetail() {
                 },
                 {
                     label: <InfoLabel title='Kênh' />,
-                    value: <Link href={`/channels/${playlist?.channel?.id}`} style={{ textDecoration: 'none' }} ><InfoValue value={playlist?.channel?.name} /></Link>
+                    value: <Link href={`/channels/${playlist?.channel?.id}`}  >
+                        <Box
+                            sx={{
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <InfoValue value={playlist?.channel?.name} />
+                        </Box>
+                    </Link>
                 },
                 {
                     label: <InfoLabel title='Người đọc' />,
@@ -361,6 +382,13 @@ export default function PlatlistDetail() {
         }
     }
 
+    const getImgWidth = () => {
+        const leftPane = document.querySelector('#left-pane');
+        const { clientWidth } = leftPane;
+        const sidePadding = isSm ? 0 : 32
+        return ((clientWidth - sidePadding * 2) / 3) - 3.5;
+    }
+
     return (
         <Box
             sx={{
@@ -479,7 +507,7 @@ export default function PlatlistDetail() {
                                     <Box onClick={handleOpenShareModal}>
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
-                                    <ShareModal url={`${window.location.href}`} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
+                                    <ShareModal url={asPath} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal
                                         isSm={isSm}
                                         open={openRateModal}
@@ -624,6 +652,7 @@ export default function PlatlistDetail() {
                         padding: isSm ? '26px 0 0 15px' : '26px 32px',
                         borderRadius: '10px'
                     }}
+                    id='left-pane'
                 >
                     <Typography
                         sx={{
@@ -731,17 +760,20 @@ export default function PlatlistDetail() {
                                             <Link
                                                 href={`/playlists/${item?.id}`}
                                                 key={idx}
-                                                style={{
-                                                    width: 'calc(100% / 3 - 3.5px)',
-                                                }}
                                             >
-                                                <Thumbnail
-                                                    style={{
-                                                        width: '100%',
-                                                        height: '100%'
+                                                <Box
+                                                    sx={{
+                                                        width: 'calc(100% / 3 - 3.5px)'
                                                     }}
-                                                    avtSrc={item?.avatar?.thumb_url} alt={item.alt}
-                                                />
+                                                >
+                                                    <Thumbnail
+                                                        style={{
+                                                            width: '100%',
+                                                            height: `${getImgWidth()}px`
+                                                        }}
+                                                        avtSrc={item?.avatar?.thumb_url} alt={item.alt}
+                                                    />
+                                                </Box>
                                             </Link>
                                         ))
                                     }
@@ -757,14 +789,16 @@ export default function PlatlistDetail() {
                                                 href={`/playlists/${item?.id}`}
                                                 key={idx}
                                             >
-                                                <Thumbnail
-                                                    key={idx}
-                                                    style={{
-                                                        width: '96px',
-                                                        height: '96px'
-                                                    }}
-                                                    avtSrc={item?.avatar?.thumb_url} alt={item.alt}
-                                                />
+                                                <Box>
+                                                    <Thumbnail
+                                                        key={idx}
+                                                        style={{
+                                                            width: '96px',
+                                                            height: '96px'
+                                                        }}
+                                                        avtSrc={item?.avatar?.thumb_url} alt={item.alt}
+                                                    />
+                                                </Box>
                                             </Link>
                                         </SwiperSlide>
                                     ))}
@@ -920,22 +954,25 @@ export default function PlatlistDetail() {
                 </Tooltip>
                 <Link
                     href='/up-vip/'
-                    style={{
-                        textDecoration: 'none',
-                        width: isSm ? '50%' : '20%',
-                    }}
+
                 >
-                    <Button
+                    <Box
                         sx={{
-                            bgcolor: COLORS.main,
-                            borderRadius: '6px',
-                            width: '100%',
-                            ...TEXT_STYLE.title1,
-                            color: COLORS.white,
-                            textTransform: 'none',
-                            height: '48px'
+                            width: isSm ? '50%' : '20%',
                         }}
-                    >Mua gói VIP</Button>
+                    >
+                        <Button
+                            sx={{
+                                bgcolor: COLORS.main,
+                                borderRadius: '6px',
+                                width: '100%',
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                textTransform: 'none',
+                                height: '48px'
+                            }}
+                        >Mua gói VIP</Button>
+                    </Box>
                 </Link>
             </Box>
             <Dialog
@@ -971,26 +1008,29 @@ export default function PlatlistDetail() {
                 >
                     <Link
                         href={`/up-vip`}
-                        style={{
-                            textDecoration: 'none',
-                            maxWidth: '192px',
-                            width: 'calc(50% - 8px)',
-                        }}
+
                     >
-                        <Button
+                        <Box
                             sx={{
-                                ...TEXT_STYLE.title1,
-                                color: COLORS.white,
-                                textTransform: 'none',
-                                borderRadius: '8px',
-                                width: '100%',
-                                height: '48px',
-                                bgcolor: COLORS.main
+                                maxWidth: '192px',
+                                width: 'calc(50% - 8px)',
                             }}
-                            autoFocus
                         >
-                            UP VIP
-                        </Button>
+                            <Button
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    borderRadius: '8px',
+                                    width: '100%',
+                                    height: '48px',
+                                    bgcolor: COLORS.main
+                                }}
+                                autoFocus
+                            >
+                                UP VIP
+                            </Button>
+                        </Box>
                     </Link>
                 </DialogActions>
             </Dialog>

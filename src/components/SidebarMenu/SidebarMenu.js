@@ -198,7 +198,7 @@ export default function SidebarMenu() {
         if (isSm) {
             dispatch(setOpen(false));
         }
-        navigate.push(`../${item[0].url}`);
+        navigate.push(`/${item[0].url}`);
         e.stopPropagation();
     }
 
@@ -226,7 +226,9 @@ export default function SidebarMenu() {
                 <Link
                     href='/'
                 >
-                    <Logo windowWidth={windowSize.width} />
+                    <a>
+                        <Logo windowWidth={windowSize.width} />
+                    </a>
                 </Link>
             </div>
             <Divider />
@@ -312,7 +314,7 @@ export default function SidebarMenu() {
                 href='/book-request'
                 style={{ textDecoration: 'none' }}
             >
-                <RequestsBook />
+                <a><RequestsBook /></a>
             </Link>
         </Drawer >
     )

@@ -157,11 +157,13 @@ const ChannelBookmark = (props) => {
                                 height: isSm ? '145px' : '186px'
                             }}
                         >
-                            <Thumbnail
-                                style={{ width: '100%', height: '100%', borderRadius: '4px' }}
-                                avtSrc={item.avatar.thumb_url}
-                                alt={`images ${item.id}`}
-                            />
+                            <a>
+                                <Thumbnail
+                                    style={{ width: '100%', height: '100%', borderRadius: '4px' }}
+                                    avtSrc={item.avatar.thumb_url}
+                                    alt={`images ${item.id}`}
+                                />
+                            </a>
                         </Link>
                     </SwiperSlide>
                 ))}

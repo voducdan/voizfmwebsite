@@ -16,6 +16,5 @@ export default function Logo(props) {
                 loading="lazy"
             />
         </div>
-
     )
 }

@@ -80,7 +80,9 @@ const SearchResult = (props) => {
                             href={`/${type}/${item.id}`}
                             style={{ width: `calc(100% / ${isSm ? numItemPerLine : 5} - ${((numItemPerLine - 1) * playlistRowGap) / numItemPerLine}px)`, height: `${playlistImgWidth}px` }}
                         >
-                            <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item.name}`} />
+                            <a>
+                                <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item.name}`} />
+                            </a>
                         </Link>
                     ))}
                 </Box>

@@ -248,7 +248,9 @@ export default function HomeContent() {
                     {randomPlaylists.map(item => (
                         <SwiperSlide key={item?.id}>
                             <Link href={`/playlists/${item?.id}`}>
-                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                <a>
+                                    <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                </a>
                             </Link>
                         </SwiperSlide>
                     ))}
@@ -270,7 +272,9 @@ export default function HomeContent() {
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
                                     <Link href={`/playlists/${item?.id}`}>
-                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                        <a>
+                                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                        </a>
                                     </Link>
                                 </SwiperSlide>
                             ))}
@@ -303,7 +307,9 @@ export default function HomeContent() {
                     {newContents.map((item) => (
                         <SwiperSlide key={item.id} >
                             <Link href={`/playlists/${item?.id}`}>
-                                <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                <a>
+                                    <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                </a>
                             </Link>
                         </SwiperSlide>
                     ))}
@@ -332,25 +338,31 @@ export default function HomeContent() {
                             }}
                             key={item.id}
                         >
-                            <Link href={`/authors/${item?.id}`} style={{ textDecoration: 'none', textAlign: 'center' }}>
-                                <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
-                                <Typography sx={{
-                                    ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
-                                    color: COLORS.white,
-                                    letterSpacing: 0,
-                                    marginTop: '22px'
-                                }}>{item?.name}</Typography>
-                                <Typography sx={{
-                                    ...(!isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
-                                    color: COLORS.VZ_Text_content,
-                                    display: '-webkit-box',
-                                    marginTop: '8px',
-                                    textOverflow: 'ellipsis',
-                                    WebkitLineClamp: 2,
-                                    WebkitBoxOrient: 'vertical',
-                                    overflow: 'hidden'
-                                }}>{item?.description}
-                                </Typography>
+                            <Link href={`/authors/${item?.id}`} style={{ textDecoration: 'none' }}>
+                                <Box
+                                    sx={{
+                                        textAlign: 'center'
+                                    }}
+                                >
+                                    <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                    <Typography sx={{
+                                        ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
+                                        color: COLORS.white,
+                                        letterSpacing: 0,
+                                        marginTop: '22px'
+                                    }}>{item?.name}</Typography>
+                                    <Typography sx={{
+                                        ...(!isSm ? TEXT_STYLE.VZ_Caption_2 : TEXT_STYLE.caption10Regular),
+                                        color: COLORS.VZ_Text_content,
+                                        display: '-webkit-box',
+                                        marginTop: '8px',
+                                        textOverflow: 'ellipsis',
+                                        WebkitLineClamp: 2,
+                                        WebkitBoxOrient: 'vertical',
+                                        overflow: 'hidden'
+                                    }}>{item?.description}
+                                    </Typography>
+                                </Box>
                             </Link>
                         </SwiperSlide>
                     ))}
@@ -371,7 +383,9 @@ export default function HomeContent() {
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
                                     <Link href={`/playlists/${item?.id}`}>
-                                        <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                        <a>
+                                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
+                                        </a>
                                     </Link>
                                 </SwiperSlide>
                             ))}

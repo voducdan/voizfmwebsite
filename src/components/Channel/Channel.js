@@ -184,7 +184,9 @@ export default function Channel() {
                                             href={`/playlists/${item?.id}`}
                                             tyle={{ width: '100%', height: `${getPlaylistImgWidth()}px` }}
                                         >
-                                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.name}`} ></Thumbnail>
+                                            <a>
+                                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.name}`} ></Thumbnail>
+                                            </a>
                                         </Link>
                                     </SwiperSlide>
                                 ))}
