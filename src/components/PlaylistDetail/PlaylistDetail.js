@@ -100,8 +100,8 @@ export default function PlatlistDetail() {
 
     const windowSize = useWindowSize();
     const router = useRouter();
-    const { asPath } = router;
     const cart = useSelector(selectCart);
+    const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
     const [playlistInfo, setPlaylistInfo] = useState([]);
@@ -176,6 +176,7 @@ export default function PlatlistDetail() {
 
 
     useEffect(() => {
+        setUrl(window.location.href);
         audio.addEventListener('ended', () => setPaused(true));
         return () => {
             audio.removeEventListener('ended', () => setPaused(true));
@@ -400,7 +401,7 @@ export default function PlatlistDetail() {
         >
             <Head>
                 <title>{playlist?.name}</title>
-                <meta property="og:url" content={asPath} />
+                <meta property="og:url" content={url} />
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content={playlist?.name} />
                 <meta
@@ -519,7 +520,7 @@ export default function PlatlistDetail() {
                                     <Box onClick={handleOpenShareModal}>
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
-                                    <ShareModal url={asPath} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
+                                    <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal
                                         isSm={isSm}
                                         open={openRateModal}
