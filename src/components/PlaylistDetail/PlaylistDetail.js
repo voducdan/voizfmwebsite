@@ -771,7 +771,7 @@ export default function PlatlistDetail() {
                                     {
                                         recommendedPlaylist.map((item, idx) => (
                                             <Link
-                                                href={`/playlists/${item?.id}`}
+                                                href={'/playlists/[id].jd'}
                                                 key={idx}
                                             >
                                                 <Box
@@ -799,7 +799,7 @@ export default function PlatlistDetail() {
                                     {recommendedPlaylist.map((item, idx) => (
                                         <SwiperSlide key={idx} style={{ width: 'auto' }}>
                                             <Link
-                                                href={`/playlists/${item?.id}`}
+                                                href={'/playlists/[id].js'}
                                                 key={idx}
                                             >
                                                 <Box>
