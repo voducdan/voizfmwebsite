@@ -35,7 +35,8 @@
     "dev": "next dev",
     "build": "next build",
     "test": "next test",
-    "eject": "next eject"
+    "eject": "next eject",
+    "export": "next export"
   },
   "eslintConfig": {
     "extends": [
@@ -56,6 +57,7 @@
     ]
   },
   "devDependencies": {
+    "eslint": "^8.7.0",
     "sass": "^1.43.4"
   }
 }

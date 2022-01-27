@@ -1,5 +1,5 @@
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -62,7 +62,7 @@ export default function PlaylistByCategory(props) {
                 {i.data.map((item) => (
                     <SwiperSlide key={item.id}>
                         <Link
-                            to={`/playlists/${item.id}`}
+                            href={`/playlists/${item.id}`}
                             tyle={{ width: '100%', height: `${playlistImgWidth}px` }}
                         >
                             <a>

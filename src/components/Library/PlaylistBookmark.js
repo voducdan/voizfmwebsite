@@ -1,8 +1,8 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI component
 import {
@@ -152,7 +152,7 @@ const ChannelBookmark = (props) => {
                 {playlists.map((item) => (
                     <SwiperSlide key={item.id}>
                         <Link
-                            to={`/playlists/${item.id}`}
+                            href={`/playlists/${item.id}`}
                             style={{
                                 height: isSm ? '145px' : '186px'
                             }}
