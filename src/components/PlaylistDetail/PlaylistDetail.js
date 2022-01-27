@@ -94,7 +94,7 @@ const ShowTextBtn = (content) => (
 
 SwiperCore.use([Navigation]);
 
-export default function PlatlistDetail() {
+export default function PlatlistDetail({ playlistFromAPI }) {
 
     const api = new API();
 
@@ -771,7 +771,8 @@ export default function PlatlistDetail() {
                                     {
                                         recommendedPlaylist.map((item, idx) => (
                                             <Link
-                                                href={'/playlists/[id].jd'}
+                                                href={'/playlists/[id]'}
+                                                as={`/playlists/${item?.id}`}
                                                 key={idx}
                                             >
                                                 <Box
@@ -799,7 +800,8 @@ export default function PlatlistDetail() {
                                     {recommendedPlaylist.map((item, idx) => (
                                         <SwiperSlide key={idx} style={{ width: 'auto' }}>
                                             <Link
-                                                href={'/playlists/[id].js'}
+                                                href={'/playlists/[id]'}
+                                                as={`/playlists/${item?.id}`}
                                                 key={idx}
                                             >
                                                 <Box>
