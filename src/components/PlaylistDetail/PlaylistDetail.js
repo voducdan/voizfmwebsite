@@ -1,6 +1,3 @@
-// import next
-import Head from 'next/head';
-
 // import react
 import { useState, useEffect } from 'react';
 
@@ -95,7 +92,6 @@ const ShowTextBtn = (content) => (
 SwiperCore.use([Navigation]);
 
 export default function PlatlistDetail({ playlistFromAPI }) {
-
     const api = new API();
 
     const windowSize = useWindowSize();
@@ -129,11 +125,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     useEffect(() => {
         async function fetchPlaylist() {
-            const res = await api.getPlaylistDetail(id);
-            const data = res.data.data;
-            const playlistTrailer = data.playlist_trailers.length > 0 ? data.playlist_trailers[0]['file_url'] : '';
-            setPlaylist(data);
-            setContentRating(data.playlist_rating.content_stars);
+            setPlaylist(playlistFromAPI);
+            const playlistTrailer = playlistFromAPI.playlist_trailers.length > 0 ? playlistFromAPI.playlist_trailers[0]['file_url'] : '';
+            setContentRating(playlistFromAPI.playlist_rating.content_stars);
             setAudioTrailerUrl(playlistTrailer);
         }
 
@@ -149,6 +143,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             setPlaylistAudios(data);
         }
         if (id) {
+            setUrl(window.location.href);
             fetchPlaylist();
             fetchRecommendedPlaylist();
             fetchPlaylistAudios();
@@ -176,7 +171,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
 
     useEffect(() => {
-        setUrl(window.location.href);
         audio.addEventListener('ended', () => setPaused(true));
         return () => {
             audio.removeEventListener('ended', () => setPaused(true));
@@ -399,17 +393,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 position: 'relative'
             }}
         >
-            <Head>
-                <title>{playlist?.name}</title>
-                <meta property="og:url" content={url} />
-                <meta property="og:type" content="website" />
-                <meta property="og:title" content={playlist?.name} />
-                <meta
-                    property="og:description"
-                    content={playlist?.description}
-                />
-                <meta property="og:image" content={playlist?.avatar?.thumb_url} />
-            </Head>
+
             <Box
                 sx={{
                     position: 'absolute',
