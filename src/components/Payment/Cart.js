@@ -145,7 +145,7 @@ export default function Cart() {
     const handlePayment = () => {
         const paymentData = {
             selectedItem: selectedItem,
-            discountCode: isDiscountCodeValid ? discountCode : null,
+            discountCode: isDiscountCodeValid ? discountCode : '',
             package_type: 'playlist',
             totalPrice: totalPrice,
             finalPrice: totalPrice
