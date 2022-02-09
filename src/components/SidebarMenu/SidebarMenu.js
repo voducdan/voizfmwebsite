@@ -6,8 +6,11 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenSidebar, setOpen } from '../../redux/openSidebar';
 import { selectToken } from '../../redux/token';
 
-// import react router dom
-import { useNavigate, useLocation, Link } from "react-router-dom";
+// import next router
+import { useRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -63,8 +66,7 @@ export default function SidebarMenu() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
-    const navigate = useNavigate();
-    const location = useLocation();
+    const navigate = useRouter();
     const [current, setCurrent] = useState(null);
     const [navigatorLink, setNavigatorLink] = useState([]);
     const [categories, setCategories] = useState([]);
@@ -83,59 +85,19 @@ export default function SidebarMenu() {
                     id: 1,
                     icon: Squircle,
                     text: 'Trang chủ',
-                    url: '/'
+                    url: ''
                 },
                 {
                     id: 2,
                     icon: UpVip,
                     text: 'Up VIP',
-                    url: '/up-vip'
+                    url: 'up-vip'
                 },
                 {
                     id: 3,
                     icon: Discover,
                     text: 'Khám phá',
-                    url: '/discoveries'
-                },
-                {
-                    id: 4,
-                    icon: Library,
-                    text: 'Thư viện',
-                    url: '/library'
-                },
-                {
-                    id: 5,
-                    icon: Adward,
-                    text: 'Bảng xếp hạng',
-                    url: '/playlists/rankings'
-                },
-                {
-                    id: 6,
-                    icon: () => (<HeadphonesOutlinedIcon />),
-                    text: 'Nội dung đang nghe',
-                    url: '/listenings'
-                }
-            ];
-        }
-        else {
-            navigatorLink = [
-                {
-                    id: 1,
-                    icon: Squircle,
-                    text: 'Trang chủ',
-                    url: '/'
-                },
-                {
-                    id: 2,
-                    icon: UpVip,
-                    text: 'Up VIP',
-                    url: '/up-vip'
-                },
-                {
-                    id: 3,
-                    icon: Discover,
-                    text: 'Khám phá',
-                    url: '/discoveries'
+                    url: 'discoveries'
                 },
                 {
                     id: 4,
@@ -147,7 +109,47 @@ export default function SidebarMenu() {
                     id: 5,
                     icon: Adward,
                     text: 'Bảng xếp hạng',
-                    url: '/playlists/rankings'
+                    url: 'playlists/rankings'
+                },
+                {
+                    id: 6,
+                    icon: () => (<HeadphonesOutlinedIcon />),
+                    text: 'Nội dung đang nghe',
+                    url: 'listenings'
+                }
+            ];
+        }
+        else {
+            navigatorLink = [
+                {
+                    id: 1,
+                    icon: Squircle,
+                    text: 'Trang chủ',
+                    url: ''
+                },
+                {
+                    id: 2,
+                    icon: UpVip,
+                    text: 'Up VIP',
+                    url: 'up-vip'
+                },
+                {
+                    id: 3,
+                    icon: Discover,
+                    text: 'Khám phá',
+                    url: 'discoveries'
+                },
+                {
+                    id: 4,
+                    icon: Library,
+                    text: 'Thư viện',
+                    url: 'library'
+                },
+                {
+                    id: 5,
+                    icon: Adward,
+                    text: 'Bảng xếp hạng',
+                    url: 'playlists/rankings'
                 }
             ];
         }
@@ -157,31 +159,31 @@ export default function SidebarMenu() {
                 id: 7,
                 icon: <AudioBook />,
                 text: 'Sách nói',
-                url: '/audio-book'
+                url: 'audio-book'
             },
             {
                 id: 8,
                 icon: <AudioStory />,
                 text: 'Truyện nói',
-                url: '/story-book'
+                url: 'story-book'
             },
             {
                 id: 9,
                 icon: <Podcast />,
                 text: 'Podcast',
-                url: '/podcast'
+                url: 'podcast'
             },
             {
                 id: 10,
                 icon: <SummaryBook />,
                 text: 'Tóm tắt sách',
-                url: '/summary-book'
+                url: 'summary-book'
             },
             {
                 id: 11,
                 icon: <ChildrenBook />,
                 text: 'Thiếu nhi',
-                url: '/children-book'
+                url: 'children-book'
             }
         ];
         setNavigatorLink(navigatorLink);
@@ -196,7 +198,7 @@ export default function SidebarMenu() {
         if (isSm) {
             dispatch(setOpen(false));
         }
-        navigate(`../${item[0].url}`, { replace: true });
+        navigate.push(`/${item[0].url}`);
         e.stopPropagation();
     }
 
@@ -222,9 +224,11 @@ export default function SidebarMenu() {
         >
             <div style={{ display: 'block' }}>
                 <Link
-                    to='/'
+                    href='/'
                 >
-                    <Logo windowWidth={windowSize.width} />
+                    <a>
+                        <Logo windowWidth={windowSize.width} />
+                    </a>
                 </Link>
             </div>
             <Divider />
@@ -234,7 +238,7 @@ export default function SidebarMenu() {
                         key={icon.id}
                         sx={{
                             m: '8px 0',
-                            ...((icon.id === current || location.pathname === icon.url) && {
+                            ...((icon.id === current || navigate.pathname === icon.url) && {
                                 bgcolor: COLORS.bg2
                             })
                         }}
@@ -254,12 +258,12 @@ export default function SidebarMenu() {
                                 ...TEXT_STYLE.content1,
                             }}
                             >
-                                {icon.icon({ stroke: (icon.id === current || location.pathname === icon.url) ? '#FFFFFF' : '#ACACAC', fill: (icon.id === current || location.pathname === icon.url) ? '#FFFFFF' : '#ACACAC' })}
+                                {icon.icon({ stroke: (icon.id === current || navigate.pathname === icon.url) ? '#FFFFFF' : '#ACACAC', fill: (icon.id === current || navigate.pathname === icon.url) ? '#FFFFFF' : '#ACACAC' })}
                             </ListItemIcon>
                             <ListItemText disableTypography primary={<Typography sx={{
                                 color: FONT_COLOR,
                                 ...TEXT_STYLE.content1,
-                                ...((icon.id === current || location.pathname === icon.url) && {
+                                ...((icon.id === current || navigate.pathname === icon.url) && {
                                     color: COLORS.white
                                 })
                             }}>{icon.text}</Typography>} />
@@ -274,7 +278,7 @@ export default function SidebarMenu() {
                         key={icon.id}
                         sx={{
                             m: '8px 0',
-                            ...((icon.id === current || location.pathname === icon.url) && {
+                            ...((icon.id === current || navigate.pathname === icon.url) && {
                                 bgcolor: COLORS.bg2
                             })
                         }}
@@ -298,7 +302,7 @@ export default function SidebarMenu() {
                             <ListItemText disableTypography primary={<Typography style={{
                                 color: FONT_COLOR,
                                 ...TEXT_STYLE.content1,
-                                ...((icon.id === current || location.pathname === icon.url) && {
+                                ...((icon.id === current || navigate.pathname === icon.url) && {
                                     color: COLORS.white
                                 })
                             }}>{icon.text}</Typography>} />
@@ -307,10 +311,10 @@ export default function SidebarMenu() {
                 ))}
             </List>
             <Link
-                to='/book-request'
+                href='/book-request'
                 style={{ textDecoration: 'none' }}
             >
-                <RequestsBook />
+                <a><RequestsBook /></a>
             </Link>
         </Drawer >
     )

@@ -1,5 +1,5 @@
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -9,11 +9,8 @@ import {
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
 
 // import others components
 import Thumbnail from '../../components/Thumbnail/Thumbnail';
@@ -65,10 +62,12 @@ export default function PlaylistByCategory(props) {
                 {i.data.map((item) => (
                     <SwiperSlide key={item.id}>
                         <Link
-                            to={`/playlists/${item.id}`}
+                            href={`/playlists/${item.id}`}
                             tyle={{ width: '100%', height: `${playlistImgWidth}px` }}
                         >
-                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} ></Thumbnail>
+                            <a>
+                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} ></Thumbnail>
+                            </a>
                         </Link>
                     </SwiperSlide>
                 ))}

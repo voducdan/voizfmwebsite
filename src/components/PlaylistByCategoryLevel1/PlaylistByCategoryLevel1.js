@@ -1,8 +1,10 @@
 // import react
 import { useEffect, useState } from 'react';
 
-// import react router dom
-import { useLocation, Link } from "react-router-dom";
+import { withRouter } from 'next/router'
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -130,11 +132,10 @@ const RandomPlayList = (props) => {
 
 const NUM_PLAYLIST_RANDOM = 12;
 
-export default function AudioBook() {
+function AudioBook({ router }) {
 
     const api = new API();
-    const location = useLocation();
-    const pathname = location.pathname;
+    const pathname = router.pathname;
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const SPACE_BETWEEN = isSm ? 16 : 24;
@@ -272,7 +273,7 @@ export default function AudioBook() {
                                 >
                                     {playlists.map((item) => (
                                         <Link
-                                            to={`/playlists/${item.id}`}
+                                            href={`/playlists/${item.id}`}
                                             style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)`, height: `${getPlaylistImgWidth()}px` }}
                                         >
                                             <Thumbnail key={item.id} style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} />
@@ -305,14 +306,14 @@ export default function AudioBook() {
                 {
                     playlistsRandom.map(i => (
                         <Link
-                            to={`/playlists/${i.id}`}
-                            style={{
-                                width: isSm ? '100%' : 'calc(50% - 14px)',
-                                textDecoration: 'none'
-                            }}
-                            key={i.id}
+                            href={`/playlists/${i?.id}`}
+                            key={i?.id}
                         >
-                            <RandomPlayList data={i} isSm={isSm} />
+                            <a
+                                className={isSm ? 'random-playlist-link-mb' : 'random-playlist-link-desktop'}
+                            >
+                                <RandomPlayList data={i} isSm={isSm} />
+                            </a>
                         </Link>
                     ))
                 }
@@ -345,3 +346,5 @@ export default function AudioBook() {
         </Box >
     )
 }
+
+export default withRouter(AudioBook)

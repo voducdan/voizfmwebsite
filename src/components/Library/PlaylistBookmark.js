@@ -1,8 +1,8 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import MUI component
 import {
@@ -22,11 +22,8 @@ import ChevronRightIcon from '@mui/icons-material/ChevronRight';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
 
 // import others components
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
@@ -155,16 +152,18 @@ const ChannelBookmark = (props) => {
                 {playlists.map((item) => (
                     <SwiperSlide key={item.id}>
                         <Link
-                            to={`/playlists/${item.id}`}
+                            href={`/playlists/${item.id}`}
                             style={{
                                 height: isSm ? '145px' : '186px'
                             }}
                         >
-                            <Thumbnail
-                                style={{ width: '100%', height: '100%', borderRadius: '4px' }}
-                                avtSrc={item.avatar.thumb_url}
-                                alt={`images ${item.id}`}
-                            />
+                            <a>
+                                <Thumbnail
+                                    style={{ width: '100%', height: '100%', borderRadius: '4px' }}
+                                    avtSrc={item.avatar.thumb_url}
+                                    alt={`images ${item.id}`}
+                                />
+                            </a>
                         </Link>
                     </SwiperSlide>
                 ))}

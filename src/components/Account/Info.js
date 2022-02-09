@@ -12,8 +12,8 @@ import {
     Button
 } from '@mui/material';
 
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // Import icons
 import {
@@ -165,7 +165,7 @@ export default function Info(props) {
                                 }}
                             >Nâng cấp thành viên</Typography>
                             <Link
-                                to='/up-vip'
+                                href='/up-vip'
                                 style={{
                                     textDecoration: 'none'
                                 }}

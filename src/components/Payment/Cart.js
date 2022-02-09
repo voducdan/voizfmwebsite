@@ -1,8 +1,8 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router component
-import { useNavigate } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
 
 // import redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -53,7 +53,7 @@ export default function Cart() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const paymentData = useSelector(selectPaymentData);
     const cart = useSelector(selectCart);
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
@@ -84,7 +84,6 @@ export default function Cart() {
             const res = await api.getCart();
             const data = await res.data.data;
             dispatch(setCart([...data]));
-            console.log(cart)
             cb(data);
         }
 
@@ -146,13 +145,13 @@ export default function Cart() {
     const handlePayment = () => {
         const paymentData = {
             selectedItem: selectedItem,
-            discountCode: isDiscountCodeValid ? discountCode : null,
+            discountCode: isDiscountCodeValid ? discountCode : '',
             package_type: 'playlist',
             totalPrice: totalPrice,
             finalPrice: totalPrice
         };
         dispatch(setItems(paymentData));
-        navigate('/checkout', { replace: true });
+        navigate.push('/checkout');
     };
 
     const handleRemoveItem = async (id) => {

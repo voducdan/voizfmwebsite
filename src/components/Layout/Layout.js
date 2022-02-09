@@ -1,32 +1,32 @@
+
 import { useEffect, useState } from 'react';
 
 import { useSelector, useDispatch } from 'react-redux';
 
-import { setOpen, selectOpenSidebar } from './redux/openSidebar';
-import { selectAnchorEl, handleCloseSearch } from './redux/OpenSearch';
+import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
+import { selectAnchorEl, handleCloseSearch } from '../../redux/OpenSearch';
+
+import { useRouter } from 'next/router';
+
+import { Provider } from 'react-redux';
 
 import Box from '@mui/material/Box';
 
-import { Routes, Route, useLocation } from 'react-router-dom';
+import SidebarMenu from '../../components/SidebarMenu/SidebarMenu';
+import Header from '../../components/Header/Header';
+import Footer from '../../components/Footer/Footer';
+import Login from '../../components/Login/Login';
+import PlayBar from '../../components/PlayBar/PlayBar';
+import SearchModal from '../../components/Search/SearchModal';
 
-import './App.css';
-import ROUTES from './Routes';
+import store from '../../redux/store';
 
-import SidebarMenu from "./components/SidebarMenu/SidebarMenu";
-import Header from "./components/Header/Header";
-import Footer from "./components/Footer/Footer";
-import Login from "./components/Login/Login";
-import PlayBar from './components/PlayBar/PlayBar';
-import SearchModal from './components/Search/SearchModal';
+import useWindowSize from '../../utils/useWindowSize';
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from '../../utils/constants';
 
-import useWindowSize from './utils/useWindowSize'
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from './utils/constants'
-
-
-
-function App() {
-
-    const location = useLocation();
+function Layout(props) {
+    const { children } = props;
+    const location = useRouter();
     const [includeFooter, setIncludeFooter] = useState(null);
 
     let windowSize = useWindowSize();
@@ -45,7 +45,7 @@ function App() {
 
     useEffect(() => {
         function checkIncludeFooter() {
-            if (EXCLUDE_FOOTER.some(e => e.test(location.pathname))) {
+            if (EXCLUDE_FOOTER.some(e => e.test(location.asPath))) {
                 setIncludeFooter(false);
             } else {
                 setIncludeFooter(true);
@@ -62,7 +62,7 @@ function App() {
 
     const openPlayBar = () => {
         const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+$');
-        if (playAudioPathRegex.test(location.pathname)) {
+        if (playAudioPathRegex.test(location.asPath)) {
             if (!isSm) {
                 return true
             }
@@ -79,7 +79,7 @@ function App() {
     }
 
     return (
-        <div className="App">
+        <Box>
             <Login />
             <Header />
             {
@@ -95,13 +95,7 @@ function App() {
                 width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
                 ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
             }}>
-                <Routes>
-                    {
-                        ROUTES.map(route => (
-                            <Route path={route.path} element={route.component} key={route.key} exact={route.exact} />
-                        ))
-                    }
-                </Routes>
+                {children}
             </Box>
             {
                 openPlayBar() && (
@@ -109,8 +103,12 @@ function App() {
                 )
             }
             {includeFooter && <Footer />}
-        </div >
+        </Box>
     )
 }
-
-export default App;
+export default ({ children }) => (
+    <Provider store={store}>
+        <Layout children={children}>
+        </Layout>
+    </Provider>
+)

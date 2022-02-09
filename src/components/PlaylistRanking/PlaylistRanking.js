@@ -1,16 +1,13 @@
 // import react
 import { useEffect, useState } from 'react';
 
-// import react router dom
-import { Link } from 'react-router-dom';
+// import next link
+import Link from 'next/link';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
 
 // import MUI component
 import {
@@ -318,7 +315,7 @@ export default function PlaylistRanking() {
                                     >{(idx + 1) <= 9 ? `0${idx + 1}` : (idx + 1)}</Typography>
                                 </Box>
                                 <Link
-                                    to={`/playlists/${i?.id}`}
+                                    href={`/playlists/${i?.id}`}
                                     style={{ textDecoration: 'none', width: 'calc(85% - 22px)' }}
                                 >
                                     <Box

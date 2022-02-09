@@ -1,8 +1,8 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router component
-import { useNavigate } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
 
 // import redux
 import { useDispatch } from 'react-redux';
@@ -118,7 +118,7 @@ export default function VipPackage() {
     const api = new API();
 
     const windowSize = useWindowSize();
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const [selectedPackage, setSelectedPackage] = useState(1);
     const [vipPackages, setVipPackages] = useState([]);
@@ -159,7 +159,7 @@ export default function VipPackage() {
             package_type: 'plan_package'
         };
         dispatch(setItems(paymentData));
-        navigate('/checkout', { replace: true });
+        navigate.push('/checkout');
     }
 
     return (

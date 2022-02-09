@@ -2,12 +2,7 @@
 import { useState, useEffect } from 'react';
 
 import SwiperCore, { Navigation } from 'swiper';
-import { Swiper, SwiperSlide } from 'swiper/react/swiper-react.js';
-
-// import swiper
-import 'swiper/swiper.scss'; // core Swiper
-import 'swiper/modules/navigation/navigation.scss'; // Navigation module
-import 'swiper/modules/pagination/pagination.scss';
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 // import MUI components
 import {

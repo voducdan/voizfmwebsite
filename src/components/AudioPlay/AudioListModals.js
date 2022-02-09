@@ -1,8 +1,8 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router dom
-import { useNavigate } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
 
 // import MUI components
 import {
@@ -30,7 +30,7 @@ export default function AudioList(props) {
     const api = new API();
 
     const { playlistId, anchorAudioList, onCloseAudioList, audioId } = props;
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const open = Boolean(anchorAudioList);
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -47,7 +47,7 @@ export default function AudioList(props) {
     }, [playlistId]);
 
     const handleSelectAudio = (id) => {
-        navigate(`/audio-play/${id}`);
+        navigate.push(`/audio-play/${id}`);
     }
 
     return (

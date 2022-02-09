@@ -12,8 +12,11 @@ import { selectCart, setCart, selectAddToCartFlag, setAddToCartFlag } from '../.
 import { setUser } from '../../redux/user';
 import { selectToken } from '../../redux/token';
 
-// import react router component
-import { Link, useNavigate, useLocation } from 'react-router-dom';
+// import next router
+import { useRouter, withRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // Import MUI component
 import { styled } from '@mui/material/styles';
@@ -77,7 +80,7 @@ const CartIcon = (props) => {
     return (
         <Link
             onClick={handleCloseSidebarWhenClickAccountIcon}
-            to={`/cart`}
+            href={`/cart`}
             key={idx}
         >
             <Tooltip open={Boolean(addToCartFlag)} title="Thêm vào giỏ hàng thành công!">
@@ -95,7 +98,7 @@ const userAvt = (props) => {
         return (
             <Link
                 onClick={handleCloseSidebarWhenClickAccountIcon}
-                to="/account"
+                href="/account"
                 key={idx}
                 style={{ textDecoration: 'none' }}
             >
@@ -124,14 +127,13 @@ const AppBar = styled(MuiAppBar, {
 }));
 
 
-export default function Header() {
+function Header({ router }) {
     const api = new API();
     const windowSize = useWindowSize();
-    const location = useLocation();
-    const pathname = location.pathname;
-    const search = location.search;
+    const pathname = router.pathname;
+    const search = router.search;
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const openSidebar = useSelector(selectOpenSidebar);
     const cart = useSelector(selectCart);
     const token = useSelector(selectToken);
@@ -230,14 +232,20 @@ export default function Header() {
         if (keyCode === 13) {
             setShowHeaderItems(true);
             setSearchStatus();
-            navigate(`/search?searchKey=${searchKeyword}`, { replace: true });
+            navigate.push({
+                pathname: '/search',
+                query: { searchKey: searchKeyword }
+            });
         }
     }
 
     const handleClickSearchBtn = () => {
         setShowHeaderItems(true);
         setSearchStatus();
-        navigate(`/search?searchKey=${searchKeyword}`, { replace: true });
+        navigate.push({
+            pathname: '/search',
+            query: { searchKey: searchKeyword }
+        });
     }
 
     const handleClearSearchKeyword = () => {
@@ -361,3 +369,5 @@ export default function Header() {
         </AppBar >
     )
 }
+
+export default withRouter(Header)

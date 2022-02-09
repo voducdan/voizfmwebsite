@@ -7,8 +7,8 @@ import { useSelector, useDispatch } from 'react-redux';
 // Import redux reducer, actions
 import { selectPaymentData, selectCart, setCart, setPaymentInfo } from '../../redux/payment';
 
-// import react router component
-import { useNavigate } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
 
 // import MUI components
 import {
@@ -111,7 +111,7 @@ export default function Checkout() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const navigate = useNavigate();
+    const navigate = useRouter();
     const [expandBill, setExpandBill] = useState(false);
     const [isPaymentError, setIsPaymentError] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('shopee');
@@ -131,18 +131,18 @@ export default function Checkout() {
     }
 
     const onEditCart = () => {
-        navigate('/cart', { replace: true });
+        navigate.push('/cart');
     };
 
     const handleCheckout = async () => {
         try {
             const packageIds = selectedItem.map(i => i.id);
             const payload = {
-                "discount_code": discountCode,
+                "discount_code": discountCode || null,
                 "package_type": package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
-                "redirect_url": "http://13.251.106.4/"
+                "redirect_url": "https://voiz.vn/"
             }
             console.log(payload)
             const res = await api.payment(paymentMethod, payload);
@@ -159,7 +159,7 @@ export default function Checkout() {
                 window.location = data.data.url;
                 return;
             }
-            navigate(`/payment/${paymentMethod}`, { replace: true });
+            navigate.push(`/payment/${paymentMethod}`, { replace: true });
         }
         catch (err) {
             console.log(err);

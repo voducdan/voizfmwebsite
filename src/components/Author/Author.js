@@ -1,8 +1,11 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import react router dom
-import { useParams, Link } from 'react-router-dom';
+// import next router
+import { useRouter } from 'next/router';
+
+// import next link
+import Link from 'next/link';
 
 // import MUI components
 import {
@@ -46,22 +49,17 @@ const PlaylistAudioCount = (props) => {
     )
 }
 
-export default function Author() {
+export default function Author({ author }) {
     const api = new API();
 
+    const router = useRouter();
     const windowSize = useWindowSize();
-    const { id } = useParams();
-    const [author, setAuthor] = useState({});
+    const [id, setId] = useState(null);
     const [featuredAuthors, setFeaturedAuthors] = useState([]);
     const [playlists, setPlaylists] = useState([]);
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
 
     useEffect(() => {
-        async function fetchAuthor() {
-            const res = await api.getAuthor(id);
-            const data = await res.data.data;
-            setAuthor(data);
-        }
         async function fetchFeaturedAuthors() {
             const res = await api.getFeaturedAuthors(id);
             const data = await res.data.data;
@@ -73,10 +71,16 @@ export default function Author() {
             setPlaylists(data);
         }
 
-        fetchAuthor();
-        fetchFeaturedAuthors();
-        fetchPlaylists();
+        if (id) {
+            fetchFeaturedAuthors();
+            fetchPlaylists();
+        }
     }, [id]);
+
+    useEffect(() => {
+        const { id } = router.query;
+        setId(id);
+    }, [router.query]);
 
     const getFeaturedAuthorWidth = () => {
         const el = document.getElementById('author-detail-info');
@@ -265,7 +269,7 @@ export default function Author() {
                                             }}
                                         >
                                             <Link
-                                                to={`/authors/${i?.id}`}
+                                                href={`/authors/${i?.id}`}
                                                 style={{
                                                     textDecoration: 'none'
                                                 }}
