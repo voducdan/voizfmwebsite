@@ -150,11 +150,19 @@ function Header({ router }) {
 
 
     useEffect(() => {
-        fetchNumItemsInCart();
+        if (token) {
+            fetchNumItemsInCart();
+        }
     }, []);
 
     useEffect(() => {
-        fetchUserInfo();
+        if (token) {
+            fetchUserInfo();
+            return;
+        }
+        setAvtSrc(null);
+        dispatch(setUser(null));
+
     }, [token]);
 
     useEffect(() => {
@@ -162,7 +170,9 @@ function Header({ router }) {
     }, [isSm]);
 
     useEffect(() => {
-        fetchNumItemsInCart();
+        if (token) {
+            fetchNumItemsInCart();
+        }
     }, [cart]);
 
     useEffect(() => {

@@ -326,7 +326,12 @@ export default class API {
         }
         return this.init().post(`/web/auth/phone_number`, data);
     }
+
     createProfile = (data, accessToken) => {
         return this.init(accessToken).post(`/auth/profiles`, data);
+    }
+
+    beCreator = (data) => {
+        return this.init().post(`/web/creators`, data);
     }
 }
