@@ -66,7 +66,7 @@ export default function PlaylistByCategory(props) {
                             tyle={{ width: '100%', height: `${playlistImgWidth}px` }}
                         >
                             <a>
-                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} ></Thumbnail>
+                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} promotion={item?.promotion || ''} />
                             </a>
                         </Link>
                     </SwiperSlide>
