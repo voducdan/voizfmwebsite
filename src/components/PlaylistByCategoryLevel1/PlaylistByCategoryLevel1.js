@@ -275,9 +275,12 @@ function AudioBook({ router }) {
                                         <Link
                                             key={item.id}
                                             href={`/playlists/${item.id}`}
-                                            style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)`, height: `${getPlaylistImgWidth()}px` }}
                                         >
-                                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} promotion={item?.promotion || ''} />
+                                            <a
+                                                style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)` }}
+                                            >
+                                                <Thumbnail style={{ width: '100%', height: `${getPlaylistImgWidth()}px`, borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} promotion={item?.promotion || ''} />
+                                            </a>
                                         </Link>
                                     ))}
                                 </Box>

@@ -63,10 +63,9 @@ export default function PlaylistByCategory(props) {
                     <SwiperSlide key={item.id}>
                         <Link
                             href={`/playlists/${item.id}`}
-                            tyle={{ width: '100%', height: `${playlistImgWidth}px` }}
                         >
                             <a>
-                                <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} promotion={item?.promotion || ''} />
+                                <Thumbnail style={{ width: `${playlistImgWidth}px`, height: `${playlistImgWidth}px`, borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} promotion={item?.promotion || ''} />
                             </a>
                         </Link>
                     </SwiperSlide>
