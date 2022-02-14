@@ -75,7 +75,30 @@ const Title = (props) => {
 
 export default function PublisherComponent(props) {
     const { isSm } = props;
-    const newContent = [];
+    const publishers = [
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/1.png', id: 1 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/2.png', id: 2 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/3.png', id: 3 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/4.png', id: 4 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/5.png', id: 5 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/6.png', id: 6 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/7.png', id: 7 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/8.png', id: 8 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/9.png', id: 9 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/10.png', id: 10 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/11.png', id: 11 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/12.png', id: 12 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/13.png', id: 13 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/14.png', id: 14 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/15.png', id: 15 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/16.png', id: 16 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/17.png', id: 17 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/18.png', id: 18 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/19.png', id: 19 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/20.png', id: 20 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/21.png', id: 21 },
+        { url: 'https://voiz-nxb.s3.cloud.cmctelecom.vn/22.png', id: 22 }
+    ];
     const num_items_per_line = !isSm ? 5 : 2.5;
 
     const navigationPublisherPrevRef = useRef(null);
@@ -100,10 +123,10 @@ export default function PublisherComponent(props) {
                     swiper.params.navigation.nextEl = navigationPublisherNextRef.current;
                 }}
                 slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}>
-                {newContent.map((item) => (
+                {publishers.map((item) => (
                     <SwiperSlide key={item.id}>
                         <a>
-                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: isSm ? '81px' : '112px' }} avtSrc={item.avtSrc} alt={`images ${item.id}`} ></Thumbnail>
+                            <Thumbnail style={{ borderRadius: '6px', width: '100%', height: isSm ? '81px' : '112px' }} avtSrc={item.url} alt={`images ${item.id}`} ></Thumbnail>
                         </a>
                     </SwiperSlide>
                 ))}
