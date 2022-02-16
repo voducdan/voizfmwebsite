@@ -24,6 +24,9 @@ import {
     DialogActions
 } from '@mui/material';
 
+// import login third party
+import { GoogleLogin } from 'react-google-login';
+
 // import others components
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton';
 
@@ -36,7 +39,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import { validatePhoneNumber, validateOTP } from '../../utils/validate';
 import { flexStyle } from '../../utils/flexStyle';
 
-// import service
+// import services
 import API from '../../services/api';
 
 const flexCenter = {
@@ -217,6 +220,28 @@ export default function Login() {
         setError('');
     }
 
+    const responseGoogle = async (response) => {
+        console.log(response)
+        try {
+            const { profileObj, tokenId } = response;
+            const payload = {
+                "first_name": profileObj.givenName,
+                "last_name": profileObj.familyName,
+                "email": profileObj.email,
+                "birthday": profileObj.birthday || null,
+                "oauth2_id": tokenId,
+                "avatar_url": profileObj.imageUrl
+            }
+            console.log(payload)
+            const res = await api.loginGoogle(payload);
+            const data = await res.data;
+            console.log(data)
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
     return (
         <div>
             <Dialog
@@ -363,7 +388,14 @@ export default function Login() {
                             }}>hoặc tiếp tục với</Typography>
                             <Stack sx={{ width: '100%' }} spacing={3} direction="column">
                                 <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button>
-                                <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button>
+                                {/* <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button> */}
+                                <GoogleLogin
+                                    clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
+                                    buttonText="Google"
+                                    onSuccess={responseGoogle}
+                                    onFailure={responseGoogle}
+                                    cookiePolicy={'single_host_origin'}
+                                />
                             </Stack>
                         </Box>
                         <Box sx={{

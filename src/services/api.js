@@ -334,4 +334,8 @@ export default class API {
     beCreator = (data) => {
         return this.init().post(`/web/creators`, data);
     }
+    
+    loginGoogle = (data) => {
+        return this.init().post('web/auth/google', data);
+    }
 }
