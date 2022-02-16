@@ -5,6 +5,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { selectAnchorEl, handleCloseSearch } from '../../redux/OpenSearch';
+import { setOpenLogin } from '../../redux/openLogin';
 
 import { useRouter } from 'next/router';
 
@@ -22,7 +23,7 @@ import SearchModal from '../../components/Search/SearchModal';
 import store from '../../redux/store';
 
 import useWindowSize from '../../utils/useWindowSize';
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from '../../utils/constants';
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER, REQUIRE_LOGIN } from '../../utils/constants';
 
 function Layout(props) {
     const { children } = props;
@@ -50,6 +51,10 @@ function Layout(props) {
             } else {
                 setIncludeFooter(true);
             }
+        }
+        if (REQUIRE_LOGIN.some(e => e.test(location.asPath))){
+            dispatch(setOpenLogin());
+            return;
         }
         checkIncludeFooter();
         dispatch(handleCloseSearch());

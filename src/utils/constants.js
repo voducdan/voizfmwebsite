@@ -122,6 +122,7 @@ const DRAWER_WIDTH = 250;
 const HEADER_HEIGHT = '104px';
 const HEADER_HEIGHT_MB = '80px';
 const EXCLUDE_FOOTER = [/\/playlists\/[0-9]+/g, /\/audio-play\/[0-9]+/g];
+const REQUIRE_LOGIN = [/\/library/g, /\/account/g];
 const COUNTRY_CODES = [
     '93',
     '355',
@@ -357,5 +358,5 @@ const COUNTRY_CODES = [
 
 export {
     COLORS, TEXT_STYLE, FONT_FAMILY, FONT_COLOR, HEADER_HEIGHT, DRAWER_WIDTH, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB,
-    EXCLUDE_FOOTER, COUNTRY_CODES
+    EXCLUDE_FOOTER, COUNTRY_CODES, REQUIRE_LOGIN
 }
