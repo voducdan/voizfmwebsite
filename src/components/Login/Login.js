@@ -24,6 +24,8 @@ import {
     DialogActions
 } from '@mui/material';
 
+import FacebookLogin from 'react-facebook-login';
+
 // import others components
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton';
 
@@ -217,6 +219,10 @@ export default function Login() {
         setError('');
     }
 
+    const responseFacebook = (response) => {
+        console.log(response);
+    }
+
     return (
         <div>
             <Dialog
@@ -362,7 +368,12 @@ export default function Login() {
                                 marginBottom: '24px'
                             }}>hoặc tiếp tục với</Typography>
                             <Stack sx={{ width: '100%' }} spacing={3} direction="column">
-                                <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button>
+                                {/* <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button> */}
+                                <FacebookLogin
+                                    appId={`${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}`}
+                                    autoLoad={false}
+                                    fields="name,email,picture"
+                                    callback={responseFacebook} />
                                 <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button>
                             </Stack>
                         </Box>
