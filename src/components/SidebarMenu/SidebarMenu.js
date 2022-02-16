@@ -312,9 +312,10 @@ export default function SidebarMenu() {
             </List>
             <Link
                 href='/book-request'
-                style={{ textDecoration: 'none' }}
             >
-                <a><RequestsBook /></a>
+                <a
+                    style={{ textDecoration: 'none' }}
+                ><RequestsBook /></a>
             </Link>
         </Drawer >
     )

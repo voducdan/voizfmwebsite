@@ -22,12 +22,12 @@ const questionsList = [
     {
         id: 1,
         question: 'Phải làm gì nếu sau khi thanh toán vẫn không nghe được nội dung?',
-        answer: 'Hiện nay, Voiz FM nhận thanh toán in-app (tức thanh toán qua kho ứng dụng Apple và Google), đây là kênh thanh toán tiện lợi, có kèm tính năng tự động gia hạn để bảo đảm quá trình trải nghiệm được xuyên suốt. Nếu bạn gặp vấn đề về thanh toán hoặc không thanh toán được in-app, xin liên hệ trực tiếp với Voiz FM để được hướng dẫn thêm.'
+        answer: 'Bạn có thể thử tắt ứng dụng và mở lại. Trong một số trường hợp, giao dịch có thể bị trục trặc từ phía Ngân hàng, khi ấy bạn hãy liên hệ trực tiếp với Voiz để được hỗ trợ nhanh chóng nhất.'
     },
     {
         id: 2,
-        question: 'Hội viên VIP có thể nghe được những nội dung nào?',
-        answer: 'Hiện nay, Voiz FM nhận thanh toán in-app (tức thanh toán qua kho ứng dụng Apple và Google), đây là kênh thanh toán tiện lợi, có kèm tính năng tự động gia hạn để bảo đảm quá trình trải nghiệm được xuyên suốt. Nếu bạn gặp vấn đề về thanh toán hoặc không thanh toán được in-app, xin liên hệ trực tiếp với Voiz FM để được hướng dẫn thêm.'
+        question: 'Hội viên VIP có thể được nghe những nội dung nào?',
+        answer: 'Khi trở thành hội viên VIP, bạn sẽ được nghe và tải không giới hạn những tựa sách chất lượng cao, với biểu tượng VIP được gắn trên bìa sách. Ngoài ra, hội viên VIP còn được ưu đãi 10% khi mua sách theo từng quyển lẻ và nhận được nhiều quà tặng khác trong quá trình sử dụng ứng dụng. Gói thành viên đã mua sẽ không được đổi trả dưới mọi hình thức, xin vui lòng đọc kỹ các điều khoản hướng dẫn sử dụng trước khi giao dịch.'
     },
     {
         id: 3,
@@ -37,12 +37,12 @@ const questionsList = [
     {
         id: 4,
         question: 'Một tài khoản VIP có thể được sử dụng bởi bao nhiêu người?',
-        answer: 'Hiện nay, Voiz FM nhận thanh toán in-app (tức thanh toán qua kho ứng dụng Apple và Google), đây là kênh thanh toán tiện lợi, có kèm tính năng tự động gia hạn để bảo đảm quá trình trải nghiệm được xuyên suốt. Nếu bạn gặp vấn đề về thanh toán hoặc không thanh toán được in-app, xin liên hệ trực tiếp với Voiz FM để được hướng dẫn thêm.'
+        answer: 'Một tài khoản VIP chỉ có thể được đăng nhập và sử dụng bởi một người dùng duy nhất, cần tránh chia sẻ thông tin tài khoản để không ảnh hưởng tới vấn đề bảo mật.'
     },
     {
         id: 5,
         question: 'Chất lượng Sách nói của Voiz như thế nào?',
-        answer: 'Hiện nay, Voiz FM nhận thanh toán in-app (tức thanh toán qua kho ứng dụng Apple và Google), đây là kênh thanh toán tiện lợi, có kèm tính năng tự động gia hạn để bảo đảm quá trình trải nghiệm được xuyên suốt. Nếu bạn gặp vấn đề về thanh toán hoặc không thanh toán được in-app, xin liên hệ trực tiếp với Voiz FM để được hướng dẫn thêm.'
+        answer: 'Voiz hợp tác với các đơn vị uy tín như NXB Kim Đồng,NXB Văn học, First News, PACE, Nhã Nam... cùng đội ngũ diễn viên lồng tiếng nhiều kinh nghiệm để mang lại những nội dung Sách nói Chất lượng cao và 100% Bản quyền.'
     },
 ]
 
@@ -135,22 +135,31 @@ export default function FAQ() {
                 }}
             >
                 <Link
-                    style={{
-                        ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.content1),
-                        color: COLORS.bg4
-                    }}
-                    href="/"
+                    href="https://voiz.vn/chinh-sach-bao-mat"
                 >
-                    Chính sách bảo mật
+                    <a
+                        target='_blank'
+                        style={{
+                            ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.content1),
+                            color: COLORS.bg4
+                        }}
+                    >
+                        Chính sách bảo mật
+                    </a>
                 </Link>
                 <Link
-                    style={{
-                        ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.content1),
-                        color: COLORS.bg4
-                    }}
-                    href="/"
+
+                    href="https://voiz.vn/dieu-khoan-su-dung"
                 >
-                    Điều khoản sử dụng
+                    <a
+                        target='_blank'
+                        style={{
+                            ...(isSm ? TEXT_STYLE.caption10Bold : TEXT_STYLE.content1),
+                            color: COLORS.bg4
+                        }}
+                    >
+                        Điều khoản sử dụng
+                    </a>
                 </Link>
             </Box>
             <Box

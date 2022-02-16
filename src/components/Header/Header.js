@@ -189,9 +189,16 @@ function Header({ router }) {
     }, [pathname, search]);
 
     const fetchNumItemsInCart = async () => {
-        const res = await api.getNumItemsInCart();
-        const data = await res.data.data;
-        setNumItemsInCart(data.badge);
+        try {
+            const res = await api.getNumItemsInCart();
+            const data = await res.data.data;
+            if (!data.error) {
+                setNumItemsInCart(data.badge);
+            }
+        }
+        catch (err) {
+            setNumItemsInCart(0)
+        }
     };
 
     function setSearchStatus() {
