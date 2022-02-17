@@ -220,8 +220,7 @@ export default function Login() {
         setError('');
     }
 
-    const responseGoogle = async (response) => {
-        console.log(response)
+    const responseGoogleSuccess = async (response) => {
         try {
             const { profileObj, tokenId } = response;
             const payload = {
@@ -232,7 +231,6 @@ export default function Login() {
                 "oauth2_id": tokenId,
                 "avatar_url": profileObj.imageUrl
             }
-            console.log(payload)
             const res = await api.loginGoogle(payload);
             const data = await res.data;
             console.log(data)
@@ -240,6 +238,10 @@ export default function Login() {
         catch (err) {
             console.log(err)
         }
+    }
+
+    const responseGoogleFalure = ()=>{
+
     }
 
     return (
@@ -392,9 +394,8 @@ export default function Login() {
                                 <GoogleLogin
                                     clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
                                     buttonText="Google"
-                                    onSuccess={responseGoogle}
-                                    onFailure={responseGoogle}
-                                    cookiePolicy={'single_host_origin'}
+                                    onSuccess={responseGoogleSuccess}
+                                    onFailure={responseGoogleFalure}
                                 />
                             </Stack>
                         </Box>
