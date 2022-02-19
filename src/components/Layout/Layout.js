@@ -5,7 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { selectAnchorEl, handleCloseSearch } from '../../redux/OpenSearch';
-import { setOpenLogin } from '../../redux/openLogin';
+import { handleOpenLogin } from '../../redux/openLogin';
+import { selectToken } from '../../redux/token';
 
 import { useRouter } from 'next/router';
 
@@ -35,6 +36,7 @@ function Layout(props) {
     const openSidebar = useSelector(selectOpenSidebar);
     const [anchorEl, setAnchorEl] = useState(null);
     const anchorSearchElId = useSelector(selectAnchorEl);
+    const token = useSelector(selectToken);
     const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
 
@@ -52,8 +54,8 @@ function Layout(props) {
                 setIncludeFooter(true);
             }
         }
-        if (REQUIRE_LOGIN.some(e => e.test(location.asPath))){
-            dispatch(setOpenLogin());
+        if (REQUIRE_LOGIN.some(e => e.test(location.asPath)) && !token){
+            dispatch(handleOpenLogin());
             return;
         }
         checkIncludeFooter();

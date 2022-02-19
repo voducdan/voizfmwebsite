@@ -144,7 +144,6 @@ export default function Checkout() {
                 "platform_type": "website",
                 "redirect_url": "https://voiz.vn/"
             }
-            console.log(payload)
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
             if (data.err) {
@@ -159,7 +158,7 @@ export default function Checkout() {
                 window.location = data.data.url;
                 return;
             }
-            navigate.push(`/payment/${paymentMethod}`, { replace: true });
+            navigate.push(`/payment/${paymentMethod}`);
         }
         catch (err) {
             console.log(err);

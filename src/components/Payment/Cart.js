@@ -134,6 +134,7 @@ export default function Cart() {
             const isCheckAll = currentSelect.length === cart.length;
             setCheckAllControl(isCheckAll);
             setSelectedItem(currentSelect);
+            console.log(currentSelect)
         }
         else {
             const remainedItem = selectedItem.filter(i => i.id !== id);

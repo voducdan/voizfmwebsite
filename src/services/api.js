@@ -78,7 +78,7 @@ export default class API {
     }
 
     payment = (method, data) => {
-        return this.init().post(`/payment/${method}`, data);
+        return this.init().post(`/web/payment/${method}`, data);
     }
 
     getComboPackage = () => {
@@ -333,7 +333,7 @@ export default class API {
         return this.init().post(`/web/creators`, data);
     }
 
-    getBannerImages = (category_code = 'entire', display_on ='app_home_top', page=1, limit=5) => {
+    getBannerImages = (category_code = '', display_on = '', page = 1, limit = 5) => {
         const params = { category_code, display_on, page, limit };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/banners?${queryString}`);

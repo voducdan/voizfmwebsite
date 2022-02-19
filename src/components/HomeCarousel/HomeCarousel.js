@@ -46,15 +46,16 @@ export default function HomeCarousel(props) {
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
 
-    useEffect(()=>{
-        async function fetchBannerImages(){
+    useEffect(() => {
+        async function fetchBannerImages() {
             const res = await api.getBannerImages();
-            const data = await res.data;
-            console.log(data)
+            const data = await res.data.data;
+            const imagesList = data.map(i => i.image);
+            setImages(imagesList);
         }
-        
+
         fetchBannerImages();
-    },[])
+    }, [])
 
     const handleChangeSlideClick = (isNext) => {
         let newCurrent = null;
@@ -86,9 +87,9 @@ export default function HomeCarousel(props) {
                             height: '100%',
                             left: 0
                         }}
-                        alt={image.alt}
-                        key={idx}
-                        src={image.imgSrc}
+                        alt={image.id}
+                        key={image.id}
+                        src={image.original_url}
                     />
                 ))}
             </div>
@@ -118,7 +119,7 @@ export default function HomeCarousel(props) {
                         <SwiperSlide
                             onClick={handleClickThumbnail}
                             id={idx}
-                            key={idx}
+                            key={image.id}
                             style={{
                                 flexShrink: 'unset'
                             }}
@@ -134,9 +135,8 @@ export default function HomeCarousel(props) {
                                         border: '2px solid white'
                                     })
                                 }}
-                                alt={image.alt}
-                                key={idx}
-                                src={image.imgSrc} />
+                                alt={image.id}
+                                src={image.thumb_url} />
                         </SwiperSlide>
                     ))}
                 </Swiper>

@@ -1,3 +1,5 @@
+//import react
+import { useState, useEffect } from 'react';
 
 // import redux
 import { useSelector } from 'react-redux';
@@ -8,11 +10,151 @@ import { useRouter } from 'next/router';
 // Import redux reducer, actions
 import { selectPaymentInfo } from '../../redux/payment';
 
+// import MUI components
+import {
+    TableContainer,
+    Table,
+    TableBody,
+    TableCell,
+    TableRow,
+    Box,
+    Paper
+} from '@mui/material';
+
+// import utils
+import { flexStyle } from '../../utils/flexStyle';
+import { COLORS } from '../../utils/constants';
+import formatPrice from '../../utils/formatPrice';
+
+// import service
+import API from '../../services/api';
+
+const tblTextStyle = {
+    borderBottom: 'none',
+    color: COLORS.white
+}
+
 const PaymentUI = (props) => {
     const { method, paymentInfo } = props;
+
+    const api = new API();
+
+    const [countDountStr, setCountDountStr] = useState('');
+
+    const countDownExpireTime = (expireTime) => {
+        const x = setInterval(function () {
+            var now = new Date().getTime();
+            var distance = expireTime * 1000 - now;
+            var minutes = Math.floor((distance % (1000 * 60 * 60)) / (1000 * 60));
+            var seconds = Math.floor((distance % (1000 * 60)) / 1000);
+            if (distance < 0) {
+                clearInterval(x);
+                setCountDountStr('');
+                return;
+            }
+
+            const str = minutes + ":" + seconds;
+            setCountDountStr(str);
+        })
+    }
+
+    const checkBillingStatus = async () => {
+        const res = await api.checkBillingStatus();
+    }
+
+    useEffect(() => {
+        countDownExpireTime(paymentInfo?.expiry_time);
+    }, []);
+
     switch (method) {
         case 'shopee':
-            return <img src={paymentInfo?.url || ''} alt="qrcode" />;
+            return (
+                <Box
+                    sx={{
+                        ...flexStyle('left', 'center')
+                    }}
+                >
+                    <Box>
+                        <TableContainer>
+                            <Table aria-label="simple table">
+                                <TableBody>
+                                    <TableRow
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                            component="th"
+                                            scope="row">
+                                            {'Loại đơn hàng'}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                        >{paymentInfo?.additional_info}</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                            component="th"
+                                            scope="row">
+                                            {'Tổng tiền'}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                        >{formatPrice(paymentInfo?.amount)}</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                            component="th"
+                                            scope="row">
+                                            {'Đơn vị tiền tệ'}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                        >{paymentInfo?.currency}</TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                            component="th"
+                                            scope="row">
+                                            {'Giao dịch hết hạn sau'}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={tblTextStyle}
+
+                                        >
+                                            {countDountStr}
+                                        </TableCell>
+                                    </TableRow>
+                                    <TableRow
+                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                    >
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                            component="th"
+                                            scope="row">
+                                            {'Mã giao dịch'}
+                                        </TableCell>
+                                        <TableCell
+                                            sx={tblTextStyle}
+                                        >{paymentInfo?.payment_reference_id}</TableCell>
+                                    </TableRow>
+                                </TableBody>
+                            </Table>
+                        </TableContainer>
+                    </Box>
+                    <Box>
+                        <img src={paymentInfo?.url || ''} alt="qrcode" />
+                    </Box>
+                </Box>
+            );
         default:
             return <img src={paymentInfo?.url || ''} alt="qrcode" />;
     }

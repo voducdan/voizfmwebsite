@@ -11,7 +11,8 @@ const paymentSlice = createSlice({
         },
         cart: [],
         paymentInfo: null,
-        addToCartFlag: 0
+        addToCartFlag: 0,
+        billingInfo:null
     },
     reducers: {
         setItems: (state, action) => {
