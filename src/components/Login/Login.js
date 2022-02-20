@@ -1,6 +1,9 @@
 // import react module
 import { useState } from 'react';
 
+// import next router
+import { useRouter } from 'next/router';
+
 // import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin';
@@ -24,6 +27,9 @@ import {
     DialogActions
 } from '@mui/material';
 
+// import login third party
+import { GoogleLogin } from 'react-google-login';
+
 // import others components
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton';
 
@@ -36,7 +42,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import { validatePhoneNumber, validateOTP } from '../../utils/validate';
 import { flexStyle } from '../../utils/flexStyle';
 
-// import service
+// import services
 import API from '../../services/api';
 
 const flexCenter = {
@@ -63,6 +69,8 @@ const loginInfo = (content) => (
 export default function Login() {
     const api = new API();
 
+    const navigate = useRouter();
+
     let windowSize = useWindowSize();
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
 
@@ -77,6 +85,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const [userInfo, setUserInfo] = useState({});
     const [accessToken, setAccessToken] = useState(null);
+    const [isGoogle, setIsGoogle] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -152,6 +161,10 @@ export default function Login() {
                 setStep(4);
                 return;
             }
+            if (isGoogle) {
+                handleSkipPhone();
+                return;
+            }
             setStep(3);
         }
         catch (err) {
@@ -215,6 +228,40 @@ export default function Login() {
     const handleCloseErrorDialog = () => {
         setHasError(false);
         setError('');
+    }
+
+    const responseGoogleSuccess = async (response) => {
+        try {
+            const { profileObj, tokenId } = response;
+            const payload = {
+                "first_name": profileObj.givenName,
+                "last_name": profileObj.familyName,
+                "email": profileObj.email,
+                "birthday": profileObj.birthday || null,
+                "oauth2_id": tokenId,
+                "avatar_url": profileObj.imageUrl
+            }
+            const res = await api.loginGoogle(payload);
+            const data = await res.data;
+            setAccessToken(data.data.access_token);
+            setStep(5);
+            setIsGoogle(true);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const responseGoogleFalure = () => {
+        setHasError(true);
+        setError('Đã xảy ra lỗi khi đăng nhập bằng google, vui lòng thử lại sau!');
+        return;
+    }
+
+    const handleSkipPhone = () => {
+        dispatch(setToken(accessToken));
+        setStep(null);
+        dispatch(handleCloseLogin());
     }
 
     return (
@@ -363,7 +410,26 @@ export default function Login() {
                             }}>hoặc tiếp tục với</Typography>
                             <Stack sx={{ width: '100%' }} spacing={3} direction="column">
                                 <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button>
-                                <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="error" startIcon={<GoogleButtonIcon />}>Google</Button>
+                                <GoogleLogin
+                                    render={renderProps => (
+                                        <Button
+                                            onClick={renderProps.onClick} disabled={renderProps.disabled}
+                                            sx={{
+                                                textTransform: 'none',
+                                                height: '48px'
+                                            }}
+                                            variant="contained"
+                                            color="error"
+                                            startIcon={<GoogleButtonIcon />}>
+                                            Google
+                                        </Button>
+
+                                    )}
+                                    clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
+                                    buttonText="Google"
+                                    onSuccess={responseGoogleSuccess}
+                                    onFailure={responseGoogleFalure}
+                                />
                             </Stack>
                         </Box>
                         <Box sx={{
@@ -594,6 +660,102 @@ export default function Login() {
                         <Button onClick={handleCloseErrorDialog} autoFocus>
                             Đóng
                         </Button>
+                    </DialogActions>
+                </Dialog>
+                <Dialog
+                    open={step === 5}
+                    onClose={handleSkipPhone}
+                    PaperProps={{
+                        style: {
+                            backgroundColor: COLORS.bg1
+                        }
+                    }}
+                >
+                    <DialogContent>
+                        <DialogContentText
+                            sx={{
+                                color: COLORS.white
+                            }}
+                        >
+                            Đăng nhập hoăc tạo tài khoản mới
+                        </DialogContentText>
+                        <Box sx={{
+                            marginTop: '32px',
+                            width: '100%',
+                            ...flexCenter,
+                            flexDirection: 'column',
+                            rowGap: '24px',
+                            marginBottom: '24px',
+                        }}>
+                            <Typography sx={{
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                            }}>Nhập số điện thoại của bạn để tiếp tục</Typography>
+                            <Box sx={{
+                                width: '100%',
+                                display: flexCenter.display,
+                                columnGap: '16px',
+                                height: '49px'
+                            }}>
+                                <Select
+                                    id="select-phone-prefix"
+                                    value={countryCode}
+                                    onChange={handleChangeCountryCode}
+                                    label="countryCode"
+                                    sx={{
+                                        border: '1px solid #353535',
+                                        borderRadius: '4px',
+                                        color: COLORS.white,
+                                        '&.Mui-focused .MuiOutlinedInput-notchedOutline': {
+                                            border: "none"
+                                        },
+                                        '& .MuiSelect-icon': {
+                                            color: COLORS.white
+                                        }
+                                    }}
+                                >
+                                    {
+                                        phonePrefixList.map((prefix, idx) => (
+                                            <MenuItem key={idx} value={prefix}>+{prefix}</MenuItem>
+                                        ))
+                                    }
+                                </Select>
+                                <TextField
+                                    sx={{
+                                        borderRadius: '4px',
+                                        border: '1px solid #353535',
+                                        justifyContent: 'center',
+                                        height: '100%',
+                                        '& .MuiOutlinedInput-root': {
+                                            height: '100%'
+                                        },
+                                        '& .MuiOutlinedInput-input': {
+                                            color: COLORS.white,
+                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        }
+                                    }} id="phone-number" placeholder="986754523" variant="outlined" onChange={onPhoneChange} />
+                            </Box>
+                        </Box>
+                    </DialogContent>
+                    <DialogActions
+                        sx={{
+                            ...flexStyle('center', 'center'),
+                            'whiteSpace': 'pre-line'
+                        }}
+                    >
+                        <Button onClick={handleSkipPhone} autoFocus>
+                            Bỏ qua
+                        </Button>
+                        <CustomDisabledButton
+                            disabled={!isPhoneValid}
+                            onClick={onEnterPhone}
+                            style={{
+                                width: '100%',
+                                textTransform: 'none',
+                                marginBottom: !isSm ? '20px' : '30px',
+                                height: '48px',
+                                ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+                            }} content={'Tiếp tục'} />
                     </DialogActions>
                 </Dialog>
             </Dialog>
