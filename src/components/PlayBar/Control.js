@@ -1,5 +1,5 @@
 // import react
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // import redux
 import { useDispatch } from 'react-redux';
@@ -49,18 +49,13 @@ const TinyText = styled(Typography)({
 export default function Control(props) {
     const api = new API();
 
-    const { audioData } = props;
+    const { audioData, audio } = props;
     const theme = useTheme();
+
     const dispatch = useDispatch();
     const [position, setPosition] = useState(0);
     const [paused, setPaused] = useState(true);
-    const [audio, setAudio] = useState(new Audio(''));
-
-    // useEffect(() => {
-    //     if (audioData) {
-    //         setPosition(audioData.position);
-    //     }
-    // }, [audioData]);
+    const [loopAudio, setLoopAudio] = useState(false);
 
     useEffect(() => {
         if (paused) {
@@ -73,15 +68,15 @@ export default function Control(props) {
     }, [paused]);
 
     useEffect(() => {
-        // addAudioToListening(audioData.id, position, audioData.playlist.id);
-        audio.addEventListener('ended', () => setPaused(true));
-        // audio.addEventListener('timeupdate', (e) => {
-        //     const currentTime = e.target.currentTime;
-        //     setPosition(currentTime)
-        // });
-        return () => {
-            audio.removeEventListener('ended', () => setPaused(true));
-        };
+        audio.addEventListener('timeupdate', (e) => {
+            const currentTime = Math.floor(e.target.currentTime);
+            setPosition(currentTime);
+            // if (currentTime === audioData.duration) {
+            if (currentTime === 381 && !audio.loop) {
+                console.log(audio.loop)
+                setPaused(true);
+            }
+        });
     }, []);
 
     const onPlayClick = () => {
@@ -103,6 +98,19 @@ export default function Control(props) {
         }
     }
 
+    const onChangeAudioPosition = (value) => {
+        setPosition(value);
+        audio.currentTime = value;
+    }
+
+    const handleLoopAudio = () => {
+        const tmpLoopAudio = !audio.loop;
+        setLoopAudio(tmpLoopAudio);
+        if (tmpLoopAudio) {
+            audio.loop = true;
+        }
+    }
+
     const mainIconColor = COLORS.white;
 
     return (
@@ -116,17 +124,22 @@ export default function Control(props) {
                     }}
                 >
                     <Box
+                        onClick={handleLoopAudio}
                         sx={{
                             textAlign: 'center'
                         }}
                     >
-                        <Loop fill={COLORS.bg4} bgcolor='none' />
+                        <Loop
+                            fill={COLORS.bg4}
+                            bgcolor='none'
+                        />
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.caption10Regular,
                                 color: COLORS.contentIcon,
                                 whiteSpace: 'nowrap',
-                                marginTop: '9px'
+                                marginTop: '9px',
+                                fontWeight: loopAudio ? 'bold' : 'normal'
                             }}
                         >Lặp lại 1 bài</Typography>
                     </Box>
@@ -186,7 +199,7 @@ export default function Control(props) {
                         min={0}
                         step={1}
                         max={audioData?.duration}
-                        onChange={(_, value) => setPosition(value)}
+                        onChange={(_, value) => { onChangeAudioPosition(value) }}
                         sx={{
                             height: 3,
                             color: '#CFD1E9',
@@ -217,7 +230,7 @@ export default function Control(props) {
                             },
                         }}
                     />
-                    <TinyText>-{formatDuration(audioData?.duration - position)}</TinyText>
+                    <TinyText>-{formatDuration(audioData?.duration)}</TinyText>
                 </Box>
             </Widget>
             <WallPaper />

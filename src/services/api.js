@@ -18,7 +18,8 @@ export default class API {
         this.xSignature = xSignature;
         let headers = {
             'Content-Type': 'application/json',
-            'Accept': 'application/json'
+            'Accept': 'application/json',
+            'Access-Control-Allow-Credentials': true
         };
 
         if (!!this.api_token) {
@@ -55,7 +56,8 @@ export default class API {
             content += `&access_token=${this.api_token}`
         }
         const xSignature = Sha256Encrypt(content);
-        return this.init(null, xSignature).get(`/web/audios/${id}/files`)
+        // return this.init(null, xSignature).get(`/web/audios/${id}/files`)
+        return this.init(null, xSignature).get(`/audios/${id}/files`)
     }
 
     getCart = () => {

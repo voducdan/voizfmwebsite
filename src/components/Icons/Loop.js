@@ -1,5 +1,5 @@
 export default function Loop(props) {
-    const { bgfill, fill } = props
+    const { bgfill, fill, fontWeight } = props
     return (
         <svg width="16" height="13" viewBox="0 0 16 13" fill={bgfill} xmlns="http://www.w3.org/2000/svg">
             <g clipPath="url(#clip0_582_7148)">

@@ -45,8 +45,8 @@ export default function AudioPlay({ audio }) {
 
     const router = useRouter();
 
-    const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
+    const [url, setUrl] = useState(null);
     const [openShareModal, setOpenShareModal] = useState(false);
 
     const windowSize = useWindowSize()

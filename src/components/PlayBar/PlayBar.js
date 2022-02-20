@@ -3,7 +3,8 @@ import { useState } from 'react';
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
-import { selectAudioData, setAudioData } from '../../redux/audio';
+import { selectAudioData } from '../../redux/audio';
+import { selectUrl } from '../../redux/playAudio';
 
 // import MUI components
 import {
@@ -36,7 +37,10 @@ export default function PlayBar() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const [audio, setAudio] = useState(new Audio(url));
     const audioData = useSelector(selectAudioData);
+    // const url = useSelector(selectUrl);
+    const url = 'https://voiz-stg.s3.cloud.cmctelecom.vn/uploads/audio/filename/25064/2ea4f011bb62346c.mp3?X-Amz-Expires=3600&X-Amz-Date=20220220T154001Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=QSNI5PDG05QMOWG13EHE%2F20220220%2Fhcm%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=f8868939843553ab3c3c9e948e65e5c641f1a685a64d39a0295e1ae1880091dc';
     const [volume, setVolume] = useState(40);
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
@@ -60,6 +64,11 @@ export default function PlayBar() {
         }
 
         likeAudio();
+    }
+
+    const handleChangeVolumn = (value) => {
+        setVolume(value);
+        audio.volume = value / audioData.duration;
     }
 
     return (
@@ -156,7 +165,7 @@ export default function PlayBar() {
                     width: isSm ? '100%' : '40%',
                 }}
             >
-                <Control audioData={audioData} />
+                <Control audioData={audioData} audio={audio} />
             </Box>)
             }
             {
@@ -209,7 +218,10 @@ export default function PlayBar() {
                                         opacity: 1,
                                     },
                                 }}
-                                aria-label="Volume" value={volume} onChange={(_, value) => setVolume(value)} />
+                                aria-label="Volume"
+                                value={volume}
+                                onChange={(_, value) => handleChangeVolumn(value)}
+                            />
                         </Stack>
                     </Box>
                 )

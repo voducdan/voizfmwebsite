@@ -12,7 +12,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // import reducer, actions
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
-import { selectUser } from '../../redux/user';
+import { setAudioUrl } from '../../redux/playAudio';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
@@ -358,10 +358,14 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const handlePlayAudio = async (audioId) => {
         try {
-            var res = await api.getAudioFile(audioId);
+            const res = await api.getAudioFile(audioId);
+            const data = await res.data;
+            dispatch(setAudioUrl(data.data.url));
+            router.push(`/audio-play/${audioId}`);
         }
         catch (err) {
-            console.log(err);
+            setErrorMessage('Vui lòng mua playlist hoặc gói VIP để nghe audio!')
+            setOpenSnackbar(true);
         }
     }
 
@@ -371,10 +375,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             return;
         }
         try {
-            var res = await api.getAudioFile(playlistAudios[0].id);
+            const res = await api.getAudioFile(playlistAudios[0].id);
+            const data = await res.data;
+            dispatch(setAudioUrl(data.url));
+            router.push(`/audio-play/${playlistAudios[0].id}`);
+
         }
         catch (err) {
-            console.log(err)
+            setErrorMessage('Vui lòng mua playlist hoặc gói VIP để nghe audio!')
+            setOpenSnackbar(true);
         }
     }
 
