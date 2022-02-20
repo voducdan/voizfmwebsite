@@ -73,14 +73,14 @@ const VipPackageBaper = (props) => {
                     >{data.name}</Typography>
                 )
             }
-            {/* <Typography
+            <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.title0),
                     color: COLORS.white,
                     textAlign: 'center',
                     mt: isSm ? '23px' : '32px'
                 }}
-            >{formatPrice(price)}đ</Typography> */}
+            >{formatPrice(data.price)}đ</Typography>
             {/* <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.VZ_Text_content : TEXT_STYLE.h2),
@@ -89,7 +89,7 @@ const VipPackageBaper = (props) => {
                     mt: isSm ? '5px' : '16px'
                 }}
             >{data.name}</Typography> */}
-            <Divider
+            {/* <Divider
                 sx={{
                     borderColor: COLORS.placeHolder,
                     margin: isSm ? '12px 8px' : '24px 52px'
@@ -108,7 +108,7 @@ const VipPackageBaper = (props) => {
                 {data.ui.text_top_description && (< VipPackageBenefitItem isSm={isSm} key={0} benefit={data.ui.text_top_description} idx={0} />)}
                 {data.ui.text_middle_description && (< VipPackageBenefitItem isSm={isSm} key={1} benefit={data.ui.text_middle_description} idx={1} />)}
                 {data.ui.text_bottom_description && (<VipPackageBenefitItem isSm={isSm} key={2} benefit={data.ui.text_bottom_description} idx={2} />)}
-            </Box>
+            </Box> */}
         </Paper>
     )
 }
@@ -127,12 +127,34 @@ export default function VipPackage() {
     useEffect(() => {
         async function fetchVipPackages() {
             try {
-                const res = await api.getVipPackage();
-                const data = await res.data;
-                if (data.error) {
-                    // handle error, maybe redirect to error page
-                    console.log(data.data);
-                    return;
+                // const res = await api.getVipPackage();
+                // const data = await res.data;
+                // if (data.error) {
+                //     // handle error, maybe redirect to error page
+                //     console.log(data.data);
+                //     return;
+                // }
+                const data = {
+                    data: [
+                            {
+                                "id": 40,
+                                "name": "Tiêu Chuẩn",
+                                "code": "website_vip_1_month",
+                                "price": 99000
+                            },
+                            {
+                                "id": 99,
+                                "name": "Tiết Kiệm",
+                                "code": "website_vip_3_month",
+                                "price": 199000
+                            },
+                            {
+                                "id": 100,
+                                "name": "Tiết Kiệm",
+                                "code": "website_vip_12_month",
+                                "price": 699000
+                            }
+                        ]
                 }
                 setVipPackages(data.data);
             }
@@ -156,7 +178,9 @@ export default function VipPackage() {
                 name: vipPackages[selectedPackage]['name']
             }],
             discountCode: vipPackages[selectedPackage]['sale_code'] || null,
-            package_type: 'plan_package'
+            package_type: 'plan_package',
+            totalPrice: vipPackages[selectedPackage]['price'],
+            finalPrice: vipPackages[selectedPackage]['price']
         };
         dispatch(setItems(paymentData));
         navigate.push('/checkout');

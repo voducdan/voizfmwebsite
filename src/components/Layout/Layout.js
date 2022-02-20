@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { selectAnchorEl, handleCloseSearch } from '../../redux/OpenSearch';
+import { handleOpenLogin } from '../../redux/openLogin';
+import { selectToken } from '../../redux/token';
 
 import { useRouter } from 'next/router';
 
@@ -22,7 +24,7 @@ import SearchModal from '../../components/Search/SearchModal';
 import store from '../../redux/store';
 
 import useWindowSize from '../../utils/useWindowSize';
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from '../../utils/constants';
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER, REQUIRE_LOGIN } from '../../utils/constants';
 
 function Layout(props) {
     const { children } = props;
@@ -34,6 +36,7 @@ function Layout(props) {
     const openSidebar = useSelector(selectOpenSidebar);
     const [anchorEl, setAnchorEl] = useState(null);
     const anchorSearchElId = useSelector(selectAnchorEl);
+    const token = useSelector(selectToken);
     const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
 
@@ -50,6 +53,10 @@ function Layout(props) {
             } else {
                 setIncludeFooter(true);
             }
+        }
+        if (REQUIRE_LOGIN.some(e => e.test(location.asPath)) && !token){
+            dispatch(handleOpenLogin());
+            return;
         }
         checkIncludeFooter();
         dispatch(handleCloseSearch());

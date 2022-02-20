@@ -55,7 +55,7 @@ export default class API {
             content += `&access_token=${this.api_token}`
         }
         const xSignature = Sha256Encrypt(content);
-        return this.init(null, xSignature).get(`/audios/${id}/files`)
+        return this.init(null, xSignature).get(`/web/audios/${id}/files`)
     }
 
     getCart = () => {
@@ -78,17 +78,15 @@ export default class API {
     }
 
     payment = (method, data) => {
-        return this.init().post(`/payment/${method}`, data);
+        return this.init().post(`/web/payment/${method}`, data);
     }
 
     getComboPackage = () => {
         return this.init().get(`/combo_packages`)
     }
 
-    getVipPackage = (is_sale = '') => {
-        const params = { is_sale };
-        const queryString = this.buildQueryString(params)
-        return this.init().get(`/plans/packages?${queryString}`)
+    getVipPackage = () => {
+        return this.init().get(`/web/plan_packages`)
     }
 
     getDiscoveries = () => {
@@ -333,5 +331,19 @@ export default class API {
 
     beCreator = (data) => {
         return this.init().post(`/web/creators`, data);
+    }
+
+    getBannerImages = (category_code = '', display_on = '', page = 1, limit = 5) => {
+        const params = { category_code, display_on, page, limit };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/banners?${queryString}`);
+    }
+
+    checkBillingStatus = (data) => {
+        return this.init().post(`/payment/shopee/checking`, data);
+    }
+
+    loginGoogle = (data) => {
+        return this.init().post('web/auth/google', data);
     }
 }

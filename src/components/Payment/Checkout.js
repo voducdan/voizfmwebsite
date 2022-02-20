@@ -144,7 +144,6 @@ export default function Checkout() {
                 "platform_type": "website",
                 "redirect_url": "https://voiz.vn/"
             }
-            console.log(payload)
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
             if (data.err) {
@@ -159,7 +158,7 @@ export default function Checkout() {
                 window.location = data.data.url;
                 return;
             }
-            navigate.push(`/payment/${paymentMethod}`, { replace: true });
+            navigate.push(`/payment/${paymentMethod}`);
         }
         catch (err) {
             console.log(err);
@@ -366,7 +365,7 @@ export default function Checkout() {
                                                         ...TEXT_STYLE.content3,
                                                         color: COLORS.contentIcon
                                                     }}
-                                                >{formatPrice(i.sale_coin_price)} xu</Typography>
+                                                >{formatPrice(i.sale_coin_price)} đ</Typography>
                                                 )}
                                             </Box>
                                         ))
@@ -395,7 +394,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(totalPrice)} xu</Typography>
+                                    >{formatPrice(totalPrice)} đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -414,7 +413,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(totalPrice - finalPrice)} xu</Typography>
+                                    >{formatPrice(totalPrice - finalPrice)} đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -440,7 +439,7 @@ export default function Checkout() {
                                                 ...TEXT_STYLE.h2,
                                                 color: COLORS.white
                                             }}
-                                        >{formatPrice(finalPrice)} xu</Typography>
+                                        >{formatPrice(finalPrice)} đ</Typography>
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.caption12,

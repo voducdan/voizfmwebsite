@@ -1,5 +1,5 @@
 // import react
-import { useRef, useState } from 'react';
+import { useRef, useState, useEffect } from 'react';
 
 // import MUI components
 import Box from '@mui/material/Box';
@@ -11,6 +11,8 @@ import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-r
 // import icons
 import { CarouselNext, CarouselPrev } from '../../components/Icons/index';
 
+// import services
+import API from '../../services/api';
 
 const SwiperBtnNext = (props) => {
     const { isSm } = props;
@@ -35,49 +37,25 @@ const SwiperBtnPrev = (props) => {
 
 export default function HomeCarousel(props) {
 
+    const api = new API();
+
     const { isSm } = props;
 
     const [current, setCurrent] = useState(0);
+    const [images, setImages] = useState([]);
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
 
-    const images = [
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=1',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=1',
-            alt: "image 1"
-        },
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=2',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
-            alt: "image 1"
-        },
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=3',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
-            alt: "image 1"
-        },
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=4',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
-            alt: "image 1"
-        },
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=5',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
-            alt: "image 1"
-        },
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=6',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
-            alt: "image 1"
-        },
-        {
-            imgSrc: 'https://picsum.photos/1190/420?img=7',
-            thumbnailSrc: 'https://picsum.photos/1190/420?img=2',
-            alt: "image 1"
+    useEffect(() => {
+        async function fetchBannerImages() {
+            const res = await api.getBannerImages();
+            const data = await res.data.data;
+            const imagesList = data.map(i => i.image);
+            setImages(imagesList);
         }
-    ]
+
+        fetchBannerImages();
+    }, [])
 
     const handleChangeSlideClick = (isNext) => {
         let newCurrent = null;
@@ -109,9 +87,9 @@ export default function HomeCarousel(props) {
                             height: '100%',
                             left: 0
                         }}
-                        alt={image.alt}
-                        key={idx}
-                        src={image.imgSrc}
+                        alt={image.id}
+                        key={image.id}
+                        src={image.original_url}
                     />
                 ))}
             </div>
@@ -141,7 +119,7 @@ export default function HomeCarousel(props) {
                         <SwiperSlide
                             onClick={handleClickThumbnail}
                             id={idx}
-                            key={idx}
+                            key={image.id}
                             style={{
                                 flexShrink: 'unset'
                             }}
@@ -157,9 +135,8 @@ export default function HomeCarousel(props) {
                                         border: '2px solid white'
                                     })
                                 }}
-                                alt={image.alt}
-                                key={idx}
-                                src={image.imgSrc} />
+                                alt={image.id}
+                                src={image.thumb_url} />
                         </SwiperSlide>
                     ))}
                 </Swiper>
