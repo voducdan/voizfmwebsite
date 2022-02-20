@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // import redux action
 import { selectUser } from '../../redux/user';
+import { selectToken } from '../../redux/token';
 import { handleOpenLogin } from '../../redux/openLogin';
 
 // import MUI package 
@@ -179,6 +180,7 @@ export default function Account() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 260 : 380
     const accountData = useSelector(selectUser);
+    const token = useSelector(selectToken);
     const [value, setValue] = useState(0);
     const [accAnchorEl, setAccAnchorEl] = useState(null);
     const [openInviteFriend, setOpenInviteFriend] = useState(false);
@@ -187,7 +189,7 @@ export default function Account() {
     const dispatch = useDispatch();
 
     useEffect(() => {
-        if (!accountData) {
+        if (!token) {
             dispatch(handleOpenLogin());
         }
     }, []);
