@@ -1,6 +1,10 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import redux
+import { useDispatch } from 'react-redux';
+import { handleOpenLogin } from '../../redux/openLogin';
+
 // import MUI component
 import {
     Box,
@@ -11,7 +15,7 @@ import {
 import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 // import others components
-import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
+import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -119,19 +123,28 @@ export default function PlaylistHistory() {
     const [playlistHistories, setPlaylistHistories] = useState([]);
     const [audiotHistories, setAudioHistories] = useState([]);
     const [value, setValue] = useState(0);
-    const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
+    const dispatch = useDispatch();
 
     useEffect(() => {
         async function fetchPlaylistHistories() {
-            const res = await api.getPlaylistHistory();
-            const data = await res.data.data;
-            setPlaylistHistories(data)
+            try {
+                const res = await api.getPlaylistHistory();
+                const data = await res.data.data;
+                setPlaylistHistories(data);
+            }
+            catch (err) {
+                console.log(err)
+            }
         }
         async function fetchAudioHistories() {
-            const res = await api.getAudioHistory();
-            const data = await res.data.data;
-            setAudioHistories(data)
+            try {
+                const res = await api.getAudioHistory();
+                const data = await res.data.data;
+                setAudioHistories(data);
+            }
+            catch (err) {
+                console.log(err)
+            }
         }
 
         fetchAudioHistories()

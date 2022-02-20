@@ -31,6 +31,8 @@ import {
     WhatsappIcon,
 } from "react-share";
 
+import ShareModal from '../../../components/Shared/ShareModal';
+
 // import utils
 import { flexStyle } from '../../../utils/flexStyle';
 import { COLORS, TEXT_STYLE } from '../../../utils/constants';
@@ -96,69 +98,9 @@ const socials = [
 
 const PanelContent = (props) => {
     const { isSm, open, setOpen } = props;
-    const handleClose = () => {
-        setOpen(false);
-    }
+    const url = window.location.origin;
     return (
-        < Dialog
-            sx={{
-                width: '100vw',
-                '& .MuiDialog-paper': {
-                    bgcolor: COLORS.bg1,
-                    width: isSm ? '100%' : '40%',
-                    height: '80vh',
-                    maxWidth: '512px',
-                    maxHeight: '646px',
-                    margin: 0
-                }
-            }}
-            open={open}
-            onClose={handleClose}
-        >
-            <IconButton
-                aria-label="close"
-                onClick={handleClose}
-                sx={{
-                    position: 'absolute',
-                    right: 8,
-                    top: 8,
-                    color: COLORS.white,
-                    bgcolor: COLORS.bg2
-                }}
-            >
-                <CloseIcon />
-            </IconButton>
-            <Box
-                sx={{
-                    ...flexStyle('center', 'flex-start'),
-                    width: '100%',
-                    mb: '40px'
-                }}
-            >
-                <Typography sx={{
-                    marginTop: '40px',
-                    ...TEXT_STYLE.h1,
-                    color: COLORS.white
-                }}>Mời bạn bè qua</Typography>
-            </Box>
-            <Box
-                sx={{
-                    ...flexStyle('center', 'center'),
-                    margin: '0 40px',
-                    flexWrap: 'wrap',
-                    rowGap: '20px',
-                    columnGap: '20px'
-                }}
-            >
-                {
-                    socials.map(i => (
-                        <Box key={i.name}>
-                            {i.component()}
-                        </Box>
-                    ))
-                }
-            </Box>
-        </Dialog>
+        <ShareModal url={url} isSm={isSm} open={open} setOpen={setOpen}></ShareModal>
     )
 }
 

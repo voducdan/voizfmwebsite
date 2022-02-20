@@ -2,11 +2,11 @@
 import { useState, useEffect } from 'react';
 
 // import redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // import redux action
 import { selectUser } from '../../redux/user';
-
+import { handleOpenLogin } from '../../redux/openLogin';
 
 // import MUI package 
 import { styled } from '@mui/material/styles';
@@ -184,6 +184,13 @@ export default function Account() {
     const [openInviteFriend, setOpenInviteFriend] = useState(false);
     const [openEditProfile, setopenEditProfile] = useState(false);
     const openMore = Boolean(accAnchorEl);
+    const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (!accountData) {
+            dispatch(handleOpenLogin());
+        }
+    }, []);
 
     const handleTabChange = (event, newValue) => {
         setValue(newValue);
@@ -206,118 +213,120 @@ export default function Account() {
         setAccAnchorEl(null);
     };
 
-    return (
-        <Box
-            sx={{
-                ...flexStyle('center', 'center'),
-                flexDirection: 'column'
-            }}
-        >
+    return accountData ? (
+        (
             <Box
                 sx={{
-                    position: 'absolute',
-                    top: isSm ? HEADER_HEIGHT_MB : HEADER_HEIGHT,
-                    height: `${coverImgHeight}px`,
-                    width: isSm ? '100%' : `calc(100% - ${DRAWER_WIDTH}px)`
+                    ...flexStyle('center', 'center'),
+                    flexDirection: 'column'
                 }}
             >
-                <img style={{
-                    objectFit: 'cover',
-                    width: '100%',
-                    height: '100%',
-                    left: 0,
-                }} alt="cover img alt" src={accountData?.avatar?.original_url}></img>
-            </Box>
-            <Info accountData={accountData} />
-            <Box
-                sx={{
-                    width: isSm ? '100%' : '95%',
-                    borderRadius: '10px'
-                }}
-            >
-                <Box>
-                    <StyledTabs
-                        value={value}
-                        onChange={handleTabChange}
-                        aria-label="account tab"
-                        scrollButtons="auto"
-                        variant="scrollable"
-                    >
-                        {
-                            tabsList.map((label, idx) => (
-                                <StyledTab key={idx} label={label} />
-                            ))
-                        }
-
-                        <Box sx={{
-                            width: isSm ? '90%' : '30%',
-                            marginLeft: '16px'
-                        }}>
-                            <Button
-                                sx={{
-                                    width: '100%',
-                                    height: '36px',
-                                    bgcolor: COLORS.bg2,
-                                    color: COLORS.contentIcon,
-                                    textTransform: 'none',
-                                    ...TEXT_STYLE.title2
-                                }}
-                                startIcon={<Pencil />}
-                                onClick={handleEditProfileOpen}
-                            >Thay đổi thông tin cá nhân</Button>
-                        </Box>
-                        <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} />
-                        <Box
-                            sx={{
-                                width: '81px',
-                                height: '36px',
-                                marginLeft: '11px',
-                                bgcolor: COLORS.bg2,
-                                borderRadius: '4px',
-                                ...flexStyle('center', 'center')
-                            }}
-                        >
-                            <Button
-                                id="account-more-button"
-                                aria-controls="account-more"
-                                aria-haspopup="true"
-                                aria-expanded={openMore ? 'true' : undefined}
-                                onClick={handleClickMore}
-                            >
-                                <HorizontalMore />
-                            </Button>
-                            <Menu
-                                sx={{
-                                    '& .MuiMenu-paper': {
-                                        p: '24px',
-                                        width: '360px',
-                                        bgcolor: COLORS.bg2
-                                    }
-                                }}
-                                id="account-more"
-                                anchorEl={accAnchorEl}
-                                open={openMore}
-                                onClose={handleClose}
-                                MenuListProps={{
-                                    'aria-labelledby': 'account-more'
-                                }}
-                            >
-                                {
-                                    PopUpContent.map((item) => (
-                                        <PopUpButton key={item.id} id={item.id} startIcon={item.startIcon} text={item.text} setOpenInviteFriend={setOpenInviteFriend} setValue={setValue} />
-                                    ))
-                                }
-                            </Menu>
-                        </Box>
-                    </StyledTabs>
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: isSm ? HEADER_HEIGHT_MB : HEADER_HEIGHT,
+                        height: `${coverImgHeight}px`,
+                        width: isSm ? '100%' : `calc(100% - ${DRAWER_WIDTH}px)`
+                    }}
+                >
+                    <img style={{
+                        objectFit: 'cover',
+                        width: '100%',
+                        height: '100%',
+                        left: 0,
+                    }} alt="cover img alt" src={accountData?.avatar?.original_url}></img>
                 </Box>
-                <HistoryTransaction value={value} isSm={isSm} />
-                <AppInfo value={value} />
-                <InviteFriend key={openInviteFriend} isSm={isSm} value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
-                <BeCreator value={value} isSm={isSm} />
-                <QRUpload value={value} isSm={isSm} />
-                <Box />
+                <Info accountData={accountData} />
+                <Box
+                    sx={{
+                        width: isSm ? '100%' : '95%',
+                        borderRadius: '10px'
+                    }}
+                >
+                    <Box>
+                        <StyledTabs
+                            value={value}
+                            onChange={handleTabChange}
+                            aria-label="account tab"
+                            scrollButtons="auto"
+                            variant="scrollable"
+                        >
+                            {
+                                tabsList.map((label, idx) => (
+                                    <StyledTab key={idx} label={label} />
+                                ))
+                            }
+
+                            <Box sx={{
+                                width: isSm ? '90%' : '30%',
+                                marginLeft: '16px'
+                            }}>
+                                <Button
+                                    sx={{
+                                        width: '100%',
+                                        height: '36px',
+                                        bgcolor: COLORS.bg2,
+                                        color: COLORS.contentIcon,
+                                        textTransform: 'none',
+                                        ...TEXT_STYLE.title2
+                                    }}
+                                    startIcon={<Pencil />}
+                                    onClick={handleEditProfileOpen}
+                                >Thay đổi thông tin cá nhân</Button>
+                            </Box>
+                            <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} />
+                            <Box
+                                sx={{
+                                    width: '81px',
+                                    height: '36px',
+                                    marginLeft: '11px',
+                                    bgcolor: COLORS.bg2,
+                                    borderRadius: '4px',
+                                    ...flexStyle('center', 'center')
+                                }}
+                            >
+                                <Button
+                                    id="account-more-button"
+                                    aria-controls="account-more"
+                                    aria-haspopup="true"
+                                    aria-expanded={openMore ? 'true' : undefined}
+                                    onClick={handleClickMore}
+                                >
+                                    <HorizontalMore />
+                                </Button>
+                                <Menu
+                                    sx={{
+                                        '& .MuiMenu-paper': {
+                                            p: '24px',
+                                            width: '360px',
+                                            bgcolor: COLORS.bg2
+                                        }
+                                    }}
+                                    id="account-more"
+                                    anchorEl={accAnchorEl}
+                                    open={openMore}
+                                    onClose={handleClose}
+                                    MenuListProps={{
+                                        'aria-labelledby': 'account-more'
+                                    }}
+                                >
+                                    {
+                                        PopUpContent.map((item) => (
+                                            <PopUpButton key={item.id} id={item.id} startIcon={item.startIcon} text={item.text} setOpenInviteFriend={setOpenInviteFriend} setValue={setValue} />
+                                        ))
+                                    }
+                                </Menu>
+                            </Box>
+                        </StyledTabs>
+                    </Box>
+                    <HistoryTransaction value={value} isSm={isSm} />
+                    <AppInfo value={value} />
+                    <InviteFriend key={openInviteFriend} isSm={isSm} value={value} open={openInviteFriend} setOpen={setOpenInviteFriend} />
+                    <BeCreator value={value} isSm={isSm} />
+                    <QRUpload value={value} isSm={isSm} />
+                    <Box />
+                </Box >
             </Box >
-        </Box >
-    )
+        )
+    ) : ''
 }
