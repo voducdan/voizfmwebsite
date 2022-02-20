@@ -368,8 +368,18 @@ export default function Login() {
                                 marginBottom: '24px'
                             }}>hoặc tiếp tục với</Typography>
                             <Stack sx={{ width: '100%' }} spacing={3} direction="column">
-                                {/* <Button sx={{ textTransform: 'none', height: '48px' }} variant="contained" color="primary" startIcon={<FacebookButtonIcon />}>Facebook</Button> */}
                                 <FacebookLogin
+                                    render={renderProps => (
+                                        <Button
+                                            onClick={renderProps.onClick}
+                                            sx={{ textTransform: 'none', height: '48px' }}
+                                            variant="contained"
+                                            color="primary"
+                                            startIcon={<FacebookButtonIcon />}>
+                                            Facebook
+                                        </Button>
+
+                                    )}
                                     appId={`${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}`}
                                     autoLoad={false}
                                     fields="name,email,picture"
