@@ -338,4 +338,8 @@ export default class API {
         const queryString = this.buildQueryString(params)
         return this.init().get(`/banners?${queryString}`);
     }
+
+    checkBillingStatus = (data) => {
+        return this.init().post(`/payment/shopee/checking`, data);
+    }
 }

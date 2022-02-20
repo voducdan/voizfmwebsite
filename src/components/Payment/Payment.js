@@ -18,7 +18,11 @@ import {
     TableCell,
     TableRow,
     Box,
-    Paper
+    Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
+    Button
 } from '@mui/material';
 
 // import utils
@@ -39,7 +43,9 @@ const PaymentUI = (props) => {
 
     const api = new API();
 
+    const navigate = useRouter();
     const [countDountStr, setCountDountStr] = useState('');
+    const [isExpiry, setIsExpiry] = useState(false);
 
     const countDownExpireTime = (expireTime) => {
         const x = setInterval(function () {
@@ -50,6 +56,7 @@ const PaymentUI = (props) => {
             if (distance < 0) {
                 clearInterval(x);
                 setCountDountStr('');
+                setIsExpiry(true);
                 return;
             }
 
@@ -59,12 +66,28 @@ const PaymentUI = (props) => {
     }
 
     const checkBillingStatus = async () => {
-        const res = await api.checkBillingStatus();
+        const params = {
+            request_id: paymentInfo.request_id,
+            reference_id: paymentInfo.payment_reference_id,
+            transaction_type: 13,
+            merchant_ext_id: paymentInfo.merchant_ext_id,
+            store_ext_id: paymentInfo.store_ext_id,
+            amount: paymentInfo.amount,
+            platform_type: paymentInfo.platform_type
+        }
+        const res = await api.checkBillingStatus(params);
+        const data = await res.data;
+        console.log(data)
     }
 
     useEffect(() => {
         countDownExpireTime(paymentInfo?.expiry_time);
+        // checkBillingStatus();
     }, []);
+
+    const handleExpireTime = () => {
+        navigate.push('/checkout');
+    }
 
     switch (method) {
         case 'shopee':
@@ -153,6 +176,37 @@ const PaymentUI = (props) => {
                     <Box>
                         <img src={paymentInfo?.url || ''} alt="qrcode" />
                     </Box>
+                    <Dialog
+                        open={isExpiry}
+                        onClose={() => { setIsExpiry(false) }}
+                        PaperProps={{
+                            style: {
+                                backgroundColor: COLORS.bg1
+                            }
+                        }}
+                    >
+                        <DialogContent>
+                            <DialogContentText
+                                sx={{
+                                    color: COLORS.white
+                                }}
+                            >
+                                Giao dịch đã hết hạn, vui lòng thanh toán lại
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions
+                            sx={{
+                                ...flexStyle('center', 'center'),
+                                'whiteSpace': 'pre-line'
+                            }}
+                        >
+                            <Button
+                                onClick={handleExpireTime}
+                                autoFocus>
+                                Thanh toán lại
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                 </Box>
             );
         default:
