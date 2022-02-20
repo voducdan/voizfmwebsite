@@ -346,4 +346,8 @@ export default class API {
     loginGoogle = (data) => {
         return this.init().post('web/auth/google', data);
     }
+
+    loginFacebook = (data) => {
+        return this.init().post('web/auth/facebook', data);
+    }
 }

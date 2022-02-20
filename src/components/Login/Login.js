@@ -28,8 +28,8 @@ import {
 } from '@mui/material';
 
 // import login third party
-import FacebookLogin from 'react-facebook-login';
-import { GoogleLogin } from 'react-google-login';
+import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
+import GoogleLogin from 'react-google-login';
 
 // import others components
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton';
@@ -87,6 +87,7 @@ export default function Login() {
     const [userInfo, setUserInfo] = useState({});
     const [accessToken, setAccessToken] = useState(null);
     const [isGoogle, setIsGoogle] = useState(false);
+    const [isFacebook, setIsFacebook] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -162,7 +163,7 @@ export default function Login() {
                 setStep(4);
                 return;
             }
-            if (isGoogle) {
+            if (isGoogle || isFacebook) {
                 handleSkipPhone();
                 return;
             }
@@ -231,8 +232,29 @@ export default function Login() {
         setError('');
     }
 
-    const responseFacebook = (response) => {
-        console.log(response);
+    const responseFacebook = async (response) => {
+        try {
+            const { name } = response;
+            const splitedName = name.split(' ');
+            const payload = {
+                "first_name": splitedName.slice(0, 1).join(),
+                "last_name": splitedName.slice(1).join(' '),
+                "email": response.email,
+                "birthday": response.birthday || null,
+                "oauth2_id": response.userID,
+                "avatar_url": response.picture.data.url
+            }
+            const res = await api.loginFacebook(payload);
+            const data = await res.data;
+            setAccessToken(data.data.access_token);
+            setStep(5);
+            setIsFacebook(true);
+        }
+        catch (err) {
+            setHasError(true);
+            setError('Đã xảy ra lỗi khi đăng nhập bằng Facebook, vui lòng thử lại sau!');
+            return;
+        }
     }
     const responseGoogleSuccess = async (response) => {
         try {
@@ -252,11 +274,14 @@ export default function Login() {
             setIsGoogle(true);
         }
         catch (err) {
-            console.log(err)
+            setHasError(true);
+            setError('Đã xảy ra lỗi khi đăng nhập bằng google, vui lòng thử lại sau!');
+            return;
         }
     }
 
-    const responseGoogleFalure = () => {
+    const responseGoogleFalure = (err) => {
+        console.log(err)
         setHasError(true);
         setError('Đã xảy ra lỗi khi đăng nhập bằng google, vui lòng thử lại sau!');
         return;
@@ -444,6 +469,7 @@ export default function Login() {
                                         </Button>
 
                                     )}
+                                    cookiePolicy={'single_host_origin'}
                                     clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
                                     buttonText="Google"
                                     onSuccess={responseGoogleSuccess}
