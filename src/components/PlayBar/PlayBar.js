@@ -39,8 +39,8 @@ export default function PlayBar() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const [audio, setAudio] = useState(new Audio(url));
     const audioData = useSelector(selectAudioData);
-    // const url = useSelector(selectUrl);
-    const url = 'https://voiz-stg.s3.cloud.cmctelecom.vn/uploads/audio/filename/25064/2ea4f011bb62346c.mp3?X-Amz-Expires=3600&X-Amz-Date=20220220T154001Z&X-Amz-Algorithm=AWS4-HMAC-SHA256&X-Amz-Credential=QSNI5PDG05QMOWG13EHE%2F20220220%2Fhcm%2Fs3%2Faws4_request&X-Amz-SignedHeaders=host&X-Amz-Signature=f8868939843553ab3c3c9e948e65e5c641f1a685a64d39a0295e1ae1880091dc';
+    const url = useSelector(selectUrl);
+    console.log(url)
     const [volume, setVolume] = useState(40);
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);

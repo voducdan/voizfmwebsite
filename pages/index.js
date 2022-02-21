@@ -12,7 +12,7 @@ function App() {
     return (
         <Provider store={store}>
             <Head>
-                <meta charset="utf-8" />
+                <meta charSet="utf-8" />
                 <link rel="icon" sizes="32x32" href="/images/favicon-32x32.png" />
                 <link rel="icon" sizes="16x16" href="/images/favicon-16x16.png" />
                 <meta name="viewport" content="width=device-width, initial-scale=1" />

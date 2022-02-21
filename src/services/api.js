@@ -57,7 +57,7 @@ export default class API {
         }
         const xSignature = Sha256Encrypt(content);
         // return this.init(null, xSignature).get(`/web/audios/${id}/files`)
-        return this.init(null, xSignature).get(`/audios/${id}/files`)
+        return this.init(null, xSignature).get(`/web/audios/${id}/files`)
     }
 
     getCart = () => {
