@@ -77,7 +77,6 @@ const PaymentUI = (props) => {
         }
         const res = await api.checkBillingStatus(params);
         const data = await res.data;
-        console.log(data)
     }
 
     useEffect(() => {

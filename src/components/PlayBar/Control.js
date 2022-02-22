@@ -73,7 +73,6 @@ export default function Control(props) {
             setPosition(currentTime);
             // if (currentTime === audioData.duration) {
             if (currentTime === 381 && !audio.loop) {
-                console.log(audio.loop)
                 setPaused(true);
             }
         });

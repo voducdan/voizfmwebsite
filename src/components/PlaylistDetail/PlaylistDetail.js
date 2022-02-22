@@ -402,7 +402,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 position: 'relative'
             }}
         >
-
             <Box
                 sx={{
                     position: 'absolute',

@@ -4,7 +4,6 @@ import { useState } from 'react';
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
 import { selectAudioData } from '../../redux/audio';
-import { selectUrl } from '../../redux/playAudio';
 
 // import MUI components
 import {
@@ -37,14 +36,10 @@ export default function PlayBar() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const [audio, setAudio] = useState(new Audio(url));
     const audioData = useSelector(selectAudioData);
-    const url = useSelector(selectUrl);
-    console.log(url)
     const [volume, setVolume] = useState(40);
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
-    const dispatch = useDispatch();
     const openAudioList = (event) => {
         setAnchorAudioList(event.currentTarget);
     }
@@ -165,7 +160,7 @@ export default function PlayBar() {
                     width: isSm ? '100%' : '40%',
                 }}
             >
-                <Control audioData={audioData} audio={audio} />
+                <Control audioData={audioData} />
             </Box>)
             }
             {

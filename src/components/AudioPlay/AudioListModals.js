@@ -43,7 +43,9 @@ export default function AudioList(props) {
             setAudiosList(data);
         };
 
-        fetchPlaylistAudios();
+        if (playlistId){
+            fetchPlaylistAudios();
+        }
     }, [playlistId]);
 
     const handleSelectAudio = (id) => {
