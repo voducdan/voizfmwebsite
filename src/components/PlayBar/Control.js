@@ -2,8 +2,12 @@
 import { useState, useEffect, useRef } from 'react';
 
 // import redux
-import { useDispatch } from 'react-redux';
+import { useDispatch, useSelector } from 'react-redux';
 import { togglePlayAudio } from '../../redux/playAudio';
+import { selectAudioHls } from '../../redux/playAudio';
+
+// import hls
+import Hls from 'hls.js';
 
 // import MUI component
 import { styled, useTheme } from '@mui/material/styles';
@@ -49,34 +53,39 @@ const TinyText = styled(Typography)({
 export default function Control(props) {
     const api = new API();
 
-    const { audioData, audio } = props;
+    const { audioData } = props;
     const theme = useTheme();
+    const audio = useRef(null);
 
     const dispatch = useDispatch();
+    const audioUrl = useSelector(selectAudioHls);
     const [position, setPosition] = useState(0);
     const [paused, setPaused] = useState(true);
     const [loopAudio, setLoopAudio] = useState(false);
 
     useEffect(() => {
+        if (Hls.isSupported()) {
+            const hls = new Hls({ debug: true });
+            hls.loadSource(audioUrl);
+            hls.attachMedia(audio.current);
+        }
+        else if (audio.current.canPlayType('application/vnd.apple.mpegurl')) {
+            audio.current.src = audioUrl;
+            audio.current.addEventListener('loadedmetadata', function () {
+                audio.current.play();
+            });
+        }
+
+    }, []);
+
+    useEffect(() => {
         if (paused) {
-            audio.pause();
             addAudioToListening(audioData.id, position, audioData.playlist.id);
         }
         else {
-            audio.play();
+            audio.current.play();
         }
     }, [paused]);
-
-    useEffect(() => {
-        audio.addEventListener('timeupdate', (e) => {
-            const currentTime = Math.floor(e.target.currentTime);
-            setPosition(currentTime);
-            // if (currentTime === audioData.duration) {
-            if (currentTime === 381 && !audio.loop) {
-                setPaused(true);
-            }
-        });
-    }, []);
 
     const onPlayClick = () => {
         setPaused(!paused);
@@ -99,14 +108,11 @@ export default function Control(props) {
 
     const onChangeAudioPosition = (value) => {
         setPosition(value);
-        audio.currentTime = value;
     }
 
     const handleLoopAudio = () => {
-        const tmpLoopAudio = !audio.loop;
         setLoopAudio(tmpLoopAudio);
         if (tmpLoopAudio) {
-            audio.loop = true;
         }
     }
 
@@ -114,6 +120,11 @@ export default function Control(props) {
 
     return (
         <Box sx={{ width: '100%', overflow: 'hidden' }}>
+            <audio
+                id='audio'
+                hidden
+                ref={audio}
+            />
             <Widget>
                 <Box
                     sx={{

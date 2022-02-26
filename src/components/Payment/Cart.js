@@ -98,7 +98,7 @@ export default function Cart() {
     useEffect(() => {
         function calculatePrice() {
             if (selectedItem.length > 0) {
-                const price = selectedItem.reduce((a, b) => ({ sale_coin_price: (a.sale_coin_price + b.sale_coin_price) }), { sale_coin_price: 0 })['sale_coin_price'];
+                const price = selectedItem.reduce((a, b) => ({ sale_price: (a.sale_price + b.sale_price) }), { sale_price: 0 })['sale_price'];
                 setTotalPrice(price);
                 // wait for handle discount code
                 setFinalPrice(price);
@@ -134,7 +134,6 @@ export default function Cart() {
             const isCheckAll = currentSelect.length === cart.length;
             setCheckAllControl(isCheckAll);
             setSelectedItem(currentSelect);
-            console.log(currentSelect)
         }
         else {
             const remainedItem = selectedItem.filter(i => i.id !== id);
@@ -341,13 +340,13 @@ export default function Cart() {
                                                 }}
                                             >
                                                 {
-                                                    item.sale_coin_price && (
+                                                    item.sale_price && (
                                                         <Typography
                                                             sx={{
                                                                 ...TEXT_STYLE.content1,
                                                                 color: COLORS.contentIcon
                                                             }}
-                                                        >{formatPrice(item.sale_coin_price)} xu</Typography>
+                                                        >{formatPrice(item.sale_price)}</Typography>
                                                     )
                                                 }
                                                 <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />

@@ -40,6 +40,8 @@ export default function PlayBar() {
     const [volume, setVolume] = useState(40);
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
+
+
     const openAudioList = (event) => {
         setAnchorAudioList(event.currentTarget);
     }
