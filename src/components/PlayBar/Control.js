@@ -65,7 +65,7 @@ export default function Control(props) {
 
     useEffect(() => {
         if (Hls.isSupported()) {
-            const hls = new Hls({ debug: true });
+            const hls = new Hls();
             hls.loadSource(audioUrl);
             hls.attachMedia(audio.current);
         }
@@ -75,6 +75,16 @@ export default function Control(props) {
                 audio.current.play();
             });
         }
+
+        audio.current.addEventListener('timeupdate', (e) => {
+            const currentTime = Math.floor(e.target.currentTime);
+            setPosition(currentTime);
+            // if (currentTime === audioData.duration) {
+            if (currentTime === audioData.duration && !audio.loop) {
+                console.log(audio.loop)
+                setPaused(true);
+            }
+        });
 
     }, []);
 
