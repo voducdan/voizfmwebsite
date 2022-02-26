@@ -81,6 +81,7 @@ export default function Control(props) {
     useEffect(() => {
         if (paused) {
             addAudioToListening(audioData.id, position, audioData.playlist.id);
+            audio.current.pause();
         }
         else {
             audio.current.play();
