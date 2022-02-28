@@ -5,9 +5,8 @@ import { useEffect, useState } from 'react';
 import { useRouter } from 'next/router';
 
 // import redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectPlayAudio } from '../../redux/playAudio';
-import { setAudioData } from '../../redux/audio';
 
 // import MUI components
 import {
@@ -51,12 +50,6 @@ export default function AudioPlay({ audio }) {
 
     const windowSize = useWindowSize()
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-
-    const dispatch = useDispatch();
-
-    useEffect(() => {
-        dispatch(setAudioData(audio));
-    }, []);
 
     useEffect(() => {
         if (id) {

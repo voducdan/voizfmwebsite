@@ -1,8 +1,8 @@
 // import react
-import { useState } from 'react';
+import { useState, useRef, useEffect } from 'react';
 
 // import redux
-import { useSelector, useDispatch } from 'react-redux';
+import { useSelector } from 'react-redux';
 import { selectAudioData } from '../../redux/audio';
 
 // import MUI components
@@ -16,6 +16,7 @@ import {
     Divider
 } from '@mui/material';
 import VolumeUp from '@mui/icons-material/VolumeUp';
+import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
@@ -36,11 +37,60 @@ export default function PlayBar() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const audio = useRef(null);
     const audioData = useSelector(selectAudioData);
-    const [volume, setVolume] = useState(40);
+    const [volume, setVolume] = useState(60);
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
+    const [audiosList, setAudiosList] = useState([]);
+    const [nextAudioId, setNextAudioId] = useState(null);
+    const [prevAudioId, setPrevAudioId] = useState(null);
 
+
+    useEffect(() => {
+
+        function compare(a, b) {
+            if (a.position < b.position) {
+                return -1;
+            }
+            if (a.position > b.position) {
+                return 1;
+            }
+            return 0;
+        }
+
+        async function fetchPlaylistAudios() {
+            const res = await api.getPlaylistAudios(audioData?.playlist?.id);
+            const data = res.data.data;
+            data.sort(compare);
+            setAudiosList(data);
+        };
+        audio.current.volume = volume / audioData.duration || volume / 100;
+        if (audioData?.playlist?.id) {
+            fetchPlaylistAudios();
+        }
+    }, [audioData]);
+
+    useEffect(() => {
+        if (audiosList.length > 0) {
+            assignAudioId();
+        }
+    }, [audiosList]);
+
+    const assignAudioId = () => {
+        if (audiosList.length === 1) {
+            return;
+        }
+        const audioIdx = audiosList.findIndex(i => i.id === audioData?.id);
+        const nextIdx = audioIdx + 1;
+        const prevIdx = audioIdx - 1;
+
+        const nextId = nextIdx < audiosList.length ? audiosList[nextIdx].id : null;
+        const prevId = prevIdx >= 0 ? audiosList[prevIdx].id : null;
+
+        setNextAudioId(nextId);
+        setPrevAudioId(prevId);
+    }
 
     const openAudioList = (event) => {
         setAnchorAudioList(event.currentTarget);
@@ -65,7 +115,7 @@ export default function PlayBar() {
 
     const handleChangeVolumn = (value) => {
         setVolume(value);
-        audio.volume = value / audioData.duration;
+        audio.current.volume = value / audioData.duration;
     }
 
     return (
@@ -86,6 +136,11 @@ export default function PlayBar() {
                 ...(isSm && { flexDirection: 'column-reverse', rowGap: '16px' })
             }}
         >
+            <audio
+                id='audio'
+                hidden
+                ref={audio}
+            />
             {
                 isSm && (
                     <Button
@@ -162,7 +217,12 @@ export default function PlayBar() {
                     width: isSm ? '100%' : '40%',
                 }}
             >
-                <Control audioData={audioData} />
+                <Control
+                    audioData={audioData}
+                    audio={audio}
+                    nextAudioId={nextAudioId}
+                    prevAudioId={prevAudioId}
+                />
             </Box>)
             }
             {
@@ -192,7 +252,8 @@ export default function PlayBar() {
 
                         <Divider sx={{ color: COLORS.blackStroker, margin: '0 24px' }} orientation="vertical" flexItem />
                         <Stack spacing={2} direction="row" sx={{ mb: 1, width: '50%', }} alignItems="center" justifyContent="flex-start">
-                            <VolumeUp sx={{ color: COLORS.contentIcon }} />
+                            {volume > 0 && (<VolumeUp sx={{ color: COLORS.contentIcon }} />)}
+                            {volume === 0 && (<VolumeOffIcon sx={{ color: COLORS.contentIcon }} />)}
                             <Slider
                                 sx={{
                                     height: 2,
@@ -223,7 +284,13 @@ export default function PlayBar() {
                     </Box>
                 )
             }
-            <AudioList anchorAudioList={anchorAudioList} onCloseAudioList={onCloseAudioList} playlistId={audioData?.playlist?.id} audioId={audioData?.id} />
+            <AudioList
+                anchorAudioList={anchorAudioList}
+                onCloseAudioList={onCloseAudioList}
+                playlistId={audioData?.playlist?.id}
+                audioId={audioData?.id}
+                audiosList={audiosList}
+            />
         </Box>
     )
 }

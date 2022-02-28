@@ -1,10 +1,13 @@
 // import react
-import { useState, useEffect, useRef } from 'react';
+import { useState, useEffect } from 'react';
 
 // import redux
 import { useDispatch, useSelector } from 'react-redux';
-import { togglePlayAudio } from '../../redux/playAudio';
+import { togglePlayAudio, pauseAudio } from '../../redux/playAudio';
 import { selectAudioHls } from '../../redux/playAudio';
+
+// import next router
+import { useRouter } from 'next/router';
 
 // import hls
 import Hls from 'hls.js';
@@ -53,10 +56,9 @@ const TinyText = styled(Typography)({
 export default function Control(props) {
     const api = new API();
 
-    const { audioData } = props;
+    const { audioData, audio, nextAudioId, prevAudioId } = props;
     const theme = useTheme();
-    const audio = useRef(null);
-
+    const navigate = useRouter();
     const dispatch = useDispatch();
     const audioUrl = useSelector(selectAudioHls);
     const [position, setPosition] = useState(0);
@@ -64,6 +66,8 @@ export default function Control(props) {
     const [loopAudio, setLoopAudio] = useState(false);
 
     useEffect(() => {
+        dispatch(pauseAudio());
+        setPaused(true);
         if (Hls.isSupported()) {
             const hls = new Hls();
             hls.loadSource(audioUrl);
@@ -77,16 +81,16 @@ export default function Control(props) {
         }
 
         audio.current.addEventListener('timeupdate', (e) => {
-            const currentTime = Math.floor(e.target.currentTime);
+            const currentTime = Math.ceil(e.target.currentTime);
             setPosition(currentTime);
-            // if (currentTime === audioData.duration) {
-            if (currentTime === audioData.duration && !audio.loop) {
-                console.log(audio.loop)
+            if (currentTime === audioData.duration && !audio.current.loop) {
                 setPaused(true);
+                audio.current.currentTime = 0;
+                setPosition(0);
             }
         });
 
-    }, []);
+    }, [audioUrl]);
 
     useEffect(() => {
         if (paused) {
@@ -119,11 +123,21 @@ export default function Control(props) {
 
     const onChangeAudioPosition = (value) => {
         setPosition(value);
+        audio.current.currentTime = value;
     }
 
     const handleLoopAudio = () => {
+        const tmpLoopAudio = !audio.current.loop;
         setLoopAudio(tmpLoopAudio);
-        if (tmpLoopAudio) {
+        audio.current.loop = tmpLoopAudio;
+    }
+
+    const handleChangeAudio = (type) => {
+        if (type === 'next' && nextAudioId) {
+            navigate.push(`/audio-play/${nextAudioId}`)
+        }
+        if (type === 'prev' && prevAudioId) {
+            navigate.push(`/audio-play/${prevAudioId}`)
         }
     }
 
@@ -131,11 +145,6 @@ export default function Control(props) {
 
     return (
         <Box sx={{ width: '100%', overflow: 'hidden' }}>
-            <audio
-                id='audio'
-                hidden
-                ref={audio}
-            />
             <Widget>
                 <Box
                     sx={{
@@ -164,8 +173,14 @@ export default function Control(props) {
                             }}
                         >Lặp lại 1 bài</Typography>
                     </Box>
-                    <IconButton aria-label="previous song">
-                        <SkipPreviousIcon sx={{ width: '24px', height: '24px' }} htmlColor={mainIconColor} />
+                    <IconButton
+                        aria-label="previous song"
+                        onClick={() => { handleChangeAudio('prev') }}
+                    >
+                        <SkipPreviousIcon
+                            sx={{ width: '24px', height: '24px' }}
+                            htmlColor={mainIconColor}
+                        />
                     </IconButton>
                     <IconButton
                         sx={{
@@ -178,13 +193,18 @@ export default function Control(props) {
                             <PlayArrowIcon
                                 sx={{ width: '24px', height: '24px' }}
                                 htmlColor={mainIconColor}
-                            />
-                        ) : (
+                            />) : (
                             <PauseIcon sx={{ width: '24px', height: '24px' }} htmlColor={mainIconColor} />
                         )}
                     </IconButton>
-                    <IconButton aria-label="next song">
-                        <SkipNextIcon sx={{ width: '24px', height: '24px' }} htmlColor={mainIconColor} />
+                    <IconButton
+                        aria-label="next song"
+                        onClick={() => { handleChangeAudio('next') }}
+                    >
+                        <SkipNextIcon
+                            sx={{ width: '24px', height: '24px' }}
+                            htmlColor={mainIconColor}
+                        />
                     </IconButton>
                     <Box
                         sx={{

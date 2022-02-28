@@ -11,6 +11,9 @@ const playAudioSlice = createSlice({
         togglePlayAudio: (state) => {
             state.playing = !state.playing
         },
+        pauseAudio: (state) => {
+            state.playing = false;
+        },
         setAudioUrl: (state, action) => {
             state.url = action.payload;
         },
@@ -20,7 +23,7 @@ const playAudioSlice = createSlice({
     }
 });
 
-export const { togglePlayAudio, setAudioUrl, setAudioHls } = playAudioSlice.actions;
+export const { togglePlayAudio, pauseAudio, setAudioUrl, setAudioHls } = playAudioSlice.actions;
 export const selectPlayAudio = (state) => state.playAudio.playing;
 export const selectUrl = (state) => state.playAudio.url;
 export const selectAudioHls = (state) => state.playAudio.audioHls;

@@ -121,8 +121,8 @@ const FONT_COLOR = '#ACACAC';
 const DRAWER_WIDTH = 250;
 const HEADER_HEIGHT = '104px';
 const HEADER_HEIGHT_MB = '80px';
-const EXCLUDE_FOOTER = [/\/playlists\/[0-9]+/g, /\/audio-play\/[0-9]+/g];
-const REQUIRE_LOGIN = [/\/library/g, /\/account/g];
+const EXCLUDE_FOOTER = [/\/playlists\/[0-9]+/, /\/audio\-play\/[0-9]+/];
+const REQUIRE_LOGIN = [/\/library/, /\/account/];
 const COUNTRY_CODES = [
     '93',
     '355',

@@ -29,27 +29,15 @@ import API from '../../services/api';
 export default function AudioList(props) {
     const api = new API();
 
-    const { playlistId, anchorAudioList, onCloseAudioList, audioId } = props;
+    const { anchorAudioList, onCloseAudioList, audioId, audiosList } = props;
     const navigate = useRouter();
     const open = Boolean(anchorAudioList);
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-    const [audiosList, setAudiosList] = useState([]);
-
-    useEffect(() => {
-        async function fetchPlaylistAudios() {
-            const res = await api.getPlaylistAudios(playlistId);
-            const data = res.data.data;
-            setAudiosList(data);
-        };
-
-        if (playlistId){
-            fetchPlaylistAudios();
-        }
-    }, [playlistId]);
 
     const handleSelectAudio = (id) => {
         navigate.push(`/audio-play/${id}`);
+        onCloseAudioList();
     }
 
     return (

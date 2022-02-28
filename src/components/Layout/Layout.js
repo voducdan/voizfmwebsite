@@ -44,8 +44,19 @@ function Layout(props) {
     }, [isSm, openSidebar]);
 
     useEffect(() => {
+        function checkFooter(pathName) {
+            for (let i of EXCLUDE_FOOTER) {
+                const isMatch = i.test(pathName);
+                if (isMatch) {
+                    return true;
+                }
+            }
+            return false;
+        }
         function checkIncludeFooter() {
-            if (EXCLUDE_FOOTER.some(e => e.test(location.asPath))) {
+            const pathName = location.asPath;
+            const excludeFooter = checkFooter(pathName);
+            if (excludeFooter) {
                 setIncludeFooter(false);
             } else {
                 setIncludeFooter(true);
@@ -54,7 +65,7 @@ function Layout(props) {
         checkIncludeFooter();
         dispatch(handleCloseSearch());
 
-    }, [location])
+    }, [location.asPath])
 
     useEffect(() => {
         getSearchAnchorEl();
