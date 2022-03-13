@@ -58,7 +58,6 @@ export default function Cart() {
     const cart = useSelector(selectCart);
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
-    const [isDiscountCodeValid, setIsDiscountCodeValid] = useState(false);
     const [totalPrice, setTotalPrice] = useState(0);
     const [finalPrice, setFinalPrice] = useState(0);
     const [checkControl, setCheckControl] = useState({});
@@ -145,7 +144,7 @@ export default function Cart() {
     const handlePayment = () => {
         const paymentData = {
             selectedItem: selectedItem,
-            discountCode: isDiscountCodeValid ? discountCode : '',
+            discountCode: discountCode,
             package_type: 'playlist',
             totalPrice: totalPrice,
             finalPrice: totalPrice
@@ -187,15 +186,8 @@ export default function Cart() {
 
     const handleInputDiscountCode = (e) => {
         setDiscountCode(e.target.value);
-        setIsDiscountCodeValid(true);
     }
 
-    const handleValidateDiscountCode = () => {
-        // call api to validate
-
-        // if discountCode is not valid, reset to ''
-        setIsDiscountCodeValid(false);
-    }
 
     return (
         <Box
@@ -465,30 +457,7 @@ export default function Cart() {
                                                 placeholder="Nhập mã giảm giá (Nếu có)"
                                                 inputProps={{ 'aria-label': 'discount-code' }}
                                             />
-                                            <Button
-                                                onClick={handleValidateDiscountCode}
-                                                sx={{
-                                                    width: '20%',
-                                                    textTransform: 'none',
-                                                    bgcolor: COLORS.main,
-                                                    ...TEXT_STYLE.title2,
-                                                    color: COLORS.white,
-                                                    height: '100%',
-                                                    borderRadius: 0
-                                                }}
-                                            >Sử dụng</Button>
                                         </Paper>
-                                        {
-                                            (!isDiscountCodeValid && discountCode) && (
-                                                <Typography
-                                                    sx={{
-                                                        color: COLORS.error,
-                                                        ...TEXT_STYLE.content1,
-                                                        mt: '10px'
-                                                    }}
-                                                >Mã giảm giá {discountCode} không hợp lệ</Typography>
-                                            )
-                                        }
                                     </Box>
                                 )
                             }
