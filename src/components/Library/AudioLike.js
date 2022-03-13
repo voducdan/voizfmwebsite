@@ -265,9 +265,7 @@ export default function AudioLike() {
                                 <PlaylistThumnail
                                     id={i?.id}
                                     name={i?.name}
-                                    // src={i?.avatar?.thumb_url}
-                                    // Mock server images is currently error
-                                    src='https://picsum.photos/335/335?img=16'
+                                    src={i?.avatar?.thumb_url}
                                     authors={i?.author?.name}
                                     hasDelete={true}
                                     handleConfirmDeleteModalOpen={handleClickDeleteSingleAudio}

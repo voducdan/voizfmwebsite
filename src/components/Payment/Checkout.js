@@ -72,11 +72,11 @@ const paymentMethods = [
     //     name: 'Ví Zalo Pay',
     //     src: '/images/zalopay.png'
     // },
-    // {
-    //     code: 'vnpay',
-    //     name: 'Thanh toán qua VNPay QR Code',
-    //     src: '/images/vnpay.png'
-    // }
+    {
+        code: 'vnpay',
+        name: 'Thanh toán qua VNPay QR Code',
+        src: '/images/vnpay.png'
+    }
 ]
 
 
@@ -142,7 +142,7 @@ export default function Checkout() {
                 "package_type": package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
-                "redirect_url": "https://voiz.vn/"
+                "redirect_url": "http://13.214.152.147/"
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
@@ -154,7 +154,7 @@ export default function Checkout() {
             const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
             dispatch(setCart([...remainedItems]));
             dispatch(setPaymentInfo({ ...data.data }));
-            if (['momo', 'appota'].includes(paymentMethod)) {
+            if (['momo', 'appota', 'vnpay'].includes(paymentMethod)) {
                 window.location = data.data.url;
                 return;
             }

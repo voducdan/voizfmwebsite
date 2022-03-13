@@ -99,7 +99,6 @@ export default function Cart() {
             if (selectedItem.length > 0) {
                 const price = selectedItem.reduce((a, b) => ({ sale_price: (a.sale_price + b.sale_price) }), { sale_price: 0 })['sale_price'];
                 setTotalPrice(price);
-                // wait for handle discount code
                 setFinalPrice(price);
             }
         }
