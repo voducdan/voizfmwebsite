@@ -338,7 +338,7 @@ export default class API {
         return this.init().post(`/web/creators`, data);
     }
 
-    getBannerImages = (category_code = '', display_on = '', page = 1, limit = 5) => {
+    getBannerImages = (category_code = '', display_on = '', page = 1, limit = 10) => {
         const params = { category_code, display_on, page, limit };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/banners?${queryString}`);

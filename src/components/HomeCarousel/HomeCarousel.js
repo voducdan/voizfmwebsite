@@ -5,6 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 
 // import swiper
+import SwiperCore, { Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 
@@ -34,6 +35,8 @@ const SwiperBtnPrev = (props) => {
         ...(isSm && { display: 'none' })
     }
 }
+
+SwiperCore.use([Autoplay]);
 
 export default function HomeCarousel(props) {
 
@@ -81,7 +84,7 @@ export default function HomeCarousel(props) {
                     <img
                         style={{
                             ...(idx !== current && { display: 'none' }),
-                            objectFit: 'cover',
+                            objectFit: 'fill',
                             width: `100%`,
                             position: 'absolute',
                             height: '100%',
@@ -104,7 +107,10 @@ export default function HomeCarousel(props) {
                 right: { sm: 48, xs: 0 }
             }}>
                 <Swiper
-
+                    autoplay={{
+                        delay: 5000,
+                        disableOnInteraction: false
+                    }}
                     navigation={{
                         prevEl: navigationNewContentPrevRef.current,
                         nextEl: navigationNewContentNextRef.current
@@ -131,8 +137,9 @@ export default function HomeCarousel(props) {
                                     marginLeft: '16px',
                                     ...(idx === 0 && { marginLeft: 0 }),
                                     borderRadius: '6px',
+                                    cursor: 'pointer',
                                     ...(idx === current && {
-                                        border: '2px solid white'
+                                        border: '2px solid white',
                                     })
                                 }}
                                 alt={image.id}

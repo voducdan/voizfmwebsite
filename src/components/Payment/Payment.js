@@ -81,7 +81,7 @@ const PaymentUI = (props) => {
 
     useEffect(() => {
         countDownExpireTime(paymentInfo?.expiry_time);
-        // checkBillingStatus();
+        checkBillingStatus();
     }, []);
 
     const handleExpireTime = () => {

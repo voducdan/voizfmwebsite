@@ -127,34 +127,12 @@ export default function VipPackage() {
     useEffect(() => {
         async function fetchVipPackages() {
             try {
-                // const res = await api.getVipPackage();
-                // const data = await res.data;
-                // if (data.error) {
-                //     // handle error, maybe redirect to error page
-                //     console.log(data.data);
-                //     return;
-                // }
-                const data = {
-                    data: [
-                            {
-                                "id": 40,
-                                "name": "Tiêu Chuẩn",
-                                "code": "website_vip_1_month",
-                                "price": 99000
-                            },
-                            {
-                                "id": 99,
-                                "name": "Tiết Kiệm",
-                                "code": "website_vip_3_month",
-                                "price": 199000
-                            },
-                            {
-                                "id": 100,
-                                "name": "Tiết Kiệm",
-                                "code": "website_vip_12_month",
-                                "price": 699000
-                            }
-                        ]
+                const res = await api.getVipPackage();
+                const data = await res.data;
+                if (data.error) {
+                    // handle error, maybe redirect to error page
+                    console.log(data.data);
+                    return;
                 }
                 setVipPackages(data.data);
             }

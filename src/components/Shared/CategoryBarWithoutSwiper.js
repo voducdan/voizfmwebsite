@@ -22,6 +22,7 @@ export default function CategoryBarWithoutSwiper(props) {
     const newCategoryList = [{ "name": "Tất cả", "sub_name": null, "code": '' }, ...categoryList];
     const width = 100;
     const height = 36;
+    let numItems = 7;
 
     useEffect(() => {
         getNumItem();
@@ -29,11 +30,10 @@ export default function CategoryBarWithoutSwiper(props) {
     }, [categoryList, windowWidth, isSm]);
 
     const getNumItem = () => {
-        let numItems = Math.floor(windowWidth / width);
         if (isSm) {
             numItems *= 2;
         }
-        const itemsList = newCategoryList.slice(0, numItems - 2);
+        const itemsList = newCategoryList.slice(0, numItems);
         setShowedItems(itemsList);
     }
 
@@ -73,9 +73,7 @@ export default function CategoryBarWithoutSwiper(props) {
                     <Box
                         key={item.code}
                         sx={{
-                            ...flexStyle('flex-start', 'center'),
-                            minWidth: `${width}px`,
-                            minHeight: `${height}px`,
+                            ...flexStyle('flex-start', 'center')
                         }}
                     >
                         {
