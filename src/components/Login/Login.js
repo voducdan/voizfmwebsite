@@ -788,14 +788,25 @@ export default function Login() {
                             'whiteSpace': 'pre-line'
                         }}
                     >
-                        <Button onClick={handleSkipPhone} autoFocus>
+                        <Button
+                            sx={{
+                                width: '50%',
+                                textTransform: 'none',
+                                height: '48px',
+                                bgcolor: COLORS.gray2,
+                                ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+                                marginBottom: !isSm ? '20px' : '30px',
+                            }}
+                            onClick={handleSkipPhone}
+                            autoFocus
+                        >
                             Bỏ qua
                         </Button>
                         <CustomDisabledButton
                             disabled={!isPhoneValid}
                             onClick={onEnterPhone}
                             style={{
-                                width: '100%',
+                                width: '50%',
                                 textTransform: 'none',
                                 marginBottom: !isSm ? '20px' : '30px',
                                 height: '48px',

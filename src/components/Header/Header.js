@@ -9,8 +9,8 @@ import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
 import { selectCart, setCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
-import { setUser } from '../../redux/user';
-import { selectToken } from '../../redux/token';
+import { setUser, selectUser } from '../../redux/user';
+import { selectToken, removeToken } from '../../redux/token';
 
 // import next router
 import { useRouter, withRouter } from 'next/router';
@@ -33,14 +33,18 @@ import {
     Avatar,
     Box,
     Badge,
-    Tooltip
+    Tooltip,
+    Popover,
+    Button,
+    Typography
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
 import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
+import LogoutIcon from '@mui/icons-material/Logout';
 
 // Import utils
-import { COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
+import { TEXT_STYLE, COLORS, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
 // Import icons
@@ -51,6 +55,7 @@ import _debounce from 'lodash/debounce';
 
 // import service
 import API from '../../services/api';
+import { flexStyle } from '../../utils/flexStyle';
 
 const SearchBtn = (idx) => {
     return (
@@ -96,14 +101,13 @@ const userAvt = (props) => {
     const { avtSrc, idx, onOpenLogin, handleCloseSidebarWhenClickAccountIcon } = props;
     if (avtSrc) {
         return (
-            <Link
+            <Button
                 onClick={handleCloseSidebarWhenClickAccountIcon}
-                href="/account"
                 key={idx}
                 style={{ textDecoration: 'none' }}
             >
                 <Avatar alt="Remy Sharp" src={avtSrc} sx={{ width: 40, height: 40 }} />
-            </Link>
+            </Button>
         )
     }
     return (
@@ -138,12 +142,17 @@ function Header({ router }) {
     const cart = useSelector(selectCart);
     const token = useSelector(selectToken);
     const addToCartFlag = useSelector(selectAddToCartFlag);
+    const user = useSelector(selectUser);
     const [avtSrc, setAvtSrc] = useState(null);
     const [numItemsInCart, setNumItemsInCart] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchOnMb, setSearchOnMb] = useState(false);
     const [searchOnPC, setSearchOnPC] = useState(false);
     const [showHeaderItems, setShowHeaderItems] = useState(true);
+    const [userPaneAnchorEl, setUserPaneAnchorEl] = useState(null);
+
+    const openUserPane = Boolean(userPaneAnchorEl);
+
     const headerItems = [BookmarkIcon, CartIcon, userAvt];
 
     const dispatch = useDispatch();
@@ -187,6 +196,10 @@ function Header({ router }) {
         setShowHeaderItems(true);
         setSearchStatus();
     }, [pathname, search]);
+
+    const handleCloseUserPane = () => {
+        setUserPaneAnchorEl(null);
+    };
 
     const fetchNumItemsInCart = async () => {
         try {
@@ -303,12 +316,105 @@ function Header({ router }) {
         dispatch(setPlaylistResult(data));
     }, 300), []);
 
-    const handleCloseSidebarWhenClickAccountIcon = () => {
+    const handleCloseSidebarWhenClickAccountIcon = (e) => {
         dispatch(setOpen(false));
+        setUserPaneAnchorEl(e.currentTarget);
+    };
+
+    const handleGoToAccountPage = () => {
+        setUserPaneAnchorEl(null);
+        router.push('/account');
+    }
+
+    const handleLogout = () => {
+        dispatch(removeToken());
+        setUserPaneAnchorEl(null);
+        window.location.href = '/';
     }
 
     return (
         <AppBar position="fixed" open={openSidebar} windowwidth={windowSize.width}>
+            <Popover
+                open={openUserPane}
+                anchorEl={userPaneAnchorEl}
+                onClose={handleCloseUserPane}
+                anchorOrigin={{
+                    vertical: 'bottom',
+                    horizontal: 'right',
+                }}
+                transformOrigin={{
+                    vertical: 'top',
+                    horizontal: 'right',
+                }}
+                sx={{
+                    '& .MuiPopover-paper': {
+                        bgcolor: COLORS.bg2
+                    }
+                }}
+            >
+                <Box
+                    sx={{
+                        bgcolor: COLORS.bg2,
+                        border: `2px solid #679ded`,
+                        pt: '20px',
+                        paddingBottom: '20px',
+                        borderRadius: '5px'
+                    }}
+                >
+                    <Box
+                        sx={{
+                            ...flexStyle('flex-start', 'center'),
+                            columnGap: '15px',
+                            pl: '20px',
+                            pr: '20px',
+                            mb: '20px',
+                            borderTop: `1px solid ${COLORS.placeHolder}`
+                        }}
+                    >
+                        <Box>
+                            <Avatar alt="user avatar" src={avtSrc} sx={{ width: 60, height: 60 }} />
+                        </Box>
+                        <Box>
+                            <Typography
+                                sx={{
+                                    color: COLORS.white,
+                                    ...TEXT_STYLE.title1
+                                }}
+                            >{`${user?.first_name} ${user?.last_name}`}</Typography>
+                            <Typography
+                                onClick={handleGoToAccountPage}
+                                sx={{
+                                    ...TEXT_STYLE.content2,
+                                    color: COLORS.contentIcon,
+                                    cursor: 'pointer'
+                                }}
+                            >Xem trang cá nhân của bạn</Typography>
+                        </Box>
+                    </Box>
+                    <Box
+                        sx={{
+                            ...flexStyle('flex-start', 'center'),
+                            columnGap: '15px',
+                            pl: '20px',
+                            pr: '20px',
+                            pt: '15px',
+                            borderTop: `1px solid ${COLORS.placeHolder}`
+                        }}
+                    >
+                        <Box>
+                            <LogoutIcon sx={{ color: COLORS.white }} />
+                        </Box>
+                        <Typography
+                            onClick={handleLogout}
+                            sx={{
+                                color: COLORS.white,
+                                ...TEXT_STYLE.title2,
+                                cursor: 'pointer'
+                            }}
+                        >Đăng xuất</Typography>
+                    </Box>
+                </Box>
+            </Popover>
             <Toolbar>
                 <IconButton
                     color="inherit"
