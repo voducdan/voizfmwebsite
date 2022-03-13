@@ -1,5 +1,5 @@
 // import react
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // import redux
 import { useDispatch, useSelector } from 'react-redux';
@@ -63,6 +63,7 @@ export default function Control(props) {
 
     const { audioData, audio, nextAudioId, prevAudioId } = props;
     const theme = useTheme();
+    const playBtn = useRef(null);
     const navigate = useRouter();
     const { mode } = navigate.query;
     const dispatch = useDispatch();
@@ -76,15 +77,6 @@ export default function Control(props) {
     const [countDownTimerStr, setCountDownTimer] = useState('');
     const [anchorEl, setAnchorEl] = useState(null);
     const openTimer = Boolean(anchorEl);
-
-    useEffect(() => {
-        // if (mode && mode === 'all') {
-        //     navigate.push(`/audio-play/${nextAudioId}?mode=all`)
-        // }
-        audio.current.addEventListener('ended', function () {
-            console.log(11111)
-        })
-    }, []);
 
     useEffect(() => {
         dispatch(pauseAudio());
@@ -104,9 +96,14 @@ export default function Control(props) {
             const currentTime = Math.ceil(e.target.currentTime);
             setPosition(currentTime);
             if (currentTime === audioData.duration && !audio.current.loop) {
-                setPaused(true);
-                audio.current.currentTime = 0;
-                setPosition(0);
+                if (mode && mode === 'all' && nextAudioId) {
+                    navigate.push(`/audio-play/${nextAudioId}?mode=all`)
+                }
+                else {
+                    setPaused(true);
+                    audio.current.currentTime = 0;
+                    setPosition(0);
+                }
             }
         });
 
@@ -202,10 +199,18 @@ export default function Control(props) {
 
     const handleChangeAudio = (type) => {
         if (type === 'next' && nextAudioId) {
-            navigate.push(`/audio-play/${nextAudioId}`)
+            const nextUrl = `/audio-play/${nextAudioId}`;
+            if (mode) {
+                nextUrl += '?mode=all'
+            }
+            navigate.push(nextUrl);
         }
         if (type === 'prev' && prevAudioId) {
-            navigate.push(`/audio-play/${prevAudioId}`)
+            const prevUrl = `/audio-play/${prevAudioId}`;
+            if (mode) {
+                nextUrl += '?mode=all'
+            }
+            navigate.push(prevUrl);
         }
     }
 
@@ -256,6 +261,7 @@ export default function Control(props) {
                         }}
                         aria-label={paused ? 'play' : 'pause'}
                         onClick={onPlayClick}
+                        ref={playBtn}
                     >
                         {paused ? (
                             <PlayArrowIcon

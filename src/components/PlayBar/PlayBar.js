@@ -1,9 +1,8 @@
 // import react
 import { useState, useRef, useEffect } from 'react';
 
-// import redux
-import { useSelector } from 'react-redux';
-import { selectAudioData } from '../../redux/audio';
+// import next router
+import { useRouter } from 'next/router';
 
 // import MUI components
 import {
@@ -13,7 +12,9 @@ import {
     Button,
     Slider,
     Stack,
-    Divider
+    Divider,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
@@ -38,17 +39,29 @@ export default function PlayBar() {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const audio = useRef(null);
-    const audioData = useSelector(selectAudioData);
+    const router = useRouter()
+    const { id } = router.query;
     const [volume, setVolume] = useState(60);
+    const [audioData, setAudioData] = useState({});
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
     const [audiosList, setAudiosList] = useState([]);
-    const [nextAudioId, setNextAudioId] = useState(null);
-    const [prevAudioId, setPrevAudioId] = useState(null);
-
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [nextAudioId, setNextAudioId] = useState(undefined);
+    const [prevAudioId, setPrevAudioId] = useState(undefined);
 
     useEffect(() => {
+        async function fetchAudio() {
+            const res = await api.getAudio(id);
+            const audio = await res.data.data;
+            setAudioData(audio)
+        };
+        if (id) {
+            fetchAudio();
+        }
+    }, [router.asPath]);
 
+    useEffect(() => {
         function compare(a, b) {
             if (a.position < b.position) {
                 return -1;
@@ -65,7 +78,7 @@ export default function PlayBar() {
             data.sort(compare);
             setAudiosList(data);
         };
-        audio.current.volume = volume / audioData.duration || volume / 100;
+        audio.current.volume = volume / 100;
         if (audioData?.playlist?.id) {
             fetchPlaylistAudios();
         }
@@ -75,19 +88,20 @@ export default function PlayBar() {
         if (audiosList.length > 0) {
             assignAudioId();
         }
-    }, [audiosList]);
+    }, [router.asPath, audiosList]);
 
     const assignAudioId = () => {
         if (audiosList.length === 1) {
+            setNextAudioId(null);
+            setPrevAudioId(null);
             return;
         }
-        const audioIdx = audiosList.findIndex(i => i.id === audioData?.id);
+        const audioIdx = audiosList.findIndex(i => i.id === Number(id));
         const nextIdx = audioIdx + 1;
         const prevIdx = audioIdx - 1;
 
         const nextId = nextIdx < audiosList.length ? audiosList[nextIdx].id : null;
         const prevId = prevIdx >= 0 ? audiosList[prevIdx].id : null;
-
         setNextAudioId(nextId);
         setPrevAudioId(prevId);
     }
@@ -102,11 +116,17 @@ export default function PlayBar() {
 
     const handleLikeAudio = () => {
         async function likeAudio() {
-            const audioId = audioData.id;
-            const res = await api.likeAudio(audioId);
-            const data = await res.data;
-            if (!data.error) {
-                setIsLiked(data.data['is_liked']);
+            try {
+                const audioId = audioData.id;
+                const res = await api.likeAudio(audioId);
+                const data = await res.data;
+                if (!data.error) {
+                    setIsLiked(data.data['is_liked']);
+                }
+            }
+            catch (err) {
+                console.log(err);
+                setOpenSnackbar(true);
             }
         }
 
@@ -212,7 +232,7 @@ export default function PlayBar() {
                 </Box>
             </Box>
             {isSm && (<Divider sx={{ borderColor: COLORS.blackStroker, margin: '5px 0', width: '100%', borderWidth: '1px' }} />)}
-            {Object.keys(audioData).length > 0 && (<Box
+            {(Object.keys(audioData).length > 0 && nextAudioId !== undefined && prevAudioId !== undefined) && (<Box
                 sx={{
                     width: isSm ? '100%' : '40%',
                 }}
@@ -252,8 +272,8 @@ export default function PlayBar() {
 
                         <Divider sx={{ color: COLORS.blackStroker, margin: '0 24px' }} orientation="vertical" flexItem />
                         <Stack spacing={2} direction="row" sx={{ mb: 1, width: '50%', }} alignItems="center" justifyContent="flex-start">
-                            {volume > 0 && (<VolumeUp sx={{ color: COLORS.contentIcon }} />)}
-                            {volume === 0 && (<VolumeOffIcon sx={{ color: COLORS.contentIcon }} />)}
+                            {volume > 0 && (<VolumeUp onClick={() => { setVolume(0) }} sx={{ color: COLORS.contentIcon }} />)}
+                            {volume === 0 && (<VolumeOffIcon onClick={() => { setVolume(60) }} sx={{ color: COLORS.contentIcon }} />)}
                             <Slider
                                 sx={{
                                     height: 2,
@@ -284,11 +304,20 @@ export default function PlayBar() {
                     </Box>
                 )
             }
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => { setOpenSnackbar(false) }}
+            >
+                <Alert onClose={() => { setOpenSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                    Thích audio không thành công, vui lòng thử lại sau!
+                </Alert>
+            </Snackbar>
             <AudioList
                 anchorAudioList={anchorAudioList}
                 onCloseAudioList={onCloseAudioList}
                 playlistId={audioData?.playlist?.id}
-                audioId={audioData?.id}
+                audioId={Number(id)}
                 audiosList={audiosList}
             />
         </Box>
