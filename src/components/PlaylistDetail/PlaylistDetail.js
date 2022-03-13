@@ -371,14 +371,14 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const handleClickPlayAll = async (e) => {
         e.preventDefault();
-        if (playlistAudios) {
+        if (!playlistAudios) {
             return;
         }
         try {
             const res = await api.getAudioFile(playlistAudios[0].id);
             const data = await res.data;
             dispatch(setAudioUrl(data.url));
-            router.push(`/audio-play/${playlistAudios[0].id}`);
+            router.push(`/audio-play/${playlistAudios[0].id}?mode=all`);
 
         }
         catch (err) {
@@ -605,7 +605,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         }}
                     >
                         <Button
-                            onClick={handlePlayAudio}
+                            onClick={handleClickPlayAll}
                             sx={{
                                 bgcolor: COLORS.main,
                                 width: '50%',

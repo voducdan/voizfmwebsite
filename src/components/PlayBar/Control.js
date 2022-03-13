@@ -5,7 +5,7 @@ import { useState, useEffect } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { togglePlayAudio, pauseAudio } from '../../redux/playAudio';
 import { selectAudioHls } from '../../redux/playAudio';
-
+import { selectToken } from '../../redux/token';
 // import next router
 import { useRouter } from 'next/router';
 
@@ -15,6 +15,10 @@ import Hls from 'hls.js';
 // import MUI component
 import { styled, useTheme } from '@mui/material/styles';
 import Box from '@mui/material/Box';
+import Popover from '@mui/material/Popover';
+import MenuList from '@mui/material/MenuList';
+import MenuItem from '@mui/material/MenuItem';
+import ListItemText from '@mui/material/ListItemText';
 import Typography from '@mui/material/Typography';
 import Slider from '@mui/material/Slider';
 import IconButton from '@mui/material/IconButton';
@@ -22,6 +26,7 @@ import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
 import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
+
 import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
@@ -59,11 +64,27 @@ export default function Control(props) {
     const { audioData, audio, nextAudioId, prevAudioId } = props;
     const theme = useTheme();
     const navigate = useRouter();
+    const { mode } = navigate.query;
     const dispatch = useDispatch();
     const audioUrl = useSelector(selectAudioHls);
+    const token = useSelector(selectToken);
     const [position, setPosition] = useState(0);
     const [paused, setPaused] = useState(true);
     const [loopAudio, setLoopAudio] = useState(false);
+    const [timer, setTimer] = useState(0);
+    const [intervalId, setIntervalId] = useState(null);
+    const [countDownTimerStr, setCountDownTimer] = useState('');
+    const [anchorEl, setAnchorEl] = useState(null);
+    const openTimer = Boolean(anchorEl);
+
+    useEffect(() => {
+        // if (mode && mode === 'all') {
+        //     navigate.push(`/audio-play/${nextAudioId}?mode=all`)
+        // }
+        audio.current.addEventListener('ended', function () {
+            console.log(11111)
+        })
+    }, []);
 
     useEffect(() => {
         dispatch(pauseAudio());
@@ -79,7 +100,6 @@ export default function Control(props) {
                 audio.current.play();
             });
         }
-
         audio.current.addEventListener('timeupdate', (e) => {
             const currentTime = Math.ceil(e.target.currentTime);
             setPosition(currentTime);
@@ -94,7 +114,9 @@ export default function Control(props) {
 
     useEffect(() => {
         if (paused) {
-            addAudioToListening(audioData.id, position, audioData.playlist.id);
+            if (token) {
+                addAudioToListening(audioData.id, position, audioData.playlist.id);
+            }
             audio.current.pause();
         }
         else {
@@ -102,9 +124,55 @@ export default function Control(props) {
         }
     }, [paused]);
 
+    useEffect(() => {
+        if (timer === 0) {
+            return;
+        }
+        if (!paused) {
+            setPaused(true);
+        }
+        setTimeout(() => {
+            setPaused(false);
+        }, timer * 1000 * 60);
+        countDownTimer();
+    }, [timer]);
+
+    const countDownTimer = () => {
+        let eslapseTime = 0;
+        const x = setInterval(function () {
+            eslapseTime++;
+            const timerInSecond = timer * 60 - eslapseTime;
+            if (timerInSecond < 0) {
+                clearInterval(x);
+                setCountDownTimer('');
+                return;
+            }
+            setCountDownTimer(formatDuration(timerInSecond));
+        }, 1000);
+        setIntervalId(x);
+    }
+
     const onPlayClick = () => {
         setPaused(!paused);
         dispatch(togglePlayAudio());
+    }
+
+    const handleTimerClick = (event) => {
+        setAnchorEl(event.currentTarget);
+    };
+
+    const handleTimerClose = () => {
+        setAnchorEl(null);
+    };
+
+    const handleSelectTimer = (e) => {
+        if (intervalId) {
+            clearInterval(intervalId);
+        }
+        const selectedTimer = Number(e.currentTarget.value);
+        setCountDownTimer('');
+        setAnchorEl(null);
+        setTimer(selectedTimer);
     }
 
     const addAudioToListening = async () => {
@@ -207,6 +275,7 @@ export default function Control(props) {
                         />
                     </IconButton>
                     <Box
+                        onClick={handleTimerClick}
                         sx={{
                             textAlign: 'center'
                         }}
@@ -219,8 +288,51 @@ export default function Control(props) {
                                 whiteSpace: 'nowrap',
                                 marginTop: '4px'
                             }}
-                        >Hẹn giờ</Typography>
+                        >{(timer === 0 || countDownTimerStr === '') ? 'Hẹn giờ' : `${countDownTimerStr}`}</Typography>
                     </Box>
+                    <Popover
+                        open={openTimer}
+                        anchorEl={anchorEl}
+                        onClose={handleTimerClose}
+                        anchorOrigin={{
+                            vertical: 'top',
+                            horizontal: 'center',
+                        }}
+                        transformOrigin={{
+                            vertical: 'bottom',
+                            horizontal: 'center',
+                        }}
+                        sx={{
+                            '& .MuiPopover-paper': {
+                                bgcolor: '#292B32'
+                            }
+                        }}
+                    >
+                        <MenuList
+                            sx={{
+                                color: COLORS.contentIcon
+                            }}
+                        >
+                            <MenuItem onClick={handleSelectTimer} value={0}>
+                                <ListItemText>Không hẹn giờ</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={handleSelectTimer} value={5}>
+                                <ListItemText>5 phút</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={handleSelectTimer} value={10}>
+                                <ListItemText>10 phút</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={handleSelectTimer} value={20}>
+                                <ListItemText>20 phút</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={handleSelectTimer} value={30}>
+                                <ListItemText>30 phút</ListItemText>
+                            </MenuItem>
+                            <MenuItem onClick={handleSelectTimer} value={60}>
+                                <ListItemText>60 phút</ListItemText>
+                            </MenuItem>
+                        </MenuList>
+                    </Popover>
                 </Box>
                 <Box
                     sx={{

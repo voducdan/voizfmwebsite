@@ -73,7 +73,7 @@ function Layout(props) {
 
 
     const openPlayBar = () => {
-        const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+$');
+        const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+');
         if (playAudioPathRegex.test(location.asPath)) {
             if (!isSm) {
                 return true;
