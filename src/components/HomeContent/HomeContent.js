@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 // import swiper
-import SwiperCore, { Navigation } from 'swiper';
+import SwiperCore, { Navigation, Autoplay } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 // import others components
@@ -32,7 +32,7 @@ import { flexStyle } from '../../utils/flexStyle'
 // import services
 import API from '../../services/api'
 
-SwiperCore.use([Navigation]);
+SwiperCore.use([Navigation, Autoplay]);
 
 const SwiperBtnNext = (props) => {
     const { isSm } = props;
@@ -128,7 +128,7 @@ const CATEGORIES_LEVEL2 = [
     },
     {
         code: 'kinh_dien_viet_nam',
-        name: 'Việt nam danh tác'
+        name: 'Việt Nam Danh tác'
     },
     {
         code: 'lich_su',
