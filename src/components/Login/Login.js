@@ -65,7 +65,19 @@ const loginInfo = (content) => (
     </Box>
 );
 
-
+const textFieldStyle = {
+    width: '100%',
+    '& .MuiOutlinedInput-input': {
+        bgcolor: COLORS.bg2,
+        color: COLORS.white,
+        ...TEXT_STYLE.content1,
+        height: '50px',
+        boxSizing: 'border-box'
+    },
+    '& .MuiOutlinedInput-root': {
+        bgcolor: COLORS.bg2,
+    }
+}
 
 export default function Login() {
     const api = new API();
@@ -561,7 +573,7 @@ export default function Login() {
                             marginBottom: '24px',
                         }}>
                             <Typography sx={{
-                                ...TEXT_STYLE.title1,
+                                ...TEXT_STYLE.h2,
                                 color: COLORS.white,
                             }}>Cập nhật thông tin cá nhân</Typography>
                             <Box
@@ -574,17 +586,7 @@ export default function Login() {
                             >
                                 <TextField
                                     sx={{
-                                        borderRadius: '4px',
-                                        border: '1px solid #353535',
-                                        justifyContent: 'center',
-                                        height: '100%',
-                                        '& .MuiOutlinedInput-root': {
-                                            height: '100%'
-                                        },
-                                        '& .MuiOutlinedInput-input': {
-                                            color: COLORS.white,
-                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
-                                        }
+                                        ...textFieldStyle
                                     }}
                                     name='first_name'
                                     onChange={handleChangeUserInfo}
@@ -592,17 +594,7 @@ export default function Login() {
                                 />
                                 <TextField
                                     sx={{
-                                        borderRadius: '4px',
-                                        border: '1px solid #353535',
-                                        justifyContent: 'center',
-                                        height: '100%',
-                                        '& .MuiOutlinedInput-root': {
-                                            height: '100%'
-                                        },
-                                        '& .MuiOutlinedInput-input': {
-                                            color: COLORS.white,
-                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
-                                        }
+                                        ...textFieldStyle
                                     }}
                                     name='last_name'
                                     onChange={handleChangeUserInfo}
@@ -610,35 +602,15 @@ export default function Login() {
                                 />
                                 <TextField
                                     sx={{
-                                        borderRadius: '4px',
-                                        border: '1px solid #353535',
-                                        justifyContent: 'center',
-                                        height: '100%',
-                                        '& .MuiOutlinedInput-root': {
-                                            height: '100%'
-                                        },
-                                        '& .MuiOutlinedInput-input': {
-                                            color: COLORS.white,
-                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
-                                        }
+                                        ...textFieldStyle
                                     }}
-                                    placeholder="Ngày sinh"
+                                    placeholder="Ngày sinh (dd/mm/yyyy)"
                                     name='birthday'
                                     onChange={handleChangeUserInfo}
                                 />
                                 <TextField
                                     sx={{
-                                        borderRadius: '4px',
-                                        border: '1px solid #353535',
-                                        justifyContent: 'center',
-                                        height: '100%',
-                                        '& .MuiOutlinedInput-root': {
-                                            height: '100%'
-                                        },
-                                        '& .MuiOutlinedInput-input': {
-                                            color: COLORS.white,
-                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
-                                        }
+                                        ...textFieldStyle
                                     }}
                                     placeholder="Avatar url"
                                     name='avatar_url'
@@ -646,17 +618,7 @@ export default function Login() {
                                 />
                                 <TextField
                                     sx={{
-                                        borderRadius: '4px',
-                                        border: '1px solid #353535',
-                                        justifyContent: 'center',
-                                        height: '100%',
-                                        '& .MuiOutlinedInput-root': {
-                                            height: '100%'
-                                        },
-                                        '& .MuiOutlinedInput-input': {
-                                            color: COLORS.white,
-                                            ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
-                                        }
+                                        ...textFieldStyle
                                     }}
                                     name='email'
                                     onChange={handleChangeUserInfo}
@@ -666,11 +628,14 @@ export default function Login() {
                             <Button
                                 onClick={onUpdateProfile}
                                 sx={{
-                                    width: '100%',
                                     textTransform: 'none',
-                                    marginBottom: !isSm ? '20px' : '30px',
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    bgcolor: COLORS.main,
+                                    width: isSm ? '100%' : '50%',
                                     height: '48px',
-                                    ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+                                    borderRadius: '8px',
+                                    margin: '21px 0'
                                 }}
                             >
                                 Tiếp tục
@@ -793,7 +758,7 @@ export default function Login() {
                                 width: '50%',
                                 textTransform: 'none',
                                 height: '48px',
-                                bgcolor: COLORS.gray2,
+                                bgcolor: COLORS.contentIcon,
                                 ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
                                 marginBottom: !isSm ? '20px' : '30px',
                             }}
