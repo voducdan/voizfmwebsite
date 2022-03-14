@@ -165,7 +165,13 @@ function Header({ router }) {
     }, []);
 
     useEffect(() => {
-        if (token) {
+        if (user) {
+            setAvtSrc(user.avatar.thumb_url)
+        }
+    }, [user]);
+
+    useEffect(() => {
+        if (token && !user) {
             fetchUserInfo();
             return;
         }

@@ -25,7 +25,7 @@ import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
-export default function Info(props) {
+export default function Info() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
@@ -128,7 +128,7 @@ export default function Info(props) {
                                         color: COLORS.contentIcon
                                     }}
                                 >
-                                    {`${accountData?.promotion?.toUpperCase()} (Còn ${getRemainingDays(accountData)} ngày)`}
+                                    {`${accountData?.promotion?.toUpperCase()}`}{accountData?.promotion.toUpperCase() === 'VIP' ? `(Còn ${getRemainingDays(accountData)} ngày)` : ''}
                                 </Typography>
                             </Box>
 
@@ -143,46 +143,50 @@ export default function Info(props) {
                             ...(isSm && { marginTop: '40px' })
                         }}
                     >
-                        <Box
-                            sx={{
-                                width: '100%',
-                                maxWidth: '400px',
-                                paddingTop: '17px',
-                                paddingLeft: isSm ? '16px' : '37px',
-                                paddingBottom: '17px',
-                                paddingRight: '20px',
-                                ...flexStyle('space-between', 'center'),
-                                backgroundColor: COLORS.error,
-                                borderRadius: '6px',
-                                height: '60px',
-                                boxSizing: 'border-box'
-                            }}
-                        >
-                            <Typography
-                                sx={{
-                                    ...TEXT_STYLE.h3,
-                                    color: COLORS.white
-                                }}
-                            >Nâng cấp thành viên</Typography>
-                            <Link
-                                href='/up-vip'
-                                style={{
-                                    textDecoration: 'none'
-                                }}
-                            >
-                                <Button
-                                    style={{
-                                        color: COLORS.error,
-                                        borderRadius: '20px',
-                                        border: 'none',
-                                        backgroundColor: COLORS.white,
-                                        textTransform: 'none',
-                                        ...TEXT_STYLE.title2
+                        {
+                            accountData?.promotion.toUpperCase() !== 'VIP' && (
+                                <Box
+                                    sx={{
+                                        width: '100%',
+                                        maxWidth: '400px',
+                                        paddingTop: '17px',
+                                        paddingLeft: isSm ? '16px' : '37px',
+                                        paddingBottom: '17px',
+                                        paddingRight: '20px',
+                                        ...flexStyle('space-between', 'center'),
+                                        backgroundColor: COLORS.error,
+                                        borderRadius: '6px',
+                                        height: '60px',
+                                        boxSizing: 'border-box'
                                     }}
-                                >Nâng cấp
-                                </Button>
-                            </Link>
-                        </Box>
+                                >
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.h3,
+                                            color: COLORS.white
+                                        }}
+                                    >Nâng cấp thành viên</Typography>
+                                    <Link
+                                        href='/up-vip'
+                                        style={{
+                                            textDecoration: 'none'
+                                        }}
+                                    >
+                                        <Button
+                                            style={{
+                                                color: COLORS.error,
+                                                borderRadius: '20px',
+                                                border: 'none',
+                                                backgroundColor: COLORS.white,
+                                                textTransform: 'none',
+                                                ...TEXT_STYLE.title2
+                                            }}
+                                        >Nâng cấp
+                                        </Button>
+                                    </Link>
+                                </Box>
+                            )
+                        }
                     </Box>
                 </Box>
             </Box >

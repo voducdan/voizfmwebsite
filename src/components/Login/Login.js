@@ -21,11 +21,12 @@ import {
     TextField,
     Stack,
     Button,
-    DialogTitle,
+    IconButton,
     DialogContent,
     DialogContentText,
     DialogActions
 } from '@mui/material';
+import CloseIcon from '@mui/icons-material/Close';
 
 // import login third party
 import FacebookLogin from 'react-facebook-login/dist/facebook-login-render-props';
@@ -330,6 +331,18 @@ export default function Login() {
                     }
                 }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={onClose}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 0,
+                        color: COLORS.white
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <FormControl sx={{
                     backgroundColor: COLORS.bg1,
                     width: '100%',
@@ -511,7 +524,8 @@ export default function Login() {
                                     },
                                     '& .MuiOutlinedInput-input': {
                                         color: COLORS.white,
-                                        ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
+                                        ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3),
+                                        textAlign: 'center'
                                     }
                                 }} id="phone-number" placeholder="123456" variant="outlined" onChange={onOTPChange} />
                             <CustomDisabledButton

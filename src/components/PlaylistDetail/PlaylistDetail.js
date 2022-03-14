@@ -202,7 +202,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     for (let e in errList) {
                         const key = Object.keys(errList[e])[0];
                         const value = errList[e][key]
-                        errMessage += `${value} \n`
+                        errMessage += `${key} ${value} \n`
                     }
                     setErrorMessage(errMessage)
                     setOpenSnackbar(true);
@@ -322,7 +322,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 for (let e in errList) {
                     const key = Object.keys(errList[e])[0];
                     const value = errList[e][key]
-                    errMessage += `${value} \n`
+                    errMessage += `${key} ${value} \n`
                 }
                 setAfterRateContent(errMessage);
                 setOpenAfterRateModal(true);
@@ -359,7 +359,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     for (let e in errList) {
                         const key = Object.keys(errList[e])[0];
                         const value = errList[e][key]
-                        errMessage += `${value} \n`
+                        errMessage += `${key} ${value} \n`
                     }
                     setAddToCartErrorMessage(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
                     setAddToCartError(true);
@@ -397,7 +397,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 for (let e in errList) {
                     const key = Object.keys(errList[e])[0];
                     const value = errList[e][key]
-                    errMessage += `${value} \n`
+                    errMessage += `${key} ${value} \n`
                 }
                 setErrorMessage(errMessage)
                 setOpenSnackbar(true);

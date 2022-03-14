@@ -224,9 +224,11 @@ export default function EditProfileModal(props) {
         if (fileInput.current.files[0]) {
             userFormData.append('avatar', fileInput.current.files[0]);
         }
+        if (userInfo.email) {
+            userFormData.append('email', userInfo.email);
+        }
         userFormData.append('first_name', userInfo.firstName);
         userFormData.append('last_name', userInfo.lastName);
-        userFormData.append('email', userInfo.email);
         userFormData.append('birthday', userInfo.birthday);
         userFormData.append('avatar_url', userInfo.avatarUrl);
         try {
@@ -241,7 +243,19 @@ export default function EditProfileModal(props) {
             dispatch(setUser(data.data));
         }
         catch (err) {
-            setUpdatedInfoMessage('Cập nhật thông tin không thành công!');
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${key} ${value} \n`
+                }
+                setUpdatedInfoMessage(errMessage);
+                setOpenUpdateInfoResultModal(true);
+                return;
+            }
+            setUpdatedInfoMessage(errList);
             setOpenUpdateInfoResultModal(true);
         }
     }
@@ -419,7 +433,7 @@ export default function EditProfileModal(props) {
                             }}
                             name='email'
                             onChange={handleChangeUserInfo}
-                            value={userInfo.email}
+                            value={userInfo.email || ''}
                             placeholder="Địa chỉ email" variant="outlined"
                         />
                     </Box>

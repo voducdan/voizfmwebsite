@@ -176,7 +176,7 @@ export default function SidebarMenu() {
             {
                 id: 10,
                 icon: <SummaryBook />,
-                text: 'Tóm tắt sách',
+                text: 'Sách tóm tắt',
                 url: 'summary-book'
             },
             {

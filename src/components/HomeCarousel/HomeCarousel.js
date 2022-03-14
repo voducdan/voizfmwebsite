@@ -12,6 +12,10 @@ import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-r
 // import icons
 import { CarouselNext, CarouselPrev } from '../../components/Icons/index';
 
+// import utils
+import { SCREEN_BREAKPOINTS } from '../../utils/constants';
+import useWindowSize from '../../utils/useWindowSize';
+
 // import services
 import API from '../../services/api';
 
@@ -38,11 +42,12 @@ const SwiperBtnPrev = (props) => {
 
 SwiperCore.use([Autoplay]);
 
-export default function HomeCarousel(props) {
+export default function HomeCarousel() {
 
     const api = new API();
 
-    const { isSm } = props;
+    const windowSize = useWindowSize();
+    const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     const [current, setCurrent] = useState(0);
     const [images, setImages] = useState([]);
