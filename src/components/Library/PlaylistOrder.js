@@ -70,9 +70,14 @@ export default function PlaylistOrder() {
 
     useEffect(() => {
         async function fetchPlaylistOrders() {
-            const res = await api.getPlaylistOrders();
-            const data = await res.data.data;
-            setPlaylistOrders(data)
+            try {
+                const res = await api.getPlaylistOrders();
+                const data = await res.data.data;
+                setPlaylistOrders(data);
+            }
+            catch (err) {
+                console.log(err)
+            }
         }
 
         fetchPlaylistOrders()

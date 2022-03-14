@@ -196,7 +196,19 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setPlaylist({ ...playlistToBookmark })
             }
             catch (err) {
-                setErrorMessage('Đánh dấu playlist không thành công!')
+                const errList = err.response.data.error;
+                if (errList instanceof Object) {
+                    let errMessage = '';
+                    for (let e in errList) {
+                        const key = Object.keys(errList[e])[0];
+                        const value = errList[e][key]
+                        errMessage += `${value} \n`
+                    }
+                    setErrorMessage(errMessage)
+                    setOpenSnackbar(true);
+                    return;
+                }
+                setErrorMessage(errList)
                 setOpenSnackbar(true);
             }
         }
@@ -291,7 +303,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             });
             const result = await res.data;
             if (result.code === 0) {
-                setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
+                setAfterRateContent(result.error);
+                setOpenAfterRateModal(true);
                 return;
             }
             const data = result.data;
@@ -300,9 +313,23 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             tmpPlaylist['playlist_rating'] = data.playlist_rating;
             setPlaylist({ ...tmpPlaylist });
             cb();
+            setOpenAfterRateModal(true);
         }
         catch (err) {
-            setAfterRateContent('Đã xảy ra lỗi khi đánh giá playlist, bạn hãy thử lại nhé!');
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setAfterRateContent(errMessage);
+                setOpenAfterRateModal(true);
+                return;
+            }
+            setAfterRateContent(errList);
+            setOpenAfterRateModal(true);
         }
     }
 
@@ -364,7 +391,19 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             router.push(`/audio-play/${audioId}`);
         }
         catch (err) {
-            setErrorMessage('Vui lòng mua playlist hoặc gói VIP để nghe audio!')
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setErrorMessage(errMessage)
+                setOpenSnackbar(true);
+                return;
+            }
+            setErrorMessage(errList)
             setOpenSnackbar(true);
         }
     }
@@ -382,7 +421,19 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
         }
         catch (err) {
-            setErrorMessage('Vui lòng mua playlist hoặc gói VIP để nghe audio!')
+            const errList = err.response.data.error;
+            let errMessage = '';
+            if (errList instanceof Object) {
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${key} ${value} \n`
+                }
+                setErrorMessage(errMessage);
+                setOpenSnackbar(true);
+                return;
+            }
+            setErrorMessage(errList);
             setOpenSnackbar(true);
         }
     }

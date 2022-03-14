@@ -207,16 +207,26 @@ export default function PlaylistBookmark() {
 
     useEffect(() => {
         async function fetchPlaylistBookmarks() {
-            const res = await api.getPlaylistBookmarks(playlistPage, pageLimit);
-            const data = await res.data.data;
-            data.forEach(i => i['is_bookmark'] = true);
-            setPlaylistBookmarks(data)
+            try {
+                const res = await api.getPlaylistBookmarks(playlistPage, pageLimit);
+                const data = await res.data.data;
+                data.forEach(i => i['is_bookmark'] = true);
+                setPlaylistBookmarks(data);
+            }
+            catch (err) {
+                console.log(err)
+            }
         }
         async function fetchChannelBookmarks() {
-            const res = await api.getChannelBookmarks(channelPage, pageLimit);
-            const data = await res.data.data;
-            data.forEach(i => i['is_bookmark'] = true);
-            setChannelBookmarks(data)
+            try {
+                const res = await api.getChannelBookmarks(channelPage, pageLimit);
+                const data = await res.data.data;
+                data.forEach(i => i['is_bookmark'] = true);
+                setChannelBookmarks(data);
+            }
+            catch (err) {
+                console.log(err)
+            }
         }
 
         fetchChannelBookmarks()

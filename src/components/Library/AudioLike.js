@@ -13,7 +13,9 @@ import {
     DialogActions,
     DialogContent,
     DialogContentText,
-    DialogTitle
+    DialogTitle,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DeleteIcon from '@mui/icons-material/Delete';
@@ -83,21 +85,85 @@ export default function AudioLike() {
     const [confirmDeleteModal, setConfirmDeleteModal] = useState(false);
     const [singleItemIdToDelete, setSingleItemIdToDelete] = useState(null);
     const [confirmDeleteModalText, setConfirmDeleteModalText] = useState('');
+    const [openUnLikeAudioErrorSnackbar, setOpenUnLikeAudioErrorSnackbar] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const pageLimit = 10;
 
 
     useEffect(() => {
         async function fetchAudioLikes() {
-            const res = await api.getAudioLikes(audioPage, pageLimit);
-            const data = await res.data.data;
-            const initDeleteList = data.map(i => ({ id: i.id, checked: false }));
-            setAudioLikes([...data]);
-            setDeleteList(initDeleteList);
+            try {
+                const res = await api.getAudioLikes(audioPage, pageLimit);
+                const data = await res.data.data;
+                const initDeleteList = data.map(i => ({ id: i.id, checked: false }));
+                setAudioLikes([...data]);
+                setDeleteList(initDeleteList);
+            }
+            catch (err) {
+                const errList = err.response.data.error;
+                if (errList instanceof Object) {
+                    let errMessage = '';
+                    for (let e in errList) {
+                        const key = Object.keys(errList[e])[0];
+                        const value = errList[e][key]
+                        errMessage += `${value} \n`
+                    }
+                    setErrorMessage(errMessage)
+                    setOpenUnLikeAudioErrorSnackbar(true);
+                    return;
+                }
+                setOpenUnLikeAudioErrorSnackbar(true);
+                setErrorMessage(errList)
+            }
         }
 
         fetchAudioLikes()
     }, []);
+
+    const unLikeAudio = async (audioId) => {
+        try {
+            await api.likeAudio(audioId);
+        }
+        catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setErrorMessage(errMessage)
+                setOpenUnLikeAudioErrorSnackbar(true);
+                return;
+            }
+            setOpenUnLikeAudioErrorSnackbar(true);
+            setErrorMessage(errList)
+        }
+    }
+
+    const unLikeMultiAudio = async (audioIds) => {
+        try {
+            await api.unLikeMultiAudio(audioIds);
+        }
+        catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setErrorMessage(errMessage)
+                setOpenUnLikeAudioErrorSnackbar(true);
+                return;
+            }
+            setOpenUnLikeAudioErrorSnackbar(true);
+            setErrorMessage(errList)
+        }
+    }
 
     const handleGoDelete = () => {
         const tmpIsDeleteMode = !isDeleteMode;
@@ -110,12 +176,16 @@ export default function AudioLike() {
         if (singleItemIdToDelete) {
             remainItems = audioLikes.filter(i => i.id !== singleItemIdToDelete);
             initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            unLikeAudio(singleItemIdToDelete);
             setSingleItemIdToDelete(null);
         }
         else {
             const selectdItems = deleteList.filter(i => i.checked === true).map(i => i.id);
             remainItems = audioLikes.filter(i => !(selectdItems.includes(i.id)));
             initDeleteList = remainItems.map(i => ({ id: i.id, checked: false }));
+            for (let i of selectdItems) {
+                unLikeAudio(i);
+            }
         }
         setIsSelectDeleteAll(false);
         setDeleteList(initDeleteList);
@@ -153,7 +223,7 @@ export default function AudioLike() {
 
     const handleSelectDeleteItem = (e) => {
         const tmpDeleteList = [...deleteList];
-        const id = e.target.value;
+        const id = Number(e.target.value);
         tmpDeleteList[id]['checked'] = !tmpDeleteList[id]['checked'];
         const numCheckItems = tmpDeleteList.filter(i => i.checked === true).length;
         let isDeleteAll = numCheckItems === deleteList.length ? true : false;
@@ -246,7 +316,7 @@ export default function AudioLike() {
                                     <Radio
                                         checked={deleteList[idx] ? deleteList[idx]['checked'] : false}
                                         onClick={handleSelectDeleteItem}
-                                        value={i?.id}
+                                        value={idx}
                                         sx={{
                                             color: COLORS.placeHolder,
                                             pl: 0,
@@ -348,6 +418,15 @@ export default function AudioLike() {
                     </Button>
                 </DialogActions>
             </Dialog>
+            <Snackbar
+                open={openUnLikeAudioErrorSnackbar}
+                autoHideDuration={6000}
+                onClose={() => { setOpenUnLikeAudioErrorSnackbar(false) }}
+            >
+                <Alert onClose={() => { setOpenUnLikeAudioErrorSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

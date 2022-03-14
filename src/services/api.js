@@ -262,6 +262,10 @@ export default class API {
         return this.init().post(`/audios/${id}/likes`);
     }
 
+    unLikeMultiAudio = (ids) => {
+        return this.init().delete(`/audios/likes`, { audio_ids: ids });
+    }
+
     getChannel = (id) => {
         return this.init().get(`/channels/${id}`);
     }

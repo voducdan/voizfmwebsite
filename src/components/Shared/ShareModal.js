@@ -68,7 +68,13 @@ export default function ShareModal(props) {
         },
         {
             label: 'Messenger',
-            icon: <FacebookMessengerShareButton url={url}><MessengerClassic size={shareIconSize} appId={`${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}`} /></FacebookMessengerShareButton>
+            icon:
+                <FacebookMessengerShareButton
+                    url={url}
+                    appId={`${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}`}
+                >
+                    <MessengerClassic size={shareIconSize} />
+                </FacebookMessengerShareButton>
         },
         {
             label: 'Link',
