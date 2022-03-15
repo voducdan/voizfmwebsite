@@ -1,5 +1,5 @@
 //import react 
-import { useState } from 'react';
+import { useState, useRef } from 'react';
 
 // import MUI components
 import {
@@ -11,11 +11,39 @@ import {
 import SwiperCore, { Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
+// import icons
+import { CarouselPrev, CarouselNext } from '../../components/Icons/index';
 
 // import utils
 import { TEXT_STYLE, COLORS } from '../../utils/constants'
 
 SwiperCore.use([Navigation]);
+
+const SwiperBtnNext = (props) => {
+    const { isSm } = props;
+    return {
+        position: 'absolute',
+        right: '-18px',
+        width: '24px',
+        height: '24px',
+        top: '2px',
+        zIndex: 2,
+        ...(isSm && { display: 'none' })
+    }
+}
+
+const SwiperBtnPrev = (props) => {
+    const { isSm } = props
+    return {
+        position: 'absolute',
+        left: '-18px',
+        width: '24px',
+        height: '24px',
+        top: '2px',
+        zIndex: 2,
+        ...(isSm && { display: 'none' })
+    }
+}
 
 export default function CategoryBar(props) {
     const { parent, categoryList, isSm, onSelectCategory } = props
@@ -29,6 +57,9 @@ export default function CategoryBar(props) {
         ...categoryList
     ]
 
+    const navigationNewContentPrevRef = useRef(null);
+    const navigationNewContentNextRef = useRef(null);
+
     const handleSelectCategory = (e) => {
         const channeId = e.currentTarget.id;
         setActiveCategory(channeId);
@@ -36,8 +67,20 @@ export default function CategoryBar(props) {
     }
 
     return (
-        <Box>
+        <Box
+            sx={{
+                position: 'relative'
+            }}
+        >
             <Swiper
+                navigation={{
+                    prevEl: navigationNewContentPrevRef.current,
+                    nextEl: navigationNewContentNextRef.current
+                }}
+                onBeforeInit={(swiper) => {
+                    swiper.params.navigation.prevEl = navigationNewContentPrevRef.current;
+                    swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
+                }}
                 slidesPerView='auto'
                 spaceBetween={isSm ? 20 : 40}
                 style={{
@@ -91,6 +134,12 @@ export default function CategoryBar(props) {
                     </SwiperSlide>
                 ))}
             </Swiper>
+            <div style={{
+                ...SwiperBtnPrev({ isSm })
+            }} ref={navigationNewContentPrevRef} ><CarouselPrev></CarouselPrev></div>
+            <div style={{
+                ...SwiperBtnNext({ isSm })
+            }} ref={navigationNewContentNextRef} > <CarouselNext></CarouselNext></div>
         </Box>
     )
 }
