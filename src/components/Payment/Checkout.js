@@ -138,7 +138,7 @@ export default function Checkout() {
         try {
             const packageIds = selectedItem.map(i => i.id);
             const payload = {
-                "discount_code": discountCode || null,
+                "discount_code": discountCode || '',
                 "package_type": package_type,
                 "package_id": packageIds,
                 "platform_type": "website",

@@ -85,7 +85,14 @@ export default function Cart() {
             dispatch(setCart([...data]));
             cb(data);
         }
-
+        dispatch(setItems(
+            {
+                selectedItem: [],
+                discountCode: '',
+                totalPrice: 0,
+                finalPrice: 0
+            }
+        ));
         fetchCart(initCheckControl);
     }, []);
 

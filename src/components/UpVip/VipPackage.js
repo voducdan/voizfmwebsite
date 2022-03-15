@@ -49,7 +49,7 @@ const VipPackageBenefitItem = (props) => {
     )
 }
 
-const VipPackageBaper = (props) => {
+const VipPackagePaper = (props) => {
     const { data, idx, bgcolor, elevation, height, isSm, selectedPackage, handleSelectPackage } = props;
     return (
         <Paper
@@ -81,34 +81,79 @@ const VipPackageBaper = (props) => {
                     mt: isSm ? '23px' : '32px'
                 }}
             >{formatPrice(data.price)}đ</Typography>
-            {/* <Typography
+            <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.VZ_Text_content : TEXT_STYLE.h2),
                     color: isSm ? COLORS.white : COLORS.contentIcon,
                     textAlign: 'center',
                     mt: isSm ? '5px' : '16px'
                 }}
-            >{data.name}</Typography> */}
-            {/* <Divider
+            >
+                {
+                    data?.code === 'website_vip_1_month' ? '1 tháng' : data?.code === 'website_vip_3_month' ? '3 tháng' : '1 năm'
+                }
+            </Typography>
+            <Divider
                 sx={{
                     borderColor: COLORS.placeHolder,
                     margin: isSm ? '12px 8px' : '24px 52px'
                 }}
             />
-            <Box
-                sx={{
-                    ...flexStyle('center', 'flex-start'),
-                    flexDirection: 'column',
-                    rowGap: isSm ? '4px' : '9px',
-                    ml: isSm ? '5%' : '10%',
-                    mr: isSm ? '5%' : '10%',
-                    mb: '22px'
-                }}
-            >
-                {data.ui.text_top_description && (< VipPackageBenefitItem isSm={isSm} key={0} benefit={data.ui.text_top_description} idx={0} />)}
-                {data.ui.text_middle_description && (< VipPackageBenefitItem isSm={isSm} key={1} benefit={data.ui.text_middle_description} idx={1} />)}
-                {data.ui.text_bottom_description && (<VipPackageBenefitItem isSm={isSm} key={2} benefit={data.ui.text_bottom_description} idx={2} />)}
-            </Box> */}
+            <Box>
+                {data?.code === 'website_vip_1_month' &&
+                    (
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'flex-start'),
+                                flexDirection: 'column',
+                                rowGap: isSm ? '4px' : '9px',
+                                ml: isSm ? '8px' : '52px',
+                                mr: isSm ? '5%' : '10%',
+                                mb: '22px'
+                            }}
+                        >
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Nghe thoải mái'} idx={0} />
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Được tải về đt'} idx={0} />
+                        </Box>
+                    )
+                }
+                {data?.code === 'website_vip_3_month' &&
+                    (
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'flex-start'),
+                                flexDirection: 'column',
+                                rowGap: isSm ? '4px' : '9px',
+                                ml: isSm ? '8px' : '52px',
+                                mr: isSm ? '5%' : '10%',
+                                mb: '22px'
+                            }}
+                        >
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Nghe thoải mái'} idx={0} />
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Được tải về đt'} idx={0} />
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Tiết kiệm 33%'} idx={2} />
+                        </Box>
+                    )
+                }
+                {data?.code === 'website_vip_12_month' &&
+                    (
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'flex-start'),
+                                flexDirection: 'column',
+                                rowGap: isSm ? '4px' : '9px',
+                                ml: isSm ? '8px' : '52px',
+                                mr: isSm ? '5%' : '10%',
+                                mb: '22px'
+                            }}
+                        >
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Nghe thoải mái'} idx={0} />
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Được tải về đt'} idx={0} />
+                            < VipPackageBenefitItem isSm={isSm} key={0} benefit={'Tiết kiệm 33%'} idx={2} />
+                        </Box>
+                    )
+                }
+            </Box>
         </Paper>
     )
 }
@@ -194,7 +239,7 @@ export default function VipPackage() {
                 >
                     {
                         vipPackages.map((p, idx) => (
-                            <VipPackageBaper
+                            <VipPackagePaper
                                 handleSelectPackage={handleSelectPackage}
                                 isSm={isSm}
                                 key={idx}
