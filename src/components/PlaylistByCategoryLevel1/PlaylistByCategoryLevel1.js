@@ -60,6 +60,7 @@ const Title = (props) => {
 
 const RandomPlayList = (props) => {
     const { data, isSm } = props;
+    const { promotion } = data;
     const height = isSm ? '153px' : '200px';
     return (
         <Box
@@ -72,7 +73,34 @@ const RandomPlayList = (props) => {
             }}
         >
 
-            <img src={data?.avatar?.thumb_url} style={{ width: height, height: height }} />
+            <Box
+                sx={{
+                    position: 'relative',
+                    ...(promotion && {
+                        '&::before': {
+                            content: `'${promotion ? promotion.toUpperCase() : ''}'`,
+                            background: promotion === 'vip' ? '#F68C2D' : '#754ADA',
+                            fontFamily: "'fs-ui-display-medium', 'sans-serif'",
+                            fontWeight: 'bold',
+                            color: promotion === 'vip' ? '#FFFFFF' : '#FFFFFF',
+                            fontStyle: 'italic',
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                            zIndex: 8,
+                            fontSize: isSm ? '12px' : '15px',
+                            borderBottomLeftRadius: isSm ? '30px' : '25px',
+                            padding: ' 4px 0',
+                            border: `1px solid ${promotion === 'vip' ? '#FDB561' : '#A4A4F8'}`,
+                            width: isSm ? '41px' : '57px',
+                            height: isSm ? '18px' : '20px',
+                            textAlign: 'center',
+                        }
+                    })
+                }}
+            >
+                <img src={data?.avatar?.thumb_url} style={{ width: height, height: height }} />
+            </Box>
             <Box
                 sx={{
                     width: `calc(100% - ${height})`,
@@ -244,11 +272,23 @@ function AudioBook({ router }) {
                     p: `0 ${SIDE_PADDING}px`
                 }}
             >
-                <CategoryBarWithoutSwiper categoryList={categories} isSm={isSm} windowWidth={getInnerWidth()} onSelectCategory={onSelectCategory} />
-                <Divider sx={{ borderColor: COLORS.bg2, mt: '24px', mb: '48px' }} />
+                {
+                    categories.length >= 2 && (
+                        <CategoryBarWithoutSwiper categoryList={categories} isSm={isSm} windowWidth={getInnerWidth()} onSelectCategory={onSelectCategory} />
+                    )
+                }
+                {
+                    categories.length >= 2 && (
+                        <Divider sx={{ borderColor: COLORS.bg2, mt: '24px' }} />
+                    )
+                }
                 {
                     (categoryCode === null || categoryCode === '') && (
-                        <Box>
+                        <Box
+                            sx={{
+                                mt: '48px'
+                            }}
+                        >
                             {
                                 initPlaylists.map(i => (
                                     <PlaylistByCategory key={i.name} i={i} isSm={isSm} playlistImgWidth={getPlaylistImgWidth()} />
@@ -260,7 +300,11 @@ function AudioBook({ router }) {
                 {
                     (categoryCode !== null && categoryCode !== '') && (
                         <Box>
-                            <Box>
+                            <Box
+                                sx={{
+                                    mt: '48px'
+                                }}
+                            >
                                 {<Title content={categoryName} isSm={isSm} haveArrow={false} />}
                                 <Box
                                     sx={{

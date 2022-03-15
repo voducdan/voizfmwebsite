@@ -343,7 +343,8 @@ export default function HomeContent() {
                             <Link href={`/authors/${item?.id}`} style={{ textDecoration: 'none' }}>
                                 <Box
                                     sx={{
-                                        textAlign: 'center'
+                                        textAlign: 'center',
+                                        cursor: 'pointer'
                                     }}
                                 >
                                     <Thumbnail style={{ borderRadius: '50%', width: '80%', height: '80%' }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />

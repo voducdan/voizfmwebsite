@@ -455,7 +455,7 @@ export default function Login() {
                                                 color: COLORS.white,
                                                 ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                             }
-                                        }} id="phone-number" placeholder="986754523" variant="outlined" onChange={onPhoneChange} />
+                                        }} id="phone-number" placeholder="987654321" variant="outlined" onChange={onPhoneChange} />
                                 </Box>
                                 <CustomDisabledButton
                                     disabled={!isPhoneValid}

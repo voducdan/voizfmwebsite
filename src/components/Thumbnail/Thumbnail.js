@@ -39,8 +39,7 @@ export default function Thumbnail(props) {
         >
             <img
                 style={{
-                    ...style,
-                    cursor: 'pointer'
+                    ...style
                 }}
                 src={avtSrc}
                 alt={alt}
