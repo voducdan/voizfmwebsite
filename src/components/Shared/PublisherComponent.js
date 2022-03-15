@@ -34,6 +34,7 @@ const SwiperBtnNext = (props) => {
         top: '50%',
         transform: 'translate(-40px, 70%)',
         zIndex: 2,
+        cursor: 'pointer',
         ...(isSm && { display: 'none' })
     }
 }
@@ -48,6 +49,7 @@ const SwiperBtnPrev = (props) => {
         top: '50%',
         transform: 'translate(28px, 70%)',
         zIndex: 2,
+        cursor: 'pointer',
         ...(isSm && { display: 'none' })
     }
 }

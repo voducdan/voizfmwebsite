@@ -28,6 +28,7 @@ const SwiperBtnNext = (props) => {
         height: '24px',
         top: '2px',
         zIndex: 2,
+        cursor: 'pointer',
         ...(isSm && { display: 'none' })
     }
 }
@@ -41,6 +42,7 @@ const SwiperBtnPrev = (props) => {
         height: '24px',
         top: '2px',
         zIndex: 2,
+        cursor: 'pointer',
         ...(isSm && { display: 'none' })
     }
 }

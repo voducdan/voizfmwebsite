@@ -25,6 +25,7 @@ const SwiperBtnNext = (props) => {
         position: 'absolute',
         transform: 'translateX(10px)',
         zIndex: 2,
+        cursor: 'pointer',
         ...(isSm && { display: 'none' })
     }
 }
@@ -36,6 +37,7 @@ const SwiperBtnPrev = (props) => {
         left: 0,
         transform: 'translateX(-15px)',
         zIndex: 2,
+        cursor: 'pointer',
         ...(isSm && { display: 'none' })
     }
 }
