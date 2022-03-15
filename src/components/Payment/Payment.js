@@ -46,6 +46,9 @@ const PaymentUI = (props) => {
     const navigate = useRouter();
     const [countDountStr, setCountDountStr] = useState('');
     const [isExpiry, setIsExpiry] = useState(false);
+    const [isPaymentFinish, setIsPaymentFinish] = useState(false);
+    const [paymentStatus, setPaymentStatus] = useState(null);
+    const [paymentStatusMessage, setPaymentStatusMessage] = useState('');
 
     const countDownExpireTime = (expireTime) => {
         const x = setInterval(function () {
@@ -67,16 +70,44 @@ const PaymentUI = (props) => {
 
     const checkBillingStatus = async () => {
         const params = {
-            request_id: paymentInfo.request_id,
-            reference_id: paymentInfo.payment_reference_id,
-            transaction_type: 13,
-            merchant_ext_id: paymentInfo.merchant_ext_id,
-            store_ext_id: paymentInfo.store_ext_id,
-            amount: paymentInfo.amount,
-            platform_type: paymentInfo.platform_type
+            payment_reference_id: paymentInfo.payment_reference_id
         }
-        const res = await api.checkBillingStatus(params);
-        const data = await res.data;
+        try {
+            const res = await api.checkBillingStatus(params);
+            const data = await res.data.data;
+            if (data.status === 1 || data.status === 3) {
+                setIsPaymentFinish(true);
+                setPaymentStatusMessage('Thanh toán thành công!');
+                setPaymentStatus(data.status);
+                return;
+            }
+            if (data.status === 6) {
+                setIsPaymentFinish(true);
+                setPaymentStatusMessage('Thanh toán không thành công, vui lòng thử lại!');
+                setPaymentStatus(data.status);
+                return;
+            }
+            if (data.status === 5 || data.status === 2) {
+                await new Promise(resolve => setTimeout(resolve, 5000));
+                await checkBillingStatus();
+            }
+        }
+        catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${key} ${value} \n`
+                }
+                setIsPaymentFinish(true);
+                setPaymentStatusMessage(errMessage);
+                return;
+            }
+            etIsPaymentFinish(true);
+            setPaymentStatusMessage(errList);
+        }
     }
 
     useEffect(() => {
@@ -86,6 +117,17 @@ const PaymentUI = (props) => {
 
     const handleExpireTime = () => {
         navigate.push('/checkout');
+    }
+
+    const handleFinishPayment = () => {
+        if (paymentStatus === 1 || paymentStatus === 3) {
+            setIsPaymentFinish(false);
+            navigate.push('/');
+        }
+        if (paymentStatus === 6) {
+            setIsPaymentFinish(false);
+            navigate.push('/checkout');
+        }
     }
 
     switch (method) {
@@ -175,6 +217,37 @@ const PaymentUI = (props) => {
                     <Box>
                         <img src={paymentInfo?.url || ''} alt="qrcode" />
                     </Box>
+                    <Dialog
+                        open={isPaymentFinish}
+                        onClose={() => { setIsPaymentFinish(false) }}
+                        PaperProps={{
+                            style: {
+                                backgroundColor: COLORS.bg1
+                            }
+                        }}
+                    >
+                        <DialogContent>
+                            <DialogContentText
+                                sx={{
+                                    color: COLORS.white
+                                }}
+                            >
+                                {paymentStatusMessage}
+                            </DialogContentText>
+                        </DialogContent>
+                        <DialogActions
+                            sx={{
+                                ...flexStyle('center', 'center'),
+                                'whiteSpace': 'pre-line'
+                            }}
+                        >
+                            <Button
+                                onClick={handleFinishPayment}
+                                autoFocus>
+                                Đóng
+                            </Button>
+                        </DialogActions>
+                    </Dialog>
                     <Dialog
                         open={isExpiry}
                         onClose={() => { setIsExpiry(false) }}

@@ -349,7 +349,7 @@ export default class API {
     }
 
     checkBillingStatus = (data) => {
-        return this.init().post(`/payment/shopee/checking`, data);
+        return this.init().post(`/web/payment/shopee/checking`, data);
     }
 
     loginGoogle = (data) => {

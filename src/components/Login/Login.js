@@ -287,9 +287,20 @@ export default function Login() {
             setIsGoogle(true);
         }
         catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setHasError(true);
+                setError(errMessage);
+                return;
+            }
             setHasError(true);
-            setError('Đã xảy ra lỗi khi đăng nhập bằng google, vui lòng thử lại sau!');
-            return;
+            setError(errList);
         }
     }
 
@@ -482,7 +493,8 @@ export default function Login() {
                                 <GoogleLogin
                                     render={renderProps => (
                                         <Button
-                                            onClick={renderProps.onClick} disabled={renderProps.disabled}
+                                            onClick={renderProps.onClick}
+                                            disabled={renderProps.disabled}
                                             sx={{
                                                 textTransform: 'none',
                                                 height: '48px'
