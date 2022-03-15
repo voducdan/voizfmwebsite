@@ -128,16 +128,10 @@ export default function VipPackage() {
         async function fetchVipPackages() {
             try {
                 const res = await api.getVipPackage();
-                const data = await res.data;
-                if (data.error) {
-                    // handle error, maybe redirect to error page
-                    console.log(data.data);
-                    return;
-                }
-                setVipPackages(data.data);
+                const data = await res.data.data;
+                setVipPackages(data);
             }
             catch (err) {
-                // handle error, maybe redirect to error page
                 console.log(err);
             }
         }
