@@ -12,6 +12,7 @@ import {
     Tooltip,
     IconButton
 } from "@mui/material";
+import CloseIcon from '@mui/icons-material/Close';
 
 // import react QRcode
 import QRCode from 'qrcode.react';
@@ -126,7 +127,19 @@ export default function ShareModal(props) {
                     margin: 0
                 }
             }}>
-
+            <IconButton
+                aria-label="close"
+                onClick={handleClose}
+                sx={{
+                    position: 'absolute',
+                    right: 8,
+                    top: 0,
+                    color: COLORS.white,
+                    bgcolor: COLORS.bg2
+                }}
+            >
+                <CloseIcon />
+            </IconButton>
             <Box
                 sx={{
                     ...flexStyle('center', 'center'),
@@ -184,6 +197,18 @@ export default function ShareModal(props) {
                 open={openQRcodeDialog}
                 onClose={handleCloseQRCodeDialog}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={handleCloseQRCodeDialog}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 0,
+                        color: COLORS.bg2
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <DialogTitle >
                     QR code
                 </DialogTitle>

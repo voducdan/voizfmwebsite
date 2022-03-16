@@ -246,7 +246,7 @@ function AudioBook({ router }) {
     const onSelectCategory = (categoryCode) => {
         if (categoryCode !== null && categoryCode !== '') {
             const category = categories.filter(i => i.code === categoryCode)[0];
-            const categoryName = !!category.sub_name ? category.sub_name : category.name
+            const categoryName = !!category.sub_name ? category.sub_name : category.name;
             setCategoryName(categoryName);
         }
         setCategoryCode(categoryCode);
@@ -275,6 +275,11 @@ function AudioBook({ router }) {
                 {
                     categories.length >= 2 && (
                         <CategoryBarWithoutSwiper categoryList={categories} isSm={isSm} windowWidth={getInnerWidth()} onSelectCategory={onSelectCategory} />
+                    )
+                }
+                {
+                    (categories.length === 1 && initPlaylists.length === 0) && (
+                        <Title content={categories[0]?.name} isSm={isSm} haveArrow={false} />
                     )
                 }
                 {

@@ -233,7 +233,8 @@ export default function AudioPlay({ audio }) {
                                     height: '48px',
                                     border: `1px solid ${COLORS.blackStroker}`,
                                     borderRadius: '6px',
-                                    marginTop: '40px'
+                                    marginTop: '40px',
+                                    cursor: 'text'
                                 }}
                                 variant="outlined"
                                 endIcon={<GraphicEqIcon />}

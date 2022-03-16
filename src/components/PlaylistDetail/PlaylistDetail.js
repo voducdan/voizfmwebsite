@@ -13,6 +13,8 @@ import { useSelector, useDispatch } from 'react-redux';
 // import reducer, actions
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
 import { setAudioUrl } from '../../redux/playAudio';
+import { selectUser } from '../../redux/user';
+import { setOpenLogin } from '../../redux/openLogin';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
@@ -97,6 +99,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const windowSize = useWindowSize();
     const router = useRouter();
     const cart = useSelector(selectCart);
+    const user = useSelector(selectUser);
     const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
@@ -134,7 +137,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         async function fetchRecommendedPlaylist() {
             const res = await api.getPlaylistAnalyses();
             const data = res.data.data;
-            setRecommendedPlaylist(data);
+            setRecommendedPlaylist(data.slice(0, 6));
         }
 
         async function fetchPlaylistAudios() {
@@ -196,6 +199,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setPlaylist({ ...playlistToBookmark })
             }
             catch (err) {
+                const { status } = err.response;
+                if (status === 401) {
+                    dispatch(setOpenLogin(true));
+                    return;
+                }
                 const errList = err.response.data.error;
                 if (errList instanceof Object) {
                     let errMessage = '';
@@ -261,10 +269,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
                             {
                                 playlist?.sale_coin_price < playlist?.coin_price && (
-                                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.sale_coin_price)}</Typography>
+                                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.sale_coin_price * 100)}đ</Typography>
                                 )
                             }
-                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price)}</Typography>
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price * 100)}đ</Typography>
                         </Box>
 
                 },
@@ -353,6 +361,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 dispatch(setAddToCartFlag(1));
             }
             catch (err) {
+                const { status } = err.response;
+                if (status === 401) {
+                    dispatch(setOpenLogin(true));
+                    return;
+                }
                 const errList = err.response.data.error;
                 if (errList instanceof Object) {
                     let errMessage = '';
@@ -385,6 +398,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const handlePlayAudio = async (audioId) => {
         try {
+            if (playlist.promotion === 'vip' && (!user || user?.promotion === 'free')) {
+                setErrorMessage('Vui lòng đăng nhập tài khoản VIP \n hoặc nâng cấp tài khoản để được nghe!');
+                setOpenSnackbar(true);
+                return;
+            }
             const res = await api.getAudioFile(audioId);
             const data = await res.data;
             dispatch(setAudioUrl(data.data.url));
@@ -414,6 +432,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             return;
         }
         try {
+            if (playlist.promotion === 'vip' && (!user || user?.promotion === 'free')) {
+                setErrorMessage('Vui lòng đăng nhập tài khoản VIP \n hoặc nâng cấp tài khoản để được nghe!');
+                setOpenSnackbar(true);
+                return;
+            }
             const res = await api.getAudioFile(playlistAudios[0].id);
             const data = await res.data;
             dispatch(setAudioUrl(data.url));
@@ -507,7 +530,28 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                     sx={{
                                         width: isSm ? '40%' : '30%',
                                         minWidth: isSm ? '136px' : '250px',
-                                        transform: 'translateY(-50%)'
+                                        transform: 'translateY(-50%)',
+                                        ...(playlist?.promotion && {
+                                            '&::before': {
+                                                content: `'${playlist?.promotion ? playlist?.promotion.toUpperCase() : ''}'`,
+                                                background: playlist?.promotion === 'vip' ? '#F68C2D' : '#754ADA',
+                                                fontFamily: "'fs-ui-display-medium', 'sans-serif'",
+                                                fontWeight: 'bold',
+                                                color: playlist?.promotion === 'vip' ? '#FFFFFF' : '#FFFFFF',
+                                                fontStyle: 'italic',
+                                                position: 'absolute',
+                                                right: 0,
+                                                top: 0,
+                                                zIndex: 8,
+                                                fontSize: isSm ? '12px' : '15px',
+                                                borderBottomLeftRadius: isSm ? '30px' : '25px',
+                                                padding: ' 4px 0',
+                                                border: `1px solid ${playlist?.promotion === 'vip' ? '#FDB561' : '#A4A4F8'}`,
+                                                width: isSm ? '41px' : '57px',
+                                                height: isSm ? '18px' : '20px',
+                                                textAlign: 'center',
+                                            }
+                                        })
                                     }}
                                 >
                                     <Avatar

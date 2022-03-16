@@ -19,6 +19,7 @@ import {
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FavoriteIcon from '@mui/icons-material/Favorite';
+import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 // import others components
@@ -223,12 +224,26 @@ export default function PlayBar() {
                             Tác giả: {audioData?.playlist?.author_string}
                         </Typography>
                     </Box>
-                    <FavoriteIcon
-                        onClick={handleLikeAudio}
-                        sx={{
-                            color: isLiked ? COLORS.main : COLORS.contentIcon
-                        }}
-                    />
+                    {
+                        isLiked && (
+                            <FavoriteIcon
+                                onClick={handleLikeAudio}
+                                sx={{
+                                    color: COLORS.main
+                                }}
+                            />
+                        )
+                    }
+                    {
+                        !isLiked && (
+                            <FavoriteBorderIcon
+                                sx={{
+                                    color: COLORS.contentIcon
+                                }}
+                                onClick={handleLikeAudio}
+                            />
+                        )
+                    }
                 </Box>
             </Box>
             {isSm && (<Divider sx={{ borderColor: COLORS.blackStroker, margin: '5px 0', width: '100%', borderWidth: '1px' }} />)}

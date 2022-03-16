@@ -177,8 +177,8 @@ export default function PlaylistRanking() {
                         fontFamily: 'Work Sans',
                         fontStyle: 'normal',
                         fontWeight: 'bold',
-                        fontSize: '48px',
-                        lineHeight: '72px',
+                        fontSize: isSm ? '34px' : '48px',
+                        lineHeight: isSm ? '40px' : '72px',
                         color: COLORS.white,
                         zIndex: 2
                     }}
@@ -293,13 +293,13 @@ export default function PlaylistRanking() {
                                     ...flexStyle('flex-start', 'center'),
                                     columnGap: '22px',
                                     bgcolor: COLORS.bg2,
-                                    mt: '40px',
+                                    mt: isSm ? '16px' : '24px',
                                     borderRadius: '6px'
                                 }}
                             >
                                 <Box
                                     sx={{
-                                        width: '15%',
+                                        width: isSm ? '57px' : '94px',
                                         height: '100%',
                                         bgcolor: COLORS.bg3,
                                         ...flexStyle('center', 'center'),
@@ -316,14 +316,16 @@ export default function PlaylistRanking() {
                                 </Box>
                                 <Link
                                     href={`/playlists/${i?.id}`}
-                                    style={{ textDecoration: 'none', width: 'calc(85% - 22px)' }}
+                                    style={{ textDecoration: 'none' }}
                                 >
                                     <Box
                                         sx={{
                                             ...flexStyle('flex-start', 'center'),
                                             columnGap: '24px',
                                             p: '8px 0',
-                                            boxSizing: 'border-box'
+                                            boxSizing: 'border-box',
+                                            width: isSm ? 'calc(100% - 57px)' : 'calc(100% - 94px)',
+                                            cursor: 'pointer'
                                         }}
                                     >
                                         <Box>
@@ -337,6 +339,9 @@ export default function PlaylistRanking() {
                                             />
                                         </Box>
                                         <Box
+                                            sx={{
+                                                pr: '22px'
+                                            }}
                                         >
                                             <Typography
                                                 sx={{

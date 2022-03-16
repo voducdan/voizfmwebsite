@@ -58,6 +58,7 @@ export default function AudioList(props) {
             sx={{
                 '& .MuiPopover-paper': {
                     bgcolor: COLORS.bg2,
+                    minWidth: isSm ? '90%' : '632px',
                     maxHeight: isSm ? '70%' : 'calc(100% - 210px)'
                 }
             }}
