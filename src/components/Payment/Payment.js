@@ -49,6 +49,13 @@ const PaymentUI = (props) => {
     const [isPaymentFinish, setIsPaymentFinish] = useState(false);
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [paymentStatusMessage, setPaymentStatusMessage] = useState('');
+    const [paymentInfoFromStorage, setPaymentInfoFromStorage] = useState({});
+
+    useEffect(() => {
+        if (paymentInfo) {
+            setPaymentInfoFromStorage(paymentInfo);
+        }
+    }, [paymentInfo]);
 
     const countDownExpireTime = (expireTime) => {
         const x = setInterval(function () {
@@ -68,9 +75,9 @@ const PaymentUI = (props) => {
         })
     }
 
-    const checkBillingStatus = async () => {
+    const checkBillingStatus = async (payment_reference_id) => {
         const params = {
-            payment_reference_id: paymentInfo.payment_reference_id
+            payment_reference_id: payment_reference_id
         }
         try {
             const res = await api.checkBillingStatus(params);
@@ -79,17 +86,19 @@ const PaymentUI = (props) => {
                 setIsPaymentFinish(true);
                 setPaymentStatusMessage('Thanh toán thành công!');
                 setPaymentStatus(data.status);
+                localStorage.removeItem('paymentData');
                 return;
             }
             if (data.status === 6) {
                 setIsPaymentFinish(true);
                 setPaymentStatusMessage('Thanh toán không thành công, vui lòng thử lại!');
                 setPaymentStatus(data.status);
+                localStorage.removeItem('paymentData');
                 return;
             }
             if (data.status === 5 || data.status === 2) {
                 await new Promise(resolve => setTimeout(resolve, 5000));
-                await checkBillingStatus();
+                await checkBillingStatus(payment_reference_id);
             }
         }
         catch (err) {
@@ -111,8 +120,20 @@ const PaymentUI = (props) => {
     }
 
     useEffect(() => {
-        countDownExpireTime(paymentInfo?.expiry_time);
-        checkBillingStatus();
+        if (paymentInfo) {
+            countDownExpireTime(paymentInfo.expiry_time);
+            checkBillingStatus(paymentInfo.payment_reference_id);
+            return;
+        }
+        const paymentData = localStorage.getItem('paymentData');
+        if (paymentData) {
+            const paymentDataObj = JSON.parse(paymentData);
+            setPaymentInfoFromStorage(paymentDataObj);
+            countDownExpireTime(paymentDataObj.expiry_time);
+            checkBillingStatus(paymentDataObj.payment_reference_id);
+            return;
+        }
+        navigate.push('/checkout');
     }, []);
 
     const handleExpireTime = () => {
@@ -123,11 +144,14 @@ const PaymentUI = (props) => {
         if (paymentStatus === 1 || paymentStatus === 3) {
             setIsPaymentFinish(false);
             navigate.push('/');
+            return;
         }
         if (paymentStatus === 6) {
             setIsPaymentFinish(false);
             navigate.push('/checkout');
+            return;
         }
+        setIsPaymentFinish(false);
     }
 
     switch (method) {
@@ -135,10 +159,10 @@ const PaymentUI = (props) => {
             return (
                 <Box
                     sx={{
-                        ...flexStyle('left', 'center')
+                        ...flexStyle('center', 'center')
                     }}
                 >
-                    <Box>
+                    <Box >
                         <TableContainer>
                             <Table aria-label="simple table">
                                 <TableBody>
@@ -153,7 +177,7 @@ const PaymentUI = (props) => {
                                         </TableCell>
                                         <TableCell
                                             sx={tblTextStyle}
-                                        >{paymentInfo?.additional_info}</TableCell>
+                                        >{Object.keys(paymentInfoFromStorage).length > 0 ? JSON.parse(paymentInfoFromStorage?.additional_info)['field1'] : ''}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -166,7 +190,7 @@ const PaymentUI = (props) => {
                                         </TableCell>
                                         <TableCell
                                             sx={tblTextStyle}
-                                        >{formatPrice(paymentInfo?.amount)}</TableCell>
+                                        >{formatPrice(paymentInfoFromStorage?.amount)}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -179,7 +203,7 @@ const PaymentUI = (props) => {
                                         </TableCell>
                                         <TableCell
                                             sx={tblTextStyle}
-                                        >{paymentInfo?.currency}</TableCell>
+                                        >{paymentInfoFromStorage?.currency}</TableCell>
                                     </TableRow>
                                     <TableRow
                                         sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
@@ -208,14 +232,14 @@ const PaymentUI = (props) => {
                                         </TableCell>
                                         <TableCell
                                             sx={tblTextStyle}
-                                        >{paymentInfo?.payment_reference_id}</TableCell>
+                                        >{paymentInfoFromStorage?.payment_reference_id}</TableCell>
                                     </TableRow>
                                 </TableBody>
                             </Table>
                         </TableContainer>
                     </Box>
                     <Box>
-                        <img src={paymentInfo?.url || ''} alt="qrcode" />
+                        <img src={paymentInfoFromStorage?.url || ''} alt="qrcode" />
                     </Box>
                     <Dialog
                         open={isPaymentFinish}

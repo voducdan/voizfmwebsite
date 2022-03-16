@@ -154,6 +154,8 @@ export default function Checkout() {
             const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
             dispatch(setCart([...remainedItems]));
             dispatch(setPaymentInfo({ ...data.data }));
+            // save to local storage
+            localStorage.setItem('paymentData', JSON.stringify(data.data));
             if (['momo', 'appota', 'vnpay'].includes(paymentMethod)) {
                 window.location = data.data.url;
                 return;

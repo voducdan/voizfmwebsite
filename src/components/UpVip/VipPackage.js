@@ -191,7 +191,7 @@ export default function VipPackage() {
     const handleRegisterVip = () => {
         const paymentData = {
             selectedItem: [{
-                id: vipPackages[selectedPackage]['code'],
+                id: vipPackages[selectedPackage]['id'],
                 name: vipPackages[selectedPackage]['name']
             }],
             discountCode: vipPackages[selectedPackage]['sale_code'] || null,
