@@ -24,6 +24,7 @@ const PanelContent = (props) => {
             sx={{
                 ...flexStyle('center', 'flex-start'),
                 flexDirection: 'column',
+                borderRadius: '10px',
                 backgroundColor: COLORS.bg2,
                 rowGap: isSm ? '24px' : '32px',
                 padding: isSm ? '16px' : '32px'

@@ -1,7 +1,8 @@
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // import others component
 import TabPanel from '../../../components/TabPanel/TabPanel';
+import CustomDisabledButton from '../../../components/CustomDisabledButton/CustomDisabledButton';
 
 // import mui components
 import {
@@ -58,8 +59,12 @@ const PanelContent = (props) => {
     const { isSm } = props;
     const [userInfo, setUserInfo] = useState({});
     const [hasError, setHasError] = useState(false);
+    const [isFormValid, setIsFormValid] = useState(false);
     const [error, setError] = useState('');
 
+    useEffect(() => {
+        validateForm();
+    }, [userInfo]);
 
     const handleChangeCreatorInfo = (e) => {
         const name = e.target.name;
@@ -103,14 +108,26 @@ const PanelContent = (props) => {
         setError('');
     }
 
+    const validateForm = () => {
+        for (let i of Object.keys(userInfo)) {
+            console.log(userInfo[i])
+            if (!userInfo[i]) {
+                setIsFormValid(false);
+                return;
+            }
+        }
+        setIsFormValid(true);
+    }
+
     return (
         <Box
             sx={{
                 ...flexStyle('center', 'flex-start'),
                 flexDirection: 'column',
+                borderRadius: '10px',
                 backgroundColor: COLORS.bg2,
                 rowGap: '32px',
-                padding: isSm ? '16px' : '32px'
+                padding: isSm ? '16px 16px 0 16px' : '32px 32px 0 32px',
             }}>
             <Typography sx={{ ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2), color: COLORS.white }}>Trở thành creator</Typography>
             <Box
@@ -183,19 +200,26 @@ const PanelContent = (props) => {
                         ))
                     }
                 </FormControl>
-                <Button
+            </Box>
+            <Box
+                sx={{
+                    margin: '0 auto',
+                    width: isSm ? '90%' : '400px',
+                }}
+            >
+                <CustomDisabledButton
+                    disabled={!isFormValid}
                     onClick={handleSubmitCreator}
-                    sx={{
+                    style={{
                         textTransform: 'none',
+                        width: '100%',
                         ...TEXT_STYLE.title1,
                         color: COLORS.white,
                         bgcolor: COLORS.main,
-                        width: '400px',
                         height: '48px',
                         borderRadius: '8px',
-                        marginTop: '40px'
-                    }}
-                >Gửi</Button>
+                        marginBottom: '40px'
+                    }} content={'Gửi'} />
             </Box>
             <Dialog
                 open={hasError}

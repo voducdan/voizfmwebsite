@@ -141,8 +141,18 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         }
 
         async function fetchPlaylistAudios() {
+            function compare(a, b) {
+                if (a.position < b.position) {
+                    return -1;
+                }
+                if (a.position > b.position) {
+                    return 1;
+                }
+                return 0;
+            }
             const res = await api.getPlaylistAudios(id);
             const data = res.data.data;
+            data.sort(compare);
             setPlaylistAudios(data);
         }
         if (id) {
@@ -264,6 +274,19 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     value: <InfoValue value={playlist?.voicers.map(i => i.name).join(', ')} />
                 },
                 {
+                    label: <InfoLabel title='Đánh giá' />,
+                    value:
+                        <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{formatRating(playlist?.playlist_counter?.content_avg)}</Typography>
+                            <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
+                                <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
+                            </svg>
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>({playlist?.playlist_counter?.ratings_count})</Typography>
+                        </Box>
+                }
+            ]
+            if (playlist?.promotion !== 'free') {
+                const sellPrice = {
                     label: <InfoLabel title='Giá bán lẻ' />,
                     value:
                         <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
@@ -275,19 +298,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price * 100)}đ</Typography>
                         </Box>
 
-                },
-                {
-                    label: <InfoLabel title='Đánh giá' />,
-                    value:
-                        <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
-                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{Math.round(playlist?.playlist_counter?.content_avg, 2)}</Typography>
-                            <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
-                                <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
-                            </svg>
-                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>({playlist?.playlist_counter?.ratings_count})</Typography>
-                        </Box>
-                }
-            ]
+                };
+                playlistInfo.splice(4, 0, sellPrice);
+            }
             return playlistInfo;
         }
         return []
@@ -402,8 +415,13 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 dispatch(setOpenLogin(true));
                 return;
             }
-            if (playlist.promotion === 'vip' && user && user?.promotion === 'free') {
+            if (playlist.promotion === 'vip' && user?.promotion === 'free') {
                 setErrorMessage('Vui lòng đăng nhập tài khoản VIP \n hoặc nâng cấp tài khoản để được nghe!');
+                setOpenSnackbar(true);
+                return;
+            }
+            if (playlist.promotion === 'coin' && user?.promotion.includes('vip')) {
+                setErrorMessage('Vui lòng mua sách lẻ để được nghe!');
                 setOpenSnackbar(true);
                 return;
             }
@@ -445,6 +463,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setOpenSnackbar(true);
                 return;
             }
+            if (playlist.promotion === 'coin' && user?.promotion.includes('vip')) {
+                setErrorMessage('Vui lòng mua sách lẻ để được nghe!');
+                setOpenSnackbar(true);
+                return;
+            }
             const res = await api.getAudioFile(playlistAudios[0].id);
             const data = await res.data;
             dispatch(setAudioUrl(data.url));
@@ -480,6 +503,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         if (!user) {
             dispatch(setOpenLogin(true));
             return;
+        }
+    }
+
+    const formatRating = (rate) => {
+        try {
+            return Number(rate).toFixed(1);
+        }
+        catch (err) {
+            return 0;
         }
     }
 
@@ -547,24 +579,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         transform: 'translateY(-50%)',
                                         ...(playlist?.promotion && {
                                             '&::before': {
-                                                content: `'${playlist?.promotion ? playlist?.promotion.toUpperCase() : ''}'`,
-                                                background: playlist?.promotion === 'vip' ? '#F68C2D' : '#754ADA',
-                                                fontFamily: "'fs-ui-display-medium', 'sans-serif'",
-                                                fontWeight: 'bold',
-                                                color: playlist?.promotion === 'vip' ? '#FFFFFF' : '#FFFFFF',
-                                                fontStyle: 'italic',
+                                                content: playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
                                                 position: 'absolute',
                                                 right: 0,
                                                 top: 0,
-                                                zIndex: 8,
-                                                fontSize: isSm ? '12px' : '15px',
-                                                borderBottomLeftRadius: isSm ? '30px' : '25px',
-                                                borderTopRightRadius: '8px',
-                                                padding: ' 4px 0',
-                                                border: `1px solid ${playlist?.promotion === 'vip' ? '#FDB561' : '#A4A4F8'}`,
-                                                width: isSm ? '41px' : '57px',
-                                                height: isSm ? '18px' : '20px',
-                                                textAlign: 'center',
+                                                zIndex: 8
                                             }
                                         })
                                     }}
@@ -940,6 +959,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                             width: '96px',
                                                             height: '96px'
                                                         }}
+                                                        promotion={item?.promotion}
                                                         avtSrc={item?.avatar?.thumb_url} alt={item.alt}
                                                     />
                                                 </Box>
@@ -1032,7 +1052,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                 maxHeight: '654px',
                                 overflowY: 'hidden',
                                 ':hover': {
-                                    overflowY: 'scroll'
+                                    overflowY: 'auto'
                                 }
                             }}
                         >
@@ -1058,6 +1078,13 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             }
                                         >
                                             <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                                <Typography
+                                                    sx={{
+                                                        ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                        color: COLORS.white,
+                                                        mr: '14px'
+                                                    }}
+                                                >{value.position}</Typography>
                                                 <ListItemText
                                                     sx={{
                                                         'span': {
@@ -1071,7 +1098,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                             mr: '20px'
                                                         }
                                                     }}
-                                                    id={`label-${value.id}`} primary={value.name} />
+                                                    id={`label-${value.id}`} primary={`${value.name}`} />
                                             </ListItemButton>
                                         </ListItem>
                                     );
@@ -1091,21 +1118,25 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     columnGap: '24px'
                 }}
             >
-                <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
-                    <Button
-                        onClick={handleAddToCart}
-                        sx={{
-                            border: '1px solid rgba(255, 255, 255, 0.1)',
-                            width: isSm ? '50%' : '20%',
-                            borderRadius: '6px',
-                            ...TEXT_STYLE.title1,
-                            color: COLORS.white,
-                            textTransform: 'none',
-                            height: '48px'
-                        }}
-                        variant="outlined"
-                    >Thêm vào giỏ hàng</Button>
-                </Tooltip>
+                {
+                    playlist?.promotion === 'vip' && (
+                        <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
+                            <Button
+                                onClick={handleAddToCart}
+                                sx={{
+                                    border: '1px solid rgba(255, 255, 255, 0.1)',
+                                    width: isSm ? '50%' : '20%',
+                                    borderRadius: '6px',
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    height: '48px'
+                                }}
+                                variant="outlined"
+                            >Thêm vào giỏ hàng</Button>
+                        </Tooltip>
+                    )
+                }
                 <Box
                     onClick={handleUpVip}
                     sx={{

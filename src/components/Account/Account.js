@@ -17,7 +17,8 @@ import {
     Tab,
     Button,
     Menu,
-    MenuItem
+    MenuItem,
+    Popover
 } from '@mui/material';
 
 
@@ -296,16 +297,26 @@ export default function Account() {
                                 >
                                     <HorizontalMore />
                                 </Button>
-                                <Menu
+                                <Popover
                                     sx={{
-                                        '& .MuiMenu-paper': {
+                                        '& .MuiPopover-paper': {
                                             p: '24px',
                                             width: '360px',
-                                            bgcolor: COLORS.bg2
+                                            bgcolor: COLORS.bg2,
+                                            mt: '18px',
+                                            boxSizing: 'border-box'
                                         }
                                     }}
                                     id="account-more"
                                     anchorEl={accAnchorEl}
+                                    anchorOrigin={{
+                                        vertical: 'bottom',
+                                        horizontal: 'right',
+                                    }}
+                                    transformOrigin={{
+                                        vertical: 'top',
+                                        horizontal: 'right',
+                                    }}
                                     open={openMore}
                                     onClose={handleClose}
                                     MenuListProps={{
@@ -314,10 +325,15 @@ export default function Account() {
                                 >
                                     {
                                         PopUpContent.map((item) => (
-                                            <PopUpButton key={item.id} id={item.id} startIcon={item.startIcon} text={item.text} setOpenInviteFriend={setOpenInviteFriend} setValue={setValue} />
+                                            <PopUpButton
+                                                key={item.id} id={item.id}
+                                                startIcon={item.startIcon}
+                                                text={item.text}
+                                                setOpenInviteFriend={setOpenInviteFriend}
+                                                setValue={setValue} />
                                         ))
                                     }
-                                </Menu>
+                                </Popover>
                             </Box>
                         </StyledTabs>
                     </Box>

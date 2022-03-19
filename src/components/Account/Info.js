@@ -87,18 +87,20 @@ export default function Info() {
                             sx={{
                                 ...flexStyle('center', 'flex-start'),
                                 flexDirection: 'column',
-                                rowGap: isSm ? '16px' : '25px'
                             }}
                         >
                             <Typography
                                 sx={{
                                     ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-                                    color: COLORS.white
-                                }}>{`${accountData?.first_name} ${accountData?.last_name}`}</Typography>
+                                    color: COLORS.white,
+                                    mb: isSm ? '16px' : '21px'
+                                }}
+                            >{`${accountData?.first_name} ${accountData?.last_name}`}</Typography>
                             <Box
                                 sx={{
                                     ...flexStyle('flex-start', 'center'),
-                                    columnGap: '18px'
+                                    columnGap: '18px',
+                                    mb: isSm ? '16px' : '15px'
                                 }}
                             >
                                 <Typography

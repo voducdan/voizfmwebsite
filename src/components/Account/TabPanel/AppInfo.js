@@ -16,6 +16,7 @@ const PanelContent = (props) => (
     <Box
         sx={{
             ...flexStyle('center', 'flex-start'),
+            borderRadius: '10px',
             flexDirection: 'column',
             backgroundColor: COLORS.bg2,
             rowGap: '52px',

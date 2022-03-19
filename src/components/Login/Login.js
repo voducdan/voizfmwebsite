@@ -7,7 +7,7 @@ import { useRouter } from 'next/router';
 // import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin';
-import { setToken, removeToken } from '../../redux/token';
+import { setToken } from '../../redux/token';
 
 // import MUI component
 import {

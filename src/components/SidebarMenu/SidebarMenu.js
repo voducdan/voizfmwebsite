@@ -71,7 +71,6 @@ export default function SidebarMenu() {
     const [current, setCurrent] = useState(null);
     const [navigatorLink, setNavigatorLink] = useState([]);
     const [categories, setCategories] = useState([]);
-    const [sidebarHeight, setSidebarHeight] = useState(0);
     const openSidebar = useSelector(selectOpenSidebar);
     const token = useSelector(selectToken);
     const dispatch = useDispatch();
@@ -192,11 +191,6 @@ export default function SidebarMenu() {
         setCategories(categories);
     }, []);
 
-    useEffect(() => {
-        const height = sidebar.current.children[0].clientHeight;
-        setSidebarHeight(height);
-    }, [sidebar]);
-
     const handleClickSidebar = (e) => {
         const id = Number(e.currentTarget.id);
         const allItems = [...navigatorLink, ...categories];
@@ -223,7 +217,7 @@ export default function SidebarMenu() {
                     boxSizing: 'border-box',
                     borderRight: `1px solid ${COLORS.blackStroker}`,
                     ':hover': {
-                        overflowY: sidebarHeight > (windowSize.height - 100) ? 'scroll' : 'hidden'
+                        overflowY: 'auto'
                     }
                 },
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },

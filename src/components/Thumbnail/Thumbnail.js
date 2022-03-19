@@ -16,23 +16,11 @@ export default function Thumbnail(props) {
                 height: '100%',
                 ...(promotion && {
                     '&::before': {
-                        content: `'${promotion ? promotion.toUpperCase() : ''}'`,
-                        background: promotion === 'vip' ? '#F68C2D' : '#754ADA',
-                        fontFamily: "'fs-ui-display-medium', 'sans-serif'",
-                        fontWeight: 'bold',
-                        color: promotion === 'vip' ? '#FFFFFF' : '#FFFFFF',
-                        fontStyle: 'italic',
+                        content: promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
                         position: 'absolute',
                         right: 0,
                         top: 0,
-                        zIndex: 8,
-                        fontSize: isSm ? '12px' : '15px',
-                        borderBottomLeftRadius: isSm ? '30px' : '25px',
-                        padding: ' 4px 0',
-                        border: `1px solid ${promotion === 'vip' ? '#FDB561' : '#A4A4F8'}`,
-                        width: isSm ? '41px' : '57px',
-                        height: isSm ? '18px' : '20px',
-                        textAlign: 'center',
+                        zIndex: 8
                     }
                 })
             }}

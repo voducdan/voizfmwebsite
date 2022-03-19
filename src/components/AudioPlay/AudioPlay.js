@@ -106,8 +106,8 @@ export default function AudioPlay({ audio }) {
             >
                 <Box
                     sx={{
-                        width: '45%',
-                        ...flexStyle('flex-end', 'flex-start')
+                        width: isSm ? '70%' : '45%',
+                        ...(isSm ? flexStyle('center', 'flex-start') : flexStyle('flex-end', 'flex-start'))
                     }}
                 >
                     <Avatar
@@ -116,7 +116,14 @@ export default function AudioPlay({ audio }) {
                             maxHeight: '100%',
                             width: isSm ? '235px' : '335px',
                             height: isSm ? '235px' : '335px',
-                            borderRadius: '15px'
+                            borderRadius: '15px',
+                            '&::before': {
+                                content: audio?.playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
+                                position: 'absolute',
+                                right: 0,
+                                top: 0,
+                                zIndex: 8
+                            }
                         }}
                         variant="rounded"
                         alt="playlist avt"
