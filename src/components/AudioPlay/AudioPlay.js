@@ -84,7 +84,12 @@ export default function AudioPlay({ audio }) {
                     padding: isSm ? '20px 0 32px 0' : '35px 0'
                 }}
             >
-                <Box onClick={handleOpenShareModal}>
+                <Box
+                    sx={{
+                        cursor: 'pointer'
+                    }}
+                    onClick={handleOpenShareModal}
+                >
                     <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
                 </Box>
                 <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
@@ -94,17 +99,32 @@ export default function AudioPlay({ audio }) {
                 sx={{
                     ...(isSm ? flexStyle('center', 'center') : flexStyle('center', 'flex-start')),
                     ...(isSm && { flexDirection: 'column', rowGap: '32px' }),
+                    width: '100%',
                     columnGap: '75px',
-                    width: '100%'
+                    mb: '100px'
                 }}
             >
-                <Box>
-                    <Avatar sx={{ width: isSm ? '235px' : '335px', height: isSm ? '235px' : '335px', borderRadius: '15px' }}
-                        variant="rounded" alt="playlist avt" src={audio?.playlist?.avatar?.original_url} />
+                <Box
+                    sx={{
+                        width: '45%',
+                        ...flexStyle('flex-end', 'flex-start')
+                    }}
+                >
+                    <Avatar
+                        sx={{
+                            maxWidth: '100%',
+                            maxHeight: '100%',
+                            width: isSm ? '235px' : '335px',
+                            height: isSm ? '235px' : '335px',
+                            borderRadius: '15px'
+                        }}
+                        variant="rounded"
+                        alt="playlist avt"
+                        src={audio?.playlist?.avatar?.original_url} />
                 </Box>
                 <Box
                     sx={{
-                        width: '90%'
+                        width: '55%'
                     }}
                 >
                     <Typography

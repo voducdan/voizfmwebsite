@@ -14,7 +14,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
 import { setAudioUrl } from '../../redux/playAudio';
 import { selectUser } from '../../redux/user';
-import { setOpenLogin } from '../../redux/openLogin';
+import openLogin, { setOpenLogin } from '../../redux/openLogin';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
@@ -122,7 +122,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
-    const coverImgHeight = isSm ? 182 : 380;
+    const coverImgHeight = isSm ? 182 : 300;
 
     const dispatch = useDispatch();
 
@@ -280,7 +280,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     label: <InfoLabel title='Đánh giá' />,
                     value:
                         <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '2px' }}>
-                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{playlist?.playlist_counter?.content_avg}</Typography>
+                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content }}>{Math.round(playlist?.playlist_counter?.content_avg, 2)}</Typography>
                             <svg width="14" height="13" viewBox="0 0 14 13" fill="none" xmlns="http://www.w3.org/2000/svg">
                                 <path d="M7 0L8.5716 4.83688H13.6574L9.5429 7.82624L11.1145 12.6631L7 9.67376L2.8855 12.6631L4.4571 7.82624L0.342604 4.83688H5.4284L7 0Z" fill="#754ADA" />
                             </svg>
@@ -398,7 +398,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const handlePlayAudio = async (audioId) => {
         try {
-            if (playlist.promotion === 'vip' && (!user || user?.promotion === 'free')) {
+            if (!user) {
+                dispatch(setOpenLogin(true));
+                return;
+            }
+            if (playlist.promotion === 'vip' && user && user?.promotion === 'free') {
                 setErrorMessage('Vui lòng đăng nhập tài khoản VIP \n hoặc nâng cấp tài khoản để được nghe!');
                 setOpenSnackbar(true);
                 return;
@@ -432,7 +436,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             return;
         }
         try {
-            if (playlist.promotion === 'vip' && (!user || user?.promotion === 'free')) {
+            if (!user) {
+                dispatch(setOpenLogin(true));
+                return;
+            }
+            if (playlist.promotion === 'vip' && user && user?.promotion === 'free') {
                 setErrorMessage('Vui lòng đăng nhập tài khoản VIP \n hoặc nâng cấp tài khoản để được nghe!');
                 setOpenSnackbar(true);
                 return;
@@ -466,6 +474,13 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         const { clientWidth } = leftPane;
         const sidePadding = isSm ? 0 : 32
         return ((clientWidth - sidePadding * 2) / 3) - 3.5;
+    }
+
+    const handleUpVip = () => {
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
     }
 
     return (
@@ -528,8 +543,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             >
                                 <Box
                                     sx={{
-                                        width: isSm ? '40%' : '30%',
-                                        minWidth: isSm ? '136px' : '250px',
+                                        width: isSm ? '136px' : '262px',
                                         transform: 'translateY(-50%)',
                                         ...(playlist?.promotion && {
                                             '&::before': {
@@ -545,6 +559,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                 zIndex: 8,
                                                 fontSize: isSm ? '12px' : '15px',
                                                 borderBottomLeftRadius: isSm ? '30px' : '25px',
+                                                borderTopRightRadius: '8px',
                                                 padding: ' 4px 0',
                                                 border: `1px solid ${playlist?.promotion === 'vip' ? '#FDB561' : '#A4A4F8'}`,
                                                 width: isSm ? '41px' : '57px',
@@ -556,9 +571,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                 >
                                     <Avatar
                                         sx={{
-                                            width: isSm ? '136px' : '250px',
-                                            height: isSm ? '136px' : '250px',
-                                        }} alt="Remy Sharp" src={playlist?.avatar?.thumb_url}
+                                            width: isSm ? '136px' : '262px',
+                                            height: isSm ? '136px' : '262px',
+                                            borderRadius: '8px'
+                                        }} alt="playlist avt" src={playlist?.avatar?.thumb_url}
                                         variant="rounded"
                                     />
                                 </Box>
@@ -584,7 +600,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                     overflow: 'hidden'
                                                 }}>{playlist?.name}
                                             </Typography>
-                                            <Box onClick={handleOpenRateModal}>
+                                            <Box
+                                                sx={{
+                                                    cursor: 'pointer'
+                                                }}
+                                                onClick={handleOpenRateModal}
+                                            >
                                                 <Rating
                                                     sx={{
                                                         columnGap: '24px',
@@ -604,7 +625,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         columnGap: isSm ? '24px' : '35px'
                                     }}
                                 >
-                                    <Box onClick={handleOpenShareModal}>
+                                    <Box
+                                        sx={{
+                                            cursor: 'pointer'
+                                        }}
+                                        onClick={handleOpenShareModal}
+                                    >
                                         <Share bgfill='#373944' stroke='none' fill='white'></Share>
                                     </Box>
                                     <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
@@ -628,7 +654,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white,
                                             borderRadius: '22px',
-                                            height: isSm ? '28px' : '48px',
+                                            height: '48px',
                                             width: 'max-content',
                                             minWidth: 'auto',
                                             whiteSpace: 'nowrap',
@@ -660,7 +686,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             ...flexStyle('center', 'center'),
                                             flexDirection: 'column',
                                             rowGap: isSm ? '16px' : '25px',
-                                            marginTop: '-50px',
+                                            marginTop: '-40px',
                                             width: '70%'
                                         }}
                                     >
@@ -671,7 +697,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             }}>
                                             {playlist?.name}
                                         </Typography>
-                                        <Box onClick={handleOpenRateModal}>
+                                        <Box
+                                            sx={{
+                                                cursor: 'pointer'
+                                            }}
+                                            onClick={handleOpenRateModal}
+                                        >
                                             <Rating
                                                 sx={{
                                                     columnGap: '24px'
@@ -764,7 +795,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     <Box
                         sx={{
                             ...flexStyle('flex-start', 'center'),
-                            columnGap: '20px'
+                            columnGap: '20px',
+                            overflowX: 'hidden'
                         }}
                     >
                         <TableContainer
@@ -785,7 +817,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             <TableCell
                                                 sx={{
                                                     borderBottom: 'none',
-                                                    padding: '0 0 21px 0'
+                                                    padding: '0 10px 16px 0',
+                                                    whiteSpace: 'nowrap',
+
                                                 }}
                                                 component="th" scope="row"
                                             >
@@ -794,7 +828,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             <TableCell
                                                 sx={{
                                                     borderBottom: 'none',
-                                                    padding: '0 0 21px 0',
+                                                    padding: '0 0 16px 10px',
                                                     textAlign: 'left'
                                                 }}
                                                 align="right"
@@ -839,7 +873,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     <Box>
                         <Typography
                             sx={{
-                                ...TEXT_STYLE.title2,
+                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
                                 color: COLORS.white,
                                 marginBottom: '15px',
                                 marginTop: isSm ? '26px' : '16px'
@@ -870,9 +904,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                     <Thumbnail
                                                         style={{
                                                             width: '100%',
-                                                            height: `${getImgWidth()}px`
+                                                            height: `${getImgWidth()}px`,
+                                                            cursor: 'pointer'
                                                         }}
-                                                        avtSrc={item?.avatar?.thumb_url} alt={item.alt}
+                                                        avtSrc={item?.avatar?.thumb_url}
+                                                        promotion={item?.promotion}
+                                                        alt={item.alt}
                                                     />
                                                 </Box>
                                             </Link>
@@ -883,7 +920,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         }
                         {
                             isSm && (
-                                <Swiper slidesPerView='auto' spaceBetween={10} >
+                                <Swiper
+                                    style={{
+                                        marginBottom: '33px'
+                                    }}
+                                    slidesPerView='auto'
+                                    spaceBetween={10} >
                                     {recommendedPlaylist.map((item, idx) => (
                                         <SwiperSlide key={idx} style={{ width: 'auto' }}>
                                             <Link
@@ -960,7 +1002,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                 textTransform: 'none',
                                                 height: '48px'
                                             }}
-                                            startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                                            startIcon={paused ? <VolumeUpIcon sx={{ color: COLORS.white }} /> : <VolumeMuteIcon sx={{ color: COLORS.white }} />}
                                             onClick={onPlayClick}
                                         >Nghe thử</Button>
                                     )
@@ -974,7 +1016,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             width: '100%',
                             padding: isSm ? '26px 15px 0 15px' : '26px 32px 0 26px',
                             boxSizing: 'border-box',
-                            borderRadius: '10px'
+                            borderRadius: '10px',
+                            mb: '22px'
                         }}
                     >
                         <Typography
@@ -984,7 +1027,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                 marginBottom: isSm ? '26px' : '32px'
                             }}
                         >Danh sách audios</Typography>
-                        <Box>
+                        <Box
+                            sx={{
+                                maxHeight: '654px',
+                                overflowY: 'hidden',
+                                ':hover': {
+                                    overflowY: 'scroll'
+                                }
+                            }}
+                        >
                             <List sx={{ width: '100%' }}>
                                 {playlistAudios.map((value, idx) => {
                                     return (
@@ -993,7 +1044,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             onClick={() => { handlePlayAudio(value?.id) }}
                                             sx={{
                                                 paddingLeft: 0,
-                                                paddingRight: '20px',
+                                                paddingRight: '0',
                                                 borderTop: `.5px solid ${COLORS.placeHolder}`,
                                                 height: '72px'
                                             }}
@@ -1016,7 +1067,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                             textOverflow: 'ellipsis',
                                                             WebkitLineClamp: 2,
                                                             WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden'
+                                                            overflow: 'hidden',
+                                                            mr: '20px'
                                                         }
                                                     }}
                                                     id={`label-${value.id}`} primary={value.name} />
@@ -1054,28 +1106,24 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         variant="outlined"
                     >Thêm vào giỏ hàng</Button>
                 </Tooltip>
-                <Link
-                    href='/up-vip/'
-
+                <Box
+                    onClick={handleUpVip}
+                    sx={{
+                        width: isSm ? '50%' : '20%',
+                    }}
                 >
-                    <Box
+                    <Button
                         sx={{
-                            width: isSm ? '50%' : '20%',
+                            bgcolor: COLORS.main,
+                            borderRadius: '6px',
+                            width: '100%',
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            height: '48px'
                         }}
-                    >
-                        <Button
-                            sx={{
-                                bgcolor: COLORS.main,
-                                borderRadius: '6px',
-                                width: '100%',
-                                ...TEXT_STYLE.title1,
-                                color: COLORS.white,
-                                textTransform: 'none',
-                                height: '48px'
-                            }}
-                        >Mua gói VIP</Button>
-                    </Box>
-                </Link>
+                    >Mua gói VIP</Button>
+                </Box>
             </Box>
             <Dialog
                 open={playAudioError}

@@ -3,5 +3,8 @@
     font-size: 14px;
     line-height: 20px;
     font-weight: 500;
-    font-family: 'SF UI Display'
+    font-family: 'SF UI Display';
 }
+.truncated-text .my-anchor-css-class {
+     text-decoration: none;
+ }

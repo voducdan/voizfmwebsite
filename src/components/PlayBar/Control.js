@@ -229,7 +229,8 @@ export default function Control(props) {
                     <Box
                         onClick={handleLoopAudio}
                         sx={{
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            cursor: 'pointer'
                         }}
                     >
                         <Loop
@@ -283,7 +284,8 @@ export default function Control(props) {
                     <Box
                         onClick={handleTimerClick}
                         sx={{
-                            textAlign: 'center'
+                            textAlign: 'center',
+                            cursor: 'pointer'
                         }}
                     >
                         <Clock fill={COLORS.bg4} bgcolor='none' />

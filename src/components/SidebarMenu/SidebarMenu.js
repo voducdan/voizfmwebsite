@@ -1,5 +1,5 @@
 // import react 
-import { useState, useEffect } from 'react';
+import { useState, useEffect, useRef } from 'react';
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
@@ -67,14 +67,16 @@ export default function SidebarMenu() {
     const windowSize = useWindowSize();
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const navigate = useRouter();
+    const sidebar = useRef(null);
     const [current, setCurrent] = useState(null);
     const [navigatorLink, setNavigatorLink] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [sidebarHeight, setSidebarHeight] = useState(0);
     const openSidebar = useSelector(selectOpenSidebar);
     const token = useSelector(selectToken);
     const dispatch = useDispatch();
 
-    let open = !isSm ? true : openSidebar
+    let open = openSidebar
 
     useEffect(() => {
         let navigatorLink = [];
@@ -188,7 +190,12 @@ export default function SidebarMenu() {
         ];
         setNavigatorLink(navigatorLink);
         setCategories(categories);
-    }, [])
+    }, []);
+
+    useEffect(() => {
+        const height = sidebar.current.children[0].clientHeight;
+        setSidebarHeight(height);
+    }, [sidebar]);
 
     const handleClickSidebar = (e) => {
         const id = Number(e.currentTarget.id);
@@ -212,8 +219,12 @@ export default function SidebarMenu() {
                     top: { sm: 0, xs: HEADER_HEIGHT_MB },
                     paddingBottom: { sm: 0, xs: HEADER_HEIGHT },
                     overflowX: 'hidden',
+                    overflowY: 'hidden',
                     boxSizing: 'border-box',
-                    borderRight: `1px solid ${COLORS.blackStroker}`
+                    borderRight: `1px solid ${COLORS.blackStroker}`,
+                    ':hover': {
+                        overflowY: sidebarHeight > (windowSize.height - 100) ? 'scroll' : 'hidden'
+                    }
                 },
                 width: { sm: DRAWER_WIDTH, xs: '100vw' },
                 ...(!open && { display: 'none' }),
@@ -221,6 +232,7 @@ export default function SidebarMenu() {
             variant="persistent"
             anchor="left"
             open={open}
+            ref={sidebar}
         >
             <div style={{ display: 'block' }}>
                 <Link

@@ -92,7 +92,7 @@ export default function HomeCarousel() {
                         style={{
                             ...(idx !== current && { display: 'none' }),
                             objectFit: 'fill',
-                            width: `100%`,
+                            width: '100%',
                             position: 'absolute',
                             height: '100%',
                             left: 0
