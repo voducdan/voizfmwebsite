@@ -95,7 +95,7 @@ export default function ShareModal(props) {
                         cursor: 'pointer'
                     }}
                     onClick={() => {
-			FB.ui({
+                        FB.ui({
                             method: 'send',
                             link: url
                         });
