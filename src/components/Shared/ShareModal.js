@@ -1,5 +1,5 @@
 // import react
-import { useState } from "react";
+import { useState, useEffect } from "react";
 
 // import MUI components
 import {
@@ -37,6 +37,26 @@ export default function ShareModal(props) {
     const [openCopyLinkTooltop, setOpenCopyLinkTooltop] = useState(false);
     const [openQRcodeDialog, setOpenQRcodeDialog] = useState(false);
     const [tooltipTitle, setTooltipTitle] = useState('Sao chép link thành công!');
+
+    useEffect(() => {
+        window.fbAsyncInit = function () {
+            FB.init({
+                appId: process.env.NEXT_PUBLIC_FACEBOOK_APP_ID,
+                autoLogAppEvents: true,
+                xfbml: true,
+                version: 'v13.0'
+            });
+        };
+        // load facebook sdk script
+        (function (d, s, id) {
+            var js, fjs = d.getElementsByTagName(s)[0];
+            if (d.getElementById(id)) { return; }
+            js = d.createElement(s); js.id = id;
+            js.src = "https://connect.facebook.net/en_US/sdk.js";
+            fjs.parentNode.insertBefore(js, fjs);
+        }(document, 'script', 'facebook-jssdk'));
+    }, []);
+
     const handleClose = () => {
         setOpen(false)
     }
@@ -70,12 +90,19 @@ export default function ShareModal(props) {
         {
             label: 'Messenger',
             icon:
-                <FacebookMessengerShareButton
-                    url={url}
-                    appId={`${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}`}
+                <Box
+                    sx={{
+                        cursor: 'pointer'
+                    }}
+                    onClick={() => {
+                        FB.ui({
+                            method: 'send',
+                            link: url
+                        });
+                    }}
                 >
                     <MessengerClassic size={shareIconSize} />
-                </FacebookMessengerShareButton>
+                </Box>
         },
         {
             label: 'Link',
