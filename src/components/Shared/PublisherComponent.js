@@ -1,5 +1,5 @@
 // import react
-import { useRef } from 'react';
+import { useRef, useState } from 'react';
 
 // import MUI components
 import {
@@ -8,7 +8,7 @@ import {
 } from '@mui/material';
 
 // import swiper
-import SwiperCore, { Navigation } from 'swiper';
+import SwiperCore, { Navigation, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 
@@ -22,7 +22,7 @@ import { RightArrow, CarouselPrev, CarouselNext } from '../../components/Icons/i
 import { TEXT_STYLE, FONT_FAMILY, COLORS } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle'
 
-SwiperCore.use([Navigation]);
+SwiperCore.use([Navigation, Pagination]);
 
 const SwiperBtnNext = (props) => {
     const { isSm } = props;
@@ -75,6 +75,38 @@ const Title = (props) => {
     )
 }
 
+const CustomPaginationBullet = ({ numOfBullets, activePaginationBullet, handleClickPaginationBullet }) => {
+    const ids = Array.from(Array(numOfBullets).keys());
+    return (
+        <Box
+            sx={{
+                position: 'absolute',
+                top: '32px',
+                right: '48px',
+                ...flexStyle('center', 'center'),
+                columnGap: '16px',
+            }}
+        >
+            {
+                ids.map(idx => (
+                    <Box
+                        key={idx}
+                        onClick={handleClickPaginationBullet}
+                        id={idx}
+                        sx={{
+                            width: '14px',
+                            height: '14px',
+                            bgcolor: activePaginationBullet === idx ? COLORS.second : COLORS.placeHolder,
+                            borderRadius: '50%',
+                            cursor: 'pointer'
+                        }}
+                    ></Box>
+                ))
+            }
+        </Box>
+    )
+}
+
 export default function PublisherComponent(props) {
     const { isSm } = props;
     const publishers = [
@@ -103,8 +135,24 @@ export default function PublisherComponent(props) {
     ];
     const num_items_per_line = !isSm ? 5 : 2.5;
 
+    const [activePublisherPagination, setActivePublisherPagination] = useState(0);
+
     const navigationPublisherPrevRef = useRef(null);
     const navigationPublisherNextRef = useRef(null);
+
+    const swiperPagination = {
+        clickable: true,
+        renderBullet: function (index, className) {
+            return `<span id="publisher-pagination-${index}" class="${className}" style="visibility:hidden">${index + 2}</span>`;
+        },
+    };
+
+    const handleClickPublisherPaginationBullet = (e) => {
+        const id = Number(e.target.id);
+        const actualPaginationBullet = document.querySelector(`#publisher-pagination-${id}`);
+        actualPaginationBullet.click();
+        setActivePublisherPagination(id);
+    }
 
     return (
         <Box
@@ -113,9 +161,15 @@ export default function PublisherComponent(props) {
                 backgroundColor: COLORS.bg2,
                 position: 'relative'
             }}>
+            <CustomPaginationBullet
+                numOfBullets={3}
+                activePaginationBullet={activePublisherPagination}
+                handleClickPaginationBullet={handleClickPublisherPaginationBullet}
+            />
             {<Title content="Nhà xuất bản" isSm={isSm} />}
-
             <Swiper
+                pagination={swiperPagination}
+
                 navigation={{
                     prevEl: navigationPublisherPrevRef.current,
                     nextEl: navigationPublisherNextRef.current
@@ -124,6 +178,7 @@ export default function PublisherComponent(props) {
                     swiper.params.navigation.prevEl = navigationPublisherPrevRef.current;
                     swiper.params.navigation.nextEl = navigationPublisherNextRef.current;
                 }}
+                slidesPerGroup={5}
                 slidesPerView={num_items_per_line} spaceBetween={isSm ? 8 : 20}>
                 {publishers.map((item) => (
                     <SwiperSlide key={item.id}>

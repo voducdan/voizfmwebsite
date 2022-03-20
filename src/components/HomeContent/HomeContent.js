@@ -12,7 +12,7 @@ import {
 } from '@mui/material';
 
 // import swiper
-import SwiperCore, { Navigation, Autoplay } from 'swiper';
+import SwiperCore, { Navigation, Autoplay, Pagination } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 // import others components
@@ -32,7 +32,7 @@ import { flexStyle } from '../../utils/flexStyle'
 // import services
 import API from '../../services/api'
 
-SwiperCore.use([Navigation, Autoplay]);
+SwiperCore.use([Navigation, Autoplay, Pagination]);
 
 const SwiperBtnNext = (props) => {
     const { isSm } = props;
@@ -86,6 +86,38 @@ const Title = (props) => {
                 <RightArrow fill={COLORS.white} />
             </Box>
         </ Box >
+    )
+}
+
+const CustomPaginationBullet = ({ numOfBullets, activePaginationBullet, handleClickPaginationBullet }) => {
+    const ids = Array.from(Array(numOfBullets).keys());
+    return (
+        <Box
+            sx={{
+                position: 'absolute',
+                top: '32px',
+                right: '48px',
+                ...flexStyle('center', 'center'),
+                columnGap: '16px'
+            }}
+        >
+            {
+                ids.map(idx => (
+                    <Box
+                        key={idx}
+                        onClick={handleClickPaginationBullet}
+                        id={idx}
+                        sx={{
+                            width: '14px',
+                            height: '14px',
+                            bgcolor: activePaginationBullet === idx ? COLORS.second : COLORS.placeHolder,
+                            borderRadius: '50%',
+                            cursor: 'pointer'
+                        }}
+                    ></Box>
+                ))
+            }
+        </Box>
     )
 }
 
@@ -153,6 +185,7 @@ export default function HomeContent() {
     const [playlistsBycategoryLevel2, setPlaylistsBycategoryLevel2] = useState([]);
     const [newContents, setNewContents] = useState([]);
     const [featuredsAuthors, setFeaturedAuthors] = useState([]);
+    const [activeNewContentPagination, setActiveNewContentPagination] = useState(0);
 
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
@@ -160,6 +193,13 @@ export default function HomeContent() {
     const NUMBER_ITEMS_PER_LINE = !isSm ? 5 : 2.5;
     const SPACE_BETWEEN = isSm ? 8 : 20;
     const SIDE_PADDING = isSm ? 20 : 48;
+
+    const swiperPagination = {
+        clickable: true,
+        renderBullet: function (index, className) {
+            return `<span id="new-content-pagination-${index}" class="${className}" style="visibility:hidden">${index + 2}</span>`;
+        },
+    };
 
     useEffect(() => {
         async function fetchRandomPlaylists() {
@@ -238,12 +278,18 @@ export default function HomeContent() {
         return (innerWidth / NUMBER_ITEMS_PER_LINE) - spaceToBeSubstrcted;
     }
 
+    const handleClickNewContentPaginationBullet = (e) => {
+        const id = Number(e.target.id);
+        const actualPaginationBullet = document.querySelector(`#new-content-pagination-${id}`);
+        actualPaginationBullet.click();
+        setActiveNewContentPagination(id);
+    }
 
     return (
         <Main>
             <HomeCarousel></HomeCarousel>
             <Box sx={{
-                m: isSm ? '40px 20px' : '56px 48px'
+                m: isSm ? '40px 20px' : '56px 48px',
             }}>
                 {<Title content="Gợi ý cho người chưa bắt đầu" isSm={isSm} />}
                 <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN} style={{ marginTop: 35, height: `${getPlaylistImgWidth()}px` }}>
@@ -290,18 +336,27 @@ export default function HomeContent() {
                     backgroundColor: COLORS.bg2,
                     position: 'relative'
                 }}>
+                <CustomPaginationBullet
+                    numOfBullets={3}
+                    activePaginationBullet={activeNewContentPagination}
+                    handleClickPaginationBullet={handleClickNewContentPaginationBullet}
+                />
                 {<Title content="Nội dung mới cho bạn" isSm={isSm} />}
                 <Swiper
+                    pagination={swiperPagination}
 
                     navigation={{
                         prevEl: navigationNewContentPrevRef.current,
                         nextEl: navigationNewContentNextRef.current
                     }}
+
                     onBeforeInit={(swiper) => {
                         swiper.params.navigation.prevEl = navigationNewContentPrevRef.current;
                         swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
                     }}
+
                     slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN}
+                    slidesPerGroup={3}
                     style={{
                         height: `${getPlaylistImgWidth()}px`
                     }}

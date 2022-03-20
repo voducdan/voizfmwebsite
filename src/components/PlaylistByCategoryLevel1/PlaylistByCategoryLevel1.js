@@ -76,6 +76,7 @@ const RandomPlayList = (props) => {
             <Box
                 sx={{
                     position: 'relative',
+                    borderRadius: '3px',
                     ...(promotion && {
                         '&::before': {
                             content: promotion === 'vip' ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
@@ -87,7 +88,14 @@ const RandomPlayList = (props) => {
                     })
                 }}
             >
-                <img src={data?.avatar?.thumb_url} style={{ width: height, height: height }} />
+                <img
+                    src={data?.avatar?.thumb_url}
+                    style={{
+                        width: height,
+                        height: height,
+                        borderRadius: '3px',
+                    }}
+                />
             </Box>
             <Box
                 sx={{
@@ -276,7 +284,19 @@ function AudioBook({ router }) {
                 }
                 {
                     (categories.length === 1 && initPlaylists.length === 0) && (
-                        <Title content={categories[0]?.name} isSm={isSm} haveArrow={false} />
+                        <Box
+                            sx={{
+                                mt: '56px',
+                                mb: '34px'
+                            }}
+                        >
+                            <Typography sx={{
+                                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                                color: COLORS.white
+                            }}>
+                                {categories[0]?.name}
+                            </Typography>
+                        </Box>
                     )
                 }
                 {
@@ -285,7 +305,7 @@ function AudioBook({ router }) {
                     )
                 }
                 {
-                    (categoryCode === null || categoryCode === '') && (
+                    ((categoryCode === null || categoryCode === '') && initPlaylists.length > 0) && (
                         <Box
                             sx={{
                                 mt: '48px'
@@ -325,7 +345,15 @@ function AudioBook({ router }) {
                                             <a
                                                 style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)` }}
                                             >
-                                                <Thumbnail style={{ width: '100%', height: `${getPlaylistImgWidth()}px`, borderRadius: 3 }} avtSrc={item.avatar.thumb_url} alt={`images ${item.name}`} promotion={item?.promotion || ''} />
+                                                <Thumbnail
+                                                    style={{
+                                                        width: '100%',
+                                                        height: `${getPlaylistImgWidth()}px`,
+                                                        borderRadius: 3
+                                                    }}
+                                                    avtSrc={item.avatar.thumb_url}
+                                                    alt={`images ${item.name}`} promotion={item?.promotion || ''}
+                                                />
                                             </a>
                                         </Link>
                                     ))}
@@ -350,7 +378,7 @@ function AudioBook({ router }) {
             <Box
                 sx={{
                     p: `0 ${SIDE_PADDING}px`,
-                    mt: '58px',
+                    mt: !['/children-book', '/summary-book'].includes(pathname) ? '58px' : 0,
                     ...flexStyle('flex-start', 'center'),
                     rowGap: isSm ? '20px' : '22px',
                     flexWrap: 'wrap',

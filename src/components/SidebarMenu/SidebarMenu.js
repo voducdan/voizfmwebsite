@@ -212,10 +212,23 @@ export default function SidebarMenu() {
                     backgroundColor: COLORS.bg1,
                     top: { sm: 0, xs: HEADER_HEIGHT_MB },
                     paddingBottom: { sm: 0, xs: HEADER_HEIGHT },
-                    overflowX: 'hidden',
-                    overflowY: 'hidden',
                     boxSizing: 'border-box',
                     borderRight: `1px solid ${COLORS.blackStroker}`,
+                    overflowX: 'hidden',
+                    scrollbarGutter: 'stable',
+                    overflowY: 'hidden',
+                    '::-webkit-scrollbar': {
+                        width: '4px'
+                    },
+
+                    '::-webkit-scrollbar-track': {
+                        borderRadius: '5px',
+                    },
+
+                    '::-webkit-scrollbar-thumb': {
+                        background: COLORS.bg3,
+                        borderRadius: '5px'
+                    },
                     ':hover': {
                         overflowY: 'auto'
                     }
@@ -228,7 +241,7 @@ export default function SidebarMenu() {
             open={open}
             ref={sidebar}
         >
-            <div style={{ display: 'block' }}>
+            <Box>
                 <Link
                     href='/'
                 >
@@ -236,7 +249,7 @@ export default function SidebarMenu() {
                         <Logo windowWidth={windowSize.width} />
                     </a>
                 </Link>
-            </div>
+            </Box>
             <Divider />
             <List>
                 {navigatorLink.map(icon => (

@@ -919,7 +919,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                         style={{
                                                             width: '100%',
                                                             height: `${getImgWidth()}px`,
-                                                            cursor: 'pointer'
+                                                            cursor: 'pointer',
+                                                            borderRadius: '3px',
                                                         }}
                                                         avtSrc={item?.avatar?.thumb_url}
                                                         promotion={item?.promotion}
@@ -952,7 +953,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                         key={idx}
                                                         style={{
                                                             width: '96px',
-                                                            height: '96px'
+                                                            height: '96px',
+                                                            borderRadius: '3px'
                                                         }}
                                                         promotion={item?.promotion}
                                                         avtSrc={item?.avatar?.thumb_url} alt={item.alt}
@@ -1046,12 +1048,30 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             sx={{
                                 maxHeight: '654px',
                                 overflowY: 'hidden',
+                                scrollbarGutter: 'stable',
+                                '::-webkit-scrollbar': {
+                                    width: '4px'
+                                },
+
+                                '::-webkit-scrollbar-track': {
+                                    borderRadius: '5px',
+                                },
+
+                                '::-webkit-scrollbar-thumb': {
+                                    background: COLORS.bg3,
+                                    borderRadius: '5px'
+                                },
+
                                 ':hover': {
                                     overflowY: 'auto'
                                 }
                             }}
                         >
-                            <List sx={{ width: '100%' }}>
+                            <List
+                                sx={{
+                                    width: '100%'
+                                }}
+                            >
                                 {playlistAudios.map((value, idx) => {
                                     return (
                                         <ListItem
