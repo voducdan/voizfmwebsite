@@ -82,6 +82,17 @@ export default function ShareModal(props) {
         setOpenQRcodeDialog(false);
     }
 
+    const deviceType = () => {
+        const ua = navigator.userAgent;
+        if (/(tablet|ipad|playbook|silk)|(android(?!.*mobi))/i.test(ua)) {
+            return "tablet";
+        }
+        else if (/Mobile|Android|iP(hone|od)|IEMobile|BlackBerry|Kindle|Silk-Accelerated|(hpw|web)OS|Opera M(obi|ini)/.test(ua)) {
+            return "mobile";
+        }
+        return "desktop";
+    };
+
     const shareItems = [
         {
             label: 'Facebook',
@@ -95,10 +106,15 @@ export default function ShareModal(props) {
                         cursor: 'pointer'
                     }}
                     onClick={() => {
-                        FB.ui({
-                            method: 'send',
-                            link: url
-                        });
+                        if (deviceType() === 'desktop') {
+                            FB.ui({
+                                method: 'send',
+                                link: url
+                            });
+                        }
+                        else {
+                            window.open('fb-messenger://share?link=' + encodeURIComponent(url) + '&app_id=' + encodeURIComponent(process.env.NEXT_PUBLIC_FACEBOOK_APP_ID));
+                        }
                     }}
                 >
                     <MessengerClassic size={shareIconSize} />
