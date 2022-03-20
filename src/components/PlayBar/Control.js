@@ -70,7 +70,7 @@ export default function Control(props) {
     const audioUrl = useSelector(selectAudioHls);
     const token = useSelector(selectToken);
     const [position, setPosition] = useState(0);
-    const [paused, setPaused] = useState(true);
+    const [paused, setPaused] = useState(false);
     const [loopAudio, setLoopAudio] = useState(false);
     const [timer, setTimer] = useState(0);
     const [intervalId, setIntervalId] = useState(null);
@@ -78,30 +78,44 @@ export default function Control(props) {
     const [anchorEl, setAnchorEl] = useState(null);
     const openTimer = Boolean(anchorEl);
 
+    const media = audio.current;
+
     useEffect(() => {
-        dispatch(pauseAudio());
-        setPaused(true);
         if (Hls.isSupported()) {
             const hls = new Hls();
-            hls.loadSource(audioUrl);
-            hls.attachMedia(audio.current);
+            hls.attachMedia(media)
+            hls.on(Hls.Events.MEDIA_ATTACHED, function () {
+                hls.loadSource(audioUrl);
+                hls.on(Hls.Events.MANIFEST_PARSED, function () {
+                    media.muted = true;
+                    const promise = media.play();
+                    if (promise !== undefined) {
+                        promise.then(_ => {
+                            media.muted = false;
+                        }).catch(error => {
+                            dispatch(togglePlayAudio());
+                            setPaused(true);
+                        });
+                    }
+                });
+            });;
         }
-        else if (audio.current.canPlayType('application/vnd.apple.mpegurl')) {
-            audio.current.src = audioUrl;
-            audio.current.addEventListener('loadedmetadata', function () {
-                audio.current.play();
+        else if (media.canPlayType('application/vnd.apple.mpegurl')) {
+            media.src = audioUrl;
+            media.addEventListener('loadedmetadata', function () {
+                media.play();
             });
         }
-        audio.current.addEventListener('timeupdate', (e) => {
-            const currentTime = Math.ceil(e.target.currentTime);
+        media.addEventListener('timeupdate', (e) => {
+            const currentTime = Math.floor(e.target.currentTime);
             setPosition(currentTime);
-            if (currentTime === audioData.duration && !audio.current.loop) {
+            if (currentTime === audioData.duration && !media.loop) {
                 if (mode && mode === 'all' && nextAudioId) {
                     navigate.push(`/audio-play/${nextAudioId}?mode=all`)
                 }
                 else {
                     setPaused(true);
-                    audio.current.currentTime = 0;
+                    media.currentTime = 0;
                     setPosition(0);
                 }
             }
@@ -114,10 +128,13 @@ export default function Control(props) {
             if (token) {
                 addAudioToListening(audioData.id, position, audioData.playlist.id);
             }
-            audio.current.pause();
+            media.pause();
         }
         else {
-            audio.current.play();
+            if (media.paused) {
+                media.play();
+            }
+            media.muted = false;
         }
     }, [paused]);
 
@@ -188,13 +205,13 @@ export default function Control(props) {
 
     const onChangeAudioPosition = (value) => {
         setPosition(value);
-        audio.current.currentTime = value;
+        media.currentTime = value;
     }
 
     const handleLoopAudio = () => {
-        const tmpLoopAudio = !audio.current.loop;
+        const tmpLoopAudio = !media.loop;
         setLoopAudio(tmpLoopAudio);
-        audio.current.loop = tmpLoopAudio;
+        media.loop = tmpLoopAudio;
     }
 
     const handleChangeAudio = (type) => {

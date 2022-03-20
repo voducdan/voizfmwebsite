@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // import reducer, actions
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
-import { setAudioUrl } from '../../redux/playAudio';
 import { selectUser } from '../../redux/user';
 import openLogin, { setOpenLogin } from '../../redux/openLogin';
 
@@ -427,7 +426,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             }
             const res = await api.getAudioFile(audioId);
             const data = await res.data;
-            dispatch(setAudioUrl(data.data.url));
             router.push(`/audio-play/${audioId}`);
         }
         catch (err) {
@@ -468,9 +466,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setOpenSnackbar(true);
                 return;
             }
-            const res = await api.getAudioFile(playlistAudios[0].id);
-            const data = await res.data;
-            dispatch(setAudioUrl(data.url));
             router.push(`/audio-play/${playlistAudios[0].id}?mode=all`);
 
         }
@@ -579,7 +574,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         transform: 'translateY(-50%)',
                                         ...(playlist?.promotion && {
                                             '&::before': {
-                                                content: playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
+                                                content: playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : playlist?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
                                                 position: 'absolute',
                                                 right: 0,
                                                 top: 0,

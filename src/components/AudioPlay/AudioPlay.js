@@ -118,7 +118,7 @@ export default function AudioPlay({ audio }) {
                             height: isSm ? '235px' : '335px',
                             borderRadius: '15px',
                             '&::before': {
-                                content: audio?.playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
+                                content: audio?.playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : audio?.playlist?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
                                 position: 'absolute',
                                 right: 0,
                                 top: 0,

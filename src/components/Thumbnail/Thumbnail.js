@@ -14,9 +14,10 @@ export default function Thumbnail(props) {
             sx={{
                 position: 'relative',
                 height: '100%',
+                borderRadius: '3px',
                 ...(promotion && {
                     '&::before': {
-                        content: promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
+                        content: promotion === 'vip' ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
                         position: 'absolute',
                         right: 0,
                         top: 0,

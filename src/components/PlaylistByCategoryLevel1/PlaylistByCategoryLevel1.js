@@ -78,7 +78,7 @@ const RandomPlayList = (props) => {
                     position: 'relative',
                     ...(promotion && {
                         '&::before': {
-                            content: promotion === 'vip' ? "url('/images/dvip.png')" : "url('/images/dfree.png')",
+                            content: promotion === 'vip' ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
                             position: 'absolute',
                             right: 0,
                             top: 0,
@@ -183,15 +183,24 @@ function AudioBook({ router }) {
 
     useEffect(() => {
         async function initPlaylist() {
-            const initCategories = categories.filter(i => i.sub_name !== '');
+            // const initCategories = categories.filter(i => i.sub_name !== '');
+            const initCategories = [...categories];
             const resultPromise = [];
             initCategories.forEach(i => {
                 const res = api.getCategoryPlaylists(i.code, 10);
                 resultPromise.push(res);
             })
             const data = await Promise.all(resultPromise);
-            const results = data.map((i, idx) => ({ name: initCategories[idx]['sub_name'], data: i.data.data }));
-            setInitPlaylists(results);
+            const results = [];
+            for (let i in data) {
+                const value = data[i].data.data;
+                if (value.length > 0) {
+                    results.push({ name: initCategories[i]['sub_name'] || initCategories[i]['name'], data: value });
+                }
+            }
+            if (results.length > 1) {
+                setInitPlaylists(results);
+            }
         }
 
         initPlaylist();
@@ -327,13 +336,17 @@ function AudioBook({ router }) {
                     )
                 }
             </Box>
-            <Box
-                sx={{
-                    width: '100%'
-                }}
-            >
-                <img src='https://picsum.photos/1190/420?img=2' style={{ width: '100%', height: '260px' }} />
-            </Box>
+            {
+                !['/children-book', '/summary-book'].includes(pathname) && (
+                    <Box
+                        sx={{
+                            width: '100%'
+                        }}
+                    >
+                        <img src='https://picsum.photos/1190/420?img=2' style={{ width: '100%', height: '260px' }} />
+                    </Box>
+                )
+            }
             <Box
                 sx={{
                     p: `0 ${SIDE_PADDING}px`,

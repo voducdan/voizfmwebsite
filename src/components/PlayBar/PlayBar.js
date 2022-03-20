@@ -160,6 +160,7 @@ export default function PlayBar() {
             <audio
                 id='audio'
                 hidden
+                preload="auto"
                 ref={audio}
             />
             {
