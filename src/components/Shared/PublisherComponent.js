@@ -162,7 +162,7 @@ export default function PublisherComponent(props) {
                 position: 'relative'
             }}>
             <CustomPaginationBullet
-                numOfBullets={3}
+                numOfBullets={5}
                 activePaginationBullet={activePublisherPagination}
                 handleClickPaginationBullet={handleClickPublisherPaginationBullet}
             />
