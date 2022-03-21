@@ -314,7 +314,11 @@ export default function Listening() {
                                         />
                                     )
                                 }
-                                <Box>
+                                <Box
+                                    sx={{
+                                        width: '100%'
+                                    }}
+                                >
                                     <PlaylistThumnail
                                         id={i?.playlist?.id}
                                         name={i?.playlist?.name}

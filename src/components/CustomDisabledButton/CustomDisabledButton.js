@@ -18,7 +18,12 @@ const styles = theme => ({
 function CustomDisabledButton(props) {
     const { classes } = props;
     return (
-        <Button sx={{ ...props.style }} disabled={props.disabled} className={classes.button} onClick={props.onClick}>
+        <Button
+            sx={{ ...props.style }}
+            disabled={props.disabled}
+            className={classes.button}
+            onClick={props.onClick}
+        >
             {props.content}
         </Button>
     );

@@ -1,5 +1,5 @@
 // import react
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // import MUI components
 import {
@@ -22,6 +22,15 @@ function RateModal(props) {
     const { contentRating, voiceRating, rateContent, setContentRating, setVoiceRating, setRateContent } = props;
     const [isFormValid, setIsFormValid] = useState(true);
     const { open, setOpen, setOpenAfterRate, handleRatePlaylist, isSm } = props;
+
+    useEffect(() => {
+        if (contentRating === 0 || voiceRating === 0) {
+            setIsFormValid(false);
+            return;
+        }
+        setIsFormValid(true);
+    }, [contentRating, voiceRating]);
+
     const handleClose = () => {
         setOpen(false);
     }
@@ -36,12 +45,6 @@ function RateModal(props) {
     }
 
     const onShareContentChange = (e) => {
-        if (e.target.value === '') {
-            setIsFormValid(false);
-        }
-        else {
-            setIsFormValid(true);
-        }
         setRateContent(e.target.value);
     }
 
@@ -51,15 +54,38 @@ function RateModal(props) {
                 '& .MuiDialog-paper': {
                     bgcolor: COLORS.bg1,
                     padding: isSm ? '16px' : '56px',
-                    boxSizing: 'border-box',
                     borderRadius: isSm ? '10px' : '30px',
                     ...flexStyle('flex-start', 'center'),
-                    width: isSm ? '95%' : '512px',
-                    margin: 0
+                    width: isSm ? '95%' : 'auto',
+                    margin: 0,
+                    '::-webkit-scrollbar': {
+                        width: '4px'
+                    },
+
+                    '::-webkit-scrollbar-button': {
+                        height: '10px'
+                    },
+
+                    '::-webkit-scrollbar-track': {
+                        borderRadius: '5px',
+                    },
+
+                    '::-webkit-scrollbar-thumb': {
+                        background: COLORS.bg3,
+                        borderRadius: '5px'
+                    },
                 }
             }}
-            onClose={handleClose} open={open}>
-            <Box>
+            onClose={handleClose}
+            open={open}
+        >
+            <Box
+                sx={{
+                    width: '100%',
+                    ...flexStyle('center', 'center'),
+                    flexDirection: 'column',
+                }}
+            >
                 <Typography
                     sx={{
                         ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
@@ -77,6 +103,7 @@ function RateModal(props) {
                 >Bạn muốn chia sẻ cụ thể với Voiz không?</Typography>
                 <Box
                     sx={{
+                        width: '100%',
                         ...flexStyle('flex-start', 'center'),
                         flexDirection: 'column',
                         rowGap: '32px',
@@ -95,17 +122,23 @@ function RateModal(props) {
                                 ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.content2),
                                 color: COLORS.white
                             }}
-                        >Nội dung</Typography>
+                        >Nội dung:</Typography>
                         <Rating
                             sx={{
+                                ml: '10px',
                                 '& .MuiRating-iconEmpty': {
                                     color: COLORS.contentIcon
+                                },
+                                '& .MuiRating-icon': {
+                                    mr: isSm ? '26px' : '35px'
                                 }
                             }}
-                            onChange={(event, newValue) => {
-                                setContentRating(newValue);
+                            onChange={(_, newValue) => {
+                                setContentRating(newValue || 0);
                             }}
-                            name="playlist-rate" value={contentRating} precision={1}
+                            name="content-rating"
+                            value={contentRating}
+                            precision={1}
                         />
                     </Box>
                     <Box
@@ -120,35 +153,46 @@ function RateModal(props) {
                                 ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.content2),
                                 color: COLORS.white
                             }}
-                        >Giọng đọc</Typography>
+                        >Giọng đọc:</Typography>
                         <Rating
                             sx={{
+                                ml: '4px',
                                 '& .MuiRating-iconEmpty': {
                                     color: COLORS.contentIcon
+                                },
+                                '& .MuiRating-icon': {
+                                    mr: isSm ? '26px' : '35px'
                                 }
                             }}
-                            onChange={(event, newValue) => {
-                                setVoiceRating(newValue);
+                            onChange={(_, newValue) => {
+                                setVoiceRating(newValue || 0);
                             }}
-                            name="playlist-rate" value={voiceRating} precision={1} />
+                            name="voice-rating"
+                            value={voiceRating}
+                            precision={1}
+                        />
                     </Box>
                 </Box>
                 <TextField
                     sx={{
                         width: '100%',
                         '& .MuiOutlinedInput-input': {
-                            color: COLORS.placeHolder,
+                            color: COLORS.white,
                             bgcolor: COLORS.bg1,
                             ...TEXT_STYLE.content2
                         },
                         '& .MuiOutlinedInput-root': {
                             bgcolor: COLORS.bg1,
-                            border: `1px solid ${COLORS.blackStroker}`
+                            border: `1px solid ${COLORS.blackStroker}`,
+                            padding: isSm ? '10px 17px' : '10px 14px'
                         }
                     }}
                     value={rateContent}
                     onChange={onShareContentChange}
-                    id="share text area" placeholder="Những đóng góp khác, ví dụ: Cảm nhận nội dung, góp ý nhạc nền, thắc mắc về sách,..." multiline rows={5} variant="outlined"
+                    id="share text area"
+                    placeholder="Những đóng góp khác, ví dụ: Cảm nhận nội dung, góp ý nhạc nền, thắc mắc về sách,..."
+                    multiline rows={5}
+                    variant="outlined"
                 />
                 <Box
                     sx={{
@@ -199,7 +243,8 @@ function AfterRateModal(props) {
     }
     return (
         <Dialog
-            onClose={handleClose} open={open}
+            onClose={handleClose}
+            open={open}
             sx={{
                 '& .MuiDialog-paper': {
                     bgcolor: COLORS.bg1,

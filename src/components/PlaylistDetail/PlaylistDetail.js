@@ -120,6 +120,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
+    const [leftPaneHeight, setLeftPaneHeight] = useState(0);
+
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
 
@@ -208,11 +210,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setPlaylist({ ...playlistToBookmark })
             }
             catch (err) {
-                const { status } = err.response;
-                if (status === 401) {
-                    dispatch(setOpenLogin(true));
-                    return;
-                }
                 const errList = err.response.data.error;
                 if (errList instanceof Object) {
                     let errMessage = '';
@@ -306,7 +303,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     }
 
     const handleOpenRateModal = () => {
-        setOpenRateModal(true)
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
+        setOpenRateModal(true);
     }
 
 
@@ -466,8 +467,13 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setOpenSnackbar(true);
                 return;
             }
-            router.push(`/audio-play/${playlistAudios[0].id}?mode=all`);
-
+            if (playlistAudios.length > 0) {
+                await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
+                router.push(`/audio-play/${playlistAudios[0].id}?mode=all`);
+                return;
+            }
+            setErrorMessage('Playlist hiện không có audio nào!');
+            setOpenSnackbar(true);
         }
         catch (err) {
             const errList = err.response.data.error;
@@ -622,12 +628,21 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             >
                                                 <Rating
                                                     sx={{
-                                                        columnGap: '24px',
+                                                        mr: '10px',
                                                         '& .MuiRating-iconEmpty': {
                                                             color: COLORS.contentIcon
+                                                        },
+                                                        '& .MuiRating-icon': {
+                                                            ml: isSm ? '22px' : '24px'
                                                         }
                                                     }}
-                                                    name="playlist-rate" value={contentRating} precision={1} readOnly />
+                                                    onChange={(_, newValue) => {
+                                                        setContentRating(newValue || 0);
+                                                    }}
+                                                    name='desktop-content-rating'
+                                                    value={contentRating}
+                                                    precision={1}
+                                                />
                                             </Box>
                                         </Box>
                                     )
@@ -719,9 +734,21 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         >
                                             <Rating
                                                 sx={{
-                                                    columnGap: '24px'
+                                                    mr: '10px',
+                                                    '& .MuiRating-iconEmpty': {
+                                                        color: COLORS.contentIcon
+                                                    },
+                                                    '& .MuiRating-icon': {
+                                                        ml: isSm ? '22px' : '24px'
+                                                    }
                                                 }}
-                                                name="playlist-rate" value={contentRating} precision={1} readOnly />
+                                                onChange={(_, newValue) => {
+                                                    setContentRating(newValue || 0);
+                                                }}
+                                                name='mb-content-rating'
+                                                value={contentRating}
+                                                precision={1}
+                                            />
                                         </Box>
                                     </Box>
                                 )
@@ -787,6 +814,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     columnGap: '32px',
                     padding: isSm ? 0 : '48px',
                     boxSizing: 'border-box',
+                    maxHeight: '881px',
                     ...(isSm && { flexDirection: 'column' })
                 }}
             >
