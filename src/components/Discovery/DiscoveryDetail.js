@@ -178,9 +178,9 @@ const CommentItem = (props) => {
 
 export default function DiscoveryDetail({ discovery }) {
     const api = new API();
-
     const windowSize = useWindowSize();
     const commentInputRef = useRef();
+    const [inlineDiscovery, setInlineDiscovery] = useState(discovery);
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState('');
     const [commentPage, setCommentPage] = useState(0);
@@ -208,12 +208,12 @@ export default function DiscoveryDetail({ discovery }) {
     const handleCommentKeyUp = async (e) => {
         const { keyCode } = e;
         if (keyCode === 13) {
-            await sendComment(discovery.id, { content: commentContent });
+            await sendComment(inlineDiscovery.id, { content: commentContent });
         }
     }
 
     const handleComment = async () => {
-        await sendComment(discovery.id, { content: commentContent });
+        await sendComment(inlineDiscovery.id, { content: commentContent });
     }
 
     const updateLike = (data) => {
@@ -244,6 +244,29 @@ export default function DiscoveryDetail({ discovery }) {
         }
     }
 
+    const updateDiscoveryLike = (data) => {
+        const discoveryTmp = { ...inlineDiscovery };
+        discoveryTmp['discovery_counter']['likes_count'] = data.likes_count;
+        discoveryTmp['is_liked'] = !discoveryTmp['is_liked'];
+        setInlineDiscovery(discoveryTmp);
+    }
+
+    const handleLikeDiscovery = async () => {
+        const res = await api.likeDiscovery(id);
+        try {
+            const data = await res.data;
+            if (data.error) {
+                setIsLikeError(true);
+                return;
+            }
+            updateDiscoveryLike(data.data);
+        }
+        catch (err) {
+            setIsLikeError(true);
+            console.log(err);
+        }
+    }
+
     return (
         <Box
             sx={{
@@ -263,7 +286,7 @@ export default function DiscoveryDetail({ discovery }) {
                     width: '100%',
                     height: '100%',
                     left: 0,
-                }} alt="cover img alt" src={discovery?.image?.original_url}></img>
+                }} alt="cover img alt" src={inlineDiscovery?.image?.original_url}></img>
             </Box>
             <Box
                 sx={{
@@ -286,7 +309,7 @@ export default function DiscoveryDetail({ discovery }) {
                         }}
                     >
                         <Box>
-                            <Avatar sx={{ width: '48px', height: '48px' }} alt="discovery avt alt" src={discovery?.channel?.avatar?.thumb_url} />
+                            <Avatar sx={{ width: '48px', height: '48px' }} alt="discovery avt alt" src={inlineDiscovery?.channel?.avatar?.thumb_url} />
                         </Box>
                         <Box
                             sx={{
@@ -300,13 +323,13 @@ export default function DiscoveryDetail({ discovery }) {
                                     ...TEXT_STYLE.h3,
                                     color: COLORS.white
                                 }}
-                            >{discovery?.channel?.name}</Typography>
+                            >{inlineDiscovery?.channel?.name}</Typography>
                             <Typography
                                 sx={{
                                     ...TEXT_STYLE.content2,
                                     color: COLORS.contentIcon
                                 }}
-                            >{discovery?.published_at}</Typography>
+                            >{inlineDiscovery?.published_at}</Typography>
                         </Box>
                     </Box>
                     <Divider sx={{ border: `1px solid ${COLORS.blackStroker}`, mb: isSm ? '16px' : '24px' }} />
@@ -317,12 +340,12 @@ export default function DiscoveryDetail({ discovery }) {
                             mb: isSm ? '19px' : '16px'
                         }}
                     >
-                        {discovery?.summary}
+                        {inlineDiscovery?.summary}
                     </Typography>
                 </Box>
             </Box>
             {
-                discovery.discovery_contents && discovery.discovery_contents.map(i => (
+                inlineDiscovery.discovery_contents && inlineDiscovery.discovery_contents.map(i => (
                     <Box
                         key={i?.id}
                         sx={{
@@ -421,7 +444,7 @@ export default function DiscoveryDetail({ discovery }) {
                                 color: COLORS.white,
                             }}
                         >
-                            {discovery?.discovery_counter?.comments_count} góp ý
+                            {inlineDiscovery?.discovery_counter?.comments_count} góp ý
                         </Typography>
                     </Box>
                     <Box
@@ -429,15 +452,23 @@ export default function DiscoveryDetail({ discovery }) {
                             ...flexStyle('center', 'center'),
                             columnGap: '8px'
                         }}
+                        onClick={handleLikeDiscovery}
                     >
-                        <ThumbUpAltOutlinedIcon sx={{ color: COLORS.white, width: '14px', height: '14px' }} />
+                        <ThumbUpAltOutlinedIcon
+                            sx={{
+                                color: inlineDiscovery.is_liked ? COLORS.main : COLORS.white,
+                                width: '14px',
+                                height: '14px',
+                                cursor: 'pointer'
+                            }}
+                        />
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.content2,
                                 color: COLORS.white,
                             }}
                         >
-                            {discovery?.discovery_counter?.likes_count} thích
+                            {inlineDiscovery?.discovery_counter?.likes_count} thích
                         </Typography>
                     </Box>
                 </Box>

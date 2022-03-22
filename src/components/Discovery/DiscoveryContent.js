@@ -42,11 +42,15 @@ const DiscoveryItem = (props) => {
                 sx={{
                     alignContent: 'flex-start',
                     overflow: 'hidden',
-                    margin: 0
+                    margin: 0,
+                    cursor: 'pointer'
                 }}
             >
                 {discoveryList.map((item, index) => (
-                    <Stack key={index} key={item.id}>
+                    <Stack
+                        key={index}
+                        key={item.id}
+                    >
                         <Link
                             href={`/discoveries/${item.id}`}
                             key={idx}
@@ -57,7 +61,7 @@ const DiscoveryItem = (props) => {
                             <Card
                                 sx={{
                                     bgcolor: COLORS.bg2,
-                                    margin: '8px 0'
+                                    margin: 0
                                 }}>
                                 <Box
                                     sx={{
@@ -239,7 +243,7 @@ export default function DiscoveryContent() {
                     pt: '5px'
                 }}
             >
-                {categoryList.length > 0 && (<CategoryBar categoryList={categoryList} isSm={isSm} parent='' onSelectCategory={onSelectCategory} />)}
+                {categoryList.length > 0 && (<CategoryBar categoryList={categoryList} isSm={isSm} parent='' onSelectCategory={onSelectCategory} hasNavigation={false} />)}
             </Box>
             <Divider sx={{ borderColor: COLORS.bg2, margin: '28px 0' }} />
             {showedDiscoveryList.length > 0 && (<DiscoveryItem isSm={isSm} discoveryList={showedDiscoveryList} />)}

@@ -113,6 +113,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [openShareModal, setOpenShareModal] = useState(false);
     const [contentRating, setContentRating] = useState(0);
     const [voiceRating, setVoiceRating] = useState(0);
+    const [recentlyVoiceRating, setRecentlyVoiceRating] = useState(0);
     const [rateContent, setRateContent] = useState('');
     const [addToCartError, setAddToCartError] = useState(false);
     const [playAudioError, setPlayAudioError] = useState(false);
@@ -120,7 +121,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
-    const [leftPaneHeight, setLeftPaneHeight] = useState(0);
 
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
@@ -131,7 +131,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         async function fetchPlaylist() {
             setPlaylist(playlistFromAPI);
             const playlistTrailer = playlistFromAPI.playlist_trailers.length > 0 ? playlistFromAPI.playlist_trailers[0]['file_url'] : '';
-            setContentRating(playlistFromAPI.playlist_rating.content_stars);
+            setContentRating(playlistFromAPI.playlist_rating.content_stars || 0);
             setAudioTrailerUrl(playlistTrailer);
         }
 
@@ -302,12 +302,16 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         return []
     }
 
-    const handleOpenRateModal = () => {
+    const handleOpenRateModal = (newValue) => {
         if (!user) {
+            setContentRating(0);
             dispatch(setOpenLogin(true));
             return;
         }
-        setOpenRateModal(true);
+        if (newValue && newValue !== contentRating) {
+            setOpenRateModal(true);
+            setContentRating(newValue);
+        }
     }
 
 
@@ -333,6 +337,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             tmpPlaylist['playlist_counter'] = data.playlist_counter;
             tmpPlaylist['playlist_rating'] = data.playlist_rating;
             setPlaylist({ ...tmpPlaylist });
+            setRateContent('');
+            setRecentlyVoiceRating(data.playlist_rating.voice_stars);
             cb();
             setOpenAfterRateModal(true);
         }
@@ -624,7 +630,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                 sx={{
                                                     cursor: 'pointer'
                                                 }}
-                                                onClick={handleOpenRateModal}
                                             >
                                                 <Rating
                                                     sx={{
@@ -636,9 +641,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                             ml: isSm ? '22px' : '24px'
                                                         }
                                                     }}
-                                                    onChange={(_, newValue) => {
-                                                        setContentRating(newValue || 0);
-                                                    }}
+                                                    onChange={(_, newValue) => { handleOpenRateModal(newValue) }}
                                                     name='desktop-content-rating'
                                                     value={contentRating}
                                                     precision={1}
@@ -675,6 +678,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         voiceRating={voiceRating}
                                         rateContent={rateContent}
                                         setRateContent={setRateContent}
+                                        recentlyVoiceRating={recentlyVoiceRating}
                                     />
                                     <AfterRateModal content={afterRateContent} isSm={isSm} open={openAfterRateModal} setOpen={setOpenAfterRateModal} />
                                     <Button
@@ -730,7 +734,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             sx={{
                                                 cursor: 'pointer'
                                             }}
-                                            onClick={handleOpenRateModal}
                                         >
                                             <Rating
                                                 sx={{
@@ -742,9 +745,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                         ml: isSm ? '22px' : '24px'
                                                     }
                                                 }}
-                                                onChange={(_, newValue) => {
-                                                    setContentRating(newValue || 0);
-                                                }}
+                                                onChange={(_, newValue) => { handleOpenRateModal(newValue) }}
                                                 name='mb-content-rating'
                                                 value={contentRating}
                                                 precision={1}
@@ -812,9 +813,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     ...flexStyle('center', 'flex-start'),
                     width: '100%',
                     columnGap: '32px',
-                    padding: isSm ? 0 : '48px',
+                    padding: isSm ? 0 : '0 48px',
+                    margin: isSm ? 0 : '48px 0',
                     boxSizing: 'border-box',
-                    maxHeight: '881px',
+                    height: '881px',
+                    overflow: 'hidden',
                     ...(isSm && { flexDirection: 'column' })
                 }}
             >
@@ -823,7 +826,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         width: isSm ? '100%' : '35%',
                         bgcolor: COLORS.bg2,
                         padding: isSm ? '26px 0 0 15px' : '26px 32px',
-                        borderRadius: '10px'
+                        borderRadius: '10px',
+                        height: '100%'
                     }}
                     id='left-pane'
                 >
@@ -999,7 +1003,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 <Box
                     sx={{
                         width: isSm ? '100%' : '65%',
-                        ...flexStyle('center', 'center'),
+                        ...flexStyle('flex-start', 'center'),
                         flexDirection: 'column',
                         rowGap: '32px',
                         height: '100%',
@@ -1127,7 +1131,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                         color: COLORS.white,
                                                         mr: '14px'
                                                     }}
-                                                >{value.position}</Typography>
+                                                >{idx + 1}</Typography>
                                                 <ListItemText
                                                     sx={{
                                                         'span': {

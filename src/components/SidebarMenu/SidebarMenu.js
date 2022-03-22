@@ -97,7 +97,7 @@ export default function SidebarMenu() {
                 {
                     id: 3,
                     icon: Discover,
-                    text: 'Khám phá',
+                    text: 'Cộng đồng',
                     url: 'discoveries'
                 },
                 {
@@ -137,7 +137,7 @@ export default function SidebarMenu() {
                 {
                     id: 3,
                     icon: Discover,
-                    text: 'Khám phá',
+                    text: 'Cộng đồng',
                     url: 'discoveries'
                 },
                 {

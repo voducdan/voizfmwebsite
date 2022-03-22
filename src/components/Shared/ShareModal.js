@@ -175,8 +175,8 @@ export default function ShareModal(props) {
                 onClick={handleClose}
                 sx={{
                     position: 'absolute',
-                    right: 8,
-                    top: 0,
+                    right: 14,
+                    top: 11,
                     color: COLORS.white,
                     bgcolor: COLORS.bg2
                 }}

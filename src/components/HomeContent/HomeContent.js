@@ -313,7 +313,7 @@ export default function HomeContent() {
                         key={data.code}
                     >
                         {<Title content={data.name} isSm={isSm} />}
-                        {(data?.categories && data?.categories.length >= 2) && <CategoryBar categoryList={data.categories} isSm={isSm} active={0} onSelectCategory={onSelectCategory} parent={data.code} />}
+                        {(data?.categories && data?.categories.length >= 2) && <CategoryBar categoryList={data.categories} isSm={isSm} active={0} onSelectCategory={onSelectCategory} parent={data.code} hasNavigation={true} />}
                         <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN}
                             style={{ marginTop: !isSm ? 35 : 20, height: `${getPlaylistImgWidth()}px` }}
                         >

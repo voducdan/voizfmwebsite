@@ -48,7 +48,7 @@ const SwiperBtnPrev = (props) => {
 }
 
 export default function CategoryBar(props) {
-    const { parent, categoryList, isSm, onSelectCategory } = props
+    const { parent, categoryList, isSm, onSelectCategory, hasNavigation } = props
     const [activeCategory, setActiveCategory] = useState(parent);
     const newCategoryList = [
         {
@@ -136,12 +136,31 @@ export default function CategoryBar(props) {
                     </SwiperSlide>
                 ))}
             </Swiper>
-            <div style={{
-                ...SwiperBtnPrev({ isSm })
-            }} ref={navigationNewContentPrevRef} ><CarouselPrev></CarouselPrev></div>
-            <div style={{
-                ...SwiperBtnNext({ isSm })
-            }} ref={navigationNewContentNextRef} > <CarouselNext></CarouselNext></div>
+            {
+                hasNavigation && (
+                    <div
+                        style={{
+                            ...SwiperBtnPrev({ isSm })
+                        }}
+                        ref={navigationNewContentPrevRef}
+                    >
+                        <CarouselPrev></CarouselPrev>
+                    </div>
+                )
+            }
+            {
+                hasNavigation && (
+                    <div
+                        style={{
+                            ...SwiperBtnNext({ isSm })
+                        }}
+                        ref={navigationNewContentNextRef}
+                    >
+                        <CarouselNext></CarouselNext>
+                    </div>
+                )
+            }
+
         </Box>
     )
 }

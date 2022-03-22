@@ -111,8 +111,13 @@ export default class API {
     commentDiscovery = (discoveryId, data) => {
         return this.init().post(`/discoveries/${discoveryId}/comments`, data)
     }
+
     likeComment = (commentId) => {
         return this.init().post(`/comments/${commentId}/likes`)
+    }
+
+    likeDiscovery = (discoveryId) => {
+        return this.init().post(`/discoveries/${discoveryId}/likes`)
     }
 
     getPlaylistHistory = () => {

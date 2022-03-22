@@ -19,10 +19,9 @@ import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 
 function RateModal(props) {
-    const { contentRating, voiceRating, rateContent, setContentRating, setVoiceRating, setRateContent } = props;
+    const { contentRating, voiceRating, rateContent, setContentRating, setVoiceRating, setRateContent, recentlyVoiceRating } = props;
     const [isFormValid, setIsFormValid] = useState(true);
     const { open, setOpen, setOpenAfterRate, handleRatePlaylist, isSm } = props;
-
     useEffect(() => {
         if (contentRating === 0 || voiceRating === 0) {
             setIsFormValid(false);
@@ -32,12 +31,13 @@ function RateModal(props) {
     }, [contentRating, voiceRating]);
 
     const handleClose = () => {
+        setVoiceRating(recentlyVoiceRating);
         setOpen(false);
     }
 
     const handleSubmit = () => {
-        handleClose();
         handleRatePlaylist(handleOpenAfterRateModal);
+        setOpen(false);
     }
 
     const handleOpenAfterRateModal = () => {
@@ -53,10 +53,10 @@ function RateModal(props) {
             sx={{
                 '& .MuiDialog-paper': {
                     bgcolor: COLORS.bg1,
-                    padding: isSm ? '16px' : '56px',
+                    padding: isSm ? '16px 16px 24px 16px' : '40px 56px 56px 56px',
                     borderRadius: isSm ? '10px' : '30px',
                     ...flexStyle('flex-start', 'center'),
-                    width: isSm ? '95%' : 'auto',
+                    width: isSm ? '85%' : '400px',
                     margin: 0,
                     '::-webkit-scrollbar': {
                         width: '4px'
@@ -176,15 +176,25 @@ function RateModal(props) {
                 <TextField
                     sx={{
                         width: '100%',
+                        height: isSm ? '120px' : '186px',
+                        '& ::placeholder': {
+                            color: `${COLORS.placeHolder}!important`,
+                            opacity: 1,
+                            ...(isSm ? TEXT_STYLE.content3 : TEXT_STYLE.content2)
+                        },
+
                         '& .MuiOutlinedInput-input': {
                             color: COLORS.white,
                             bgcolor: COLORS.bg1,
-                            ...TEXT_STYLE.content2
+                            ...(isSm ? TEXT_STYLE.content3 : TEXT_STYLE.content2),
+                            height: '100%!important'
                         },
                         '& .MuiOutlinedInput-root': {
                             bgcolor: COLORS.bg1,
                             border: `1px solid ${COLORS.blackStroker}`,
-                            padding: isSm ? '10px 17px' : '10px 14px'
+                            padding: isSm ? '10px 17px' : '10px 14px',
+                            borderRadius: '8px',
+                            height: '100%'
                         }
                     }}
                     value={rateContent}
@@ -250,7 +260,7 @@ function AfterRateModal(props) {
                     bgcolor: COLORS.bg1,
                     borderRadius: isSm ? '10px' : '30px',
                     ...flexStyle('center', 'center'),
-                    width: isSm ? '95%' : '512px',
+                    width: isSm ? '93%' : '512px',
                     margin: 0
                 }
             }}>
