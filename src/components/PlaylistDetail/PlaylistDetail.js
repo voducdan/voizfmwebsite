@@ -13,7 +13,7 @@ import { useSelector, useDispatch } from 'react-redux';
 // import reducer, actions
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
 import { selectUser } from '../../redux/user';
-import openLogin, { setOpenLogin } from '../../redux/openLogin';
+import { setOpenLogin } from '../../redux/openLogin';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
@@ -417,7 +417,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const handlePlayAudio = async (audioId) => {
         try {
-            if (!user) {
+            if (!user && playlist.promotion !== 'free') {
                 dispatch(setOpenLogin(true));
                 return;
             }
@@ -431,8 +431,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setOpenSnackbar(true);
                 return;
             }
-            const res = await api.getAudioFile(audioId);
-            const data = await res.data;
+            if (user) {
+                await api.addListeningPlaylists(audioId, 0, playlist.id);
+            }
             router.push(`/audio-play/${audioId}`);
         }
         catch (err) {
@@ -459,7 +460,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             return;
         }
         try {
-            if (!user) {
+            if (!user && playlist.promotion !== 'free') {
                 dispatch(setOpenLogin(true));
                 return;
             }
@@ -474,7 +475,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 return;
             }
             if (playlistAudios.length > 0) {
-                await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
+                if (user) {
+                    await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
+                }
                 router.push(`/audio-play/${playlistAudios[0].id}?mode=all`);
                 return;
             }
@@ -816,7 +819,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     padding: isSm ? 0 : '0 48px',
                     margin: isSm ? 0 : '48px 0',
                     boxSizing: 'border-box',
-                    height: '881px',
+                    height: isSm ? 'auto' : '881px',
                     overflow: 'hidden',
                     ...(isSm && { flexDirection: 'column' })
                 }}
@@ -827,7 +830,26 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         bgcolor: COLORS.bg2,
                         padding: isSm ? '26px 0 0 15px' : '26px 32px',
                         borderRadius: '10px',
-                        height: '100%'
+                        height: isSm ? 'auto' : '100%',
+                        scrollbarGutter: 'stable',
+                        overflow: isSm ? 'auto' : 'hidden',
+                        boxSizing: 'border-box',
+                        '::-webkit-scrollbar': {
+                            width: '4px'
+                        },
+
+                        '::-webkit-scrollbar-track': {
+                            borderRadius: '5px',
+                        },
+
+                        '::-webkit-scrollbar-thumb': {
+                            background: COLORS.bg3,
+                            borderRadius: '5px'
+                        },
+
+                        ':hover': {
+                            overflowY: 'auto'
+                        }
                     }}
                     id='left-pane'
                 >
@@ -902,7 +924,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             className="truncated-text"
                             anchorClass="my-anchor-css-class"
                             expanded={false}
-                            width={isSm ? 390 : 1000}
+                            width={isSm ? 390 : 700}
                             truncatedEndingComponent={"... "}
                         >
                             <Typography
@@ -1006,8 +1028,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         ...flexStyle('flex-start', 'center'),
                         flexDirection: 'column',
                         rowGap: '32px',
-                        height: '100%',
-                        marginTop: isSm ? '16px' : 0
+                        height: isSm ? 'auto' : '100%',
+                        ...(isSm && { maxHeight: '739px' }),
+                        marginTop: isSm ? '16px' : 0,
                     }}
                 >
                     {
@@ -1066,7 +1089,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             padding: isSm ? '26px 15px 0 15px' : '26px 32px 0 26px',
                             boxSizing: 'border-box',
                             borderRadius: '10px',
-                            mb: '22px'
+                            height: 'inherit'
                         }}
                     >
                         <Typography
@@ -1162,7 +1185,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     padding: isSm ? '16px' : '26px 0',
                     boxSizing: 'border-box',
                     ...flexStyle('center', 'center'),
-                    columnGap: '24px'
+                    columnGap: isSm ? '16px' : '24px'
                 }}
             >
                 {
@@ -1177,7 +1200,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                     ...TEXT_STYLE.title1,
                                     color: COLORS.white,
                                     textTransform: 'none',
-                                    height: '48px'
+                                    height: '48px',
+                                    p: '14px 20px'
                                 }}
                                 variant="outlined"
                             >Thêm vào giỏ hàng</Button>
@@ -1198,7 +1222,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             ...TEXT_STYLE.title1,
                             color: COLORS.white,
                             textTransform: 'none',
-                            height: '48px'
+                            height: '48px',
+                            p: '14px 20px'
                         }}
                     >Mua gói VIP</Button>
                 </Box>

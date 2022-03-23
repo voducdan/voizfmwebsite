@@ -6,7 +6,7 @@ import { useRouter } from 'next/router';
 
 // import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux';
-import { selectOpenLogin, handleCloseLogin } from '../../redux/openLogin';
+import { selectOpenLogin, handleCloseLogin, setOpenLogin } from '../../redux/openLogin';
 import { setToken } from '../../redux/token';
 
 // import MUI component
@@ -101,6 +101,10 @@ export default function Login() {
     const [accessToken, setAccessToken] = useState(null);
     const [isGoogle, setIsGoogle] = useState(false);
     const [isFacebook, setIsFacebook] = useState(false);
+    const [otpCountDown, setOtpCountDown] = useState('');
+    const [isOTPWrong, setIsOTPWrong] = useState(false);
+    const [otpRetries, setOtpRetries] = useState(0);
+    const [intervalId, setIntervalId] = useState(0);
 
     const dispatch = useDispatch();
 
@@ -143,6 +147,20 @@ export default function Login() {
                 return;
             }
             setStep(2);
+            let start = 59;
+            const x = setInterval(() => {
+                setOtpCountDown(`00:${start < 10 ? '0' + start : start}`);
+                start -= 1;
+                if (start === -1) {
+                    dispatch(setOpenLogin(false));
+                    setStep(1);
+                    setIsOTPWrong(false);
+                    setOtpRetries(0);
+                    clearInterval(x);
+                    setOtpCountDown('');
+                }
+            }, 1000);
+            setIntervalId(x);
         }
         catch (err) {
             setHasError(true);
@@ -183,19 +201,16 @@ export default function Login() {
             setStep(3);
         }
         catch (err) {
-            setHasError(true);
-            const errList = err.response.data.error;
-            if (errList instanceof Object) {
-                let errMessage = '';
-                for (let e in errList) {
-                    const key = Object.keys(errList[e])[0];
-                    const value = errList[e][key]
-                    errMessage += `${key} ${value} \n`
-                }
-                setError(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
-                return;
+            setIsOTPWrong(true);
+            setOtpRetries(otpRetries + 1);
+            if (otpRetries === 2) {
+                dispatch(setOpenLogin(false));
+                setStep(1);
+                setIsOTPWrong(false);
+                setOtpRetries(0);
+                setOtpCountDown('');
+                clearInterval(intervalId);
             }
-            setError(errList);
         }
     }
 
@@ -518,12 +533,12 @@ export default function Login() {
                             display: step === 2 ? flexCenter.display : 'none',
                             alignItems: flexCenter.alignItems,
                             flexDirection: 'column',
-                            rowGap: '25px'
                         }}>
                             <Typography sx={{
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,
-                                mt: '32px'
+                                mt: '32px',
+                                mb: '25px'
                             }}>Nhập mã số gồm 6 chữ số đã gửi tới</Typography>
                             <TextField
                                 sx={{
@@ -531,6 +546,11 @@ export default function Login() {
                                     border: '1px solid #353535',
                                     justifyContent: 'center',
                                     height: '49px',
+                                    ...(isOTPWrong && {
+                                        '& .Mui-focused': {
+                                            border: `1px solid ${COLORS.error}`
+                                        }
+                                    }),
                                     '& .MuiOutlinedInput-root': {
                                         height: '100%'
                                     },
@@ -540,6 +560,29 @@ export default function Login() {
                                         textAlign: 'center'
                                     }
                                 }} id="phone-number" placeholder="123456" variant="outlined" onChange={onOTPChange} />
+                            {
+                                isOTPWrong && (
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.content2,
+                                            mt: '6px',
+                                            color: COLORS.error
+                                        }}
+                                    >
+
+                                        Mã không đúng, bạn còn {3 - otpRetries} lần thử
+                                    </Typography>
+                                )
+                            }
+                            <Typography
+                                sx={{
+                                    ...TEXT_STYLE.title2,
+                                    mt: isOTPWrong ? '12px' : '40px',
+                                    color: COLORS.bg4
+                                }}
+                            >
+                                Yêu cầu mã mới trong {otpCountDown}
+                            </Typography>
                             <CustomDisabledButton
                                 disabled={!isOTPValid}
                                 onClick={onEnterOTP}
@@ -547,7 +590,8 @@ export default function Login() {
                                     width: '100%',
                                     textTransform: 'none',
                                     marginBottom: !isSm ? '50px' : '40px',
-                                    height: '48px'
+                                    height: '48px',
+                                    mt: '16px',
                                 }} content={'Tiếp tục'} />
                         </Box>
                     </Box >
@@ -703,30 +747,59 @@ export default function Login() {
                     onClose={handleSkipPhone}
                     PaperProps={{
                         style: {
-                            backgroundColor: COLORS.bg1
+                            backgroundColor: COLORS.bg1,
+                            ...flexStyle('center', 'center'),
+                            borderRadius: isSm ? 0 : '30px',
+                            width: isSm ? '100%' : '512px',
+                            margin: 0,
+                            position: 'relative'
                         }
                     }}
                 >
-                    <DialogContent>
-                        <DialogContentText
-                            sx={{
-                                color: COLORS.white
-                            }}
-                        >
-                            Đăng nhập hoăc tạo tài khoản mới
-                        </DialogContentText>
+                    <IconButton
+                        aria-label="close"
+                        onClick={handleSkipPhone}
+                        sx={{
+                            position: 'absolute',
+                            right: 8,
+                            top: 0,
+                            color: COLORS.white
+                        }}
+                    >
+                        <CloseIcon />
+                    </IconButton>
+                    <DialogContent
+                        sx={{
+                            width: '90%',
+                            ...flexStyle('center', 'center'),
+                            p: 0
+                        }}
+                    >
                         <Box sx={{
                             marginTop: '32px',
-                            width: '100%',
+                            width: '90%',
                             ...flexCenter,
                             flexDirection: 'column',
-                            rowGap: '24px',
                             marginBottom: '24px',
                         }}>
                             <Typography sx={{
                                 ...TEXT_STYLE.title1,
                                 color: COLORS.white,
                             }}>Nhập số điện thoại của bạn để tiếp tục</Typography>
+                            <Box
+                                sx={{
+                                    ...flexStyle('flex-start', 'center'),
+                                    columnGap: '11px',
+                                    mt: '24px',
+                                    mb: '34px'
+                                }}
+                            >
+                                <GreenTick />
+                                <Typography sx={{
+                                    ...TEXT_STYLE.caption12,
+                                    color: COLORS.contentIcon
+                                }}>Tránh gặp vấn đề về tài khoản khi đổi điện thoại</Typography>
+                            </Box>
                             <Box sx={{
                                 width: '100%',
                                 display: flexCenter.display,
@@ -769,40 +842,30 @@ export default function Login() {
                                             color: COLORS.white,
                                             ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                         }
-                                    }} id="phone-number" placeholder="986754523" variant="outlined" onChange={onPhoneChange} />
+                                    }} id="phone-number" placeholder="987654321" variant="outlined" onChange={onPhoneChange} />
                             </Box>
                         </Box>
                     </DialogContent>
                     <DialogActions
                         sx={{
                             ...flexStyle('center', 'center'),
-                            'whiteSpace': 'pre-line'
+                            'whiteSpace': 'pre-line',
+                            width: '90%'
                         }}
                     >
-                        <Button
-                            sx={{
-                                width: '50%',
-                                textTransform: 'none',
-                                height: '48px',
-                                bgcolor: COLORS.contentIcon,
-                                ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
-                                marginBottom: !isSm ? '20px' : '30px',
-                            }}
-                            onClick={handleSkipPhone}
-                            autoFocus
-                        >
-                            Bỏ qua
-                        </Button>
                         <CustomDisabledButton
                             disabled={!isPhoneValid}
                             onClick={onEnterPhone}
                             style={{
-                                width: '50%',
+                                width: '100%',
                                 textTransform: 'none',
                                 marginBottom: !isSm ? '20px' : '30px',
                                 height: '48px',
                                 ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
-                            }} content={'Tiếp tục'} />
+                                borderRadius: '8px'
+                            }}
+                            content={'Tiếp tục'}
+                        />
                     </DialogActions>
                 </Dialog>
             </Dialog >

@@ -104,14 +104,17 @@ const userAvt = (props) => {
             <Button
                 onClick={handleCloseSidebarWhenClickAccountIcon}
                 key={idx}
-                style={{ textDecoration: 'none' }}
+                sx={{
+                    textDecoration: 'none',
+                    cursor: 'pointer'
+                }}
             >
                 <Avatar alt="Remy Sharp" src={avtSrc} sx={{ width: 40, height: 40 }} />
             </Button>
         )
     }
     return (
-        <AccountCircleIcon sx={{ width: 40, height: 40 }} onClick={() => { onOpenLogin() }} key={idx} />
+        <AccountCircleIcon sx={{ width: 40, height: 40, cursor: 'pointer' }} onClick={() => { onOpenLogin() }} key={idx} />
     )
 }
 

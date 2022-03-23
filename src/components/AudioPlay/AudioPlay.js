@@ -159,6 +159,7 @@ export default function AudioPlay({ audio }) {
                                 >
                                     <TableCell
                                         sx={{
+                                            width: isSm ? '50%' : '25%',
                                             borderBottom: 'none',
                                             padding: '0 0 21px 0'
                                         }}
@@ -174,7 +175,13 @@ export default function AudioPlay({ audio }) {
                                         }}
                                         align="right"
                                     >
-                                        <InfoValue value={audio?.playlist?.author_string} />
+                                        <Typography
+                                            sx={{
+                                                ...TEXT_STYLE.content2,
+                                                color: COLORS.VZ_Text_content
+                                            }}
+                                        >{audio?.playlist?.author_string}
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
                                 <TableRow
@@ -182,6 +189,7 @@ export default function AudioPlay({ audio }) {
                                 >
                                     <TableCell
                                         sx={{
+                                            width: isSm ? '50%' : '25%',
                                             borderBottom: 'none',
                                             padding: '0 0 21px 0'
                                         }}
@@ -205,6 +213,7 @@ export default function AudioPlay({ audio }) {
                                 >
                                     <TableCell
                                         sx={{
+                                            width: isSm ? '50%' : '25%',
                                             borderBottom: 'none',
                                             padding: '0 0 21px 0'
                                         }}
@@ -220,7 +229,13 @@ export default function AudioPlay({ audio }) {
                                         }}
                                         align="right"
                                     >
-                                        <InfoValue value={audio?.playlist?.channel?.name} />
+                                        <Typography
+                                            sx={{
+                                                ...TEXT_STYLE.content2,
+                                                color: COLORS.VZ_Text_content
+                                            }}
+                                        >{audio?.playlist?.channel?.name}
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
                                 <TableRow
@@ -228,6 +243,7 @@ export default function AudioPlay({ audio }) {
                                 >
                                     <TableCell
                                         sx={{
+                                            width: isSm ? '50%' : '25%',
                                             borderBottom: 'none',
                                             padding: '0 0 21px 0'
                                         }}
@@ -243,7 +259,13 @@ export default function AudioPlay({ audio }) {
                                         }}
                                         align="right"
                                     >
-                                        <InfoValue value={audio && audio?.playlist?.voicers[0]?.name} />
+                                        <Typography
+                                            sx={{
+                                                ...TEXT_STYLE.content2,
+                                                color: COLORS.VZ_Text_content
+                                            }}
+                                        >{audio?.playlist?.voicers[0]?.name}
+                                        </Typography>
                                     </TableCell>
                                 </TableRow>
                             </TableBody>

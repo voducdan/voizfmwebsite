@@ -1,6 +1,13 @@
 // import react
 import { useState, useEffect, useRef } from 'react';
 
+// import redux
+import { useSelector, useDispatch } from 'react-redux';
+
+// import reducer, actions
+import { selectUser } from '../../redux/user';
+import { selectOpenLogin, setOpenLogin } from '../../redux/openLogin';
+
 // import next router
 import { useRouter } from 'next/router';
 
@@ -16,12 +23,17 @@ import {
     FormControl,
     Input,
     Button,
-    Snackbar
+    Snackbar,
+    Alert
 } from '@mui/material';
-import CommentOutlinedIcon from '@mui/icons-material/CommentOutlined';
-import ThumbUpAltOutlinedIcon from '@mui/icons-material/ThumbUpAltOutlined';
 import BorderColorOutlinedIcon from '@mui/icons-material/BorderColorOutlined';
 import HeadphonesIcon from '@mui/icons-material/Headphones';
+
+// Import icons
+import {
+    Comment,
+    Like
+} from '../../components/Icons/index';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -32,13 +44,21 @@ import useWindowSize from '../../utils/useWindowSize';
 import API from '../../services/api';
 
 const CommentItem = (props) => {
-    const { data, api, updateLike, commentInputRef } = props;
+    const { data, api, updateLike, commentInputRef, user } = props;
 
     const [isLikeError, setIsLikeError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+
+    const dispatch = useDispatch();
 
     const handleLikeComment = async (id) => {
-        const res = await api.likeComment(id);
+
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
         try {
+            const res = await api.likeComment(id);
             const data = await res.data;
             if (data.error) {
                 setIsLikeError(true);
@@ -47,8 +67,20 @@ const CommentItem = (props) => {
             updateLike(data.data);
         }
         catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setErrorMessage(errMessage)
+                setIsLikeError(true);
+                return;
+            }
+            setErrorMessage(errList)
             setIsLikeError(true);
-            console.log(err);
         }
     }
 
@@ -58,6 +90,7 @@ const CommentItem = (props) => {
 
     return (
         <Box
+            id={`comment-${data.id}`}
             sx={{
                 ...flexStyle('flex-start', 'flex-start'),
                 columnGap: '11px'
@@ -113,7 +146,7 @@ const CommentItem = (props) => {
                             cursor: 'pointer'
                         }}
                     >
-                        <CommentOutlinedIcon sx={{ color: COLORS.contentIcon, width: '14px', height: '14px' }} />
+                        <Comment bgfill={COLORS.contentIcon} fill={COLORS.contentIcon} />
                         <Typography
                             onClick={handleResponseComment}
                             sx={{
@@ -130,14 +163,11 @@ const CommentItem = (props) => {
                             columnGap: '8px',
                             cursor: 'pointer'
                         }}
+                        onClick={() => { handleLikeComment(data.id) }}
                     >
-                        <ThumbUpAltOutlinedIcon
-                            onClick={() => { handleLikeComment(data.id) }}
-                            sx={{
-                                color: data.is_liked ? COLORS.main : COLORS.contentIcon,
-                                width: '14px',
-                                height: '14px'
-                            }}
+                        <Like
+                            bgfill={data.is_liked ? COLORS.main : COLORS.white}
+                            fill={data.is_liked ? COLORS.main : COLORS.white}
                         />
                         <Typography
                             sx={{
@@ -169,7 +199,7 @@ const CommentItem = (props) => {
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 open={isLikeError}
                 onClose={() => { setIsLikeError(false) }}
-                message="Thích đánh giá không thành công, vui lòng thử lại!"
+                message={errorMessage}
                 key='bottomcenter'
             />
         </Box>
@@ -180,21 +210,31 @@ export default function DiscoveryDetail({ discovery }) {
     const api = new API();
     const windowSize = useWindowSize();
     const commentInputRef = useRef();
+    const user = useSelector(selectUser);
+    const openLogin = useSelector(selectOpenLogin);
     const [inlineDiscovery, setInlineDiscovery] = useState(discovery);
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState('');
     const [commentPage, setCommentPage] = useState(0);
     const [isCommentError, setIsCommentError] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
     const { id } = useRouter().query;
+
+    const dispatch = useDispatch();
 
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 200 : 380;
 
     useEffect(() => {
         async function fetchDiscoveryComment() {
-            const res = await api.getDiscoveryComment(id);
-            const data = await res.data.data;
-            setComments(data);
+            try {
+                const res = await api.getDiscoveryComment(id);
+                const data = await res.data.data;
+                setComments(data);
+            }
+            catch (err) {
+                console.log(err)
+            }
         };
 
         fetchDiscoveryComment();
@@ -203,6 +243,13 @@ export default function DiscoveryDetail({ discovery }) {
     const handleWriteComment = (e) => {
         const content = e.target.value;
         setCommentContent(content);
+    }
+
+    const handleClickCommentInput = () => {
+        if (!user && !commentContent) {
+            dispatch(setOpenLogin(true));
+            setCommentContent('');
+        }
     }
 
     const handleCommentKeyUp = async (e) => {
@@ -227,9 +274,14 @@ export default function DiscoveryDetail({ discovery }) {
         setComments([comment, ...comments]);
     }
 
-    async function sendComment(discoveryId, data) {
-        const res = await api.commentDiscovery(discoveryId, data);
+    async function sendComment(discoveryId, body) {
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            setCommentContent('');
+            return;
+        }
         try {
+            const res = await api.commentDiscovery(discoveryId, body);
             const data = await res.data;
             if (data.error) {
                 setIsCommentError(true);
@@ -237,10 +289,25 @@ export default function DiscoveryDetail({ discovery }) {
                 return;
             }
             appendComment(data.data);
+            setCommentContent('');
+            window.location.href = `${window.location.origin}${window.location.pathname}#comment-${data.data.id}`;
         }
         catch (err) {
+            setCommentContent('');
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setErrorMessage(errMessage)
+                setIsCommentError(true);
+                return;
+            }
+            setErrorMessage(errList)
             setIsCommentError(true);
-            console.log(err);
         }
     }
 
@@ -252,8 +319,12 @@ export default function DiscoveryDetail({ discovery }) {
     }
 
     const handleLikeDiscovery = async () => {
-        const res = await api.likeDiscovery(id);
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
         try {
+            const res = await api.likeDiscovery(id);
             const data = await res.data;
             if (data.error) {
                 setIsLikeError(true);
@@ -262,8 +333,20 @@ export default function DiscoveryDetail({ discovery }) {
             updateDiscoveryLike(data.data);
         }
         catch (err) {
-            setIsLikeError(true);
-            console.log(err);
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setErrorMessage(errMessage)
+                setIsCommentError(true);
+                return;
+            }
+            setErrorMessage(errList)
+            setIsCommentError(true);
         }
     }
 
@@ -375,18 +458,21 @@ export default function DiscoveryDetail({ discovery }) {
                                 width: '100%',
                                 height: '100%',
                                 left: 0,
-                            }} alt="cover img alt" src={i.avatar && i?.avatar.thumb_url}></img>
+                            }}
+                                alt="cover img alt"
+                                src={i?.avatar?.original_url}
+                            />
                             <Link
                                 style={{
-                                    position: 'absolute',
-                                    bottom: '10px',
-                                    right: '10px',
                                     textDecoration: 'none'
                                 }}
                                 href={`/playlists/${i?.playlist?.id}`}
                             >
                                 <Button
                                     sx={{
+                                        position: 'absolute',
+                                        bottom: '10px',
+                                        right: '10px',
                                         ...TEXT_STYLE.title2,
                                         color: COLORS.white,
                                         bgcolor: COLORS.main,
@@ -432,12 +518,13 @@ export default function DiscoveryDetail({ discovery }) {
                     }}
                 >
                     <Box
+                        id='comment-area'
                         sx={{
                             ...flexStyle('center', 'center'),
                             columnGap: '8px'
                         }}
                     >
-                        <CommentOutlinedIcon sx={{ color: COLORS.white, width: '14px', height: '14px' }} />
+                        <Comment bgfill={COLORS.white} fill={COLORS.white} />
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.content2,
@@ -454,13 +541,9 @@ export default function DiscoveryDetail({ discovery }) {
                         }}
                         onClick={handleLikeDiscovery}
                     >
-                        <ThumbUpAltOutlinedIcon
-                            sx={{
-                                color: inlineDiscovery.is_liked ? COLORS.main : COLORS.white,
-                                width: '14px',
-                                height: '14px',
-                                cursor: 'pointer'
-                            }}
+                        <Like
+                            bgfill={inlineDiscovery.is_liked ? COLORS.main : COLORS.white}
+                            fill={inlineDiscovery.is_liked ? COLORS.main : COLORS.white}
                         />
                         <Typography
                             sx={{
@@ -488,7 +571,7 @@ export default function DiscoveryDetail({ discovery }) {
                 >
                     {
                         comments.map(item => (
-                            <CommentItem commentInputRef={commentInputRef} updateLike={updateLike} api={api} key={item.id} data={item} />
+                            <CommentItem user={user} commentInputRef={commentInputRef} updateLike={updateLike} api={api} key={item.id} data={item} />
                         ))
                     }
                 </Box>
@@ -496,7 +579,8 @@ export default function DiscoveryDetail({ discovery }) {
                     sx={{
                         ...flexStyle('flex-start', 'center'),
                         columnGap: isSm ? '16px' : '31px',
-                        mt: '40px'
+                        mt: '40px',
+                        maxWidth: '650px'
                     }}
                 >
                     <FormControl fullWidth variant="standard">
@@ -520,15 +604,22 @@ export default function DiscoveryDetail({ discovery }) {
                             placeholder='Gửi góp ý cho nội dung này'
                             onChange={handleWriteComment}
                             onKeyUp={handleCommentKeyUp}
+                            onClick={handleClickCommentInput}
                             startAdornment={<BorderColorOutlinedIcon sx={{ color: COLORS.placeHolder }} position="start">$</BorderColorOutlinedIcon>}
                         />
                     </FormControl>
                     <Button
                         onClick={handleComment}
                         sx={{
-                            ...TEXT_STYLE.title3,
+                            fontSize: '16px',
+                            lineHeight: '16px',
+                            fontWeight: 600,
+                            fontFamily: 'SF UI Display',
+                            fontStyle: 'normal',
                             color: COLORS.VZ_Text_content,
-                            textTransform: 'none'
+                            textTransform: 'none',
+                            p: 0,
+                            minWidth: 0
                         }}
                     >Gửi</Button>
                 </Box>
@@ -536,10 +627,14 @@ export default function DiscoveryDetail({ discovery }) {
             <Snackbar
                 anchorOrigin={{ vertical: 'bottom', horizontal: 'center' }}
                 open={isCommentError}
+                autoHideDuration={6000}
                 onClose={() => { setIsCommentError(false) }}
-                message="Đánh giá không thành công, vui lòng thử lại sau!"
                 key='bottomcenter'
-            />
+            >
+                <Alert onClose={() => { setIsCommentError(false) }} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
         </Box>
     )
 }

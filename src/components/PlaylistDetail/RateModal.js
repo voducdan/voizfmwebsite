@@ -261,7 +261,9 @@ function AfterRateModal(props) {
                     borderRadius: isSm ? '10px' : '30px',
                     ...flexStyle('center', 'center'),
                     width: isSm ? '93%' : '512px',
-                    margin: 0
+                    margin: 0,
+                    p: isSm ? '0 25px' : '0 66px',
+                    boxSizing: 'border-box'
                 }
             }}>
 
@@ -271,7 +273,8 @@ function AfterRateModal(props) {
                     flexDirection: 'column',
                     width: '70%',
                     padding: '40px 0',
-                    boxSizing: 'border-box'
+                    boxSizing: 'border-box',
+                    width: '100%'
                 }}
             >
                 <Typography

@@ -105,7 +105,7 @@ export default class API {
     }
 
     getDiscoveryComment = (discoveryId) => {
-        return this.init().get(`/discoveries/${discoveryId}/comments`)
+        return this.init().get(`/discoveries/${discoveryId}/comments?limit=999999`)
     }
 
     commentDiscovery = (discoveryId, data) => {

@@ -38,7 +38,7 @@ const DiscoveryItem = (props) => {
         <Box>
             <Masonry
                 columns={isSm ? 1 : 3}
-                spacing={isSm ? 0 : 4}
+                spacing={isSm ? 2 : 4}
                 sx={{
                     alignContent: 'flex-start',
                     overflow: 'hidden',
@@ -48,7 +48,6 @@ const DiscoveryItem = (props) => {
             >
                 {discoveryList.map((item, index) => (
                     <Stack
-                        key={index}
                         key={item.id}
                     >
                         <Link

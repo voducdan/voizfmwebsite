@@ -4,7 +4,9 @@
     line-height: 20px;
     font-weight: 500;
     font-family: 'SF UI Display';
+    scrollbar-gutter: stable;
 }
+
 .truncated-text .my-anchor-css-class {
      text-decoration: none;
  }
