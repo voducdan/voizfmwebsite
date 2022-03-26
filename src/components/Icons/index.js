@@ -26,6 +26,7 @@ import SelectDownArrow from './SelectDownArrow';
 import FacebookButtonIcon from './FacebookButtonIcon';
 import GoogleButtonIcon from './GoogleButtonIcon';
 import VipMedal from './VipMedal';
+import FreeMedal from './FreeMedal';
 import Pencil from './Pencil';
 import HorizontalMore from './HorizontalMore';
 import Save from './Save';
@@ -55,7 +56,6 @@ import OpenBook from './OpenBook';
 import Like from './Like';
 import Comment from './Comment';
 import Tick from './Tick';
-
 
 export {
     Bookmark,
@@ -114,5 +114,6 @@ export {
     OpenBook,
     Comment,
     Like,
-    Tick
+    Tick,
+    FreeMedal
 }

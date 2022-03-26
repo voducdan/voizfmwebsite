@@ -22,7 +22,7 @@ import { TEXT_STYLE, COLORS, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 
 export default function PlaylistThumnail(props) {
-    const { id, src, name, authors, isBookmark, hasBookmark, hasDelete, handleConfirmDeleteModalOpen, handleBookmark, children, width } = props;
+    const { id, src, name, authors, isBookmark, hasBookmark, hasDelete, handleConfirmDeleteModalOpen, handleBookmark, children, width, promotion } = props;
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const clientWidth = width ? width : (isSm || hasDelete) ? '100%' : '45%';
@@ -52,12 +52,20 @@ export default function PlaylistThumnail(props) {
                 sx={{
                     width: '100px',
                     height: '100px',
-                    position: 'relative'
+                    position: 'relative',
+                    ...(promotion && {
+                        '&::before': {
+                            content: promotion.includes('vip') ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                            position: 'absolute',
+                            right: 0,
+                            top: 0,
+                            zIndex: 8
+                        }
+                    })
                 }}
             >
                 <img
-                    style=
-                    {{
+                    style={{
                         width: '100px',
                         height: '100px',
                         borderRadius: hasDelete ? '50%' : '4px'

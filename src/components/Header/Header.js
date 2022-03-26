@@ -371,7 +371,7 @@ function Header({ router }) {
                 >
                     <Box
                         sx={{
-                            ...flexStyle('flex-start', 'center'),
+                            ...flexStyle('flex-start', 'flex-start'),
                             columnGap: '15px',
                             mb: '25px',
                             borderTop: `1px solid ${COLORS.bg3}`,
@@ -380,11 +380,7 @@ function Header({ router }) {
                             boxSizing: 'border-box'
                         }}
                     >
-                        <Box
-                            sx={{
-                                pt: '25px'
-                            }}
-                        >
+                        <Box>
                             <Avatar alt="user avatar" src={avtSrc} sx={{ width: 60, height: 60 }} />
                         </Box>
                         <Box>

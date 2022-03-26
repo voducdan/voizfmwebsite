@@ -324,7 +324,7 @@ export default function Login() {
             setIsGoogle(true);
         }
         catch (err) {
-            const errList = err.response.data.error;
+            const errList = err.response.data.error || '';
             if (errList instanceof Object) {
                 let errMessage = '';
                 for (let e in errList) {
@@ -957,8 +957,8 @@ export default function Login() {
                     </DialogContent>
                     <DialogActions
                         sx={{
-                            ...flexStyle('center', 'center'),
                             'whiteSpace': 'pre-line',
+                            ...flexStyle('center', 'center'),
                             flexDirection: 'column',
                             width: '100%',
                             p: 0

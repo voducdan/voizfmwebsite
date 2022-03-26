@@ -24,7 +24,7 @@ const tokenSlice = createSlice({
     }
 })
 
-export const { setToken, saveToken, removeToken } = tokenSlice.actions
-export const selectToken = (state) => state.token.token
+export const { setToken, saveToken, removeToken } = tokenSlice.actions;
+export const selectToken = (state) => state.token.token;
 
 export default tokenSlice.reducer

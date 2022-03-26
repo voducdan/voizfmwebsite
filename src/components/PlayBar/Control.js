@@ -84,6 +84,9 @@ export default function Control(props) {
     const media = audio.current;
 
     useEffect(() => {
+        if (!audioUrl) {
+            return;
+        }
         if (Hls.isSupported()) {
             const hls = new Hls();
             hls.attachMedia(media)

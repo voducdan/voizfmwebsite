@@ -17,7 +17,8 @@ import Link from 'next/link';
 
 // Import icons
 import {
-    VipMedal
+    VipMedal,
+    FreeMedal
 } from '../../components/Icons/index';
 
 // import utils
@@ -123,14 +124,23 @@ export default function Info() {
                                     columnGap: '18px'
                                 }}
                             >
-                                <VipMedal />
+                                {
+                                    accountData?.promotion.toUpperCase().includes('VIP') && (
+                                        <VipMedal />
+                                    )
+                                }
+                                {
+                                    accountData?.promotion.toUpperCase().includes('FREE') && (
+                                        <FreeMedal />
+                                    )
+                                }
                                 <Typography
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.content2),
                                         color: COLORS.contentIcon
                                     }}
                                 >
-                                    {`${accountData?.promotion?.toUpperCase()}`}{accountData?.promotion.toUpperCase() === 'VIP' ? `(Còn ${getRemainingDays(accountData)} ngày)` : ''}
+                                    {`${accountData?.promotion?.toUpperCase()}`}{accountData?.promotion.toUpperCase().includes('VIP') ? `(Còn ${getRemainingDays(accountData)} ngày)` : ''}
                                 </Typography>
                             </Box>
 

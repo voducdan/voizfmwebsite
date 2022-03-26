@@ -10,18 +10,20 @@ import audioReducer from './audio';
 import openSearchReducer from './OpenSearch';
 import paymentReducer from './payment';
 import userReducer from './user';
+import voicerReducer from './voicer';
 
 export default configureStore({
-  reducer: {
-    openSidebar: openSidebarReducer,
-    openLogin: openLoginReducer,
-    token: tokenSlice,
-    playAudio: playAudioReducer,
-    audio: audioReducer,
-    openSearch: openSearchReducer,
-    payment: paymentReducer,
-    user: userReducer
-  },
+    reducer: {
+        openSidebar: openSidebarReducer,
+        openLogin: openLoginReducer,
+        token: tokenSlice,
+        playAudio: playAudioReducer,
+        audio: audioReducer,
+        openSearch: openSearchReducer,
+        payment: paymentReducer,
+        user: userReducer,
+        voicer: voicerReducer
+    },
 })
 
 

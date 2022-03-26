@@ -364,4 +364,8 @@ export default class API {
     loginFacebook = (data) => {
         return this.init().post('web/auth/facebook', data);
     }
+
+    getVoicerPlaylists = (id) => {
+        return this.init().get(`/voicers/${id}/playlists`);
+    }
 }

@@ -17,7 +17,7 @@ export default function Thumbnail(props) {
                 borderRadius: '3px',
                 ...(promotion && {
                     '&::before': {
-                        content: promotion === 'vip' ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                        content: promotion.includes('vip') ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
                         position: 'absolute',
                         right: 0,
                         top: 0,
