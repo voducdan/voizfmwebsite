@@ -1,5 +1,5 @@
 export const validatePhoneNumber = (str) => {
-    const re = RegExp('^([3|5|7|8|9])[0-9]{4,49}\\b')
+    const re = RegExp('[0-9]{4,49}\\b')
     return re.test(str)
 }
 

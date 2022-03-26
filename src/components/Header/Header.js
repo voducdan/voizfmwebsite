@@ -36,7 +36,8 @@ import {
     Tooltip,
     Popover,
     Button,
-    Typography
+    Typography,
+    Divider
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
@@ -364,23 +365,26 @@ function Header({ router }) {
                 <Box
                     sx={{
                         bgcolor: COLORS.bg2,
-                        border: `2px solid #679ded`,
-                        pt: '20px',
-                        paddingBottom: '20px',
-                        borderRadius: '5px'
+                        p: '25px 25px 16px 25px',
+                        borderRadius: '6px'
                     }}
                 >
                     <Box
                         sx={{
                             ...flexStyle('flex-start', 'center'),
                             columnGap: '15px',
-                            pl: '20px',
-                            pr: '20px',
-                            mb: '20px',
-                            borderTop: `1px solid ${COLORS.placeHolder}`
+                            mb: '25px',
+                            borderTop: `1px solid ${COLORS.bg3}`,
+                            borderRadius: '6px',
+                            width: '360px',
+                            boxSizing: 'border-box'
                         }}
                     >
-                        <Box>
+                        <Box
+                            sx={{
+                                pt: '25px'
+                            }}
+                        >
                             <Avatar alt="user avatar" src={avtSrc} sx={{ width: 60, height: 60 }} />
                         </Box>
                         <Box>
@@ -400,24 +404,36 @@ function Header({ router }) {
                             >Xem trang cá nhân của bạn</Typography>
                         </Box>
                     </Box>
+                    <Divider
+                        sx={{
+                            bgcolor: COLORS.bg3,
+                            margin: '0 25px'
+                        }}
+                    />
                     <Box
                         sx={{
                             ...flexStyle('flex-start', 'center'),
                             columnGap: '15px',
-                            pl: '20px',
-                            pr: '20px',
-                            pt: '15px',
-                            borderTop: `1px solid ${COLORS.placeHolder}`
+                            pt: '15px'
                         }}
                     >
                         <Box>
-                            <LogoutIcon sx={{ color: COLORS.white }} />
+                            <LogoutIcon
+                                sx={{
+                                    width: '32px',
+                                    height: '32px',
+                                    bgcolor: COLORS.bg3,
+                                    borderRadius: '50%',
+                                    p: '8px',
+                                    boxSizing: 'border-box',
+                                    color: COLORS.white
+                                }} />
                         </Box>
                         <Typography
                             onClick={handleLogout}
                             sx={{
                                 color: COLORS.white,
-                                ...TEXT_STYLE.title2,
+                                ...TEXT_STYLE.content2,
                                 cursor: 'pointer'
                             }}
                         >Đăng xuất</Typography>

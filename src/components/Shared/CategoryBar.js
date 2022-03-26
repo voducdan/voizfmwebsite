@@ -19,37 +19,10 @@ import { TEXT_STYLE, COLORS } from '../../utils/constants'
 
 SwiperCore.use([Navigation]);
 
-const SwiperBtnNext = (props) => {
-    const { isSm } = props;
-    return {
-        position: 'absolute',
-        right: '-18px',
-        width: '24px',
-        height: '24px',
-        top: '2px',
-        zIndex: 2,
-        cursor: 'pointer',
-        ...(isSm && { display: 'none' })
-    }
-}
-
-const SwiperBtnPrev = (props) => {
-    const { isSm } = props
-    return {
-        position: 'absolute',
-        left: '-18px',
-        width: '24px',
-        height: '24px',
-        top: '2px',
-        zIndex: 2,
-        cursor: 'pointer',
-        ...(isSm && { display: 'none' })
-    }
-}
-
 export default function CategoryBar(props) {
     const { parent, categoryList, isSm, onSelectCategory, hasNavigation } = props
     const [activeCategory, setActiveCategory] = useState(parent);
+    const [showNavigationBtn, setShowNavigationBtn] = useState(false);
     const newCategoryList = [
         {
             code: parent,
@@ -62,6 +35,28 @@ export default function CategoryBar(props) {
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
 
+    const SwiperBtnNext = {
+        position: 'absolute',
+        right: '-18px',
+        width: '24px',
+        height: '24px',
+        top: '2px',
+        zIndex: 2,
+        cursor: 'pointer',
+        ...((isSm || !showNavigationBtn) && { display: 'none' })
+    }
+
+    const SwiperBtnPrev = {
+        position: 'absolute',
+        left: '-18px',
+        width: '24px',
+        height: '24px',
+        top: '2px',
+        zIndex: 2,
+        cursor: 'pointer',
+        ...((isSm || !showNavigationBtn) && { display: 'none' })
+    }
+
     const handleSelectCategory = (e) => {
         const channeId = e.currentTarget.id;
         setActiveCategory(channeId);
@@ -70,6 +65,8 @@ export default function CategoryBar(props) {
 
     return (
         <Box
+            onMouseOver={() => { setShowNavigationBtn(true); }}
+            onMouseOut={() => { setShowNavigationBtn(false); }}
             sx={{
                 position: 'relative'
             }}
@@ -140,7 +137,7 @@ export default function CategoryBar(props) {
                 hasNavigation && (
                     <div
                         style={{
-                            ...SwiperBtnPrev({ isSm })
+                            ...SwiperBtnPrev
                         }}
                         ref={navigationNewContentPrevRef}
                     >
@@ -152,7 +149,7 @@ export default function CategoryBar(props) {
                 hasNavigation && (
                     <div
                         style={{
-                            ...SwiperBtnNext({ isSm })
+                            ...SwiperBtnNext
                         }}
                         ref={navigationNewContentNextRef}
                     >

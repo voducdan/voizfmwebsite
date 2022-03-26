@@ -154,6 +154,12 @@ export default function PublisherComponent(props) {
         setActivePublisherPagination(id);
     }
 
+    const handleSlideChange = (e) => {
+        const realIndex = e.realIndex;
+        const id = Math.ceil(realIndex / 5);
+        setActivePublisherPagination(id);
+    }
+
     return (
         <Box
             sx={{
@@ -168,6 +174,8 @@ export default function PublisherComponent(props) {
             />
             {<Title content="Nhà xuất bản" isSm={isSm} />}
             <Swiper
+                onSlideChange={handleSlideChange}
+
                 pagination={swiperPagination}
 
                 navigation={{

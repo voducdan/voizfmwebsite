@@ -242,7 +242,7 @@ const PanelContent = (props) => {
                 <DialogActions
                     sx={{
                         ...flexStyle('center', 'center'),
-                        'whiteSpace': 'pre-line'
+                        whiteSpace: 'pre-line'
                     }}
                 >
                     <Button onClick={handleCloseErrorDialog} autoFocus>

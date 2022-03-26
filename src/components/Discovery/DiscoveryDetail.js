@@ -6,7 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // import reducer, actions
 import { selectUser } from '../../redux/user';
-import { selectOpenLogin, setOpenLogin } from '../../redux/openLogin';
+import { setOpenLogin } from '../../redux/openLogin';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -85,6 +85,10 @@ const CommentItem = (props) => {
     }
 
     const handleResponseComment = () => {
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
         commentInputRef.current.children[1].focus();
     }
 
@@ -211,7 +215,6 @@ export default function DiscoveryDetail({ discovery }) {
     const windowSize = useWindowSize();
     const commentInputRef = useRef();
     const user = useSelector(selectUser);
-    const openLogin = useSelector(selectOpenLogin);
     const [inlineDiscovery, setInlineDiscovery] = useState(discovery);
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState('');
@@ -254,13 +257,15 @@ export default function DiscoveryDetail({ discovery }) {
 
     const handleCommentKeyUp = async (e) => {
         const { keyCode } = e;
-        if (keyCode === 13) {
+        if (keyCode === 13 && commentContent) {
             await sendComment(inlineDiscovery.id, { content: commentContent });
         }
     }
 
     const handleComment = async () => {
-        await sendComment(inlineDiscovery.id, { content: commentContent });
+        if (commentContent){
+            await sendComment(inlineDiscovery.id, { content: commentContent });
+        }
     }
 
     const updateLike = (data) => {
@@ -271,6 +276,9 @@ export default function DiscoveryDetail({ discovery }) {
     }
 
     const appendComment = (comment) => {
+        const copiedDiscovery = {...inlineDiscovery};
+        copiedDiscovery.discovery_counter.comments_count = inlineDiscovery.discovery_counter.comments_count + 1;
+        setInlineDiscovery({...copiedDiscovery});
         setComments([comment, ...comments]);
     }
 
@@ -594,7 +602,8 @@ export default function DiscoveryDetail({ discovery }) {
                                 boxSizing: 'border-box',
                                 '& .MuiInput-input': {
                                     padding: '13px 16px',
-                                    ...TEXT_STYLE.caption12
+                                    ...TEXT_STYLE.content2,
+                                    color: COLORS.white
                                 }
                             }}
                             ref={commentInputRef}

@@ -11,7 +11,8 @@ import Link from 'next/link';
 import {
     Box,
     Avatar,
-    Typography
+    Typography,
+    Divider
 } from '@mui/material';
 import PhotoLibraryOutlinedIcon from '@mui/icons-material/PhotoLibraryOutlined';
 import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
@@ -63,7 +64,8 @@ export default function Author({ author }) {
         async function fetchFeaturedAuthors() {
             const res = await api.getFeaturedAuthors(id);
             const data = await res.data.data;
-            setFeaturedAuthors(data);
+            const slicedData = data.slice(0, 6);
+            setFeaturedAuthors(slicedData);
         }
         async function fetchPlaylists() {
             const res = await api.getAuthorPlaylists(id);
@@ -98,8 +100,10 @@ export default function Author({ author }) {
             <Box
                 sx={{
                     width: '100%',
-                    height: '40vh',
-                    background: '#222530'
+                    height: '390px',
+                    background: '#222530',
+                    p: isSm ? '57px 0' : '65px 0',
+                    boxSizing: 'border-box'
                 }}
             >
                 <Box
@@ -112,14 +116,14 @@ export default function Author({ author }) {
                 >
                     <Avatar
                         sx={{
-                            width: isSm ? '140px' : '160px',
-                            height: isSm ? '140px' : '160px',
+                            width: isSm ? '120px' : '160px',
+                            height: isSm ? '120px' : '160px',
                             mb: '40px'
                         }} alt="Remy Sharp" src={author?.avatar?.thumb_url}
                     />
                     <Typography
                         sx={{
-                            ...TEXT_STYLE.h2,
+                            ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                             color: COLORS.white,
                             mb: '16px'
                         }}
@@ -133,7 +137,7 @@ export default function Author({ author }) {
                         <PhotoLibraryOutlinedIcon sx={{ color: COLORS.white }} />
                         <Typography
                             sx={{
-                                ...TEXT_STYLE.title1,
+                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                 color: COLORS.white
                             }}
                         >{author?.author_counter?.playlists_count} albums</Typography>
@@ -356,6 +360,16 @@ export default function Author({ author }) {
                     )
                 }
             </Box>
+            {
+                !isSm && (
+                    <Divider
+                        sx={{
+                            bgcolor: COLORS.blackStroker,
+                            m: '0 48px'
+                        }}
+                    />
+                )
+            }
         </Box>
     )
 }

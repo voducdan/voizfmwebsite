@@ -14,14 +14,18 @@ import Hls from 'hls.js';
 
 // import MUI component
 import { styled, useTheme } from '@mui/material/styles';
-import Box from '@mui/material/Box';
-import Popover from '@mui/material/Popover';
-import MenuList from '@mui/material/MenuList';
-import MenuItem from '@mui/material/MenuItem';
-import ListItemText from '@mui/material/ListItemText';
-import Typography from '@mui/material/Typography';
-import Slider from '@mui/material/Slider';
-import IconButton from '@mui/material/IconButton';
+import {
+    Box,
+    Dialog,
+    ListItemText,
+    Typography,
+    Slider,
+    IconButton,
+    List,
+    ListItem,
+    Radio,
+    Button
+} from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 import SkipNextIcon from '@mui/icons-material/SkipNext';
@@ -75,8 +79,7 @@ export default function Control(props) {
     const [timer, setTimer] = useState(0);
     const [intervalId, setIntervalId] = useState(null);
     const [countDownTimerStr, setCountDownTimer] = useState('');
-    const [anchorEl, setAnchorEl] = useState(null);
-    const openTimer = Boolean(anchorEl);
+    const [openTimer, setOpenTimer] = useState(false);
 
     const media = audio.current;
 
@@ -171,12 +174,12 @@ export default function Control(props) {
         dispatch(togglePlayAudio());
     }
 
-    const handleTimerClick = (event) => {
-        setAnchorEl(event.currentTarget);
+    const handleTimerClick = () => {
+        setOpenTimer(true);
     };
 
     const handleTimerClose = () => {
-        setAnchorEl(null);
+        setOpenTimer(false);
     };
 
     const handleSelectTimer = (e) => {
@@ -232,6 +235,15 @@ export default function Control(props) {
     }
 
     const mainIconColor = COLORS.white;
+
+    const timerItems = [
+        'không hẹn giờ',
+        '5 phút',
+        '10 phút',
+        '20 phút',
+        '30 phút',
+        '60 phút',
+    ]
 
     return (
         <Box sx={{ width: '100%', overflow: 'hidden' }}>
@@ -315,49 +327,111 @@ export default function Control(props) {
                             }}
                         >{(timer === 0 || countDownTimerStr === '') ? 'Hẹn giờ' : `${countDownTimerStr}`}</Typography>
                     </Box>
-                    <Popover
+                    <Dialog
                         open={openTimer}
-                        anchorEl={anchorEl}
                         onClose={handleTimerClose}
-                        anchorOrigin={{
-                            vertical: 'top',
-                            horizontal: 'center',
-                        }}
-                        transformOrigin={{
-                            vertical: 'bottom',
-                            horizontal: 'center',
-                        }}
                         sx={{
-                            '& .MuiPopover-paper': {
-                                bgcolor: '#292B32'
+                            '& .MuiDialog-paper': {
+                                borderRadius: '30px',
+                                bgcolor: COLORS.bg1,
+                                width: '512px',
+                                p: '36px 27px 32px 27px',
+                                boxSizing: 'border-box',
+                                ...flexStyle('center', 'center')
                             }
+
                         }}
                     >
-                        <MenuList
+                        <Typography
                             sx={{
-                                color: COLORS.contentIcon
+                                ...TEXT_STYLE.h1,
+                                color: COLORS.white,
+                                mb: '46px'
+                            }}
+                        >Hẹn giờ</Typography>
+                        <List
+                            dense
+                            sx={{
+                                width: '100%',
+                                height: '100%'
                             }}
                         >
-                            <MenuItem onClick={handleSelectTimer} value={0}>
-                                <ListItemText>Không hẹn giờ</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleSelectTimer} value={5}>
-                                <ListItemText>5 phút</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleSelectTimer} value={10}>
-                                <ListItemText>10 phút</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleSelectTimer} value={20}>
-                                <ListItemText>20 phút</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleSelectTimer} value={30}>
-                                <ListItemText>30 phút</ListItemText>
-                            </MenuItem>
-                            <MenuItem onClick={handleSelectTimer} value={60}>
-                                <ListItemText>60 phút</ListItemText>
-                            </MenuItem>
-                        </MenuList>
-                    </Popover>
+                            {timerItems.map((value, idx) => {
+                                return (
+                                    <ListItem
+                                        key={value}
+                                        secondaryAction={
+                                            <Radio
+                                                key={idx}
+                                                // checked={}
+                                                onChange={() => { handleToggle(idx) }}
+                                                value={idx}
+                                            />
+                                        }
+                                        sx={{
+                                            p: 0,
+                                            ...(idx > 0 && {
+                                                borderTop: `1px solid ${COLORS.blackStroker}`,
+                                                p: '22px 0'
+                                            }),
+                                            ...(idx === 0 && {
+                                                pb: '22px'
+                                            })
+                                        }}
+                                    >
+                                        <ListItemText
+                                            value={idx}
+                                            onClick={handleSelectTimer}
+                                            primary={value}
+                                            sx={{
+                                                ...TEXT_STYLE.h3,
+                                                color: COLORS.bg4
+                                            }}
+                                        />
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'center'),
+                                columnGap: '16px',
+                                width: '100%',
+                                mt: '44px'
+                            }}
+                        >
+                            <Button
+                                sx={{
+                                    borderRadius: '8px',
+                                    textTransform: 'none',
+                                    width: '50%',
+                                    height: '48px',
+                                    bgcolor: COLORS.bg3,
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white
+                                }}
+                                variant="contained"
+                                color="error"
+                            >
+                                Huỷ
+                            </Button>
+                            <Button
+                                sx={{
+                                    textTransform: 'none',
+                                    borderRadius: '8px',
+                                    width: '50%',
+                                    height: '48px',
+                                    bgcolor: COLORS.main,
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white
+                                }}
+                                variant="contained"
+                                color="error"
+                            >
+                                Tiếp tục
+                            </Button>
+                        </Box>
+                    </Dialog>
                 </Box>
                 <Box
                     sx={{

@@ -1,5 +1,5 @@
 // import react module
-import { useState } from 'react';
+import { useState, useEffect } from 'react';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -24,7 +24,8 @@ import {
     IconButton,
     DialogContent,
     DialogContentText,
-    DialogActions
+    DialogActions,
+    InputAdornment,
 } from '@mui/material';
 import CloseIcon from '@mui/icons-material/Close';
 
@@ -36,7 +37,7 @@ import GoogleLogin from 'react-google-login';
 import CustomDisabledButton from '../../components/CustomDisabledButton/CustomDisabledButton';
 
 // import icons
-import { GreenTick, FacebookButtonIcon, GoogleButtonIcon } from '../../components/Icons/index';
+import { GreenTick, FacebookButtonIcon, GoogleButtonIcon, Account, Email } from '../../components/Icons/index';
 
 // import utils
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS, COUNTRY_CODES } from '../../utils/constants';
@@ -77,8 +78,17 @@ const textFieldStyle = {
     },
     '& .MuiOutlinedInput-root': {
         bgcolor: COLORS.bg2,
+        borderRadius: '4px',
+        border: `1px solid ${COLORS.blackStroker}`
     }
 }
+
+// List steps
+// 1. Login by phone
+// 2. Enter opt for phone login
+// 3. Update user info when login by phone
+// 4. Login by phone success
+// 5. Update phone number when login social
 
 export default function Login() {
     const api = new API();
@@ -105,16 +115,28 @@ export default function Login() {
     const [isOTPWrong, setIsOTPWrong] = useState(false);
     const [otpRetries, setOtpRetries] = useState(0);
     const [intervalId, setIntervalId] = useState(0);
+    const [isUserInforValidated, setIsUserInforValidated] = useState(false);
 
     const dispatch = useDispatch();
 
     const phonePrefixList = COUNTRY_CODES;
+
+    useEffect(() => {
+        if (!userInfo['email'] || !userInfo['first_name'] || !userInfo['last_name']) {
+            setIsUserInforValidated(false);
+            return;
+        }
+        setIsUserInforValidated(true);
+
+    }, [userInfo]);
+
     const onClose = () => {
         dispatch(handleCloseLogin());
         setIsPhoneValid(false);
         setIsOTPValid(false);
         setStep(1);
     };
+
     const onPhoneChange = (event) => {
         const value = event.target.value
         if (validatePhoneNumber(value)) {
@@ -411,11 +433,13 @@ export default function Login() {
                             backgroundColor: COLORS.blackStroker,
                             width: '100%'
                         }} />
-                        <Box sx={{
-                            display: step === 1 ? flexCenter.display : 'none',
-                            alignItems: flexCenter.alignItems,
-                            flexDirection: 'column',
-                        }}>
+                        <Box
+                            sx={{
+                                display: step === 1 ? flexCenter.display : 'none',
+                                alignItems: flexCenter.alignItems,
+                                flexDirection: 'column',
+                            }}
+                        >
                             <Box sx={{
                                 marginTop: '32px',
                                 width: '100%',
@@ -620,12 +644,8 @@ export default function Login() {
                 <FormControl
                     sx={{
                         display: step === 3 ? flexCenter.display : 'none',
-                        width: isSm ? '100%' : '80%',
-                        ...flexStyle('center', 'center'),
-                        flexDirection: 'column',
-                        rowGap: '24px',
-                        marginTop: '32px',
-                        paddingBottom: '48px'
+                        width: '100%',
+                        ...flexStyle('center', 'center')
                     }}
                 >
                     <Box
@@ -633,84 +653,171 @@ export default function Login() {
                             display: step === 3 ? flexCenter.display : 'none',
                             alignItems: flexCenter.alignItems,
                             flexDirection: 'column',
-                        }}>
-                        <Box sx={{
-                            marginTop: '32px',
+                            p: isSm ? '46px 38px 64px 38px' : '51px 56px 58px 56px',
                             width: '100%',
-                            ...flexCenter,
-                            flexDirection: 'column',
-                            rowGap: '24px',
-                            marginBottom: '24px',
+                            boxSizing: 'border-box'
                         }}>
-                            <Typography sx={{
-                                ...TEXT_STYLE.h2,
-                                color: COLORS.white,
-                            }}>Cập nhật thông tin cá nhân</Typography>
+                        <Box
+                            sx={{
+                                width: '100%',
+                                ...flexCenter,
+                                flexDirection: 'column'
+                            }}
+                        >
+                            <Typography
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textAlign: 'center'
+                                }}
+                            >Bạn đã đăng ký tài khoản thành công!<br />Điền thông tin để hoàn tất</Typography>
                             <Box
                                 sx={{
                                     width: '100%',
-                                    display: flexCenter.display,
+                                    ...flexStyle('center', 'center'),
                                     flexDirection: 'column',
-                                    rowGap: '10px'
+                                    rowGap: '23px',
+                                    mt: '32px'
                                 }}
                             >
-                                <TextField
+                                <Box
                                     sx={{
-                                        ...textFieldStyle
+                                        ...flexStyle('center', 'center'),
+                                        columnGap: isSm ? '8px' : '16px',
+                                        width: '100%'
                                     }}
-                                    name='first_name'
-                                    onChange={handleChangeUserInfo}
-                                    placeholder="Họ tên lót"
-                                />
-                                <TextField
+                                >
+                                    <TextField
+                                        sx={{
+                                            ...textFieldStyle
+                                        }}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Account />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        name='first_name'
+                                        onChange={handleChangeUserInfo}
+                                        value={userInfo.first_name || ''}
+                                        placeholder="Họ tên lót" variant="outlined"
+                                    />
+                                    <TextField
+                                        sx={{
+                                            ...textFieldStyle
+                                        }}
+                                        name='last_name'
+                                        onChange={handleChangeUserInfo}
+                                        value={userInfo.last_name || ''}
+                                        placeholder="Tên" variant="outlined"
+                                    />
+                                </Box>
+                                <Box
                                     sx={{
-                                        ...textFieldStyle
+                                        ...flexStyle('center', 'center'),
+                                        width: '100%'
                                     }}
-                                    name='last_name'
-                                    onChange={handleChangeUserInfo}
-                                    placeholder="Tên"
-                                />
-                                <TextField
-                                    sx={{
-                                        ...textFieldStyle
-                                    }}
-                                    placeholder="Ngày sinh (dd/mm/yyyy)"
-                                    name='birthday'
-                                    onChange={handleChangeUserInfo}
-                                />
-                                <TextField
-                                    sx={{
-                                        ...textFieldStyle
-                                    }}
-                                    placeholder="Avatar url"
-                                    name='avatar_url'
-                                    onChange={handleChangeUserInfo}
-                                />
-                                <TextField
-                                    sx={{
-                                        ...textFieldStyle
-                                    }}
-                                    name='email'
-                                    onChange={handleChangeUserInfo}
-                                    placeholder="Email"
-                                />
+                                >
+                                    <TextField
+                                        sx={{
+                                            width: '100%',
+                                            ...textFieldStyle
+                                        }}
+                                        InputProps={{
+                                            startAdornment: (
+                                                <InputAdornment position="start">
+                                                    <Email />
+                                                </InputAdornment>
+                                            ),
+                                        }}
+                                        name='email'
+                                        onChange={handleChangeUserInfo}
+                                        value={userInfo.email || ''}
+                                        placeholder="Địa chỉ email" variant="outlined"
+                                    />
+                                </Box>
                             </Box>
-                            <Button
+                            <CustomDisabledButton
                                 onClick={onUpdateProfile}
-                                sx={{
+                                disabled={!isUserInforValidated}
+                                style={{
+                                    width: '100%',
                                     textTransform: 'none',
                                     ...TEXT_STYLE.title1,
                                     color: COLORS.white,
                                     bgcolor: COLORS.main,
-                                    width: isSm ? '100%' : '50%',
                                     height: '48px',
                                     borderRadius: '8px',
-                                    margin: '21px 0'
+                                    mt: '24px',
+                                    mb: '8px'
+                                }}
+                                content='Tiếp tục'
+                            />
+                        </Box>
+                        <Typography
+                            sx={{
+                                ...TEXT_STYLE.content3,
+                                color: '#DEDEDE'
+                            }}
+                        >
+                            Tham khảo <a
+                                target='_blank'
+                                href='https://voiz.vn/chinh-sach-bao-mat'
+                                style={{
+                                    color: '#DEDEDE'
                                 }}
                             >
-                                Tiếp tục
-                            </Button>
-                        </Box>
+                                chính sách bảo mật &nbsp;
+                            </a>
+                            của chúng tôi
+                        </Typography>
+                        <Typography sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            mb: '24px',
+                            mt: '25px'
+                        }}>hoặc tiếp tục với</Typography>
+                        <Stack sx={{ width: '100%' }} spacing={3} direction="column">
+                            <FacebookLogin
+                                render={renderProps => (
+                                    <Button
+                                        onClick={renderProps.onClick}
+                                        sx={{ textTransform: 'none', height: '48px' }}
+                                        variant="contained"
+                                        color="primary"
+                                        startIcon={<FacebookButtonIcon />}>
+                                        Facebook
+                                    </Button>
+
+                                )}
+                                appId={`${process.env.NEXT_PUBLIC_FACEBOOK_APP_ID}`}
+                                autoLoad={false}
+                                fields="name,email,picture"
+                                callback={responseFacebook} />
+                            <GoogleLogin
+                                render={renderProps => (
+                                    <Button
+                                        onClick={renderProps.onClick}
+                                        disabled={renderProps.disabled}
+                                        sx={{
+                                            textTransform: 'none',
+                                            height: '48px'
+                                        }}
+                                        variant="contained"
+                                        color="error"
+                                        startIcon={<GoogleButtonIcon />}>
+                                        Google
+                                    </Button>
+
+                                )}
+                                cookiePolicy={'single_host_origin'}
+                                clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
+                                buttonText="Google"
+                                onSuccess={responseGoogleSuccess}
+                                onFailure={responseGoogleFalure}
+                            />
+                        </Stack >
                     </Box>
                 </FormControl>
                 <Dialog
@@ -745,14 +852,16 @@ export default function Login() {
                 <Dialog
                     open={step === 5}
                     onClose={handleSkipPhone}
-                    PaperProps={{
-                        style: {
+                    sx={{
+                        '& .MuiDialog-paper': {
                             backgroundColor: COLORS.bg1,
                             ...flexStyle('center', 'center'),
                             borderRadius: isSm ? 0 : '30px',
                             width: isSm ? '100%' : '512px',
                             margin: 0,
-                            position: 'relative'
+                            position: 'relative',
+                            p: isSm ? '0 38px' : '0 56px',
+                            boxSizing: 'border-box'
                         }
                     }}
                 >
@@ -770,15 +879,15 @@ export default function Login() {
                     </IconButton>
                     <DialogContent
                         sx={{
-                            width: '90%',
+                            width: '100%',
                             ...flexStyle('center', 'center'),
                             p: 0
                         }}
                     >
                         <Box sx={{
                             marginTop: '32px',
-                            width: '90%',
-                            ...flexCenter,
+                            width: '100%',
+                            ...flexStyle('center', 'center'),
                             flexDirection: 'column',
                             marginBottom: '24px',
                         }}>
@@ -802,7 +911,7 @@ export default function Login() {
                             </Box>
                             <Box sx={{
                                 width: '100%',
-                                display: flexCenter.display,
+                                ...flexStyle('center', 'center'),
                                 columnGap: '16px',
                                 height: '49px'
                             }}>
@@ -850,7 +959,9 @@ export default function Login() {
                         sx={{
                             ...flexStyle('center', 'center'),
                             'whiteSpace': 'pre-line',
-                            width: '90%'
+                            flexDirection: 'column',
+                            width: '100%',
+                            p: 0
                         }}
                     >
                         <CustomDisabledButton
@@ -866,6 +977,17 @@ export default function Login() {
                             }}
                             content={'Tiếp tục'}
                         />
+                        <Button
+                            onClick={handleSkipPhone}
+                            sx={{
+                                ...TEXT_STYLE.content1,
+                                color: COLORS.contentIcon,
+                                textTransform: 'none',
+                                mb: '39px'
+                            }}
+                        >
+                            Bỏ qua
+                        </Button>
                     </DialogActions>
                 </Dialog>
             </Dialog >

@@ -285,6 +285,12 @@ export default function HomeContent() {
         setActiveNewContentPagination(id);
     }
 
+    const handleSlideChange = (e) => {
+        const realIndex = e.realIndex;
+        const id = Math.ceil(realIndex / 3);
+        setActiveNewContentPagination(id);
+    }
+
     return (
         <Main>
             <HomeCarousel></HomeCarousel>
@@ -343,6 +349,8 @@ export default function HomeContent() {
                 />
                 {<Title content="Nội dung mới cho bạn" isSm={isSm} />}
                 <Swiper
+                    onSlideChange={handleSlideChange}
+
                     pagination={swiperPagination}
 
                     navigation={{
