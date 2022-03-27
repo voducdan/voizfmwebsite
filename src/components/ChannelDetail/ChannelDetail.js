@@ -136,7 +136,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                 sx={{
                     width: '100%',
                     height: isSm ? '272px' : '390px',
-                    ...flexStyle('flex-end', 'center'),
+                    ...flexStyle('flext-start', 'flex-start'),
                     p: isSm ? '25px 21px' : '50px 0',
                     boxSizing: 'border-box',
                     mb: isSm ? '16px' : '40px',
@@ -157,20 +157,28 @@ export default function ChannelDetail({ channelFromAPI }) {
             >
                 <Box
                     sx={{
-                        width: '95%',
+                        width: '100%',
                         ...flexStyle('flex-start', 'center'),
                         columnGap: isSm ? '30px' : '48px',
                         pr: isSm ? 0 : '50px',
-                        boxSizing: 'border-box'
+                        boxSizing: 'border-box',
+                        height: '100%'
                     }}
                 >
-                    <img
-                        style={{
-                            width: isSm ? '110px' : '210px',
-                            height: isSm ? '110px' : '210px',
-                            borderRadius: '4px'
-                        }} alt={`image ${channel?.name}`} src={channel?.avatar?.thumb_url}
-                    />
+                    <Box
+                        sx={{
+                            height: '100%',
+                            ...flexStyle('center', 'flex-start')
+                        }}
+                    >
+                        <img
+                            style={{
+                                width: isSm ? '110px' : '210px',
+                                height: isSm ? '110px' : '210px',
+                                borderRadius: '4px'
+                            }} alt={`image ${channel?.name}`} src={channel?.avatar?.thumb_url}
+                        />
+                    </Box>
                     <Box
                         sx={{
                             height: '100%',
@@ -185,7 +193,6 @@ export default function ChannelDetail({ channelFromAPI }) {
                                 ...flexStyle('flex-start', 'center'),
                                 flexDirection: 'column',
                                 height: '100%',
-                                minHeight: '210px',
                                 width: '60%'
                             }}
                         >
