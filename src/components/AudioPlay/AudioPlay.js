@@ -26,7 +26,6 @@ import GraphicEqIcon from '@mui/icons-material/GraphicEq';
 
 // import others components
 import InfoLabel from '../../components/Shared/InfoLabel';
-import InfoValue from '../../components/Shared/InfoValue';
 import ShareModal from '../../components/Shared/ShareModal';
 
 // import icons

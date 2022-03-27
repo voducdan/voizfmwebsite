@@ -478,8 +478,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const fetchAudioUrl = async (id, mode) => {
         try {
             const res = await api.getAudioFile(id);
-            const data = await res.data.data;
-            dispatch(setAudioHls(data.url));
+            // const data = await res.data.data;
+            // dispatch(setAudioHls(data.url));
             if (mode === 'all') {
                 router.push(`/audio-play/${id}?mode=${mode}`);
                 return;
