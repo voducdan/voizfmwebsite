@@ -149,7 +149,7 @@ export default function Author({ author }) {
                     width: '100%',
                     ...flexStyle('space-between', 'stretch'),
                     ...(isSm && { flexDirection: 'column' }),
-                    p: isSm ? '16px 0' : '48px',
+                    p: isSm ? '16px 0' : '40px 48px 48px 48px',
                     boxSizing: 'border-box'
                 }}
             >
@@ -165,7 +165,10 @@ export default function Author({ author }) {
                     <Box
                         sx={{
                             width: '100%',
-                            bgcolor: COLORS.bg2
+                            bgcolor: COLORS.bg2,
+                            ...(!isSm && {
+                                borderRadius: '10px'
+                            })
                         }}
                     >
                         <Box
@@ -239,7 +242,10 @@ export default function Author({ author }) {
                     <Box
                         sx={{
                             width: '100%',
-                            bgcolor: COLORS.bg2
+                            bgcolor: COLORS.bg2,
+                            ...(!isSm && {
+                                borderRadius: '10px'
+                            })
                         }}
                     >
                         <Box
@@ -288,7 +294,8 @@ export default function Author({ author }) {
                                                     <Avatar
                                                         style={{
                                                             width: '100%',
-                                                            height: `${getFeaturedAuthorWidth()}px`
+                                                            height: `${getFeaturedAuthorWidth()}px`,
+                                                            border: `2px solid ${COLORS.second}`
                                                         }}
                                                         src={i?.avatar?.thumb_url} alt={`image ${i?.name}`}
                                                     />
@@ -318,7 +325,10 @@ export default function Author({ author }) {
                         <Box
                             sx={{
                                 width: '57%',
-                                bgcolor: COLORS.bg2
+                                bgcolor: COLORS.bg2,
+                                ...(!isSm && {
+                                    borderRadius: '10px'
+                                })
                             }}
                         >
                             <Box
@@ -350,6 +360,7 @@ export default function Author({ author }) {
                                                 name={i.name}
                                                 src={i?.avatar?.thumb_url}
                                                 authors={i?.authors}
+                                                promotion={i?.promotion}
                                                 children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
                                             />
                                         ))

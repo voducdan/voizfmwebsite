@@ -96,7 +96,7 @@ export default function Info() {
                                     color: COLORS.white,
                                     mb: isSm ? '16px' : '21px'
                                 }}
-                            >{`${accountData?.first_name} ${accountData?.last_name}`}</Typography>
+                            >{`${accountData?.last_name} ${accountData?.first_name}`}</Typography>
                             <Box
                                 sx={{
                                     ...flexStyle('flex-start', 'center'),

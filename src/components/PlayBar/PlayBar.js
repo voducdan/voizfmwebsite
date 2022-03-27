@@ -193,7 +193,7 @@ export default function PlayBar() {
                 <Avatar
                     sx={{ width: isSm ? '65px' : '65px', height: isSm ? '65px' : '65px' }}
                     alt="audio avt"
-                    src={audioData?.playlist?.avatar?.thumb_url}
+                    src={audioData?.avatar?.original_url || audioData?.playlist?.avatar?.original_url}
                 />
                 <Box
                     sx={{
@@ -258,6 +258,7 @@ export default function PlayBar() {
                     audio={audio}
                     nextAudioId={nextAudioId}
                     prevAudioId={prevAudioId}
+                    isSm={isSm}
                 />
             </Box>)
             }

@@ -45,7 +45,7 @@ import MessengerClassic from './MessengerClassic';
 import Hyperlink from './Hyperlink';
 import QR from './QR';
 import Favorite from './Favorite';
-import Loop from './Loop';
+import Speed from './Speed';
 import Clock from './Clock';
 import CartEmpty from './CartEmpty';
 import LibraryBook from './LibraryBook';
@@ -104,7 +104,7 @@ export {
     Hyperlink,
     QR,
     Favorite,
-    Loop,
+    Speed,
     Clock,
     CartEmpty,
     LibraryBook,

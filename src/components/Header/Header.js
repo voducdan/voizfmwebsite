@@ -383,7 +383,13 @@ function Header({ router }) {
                         <Box>
                             <Avatar alt="user avatar" src={avtSrc} sx={{ width: 60, height: 60 }} />
                         </Box>
-                        <Box>
+                        <Box
+                            sx={{
+                                height: '60px',
+                                ...flexStyle('center', 'flex-start'),
+                                flexDirection: 'column'
+                            }}
+                        >
                             <Typography
                                 sx={{
                                     color: COLORS.white,

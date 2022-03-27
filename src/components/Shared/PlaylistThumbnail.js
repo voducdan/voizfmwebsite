@@ -38,91 +38,93 @@ export default function PlaylistThumnail(props) {
     }
 
     return (
-        <Card
-            sx={{
-                ...flexStyle('flex-start', 'center'),
-                columnGap: isSm ? '10px' : '20px',
-                bgcolor: 'inherit',
-                boxShadow: 'none',
-                width: clientWidth,
-                height: '100px'
-            }}
+        <Link
+            href={`/playlists/${id}`}
+            style={{ textDecoration: 'none' }}
         >
-            <Box
+            <Card
                 sx={{
-                    width: '100px',
+                    ...flexStyle('flex-start', 'center'),
+                    columnGap: isSm ? '10px' : '20px',
+                    bgcolor: 'inherit',
+                    boxShadow: 'none',
+                    width: clientWidth,
                     height: '100px',
-                    position: 'relative',
-                    ...(promotion && {
-                        '&::before': {
-                            content: promotion.includes('vip') ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
-                            position: 'absolute',
-                            right: 0,
-                            top: 0,
-                            zIndex: 8
-                        }
-                    })
-                }}
-            >
-                <img
-                    style={{
-                        width: '100px',
-                        height: '100px',
-                        borderRadius: hasDelete ? '50%' : '4px'
-                    }}
-                    // img src currently not working
-                    src={src}
-                    alt={`images ${name}`}
-                />
-                {
-                    hasDelete && (
-                        <PlayArrowIcon
-                            fontSize="large"
-                            sx={{
-                                position: 'absolute',
-                                color: COLORS.white,
-                                top: '50%',
-                                left: '50%',
-                                transform: 'translate(-50%,-50%)'
-                            }}
-                        />
-                    )
-                }
-            </Box>
-
-            <CardContent
-                sx={{
-                    ...flexStyle('space-between', 'flex-start'),
-                    flexDirection: 'column',
-                    flex: '1 0 auto',
-                    p: 0,
-                    height: '100%',
-                    width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 120px)',
-                    '&:last-child': {
-                        p: 0
-                    }
+                    cursor: 'pointer'
                 }}
             >
                 <Box
                     sx={{
+                        width: '100px',
+                        height: '100px',
+                        position: 'relative',
+                        ...(promotion && {
+                            '&::before': {
+                                content: promotion.includes('vip') ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                                position: 'absolute',
+                                right: 0,
+                                top: 0,
+                                zIndex: 8
+                            }
+                        })
+                    }}
+                >
+                    <img
+                        style={{
+                            width: '100px',
+                            height: '100px',
+                            borderRadius: hasDelete ? '50%' : '4px'
+                        }}
+                        // img src currently not working
+                        src={src}
+                        alt={`images ${name}`}
+                    />
+                    {
+                        hasDelete && (
+                            <PlayArrowIcon
+                                fontSize="large"
+                                sx={{
+                                    position: 'absolute',
+                                    color: COLORS.white,
+                                    top: '50%',
+                                    left: '50%',
+                                    transform: 'translate(-50%,-50%)'
+                                }}
+                            />
+                        )
+                    }
+                </Box>
+
+                <CardContent
+                    sx={{
                         ...flexStyle('space-between', 'flex-start'),
-                        width: '100%',
-                        ...(isSm && { columnGap: '10px' })
+                        flexDirection: 'column',
+                        flex: '1 0 auto',
+                        p: 0,
+                        height: '100%',
+                        width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 120px)',
+                        '&:last-child': {
+                            p: 0
+                        }
                     }}
                 >
                     <Box
                         sx={{
-                            ...flexStyle('flex-start', 'flex-start'),
-                            flexDirection: 'column',
-                            flex: '1 0 auto',
-                            rowGap: '6px',
-                            width: '50%'
+                            ...flexStyle('space-between', 'flex-start'),
+                            width: '100%',
+                            ...(isSm && { columnGap: '10px' })
                         }}
                     >
-                        <Link
-                            href={`/playlists/${id}`}
-                            style={{ textDecoration: 'none' }}
+                        <Box
+                            sx={{
+                                ...flexStyle('flex-start', 'flex-start'),
+                                flexDirection: 'column',
+                                flex: '1 0 auto',
+                                rowGap: '6px',
+                                width: '50%'
+                            }}
                         >
+
                             <Typography
                                 sx={{
                                     ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
@@ -136,20 +138,15 @@ export default function PlaylistThumnail(props) {
                             >
                                 {name}
                             </Typography>
-                        </Link>
-                        {
-                            authorsString(authors) && (
-                                <Box
-                                    sx={{
-                                        ...flexStyle('flex-start', 'center'),
-                                        columnGap: '6px'
-                                    }}
-                                >
-                                    <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
-                                    <Link
-                                        href={`/authors/${authors[0].id}`}
-                                        style={{ textDecoration: 'none' }}
+                            {
+                                authorsString(authors) && (
+                                    <Box
+                                        sx={{
+                                            ...flexStyle('flex-start', 'center'),
+                                            columnGap: '6px'
+                                        }}
                                     >
+                                        <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                                         <Typography
                                             sx={{
                                                 ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
@@ -163,54 +160,54 @@ export default function PlaylistThumnail(props) {
                                         >
                                             {authorsString(authors)} {Array.isArray(authors) ? '(Tác giả)' : ''}
                                         </Typography>
-                                    </Link>
-                                </Box>
-                            )
+                                    </Box>
+                                )
+                            }
+                            {
+                                !authorsString(authors) && (
+                                    <Typography
+                                        sx={{
+                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                            color: COLORS.contentIcon
+                                        }}
+                                    >
+                                        Không có tác giả
+                                    </Typography>
+                                )
+                            }
+                        </Box>
+                        {hasBookmark && (
+                            <Button
+                                onClick={() => { handleBookmark(id) }}
+                                sx={{
+                                    ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.title1),
+                                    ...(isSm && { whiteSpace: 'nowrap' }),
+                                    color: COLORS.white,
+                                    borderRadius: '22px',
+                                    height: isSm ? '28px' : '48px',
+                                    width: 'max-content',
+                                    textTransform: 'none',
+                                    bgcolor: isBookmark ? COLORS.bg3 : COLORS.main,
+                                    pl: '14px',
+                                    pr: '14px',
+                                    ':hover': {
+                                        bgcolor: isBookmark ? COLORS.bg3 : COLORS.main
+                                    }
+                                }}
+                                startIcon={isBookmark ? <CheckIcon /> : <AddIcon />}
+                            >{isBookmark ? 'Hủy đánh dấu' : 'Đánh dấu'}</Button>)
                         }
                         {
-                            !authorsString(authors) && (
-                                <Typography
-                                    sx={{
-                                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                        color: COLORS.contentIcon
-                                    }}
-                                >
-                                    Không có tác giả
-                                </Typography>
+                            hasDelete && (
+                                <IconButton onClick={handleConfirmDeleteModalOpen} id={id} aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content, p: '0 5px 5px 5px' }}>
+                                    <DeleteIcon fontSize="small" />
+                                </IconButton>
                             )
                         }
                     </Box>
-                    {hasBookmark && (
-                        <Button
-                            onClick={() => { handleBookmark(id) }}
-                            sx={{
-                                ...(isSm ? TEXT_STYLE.title3 : TEXT_STYLE.title1),
-                                ...(isSm && { whiteSpace: 'nowrap' }),
-                                color: COLORS.white,
-                                borderRadius: '22px',
-                                height: isSm ? '28px' : '48px',
-                                width: 'max-content',
-                                textTransform: 'none',
-                                bgcolor: isBookmark ? COLORS.bg3 : COLORS.main,
-                                pl: '14px',
-                                pr: '14px',
-                                ':hover': {
-                                    bgcolor: isBookmark ? COLORS.bg3 : COLORS.main
-                                }
-                            }}
-                            startIcon={isBookmark ? <CheckIcon /> : <AddIcon />}
-                        >{isBookmark ? 'Hủy đánh dấu' : 'Đánh dấu'}</Button>)
-                    }
-                    {
-                        hasDelete && (
-                            <IconButton onClick={handleConfirmDeleteModalOpen} id={id} aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content, p: '0 5px 5px 5px' }}>
-                                <DeleteIcon fontSize="small" />
-                            </IconButton>
-                        )
-                    }
-                </Box>
-                {children}
-            </CardContent>
-        </Card>
+                    {children}
+                </CardContent>
+            </Card>
+        </Link>
     )
 }

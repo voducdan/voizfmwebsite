@@ -121,7 +121,7 @@ export default function ShareModal(props) {
                 </Box>
         },
         {
-            label: 'Link',
+            label: 'QR Code',
             icon: (
                 <Tooltip
                     PopperProps={{
@@ -145,7 +145,7 @@ export default function ShareModal(props) {
             )
         },
         {
-            label: 'QR Code',
+            label: 'Link',
             icon: (
                 <IconButton
                     onClick={handleCreateQR}

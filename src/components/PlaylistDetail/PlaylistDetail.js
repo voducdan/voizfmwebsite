@@ -385,6 +385,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     }
 
     const handleAddToCart = async (moveToCart = false) => {
+        console.log(moveToCart)
         // add to cart store
         const isItemExists = cart.length > 0 && cart.some(i => i.id === playlist.id);
         if (isItemExists && moveToCart) {
@@ -478,7 +479,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         try {
             const res = await api.getAudioFile(id);
             const data = await res.data.data;
-            dispathc(setAudioHls(data.url));
+            dispatch(setAudioHls(data.url));
             if (mode === 'all') {
                 router.push(`/audio-play/${id}?mode=${mode}`);
                 return;
@@ -486,16 +487,19 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             router.push(`/audio-play/${id}`);
         }
         catch (err) {
-            if (err.response.status === 400) {
+            const status = err?.response?.status;
+            if (status === 400) {
                 setErrorMessage('Quý khách chưa đăng ký dịch vụ thành công. Vui lòng kiểm tra lại')
                 setOpenUpdateRequiredModal(true);
                 return;
             }
-            if (err.response.status === 401) {
+            if (status === 401) {
                 setErrorMessage('Bạn chưa có quyền truy cập audio này.')
                 setOpenUnauthorizedModal(true);
                 return;
             }
+            setErrorMessage('Đã có lỗi xảy ra, vui lòng thử lại sau!')
+            setOpenSnackbar(true);
         }
     }
 
@@ -1228,10 +1232,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 }}
             >
                 {
-                    playlist?.promotion === 'vip' && (
+                    (playlist?.promotion === 'vip' && !playlist?.is_purchased) && (
                         <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
                             <Button
-                                onClick={handleAddToCart}
+                                onClick={() => { handleAddToCart(false) }}
                                 sx={{
                                     border: '1px solid rgba(255, 255, 255, 0.1)',
                                     width: isSm ? '50%' : '20%',
@@ -1301,7 +1305,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     }
                 }}
             >
-                <DialogContent>
+                <DialogContent
+                    sx={{
+                        p: 0
+                    }}
+                >
                     <DialogContentText
                         sx={{
                             ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
@@ -1396,7 +1404,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         alt='upgrade img'
                     />
                 </Box>
-                <DialogContent>
+                <DialogContent
+                    sx={{
+                        p: 0
+                    }}
+                >
                     <DialogContentText
                         sx={{
                             ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),

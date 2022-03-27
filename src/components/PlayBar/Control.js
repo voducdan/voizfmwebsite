@@ -24,7 +24,8 @@ import {
     List,
     ListItem,
     Radio,
-    Button
+    Button,
+    Badge
 } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -34,10 +35,11 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
-import { Loop, Clock } from '../Icons';
+import { Speed, Clock } from '../Icons';
 
 // import services
 import API from '../../services/api';
+import { setOpen } from '../../redux/openSidebar';
 
 const WallPaper = styled('div')({
     width: '100%',
@@ -62,10 +64,28 @@ const TinyText = styled(Typography)({
     color: COLORS.white
 });
 
+const StyledBadge = styled(Badge)(({ theme }) => ({
+    '& .MuiBadge-badge': {
+        backgroundColor: COLORS.bg4,
+        width: 'auto',
+        minWidth: '9px',
+        height: '7px',
+        padding: '2px',
+        fontSize: '5px',
+        top: '4px',
+        right: '3.5px',
+        color: 'black',
+        borderRadius: '5px',
+        fontWeight: 700,
+        boxSizing: 'unset'
+    },
+}));
+
+
 export default function Control(props) {
     const api = new API();
 
-    const { audioData, audio, nextAudioId, prevAudioId } = props;
+    const { audioData, audio, nextAudioId, prevAudioId, isSm } = props;
     const theme = useTheme();
     const playBtn = useRef(null);
     const navigate = useRouter();
@@ -75,11 +95,13 @@ export default function Control(props) {
     const token = useSelector(selectToken);
     const [position, setPosition] = useState(0);
     const [paused, setPaused] = useState(false);
-    const [loopAudio, setLoopAudio] = useState(false);
     const [timer, setTimer] = useState(0);
     const [intervalId, setIntervalId] = useState(null);
     const [countDownTimerStr, setCountDownTimer] = useState('');
     const [openTimer, setOpenTimer] = useState(false);
+    const [openSpeed, setOpenSpeed] = useState(false);
+    const [currentTimer, setCurrentTimer] = useState(0);
+    const [currentSpeed, setCurrentSpeed] = useState(2);
 
     const media = audio.current;
 
@@ -185,14 +207,18 @@ export default function Control(props) {
         setOpenTimer(false);
     };
 
-    const handleSelectTimer = (e) => {
+    const handleSpeedClose = () => {
+        setOpenSpeed(false);
+    };
+
+    const handleSelectTimer = () => {
         if (intervalId) {
             clearInterval(intervalId);
         }
-        const selectedTimer = Number(e.currentTarget.value);
+        const selectedTimer = timerItems[currentTimer]['time'];
         setCountDownTimer('');
-        setAnchorEl(null);
         setTimer(selectedTimer);
+        setOpenTimer(false);
     }
 
     const addAudioToListening = async () => {
@@ -214,10 +240,17 @@ export default function Control(props) {
         media.currentTime = value;
     }
 
-    const handleLoopAudio = () => {
-        const tmpLoopAudio = !media.loop;
-        setLoopAudio(tmpLoopAudio);
-        media.loop = tmpLoopAudio;
+    const handleChangeSpeedAudio = () => {
+        setOpenSpeed(true);
+    }
+
+    const handleToggleSpeed = (idx) => {
+        setCurrentSpeed(idx)
+    }
+
+    const handleSelectSpeed = () => {
+        media.playbackRate = speedItems[currentSpeed]['speed'];
+        setOpenSpeed(false);
     }
 
     const handleChangeAudio = (type) => {
@@ -237,16 +270,28 @@ export default function Control(props) {
         }
     }
 
+    const handleToggleTimer = (idx) => {
+        setCurrentTimer(idx);
+    }
+
     const mainIconColor = COLORS.white;
 
     const timerItems = [
-        'không hẹn giờ',
-        '5 phút',
-        '10 phút',
-        '20 phút',
-        '30 phút',
-        '60 phút',
-    ]
+        { time: 0, text: 'không hẹn giờ' },
+        { time: 5, text: '5 phút' },
+        { time: 10, text: '10 phút' },
+        { time: 20, text: '20 phút' },
+        { time: 30, text: '30 phút' },
+        { time: 60, text: '60 phút' },
+    ];
+    const speedItems = [
+        { speed: 0.5 },
+        { speed: 0.75 },
+        { speed: 1 },
+        { speed: 1.25 },
+        { speed: 1.75 },
+        { speed: 2 },
+    ];
 
     return (
         <Box sx={{ width: '100%', overflow: 'hidden' }}>
@@ -259,26 +304,161 @@ export default function Control(props) {
                     }}
                 >
                     <Box
-                        onClick={handleLoopAudio}
+                        onClick={handleChangeSpeedAudio}
                         sx={{
                             textAlign: 'center',
                             cursor: 'pointer'
                         }}
                     >
-                        <Loop
-                            fill={COLORS.bg4}
-                            bgcolor='none'
-                        />
+                        <StyledBadge
+                            badgeContent={`X${speedItems[currentSpeed]['speed']}`}
+                        >
+                            <Speed />
+                        </StyledBadge>
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.caption10Regular,
                                 color: COLORS.contentIcon,
                                 whiteSpace: 'nowrap',
-                                marginTop: '9px',
-                                fontWeight: loopAudio ? 'bold' : 'normal'
+                                marginTop: '4px',
                             }}
-                        >Lặp lại 1 bài</Typography>
+                        >Tốc độ</Typography>
                     </Box>
+                    <Dialog
+                        open={openSpeed}
+                        onClose={handleSpeedClose}
+                        sx={{
+                            '& .MuiDialog-paper': {
+                                borderRadius: '30px',
+                                bgcolor: COLORS.bg1,
+                                width: '512px',
+                                p: '36px 27px 32px 27px',
+                                boxSizing: 'border-box',
+                                ...flexStyle('center', 'center'),
+                                overflow: isSm ? 'auto' : 'hidden',
+                                scrollbarGutter: 'stable',
+                                '::-webkit-scrollbar': {
+                                    width: '4px'
+                                },
+
+                                '::-webkit-scrollbar-button': {
+                                    height: '10px'
+                                },
+
+                                '::-webkit-scrollbar-track': {
+                                    borderRadius: '5px',
+                                },
+
+                                '::-webkit-scrollbar-thumb': {
+                                    background: COLORS.bg3,
+                                    borderRadius: '5px'
+                                },
+
+                                ':hover': {
+                                    overflowY: 'auto'
+                                }
+                            }
+
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                ...TEXT_STYLE.h1,
+                                color: COLORS.white,
+                                mb: '46px'
+                            }}
+                        >Chọn tốc độ</Typography>
+                        <List
+                            dense
+                            sx={{
+                                width: '100%',
+                                height: '100%'
+                            }}
+                        >
+                            {speedItems.map((value, idx) => {
+                                return (
+                                    <ListItem
+                                        key={idx}
+                                        secondaryAction={
+                                            <Radio
+                                                checked={idx === currentSpeed}
+                                                onChange={() => { handleToggleSpeed(idx) }}
+                                                value={value.time}
+                                                sx={{
+                                                    color: '#DADADA',
+                                                    pl: 0,
+                                                    '&.Mui-checked': {
+                                                        color: COLORS.main
+                                                    }
+                                                }}
+                                            />
+                                        }
+                                        sx={{
+                                            p: 0,
+                                            ...(idx > 0 && {
+                                                borderTop: `1px solid ${COLORS.blackStroker}`,
+                                                p: '22px 0'
+                                            }),
+                                            ...(idx === 0 && {
+                                                pb: '22px'
+                                            })
+                                        }}
+                                    >
+                                        <ListItemText
+                                            value={idx}
+                                            primary={`X${value.speed}`}
+                                            sx={{
+                                                ...TEXT_STYLE.h3,
+                                                color: COLORS.bg4
+                                            }}
+                                        />
+                                    </ListItem>
+                                );
+                            })}
+                        </List>
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'center'),
+                                columnGap: '16px',
+                                width: '100%',
+                                mt: '44px'
+                            }}
+                        >
+                            <Button
+                                onClick={handleSpeedClose}
+                                sx={{
+                                    borderRadius: '8px',
+                                    textTransform: 'none',
+                                    width: '50%',
+                                    height: '48px',
+                                    bgcolor: COLORS.bg3,
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    ':hover': {
+                                        bgcolor: COLORS.bg3
+                                    }
+                                }}
+                                variant="contained"
+                            >
+                                Huỷ
+                            </Button>
+                            <Button
+                                onClick={handleSelectSpeed}
+                                sx={{
+                                    textTransform: 'none',
+                                    borderRadius: '8px',
+                                    width: '50%',
+                                    height: '48px',
+                                    bgcolor: COLORS.main,
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white
+                                }}
+                                variant="contained"
+                            >
+                                Tiếp tục
+                            </Button>
+                        </Box>
+                    </Dialog>
                     <IconButton
                         aria-label="previous song"
                         onClick={() => { handleChangeAudio('prev') }}
@@ -340,7 +520,29 @@ export default function Control(props) {
                                 width: '512px',
                                 p: '36px 27px 32px 27px',
                                 boxSizing: 'border-box',
-                                ...flexStyle('center', 'center')
+                                ...flexStyle('center', 'center'),
+                                overflow: isSm ? 'auto' : 'hidden',
+                                scrollbarGutter: 'stable',
+                                '::-webkit-scrollbar': {
+                                    width: '4px'
+                                },
+
+                                '::-webkit-scrollbar-button': {
+                                    height: '10px'
+                                },
+
+                                '::-webkit-scrollbar-track': {
+                                    borderRadius: '5px',
+                                },
+
+                                '::-webkit-scrollbar-thumb': {
+                                    background: COLORS.bg3,
+                                    borderRadius: '5px'
+                                },
+
+                                ':hover': {
+                                    overflowY: 'auto'
+                                }
                             }
 
                         }}
@@ -362,13 +564,19 @@ export default function Control(props) {
                             {timerItems.map((value, idx) => {
                                 return (
                                     <ListItem
-                                        key={value}
+                                        key={idx}
                                         secondaryAction={
                                             <Radio
-                                                key={idx}
-                                                // checked={}
-                                                onChange={() => { handleToggle(idx) }}
-                                                value={idx}
+                                                checked={idx === currentTimer}
+                                                onChange={() => { handleToggleTimer(idx) }}
+                                                value={value.time}
+                                                sx={{
+                                                    color: '#DADADA',
+                                                    pl: 0,
+                                                    '&.Mui-checked': {
+                                                        color: COLORS.main
+                                                    }
+                                                }}
                                             />
                                         }
                                         sx={{
@@ -384,8 +592,7 @@ export default function Control(props) {
                                     >
                                         <ListItemText
                                             value={idx}
-                                            onClick={handleSelectTimer}
-                                            primary={value}
+                                            primary={value.text}
                                             sx={{
                                                 ...TEXT_STYLE.h3,
                                                 color: COLORS.bg4
@@ -404,6 +611,7 @@ export default function Control(props) {
                             }}
                         >
                             <Button
+                                onClick={handleTimerClose}
                                 sx={{
                                     borderRadius: '8px',
                                     textTransform: 'none',
@@ -411,14 +619,17 @@ export default function Control(props) {
                                     height: '48px',
                                     bgcolor: COLORS.bg3,
                                     ...TEXT_STYLE.title1,
-                                    color: COLORS.white
+                                    color: COLORS.white,
+                                    ':hover': {
+                                        bgcolor: COLORS.bg3
+                                    }
                                 }}
                                 variant="contained"
-                                color="error"
                             >
                                 Huỷ
                             </Button>
                             <Button
+                                onClick={handleSelectTimer}
                                 sx={{
                                     textTransform: 'none',
                                     borderRadius: '8px',
@@ -429,7 +640,6 @@ export default function Control(props) {
                                     color: COLORS.white
                                 }}
                                 variant="contained"
-                                color="error"
                             >
                                 Tiếp tục
                             </Button>

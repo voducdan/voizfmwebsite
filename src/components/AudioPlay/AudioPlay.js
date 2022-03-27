@@ -39,7 +39,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
 export default function AudioPlay({ audio }) {
-
+    console.log(audio)
     const playing = useSelector(selectPlayAudio);
 
     const router = useRouter();
@@ -117,17 +117,13 @@ export default function AudioPlay({ audio }) {
                             width: isSm ? '235px' : '335px',
                             height: isSm ? '235px' : '335px',
                             borderRadius: '15px',
-                            '&::before': {
-                                content: audio?.playlist?.promotion === 'vip' ? "url('/images/dvip.png')" : audio?.playlist?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
-                                position: 'absolute',
-                                right: 0,
-                                top: 0,
-                                zIndex: 8
+                            'img': {
+                                objectFit: 'fill'
                             }
                         }}
                         variant="rounded"
                         alt="playlist avt"
-                        src={audio?.playlist?.avatar?.original_url} />
+                        src={audio?.avatar?.original_url || audio?.playlist?.avatar?.original_url} />
                 </Box>
                 <Box
                     sx={{
