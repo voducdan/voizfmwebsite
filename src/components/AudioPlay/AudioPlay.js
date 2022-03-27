@@ -39,7 +39,6 @@ import useWindowSize from '../../utils/useWindowSize';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
 export default function AudioPlay({ audio }) {
-    console.log(audio)
     const playing = useSelector(selectPlayAudio);
 
     const router = useRouter();
@@ -73,6 +72,18 @@ export default function AudioPlay({ audio }) {
                 flexDirection: 'column',
                 width: '95%',
                 margin: isSm ? `0px auto 302px auto` : 'auto',
+                '&::before': {
+                    content: "''",
+                    position: 'absolute',
+                    top: 0,
+                    left: 0,
+                    width: '100%',
+                    height: '100%',
+                    backgroundImage: "url('/images/audioplaybg.png')",
+                    backgroundRepeat: 'no-repeat',
+                    backgroundSize: 'cover',
+                    opacity: 0.4
+                }
             }}
         >
             <Box
