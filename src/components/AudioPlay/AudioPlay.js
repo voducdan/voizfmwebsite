@@ -148,7 +148,7 @@ export default function AudioPlay({ audio }) {
                             ...(isSm && { textAlign: 'center' })
                         }}
                     >
-                        {audio?.playlist?.name}
+                        {audio?.name}
                     </Typography>
                     <TableContainer
                         sx={{
@@ -186,7 +186,7 @@ export default function AudioPlay({ audio }) {
                                                 ...TEXT_STYLE.content2,
                                                 color: COLORS.VZ_Text_content
                                             }}
-                                        >{audio?.playlist?.author_string}
+                                        >{audio?.author?.name}
                                         </Typography>
                                     </TableCell>
                                 </TableRow>

@@ -1,3 +1,5 @@
+import { useEffect, useState } from 'react';
+
 // import others component
 import TabPanel from '../../../components/TabPanel/TabPanel';
 
@@ -11,6 +13,8 @@ import {
 import { flexStyle } from '../../../utils/flexStyle';
 import { COLORS, TEXT_STYLE } from '../../../utils/constants';
 
+// import services
+import API from '../../../services/api';
 
 const PanelContent = (props) => (
     <Box
@@ -81,8 +85,20 @@ const PanelContent = (props) => (
 )
 
 export default function AppInfo(props) {
-    const currentVersion = '7.2.0'
+    const api = new API();
+    const [currentVersion, setCurrentVersion] = useState('1.0.0');
+
+    useEffect(() => {
+        async function fetchVersion() {
+            const res = await api.getVersion();
+            const data = await res.data;
+            console.log(data);
+        }
+
+        fetchVersion();
+    }, []);
+
     return (
-        <TabPanel value={props.value} index={1} children={PanelContent({ currentVersion })}></TabPanel>
+        <TabPanel value={props.value} index={1} children={PanelContent({ currentVersion })}></TabPanel >
     )
 }

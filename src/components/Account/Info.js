@@ -140,7 +140,7 @@ export default function Info() {
                                         color: COLORS.contentIcon
                                     }}
                                 >
-                                    {`${accountData?.promotion?.toUpperCase()}`}{accountData?.promotion.toUpperCase().includes('VIP') ? `(Còn ${getRemainingDays(accountData)} ngày)` : ''}
+                                    {`${accountData?.promotion?.toUpperCase()}`}{accountData?.promotion.toUpperCase().includes('VIP') ? ` (Còn ${getRemainingDays(accountData)} ngày)` : ''}
                                 </Typography>
                             </Box>
 

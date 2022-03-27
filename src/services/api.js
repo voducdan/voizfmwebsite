@@ -368,4 +368,8 @@ export default class API {
     getVoicerPlaylists = (id) => {
         return this.init().get(`/voicers/${id}/playlists`);
     }
+
+    getVersion = () => {
+        return this.init().get('/versions?platform=watch');
+    }
 }

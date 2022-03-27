@@ -12,7 +12,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // import reducer, actions
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
-import { setAudioHls } from '../../redux/playAudio';
 import { selectUser } from '../../redux/user';
 import { setOpenLogin } from '../../redux/openLogin';
 import { setVoicer } from '../../redux/voicer';
@@ -54,6 +53,7 @@ import VolumeMuteIcon from '@mui/icons-material/VolumeMute';
 import VolumeUpIcon from '@mui/icons-material/VolumeUp';
 import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
+import FilterListIcon from '@mui/icons-material/FilterList';
 
 // import icons
 import { Share, Play } from '../../components/Icons/index';
@@ -197,6 +197,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     useEffect(() => {
         setPaused(true);
     }, []);
+
+    const handleSortAudioList = () => {
+        let copiedPlaylistAudios = [...playlistAudios];
+        copiedPlaylistAudios = copiedPlaylistAudios.reverse();
+        setPlaylistAudios([...copiedPlaylistAudios]);
+    }
 
     const handleBookmark = () => {
         async function bookmarkPlaylist() {
@@ -478,8 +484,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const fetchAudioUrl = async (id, mode) => {
         try {
             const res = await api.getAudioFile(id);
-            // const data = await res.data.data;
-            // dispatch(setAudioHls(data.url));
             if (mode === 'all') {
                 router.push(`/audio-play/${id}?mode=${mode}`);
                 return;
@@ -846,7 +850,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             bgcolor: COLORS.second
                                         }
                                     }}
-                                    startIcon={paused ? <VolumeMuteIcon sx={{ color: COLORS.white }} /> : <VolumeUpIcon sx={{ color: COLORS.white }} />}
+                                    startIcon={paused ? <VolumeUpIcon sx={{ color: COLORS.white }} /> : <VolumeMuteIcon sx={{ color: COLORS.white }} />}
                                     onClick={onPlayClick}
                                 >Nghe thử</Button>
                             )
@@ -930,6 +934,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                     borderBottom: 'none',
                                                     padding: '0 10px 16px 0',
                                                     whiteSpace: 'nowrap',
+                                                    ...(isSm && {
+                                                        width: '10px'
+                                                    })
 
                                                 }}
                                                 component="th" scope="row"
@@ -967,7 +974,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             className="truncated-text"
                             anchorClass="my-anchor-css-class"
                             expanded={false}
-                            width={isSm ? 390 : 700}
+                            width={isSm ? 300 : 700}
                             truncatedEndingComponent={"... "}
                         >
                             <Typography
@@ -1135,13 +1142,27 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             height: 'inherit'
                         }}
                     >
-                        <Typography
+                        <Box
                             sx={{
-                                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-                                color: COLORS.white,
-                                marginBottom: isSm ? '26px' : '32px'
+                                marginBottom: isSm ? '26px' : '32px',
+                                ...flexStyle('flex-start', 'center'),
+                                columnGap: isSm ? '8px' : '16px'
                             }}
-                        >Danh sách audios</Typography>
+                        >
+                            <Typography
+                                sx={{
+                                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+                                    color: COLORS.white
+                                }}
+                            >Danh sách audios</Typography>
+                            <FilterListIcon
+                                onClick={handleSortAudioList}
+                                sx={{
+                                    color: COLORS.contentIcon,
+                                    cursor: 'pointer'
+                                }}
+                            />
+                        </Box>
                         <Box
                             sx={{
                                 maxHeight: '654px',

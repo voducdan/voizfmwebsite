@@ -264,7 +264,7 @@ export default function Author({ author }) {
                             >Tác giả nổi bật</Typography>
                             <Box
                                 sx={{
-                                    ...flexStyle('flex-start', 'stretch'),
+                                    ...flexStyle('center', 'stretch'),
                                     flexWrap: 'wrap',
                                     columnGap: '20px',
                                     rowGap: '33px'
@@ -275,7 +275,7 @@ export default function Author({ author }) {
                                         <Box
                                             key={i?.id}
                                             sx={{
-                                                width: 'calc(100% / 3 - 13.4px)'
+                                                width: isSm ? '100px' : 'calc(100% / 3 - 13.4px)'
                                             }}
                                         >
                                             <Link

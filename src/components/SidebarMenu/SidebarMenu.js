@@ -216,7 +216,9 @@ export default function SidebarMenu() {
                     borderRight: `1px solid ${COLORS.blackStroker}`,
                     overflowX: 'hidden',
                     scrollbarGutter: 'stable',
-                    overflowY: 'hidden',
+                    ...(!isSm && {
+                        overflowY: 'hidden',
+                    }),
                     '::-webkit-scrollbar': {
                         width: '4px'
                     },

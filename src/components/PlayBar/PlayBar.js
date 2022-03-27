@@ -91,6 +91,10 @@ export default function PlayBar() {
         }
     }, [router.asPath, audiosList]);
 
+    useEffect(() => {
+        audio.current.volume = volume / 100;
+    }, [volume]);
+
     const assignAudioId = () => {
         if (audiosList.length === 1) {
             setNextAudioId(null);
@@ -136,7 +140,7 @@ export default function PlayBar() {
 
     const handleChangeVolumn = (value) => {
         setVolume(value);
-        audio.current.volume = value / audioData.duration;
+        audio.current.volume = value / 100;
     }
 
     return (
@@ -147,7 +151,7 @@ export default function PlayBar() {
                 ...flexStyle('center', 'center'),
                 columnGap: '3%',
                 boxSizing: 'border-box',
-                padding: `${isSm ? 24 : 0}px 0`,
+                padding: isSm ? '24px 25px' : 0,
                 width: '100%',
                 zIndex: 1201,
                 position: 'fixed',
@@ -214,7 +218,7 @@ export default function PlayBar() {
                                 overflow: 'hidden'
                             }}
                         >
-                            {audioData?.playlist?.name}
+                            {audioData?.name}
                         </Typography>
                         <Typography
                             sx={{
@@ -222,7 +226,7 @@ export default function PlayBar() {
                                 color: COLORS.contentIcon
                             }}
                         >
-                            Tác giả: {audioData?.playlist?.author_string}
+                            Tác giả: {audioData?.author?.name}
                         </Typography>
                     </Box>
                     {

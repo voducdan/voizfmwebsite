@@ -221,6 +221,8 @@ export default function DiscoveryDetail({ discovery }) {
     const [commentPage, setCommentPage] = useState(0);
     const [isCommentError, setIsCommentError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [readOnlyComment, setReadOnlyComment] = useState(false);
+
     const { id } = useRouter().query;
 
     const dispatch = useDispatch();
@@ -243,15 +245,24 @@ export default function DiscoveryDetail({ discovery }) {
         fetchDiscoveryComment();
     }, [commentPage]);
 
+    useEffect(() => {
+        if (user) {
+            setReadOnlyComment(false);
+        }
+    }, [user]);
+
     const handleWriteComment = (e) => {
-        const content = e.target.value;
-        setCommentContent(content);
+        if (user) {
+            const content = e.target.value;
+            setCommentContent(content);
+        }
     }
 
-    const handleClickCommentInput = () => {
+    const handleClickCommentInput = (e) => {
         if (!user && !commentContent) {
             dispatch(setOpenLogin(true));
             setCommentContent('');
+            setReadOnlyComment(true);
         }
     }
 
@@ -263,7 +274,7 @@ export default function DiscoveryDetail({ discovery }) {
     }
 
     const handleComment = async () => {
-        if (commentContent){
+        if (commentContent) {
             await sendComment(inlineDiscovery.id, { content: commentContent });
         }
     }
@@ -276,9 +287,9 @@ export default function DiscoveryDetail({ discovery }) {
     }
 
     const appendComment = (comment) => {
-        const copiedDiscovery = {...inlineDiscovery};
+        const copiedDiscovery = { ...inlineDiscovery };
         copiedDiscovery.discovery_counter.comments_count = inlineDiscovery.discovery_counter.comments_count + 1;
-        setInlineDiscovery({...copiedDiscovery});
+        setInlineDiscovery({ ...copiedDiscovery });
         setComments([comment, ...comments]);
     }
 
@@ -614,6 +625,8 @@ export default function DiscoveryDetail({ discovery }) {
                             onChange={handleWriteComment}
                             onKeyUp={handleCommentKeyUp}
                             onClick={handleClickCommentInput}
+                            readOnly={readOnlyComment}
+                            tabIndex="-1"
                             startAdornment={<BorderColorOutlinedIcon sx={{ color: COLORS.placeHolder }} position="start">$</BorderColorOutlinedIcon>}
                         />
                     </FormControl>

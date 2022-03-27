@@ -135,20 +135,31 @@ export default function ChannelDetail({ channelFromAPI }) {
             <Box
                 sx={{
                     width: '100%',
-                    minHeight: '40vh',
+                    height: isSm ? '272px' : '390px',
                     ...flexStyle('flex-end', 'center'),
-                    background: '#222530',
                     p: isSm ? '25px 21px' : '50px 0',
                     boxSizing: 'border-box',
-                    mb: isSm ? '16px' : '40px'
+                    mb: isSm ? '16px' : '40px',
+                    position: 'relative',
+                    '&::before': {
+                        content: "''",
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundImage: "url('/images/bgchannelDetail.png')",
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
+                        opacity: 0.4
+                    }
                 }}
             >
                 <Box
                     sx={{
                         width: '95%',
-                        ...flexStyle('flex-start', 'flex-start'),
+                        ...flexStyle('flex-start', 'center'),
                         columnGap: isSm ? '30px' : '48px',
-                        height: '100%',
                         pr: isSm ? 0 : '50px',
                         boxSizing: 'border-box'
                     }}
@@ -156,30 +167,33 @@ export default function ChannelDetail({ channelFromAPI }) {
                     <img
                         style={{
                             width: isSm ? '110px' : '210px',
-                            height: isSm ? '110px' : '100%',
+                            height: isSm ? '110px' : '210px',
+                            borderRadius: '4px'
                         }} alt={`image ${channel?.name}`} src={channel?.avatar?.thumb_url}
                     />
                     <Box
                         sx={{
                             height: '100%',
                             width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 210px)',
-                            ...flexStyle('flex-start', 'flex-start'),
+                            ...flexStyle('space-around', 'flex-start'),
                             ...(isSm && { flexDirection: 'column', rowGap: '20px' }),
                             columnGap: '10%'
                         }}
                     >
                         <Box
                             sx={{
-                                ...flexStyle('space-between', 'center'),
+                                ...flexStyle('flex-start', 'center'),
                                 flexDirection: 'column',
                                 height: '100%',
-                                minHeight: '210px'
+                                minHeight: '210px',
+                                width: '60%'
                             }}
                         >
                             <Box
                                 sx={{
                                     width: '100%',
-                                    mb: '10px'
+                                    mb: '10px',
+                                    mb: isSm ? '8px' : '40px'
                                 }}
                             >
                                 <Typography
@@ -227,8 +241,9 @@ export default function ChannelDetail({ channelFromAPI }) {
                         </Box>
                         <Box
                             sx={{
-                                ...flexStyle('center', 'center'),
-                                columnGap: '10%'
+                                ...flexStyle('flex-end', 'center'),
+                                columnGap: '10%',
+                                width: '30%'
                             }}
                         >
                             <IconButton onClick={handleOpenShareModal}>

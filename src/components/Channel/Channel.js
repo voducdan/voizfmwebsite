@@ -128,7 +128,20 @@ export default function Channel() {
                     width: '100%',
                     height: '20vh',
                     ...flexStyle('center', 'center'),
-                    background: '#222530'
+                    background: '#222530',
+                    position: 'relative',
+                    '&::before': {
+                        content: "''",
+                        position: 'absolute',
+                        top: 0,
+                        left: 0,
+                        width: '100%',
+                        height: '100%',
+                        backgroundImage: "url('/images/bgchannel.png')",
+                        backgroundRepeat: 'no-repeat',
+                        backgroundSize: 'cover',
+                        opacity: 0.4
+                    }
                 }}
             >
                 <Typography
