@@ -107,7 +107,11 @@ const CommentItem = (props) => {
                 sx={{
                     ...flexStyle('center', 'flex-starrt'),
                     flexDirection: 'column',
-                    rowGap: '15px'
+                    rowGap: '15px',
+                    width: '100%',
+                    overflowWrap: 'anywhere',
+                    wordBreak: 'break-word',
+                    whiteSpace: 'pre-line'
                 }}
             >
                 <Box
@@ -218,7 +222,7 @@ export default function DiscoveryDetail({ discovery }) {
     const [inlineDiscovery, setInlineDiscovery] = useState(discovery);
     const [comments, setComments] = useState([]);
     const [commentContent, setCommentContent] = useState('');
-    const [commentPage, setCommentPage] = useState(0);
+    const [commentPage, setCommentPage] = useState(1);
     const [isCommentError, setIsCommentError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [readOnlyComment, setReadOnlyComment] = useState(false);
@@ -230,18 +234,19 @@ export default function DiscoveryDetail({ discovery }) {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 200 : 380;
 
-    useEffect(() => {
-        async function fetchDiscoveryComment() {
-            try {
-                const res = await api.getDiscoveryComment(id);
-                const data = await res.data.data;
-                setComments(data);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        };
+    async function fetchDiscoveryComment() {
+        try {
+            const res = await api.getDiscoveryComment(id, commentPage);
+            const data = await res.data.data;
+            const appendedComments = [...comments, ...data];
+            setComments(appendedComments);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    };
 
+    useEffect(() => {
         fetchDiscoveryComment();
     }, [commentPage]);
 
@@ -367,7 +372,15 @@ export default function DiscoveryDetail({ discovery }) {
             setErrorMessage(errList)
             setIsCommentError(true);
         }
-    }
+    };
+
+    const handleLoadMoreComment = () => {
+        if (comments.length < inlineDiscovery.discovery_counter.comments_count) {
+            const nextCommentPage = commentPage + 1;
+            fetchDiscoveryComment(nextCommentPage);
+            setCommentPage(nextCommentPage);
+        }
+    };
 
     return (
         <Box
@@ -593,6 +606,31 @@ export default function DiscoveryDetail({ discovery }) {
                             <CommentItem user={user} commentInputRef={commentInputRef} updateLike={updateLike} api={api} key={item.id} data={item} />
                         ))
                     }
+                    <Box
+                        sx={{
+                            width: '100%',
+                            ...flexStyle('center', 'center')
+                        }}
+                    >
+                        <Button
+                            onClick={handleLoadMoreComment}
+                            disabled={comments.length >= inlineDiscovery?.discovery_counter?.comments_count}
+                            sx={{
+                                textTransform: 'none',
+                                ...TEXT_STYLE.title2,
+                                color: COLORS.white,
+                                bgcolor: COLORS.main,
+                                width: '170px',
+                                height: '40px',
+                                borderRadius: '50px',
+                                ':hover': {
+                                    bgcolor: COLORS.main
+                                }
+                            }}
+                        >
+                            Tải thêm góp ý
+                        </Button>
+                    </Box>
                 </Box>
                 <Box
                     sx={{

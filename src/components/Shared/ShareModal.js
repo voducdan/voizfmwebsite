@@ -123,6 +123,18 @@ export default function ShareModal(props) {
         {
             label: 'QR Code',
             icon: (
+                <IconButton
+                    onClick={handleCreateQR}
+                    sx={{
+                        p: 0
+                    }}>
+                    <QR size={shareIconSize} />
+                </IconButton>
+            )
+        },
+        {
+            label: 'Link',
+            icon: (
                 <Tooltip
                     PopperProps={{
                         disablePortal: true,
@@ -142,18 +154,6 @@ export default function ShareModal(props) {
                         <Hyperlink size={shareIconSize} />
                     </IconButton>
                 </Tooltip>
-            )
-        },
-        {
-            label: 'Link',
-            icon: (
-                <IconButton
-                    onClick={handleCreateQR}
-                    sx={{
-                        p: 0
-                    }}>
-                    <QR size={shareIconSize} />
-                </IconButton>
             )
         }
     ]

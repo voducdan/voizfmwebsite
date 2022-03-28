@@ -104,8 +104,8 @@ export default class API {
         return this.init().get(`/discoveries/${id}?${queryString}`)
     }
 
-    getDiscoveryComment = (discoveryId) => {
-        return this.init().get(`/discoveries/${discoveryId}/comments?limit=999999`)
+    getDiscoveryComment = (discoveryId, page, limit = 4) => {
+        return this.init().get(`/discoveries/${discoveryId}/comments?limit=${limit}&page=${page}`)
     }
 
     commentDiscovery = (discoveryId, data) => {
@@ -349,7 +349,7 @@ export default class API {
 
     getBannerImages = (category_code = '', display_on = '', page = 1, limit = 10) => {
         const params = { category_code, display_on, page, limit };
-        const queryString = this.buildQueryString(params)
+        const queryString = this.buildQueryString(params);
         return this.init().get(`/banners?${queryString}`);
     }
 

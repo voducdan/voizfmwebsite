@@ -137,7 +137,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                     width: '100%',
                     height: isSm ? '272px' : '390px',
                     ...flexStyle('flext-start', 'flex-start'),
-                    p: isSm ? '25px 21px' : '50px 0',
+                    p: isSm ? '25px 18px 41px 17px' : '50px 50px 50px 160px',
                     boxSizing: 'border-box',
                     mb: isSm ? '16px' : '40px',
                     position: 'relative',
@@ -160,7 +160,6 @@ export default function ChannelDetail({ channelFromAPI }) {
                         width: '100%',
                         ...flexStyle('flex-start', 'center'),
                         columnGap: isSm ? '30px' : '48px',
-                        pr: isSm ? 0 : '50px',
                         boxSizing: 'border-box',
                         height: '100%'
                     }}
@@ -183,7 +182,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                         sx={{
                             height: '100%',
                             width: isSm ? 'calc(100% - 110px)' : 'calc(100% - 210px)',
-                            ...flexStyle('space-around', 'flex-start'),
+                            ...(isSm ? flexStyle('flex-start', 'flex-start') : flexStyle('space-around', 'flex-start')),
                             ...(isSm && { flexDirection: 'column', rowGap: '20px' }),
                             columnGap: '10%'
                         }}
@@ -192,8 +191,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                             sx={{
                                 ...flexStyle('flex-start', 'center'),
                                 flexDirection: 'column',
-                                height: '100%',
-                                width: '60%'
+                                width: isSm ? '100%' : '60%'
                             }}
                         >
                             <Box
@@ -248,12 +246,17 @@ export default function ChannelDetail({ channelFromAPI }) {
                         </Box>
                         <Box
                             sx={{
-                                ...flexStyle('flex-end', 'center'),
+                                ...(isSm ? flexStyle('flex-start', 'center') : flexStyle('flex-end', 'center')),
                                 columnGap: '10%',
-                                width: '30%'
+                                width: isSm ? '100%' : '30%'
                             }}
                         >
-                            <IconButton onClick={handleOpenShareModal}>
+                            <IconButton
+                                onClick={handleOpenShareModal}
+                                sx={{
+                                    p: 0
+                                }}
+                            >
                                 <ShareOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                             </IconButton>
                             <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
@@ -267,8 +270,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     textTransform: 'none',
                                     bgcolor: channel?.is_bookmark ? COLORS.bg3 : COLORS.main,
                                     whiteSpace: 'nowrap',
-                                    pl: '24px',
-                                    pr: '24px',
+                                    p: '4px 14px',
                                     ':hover': {
                                         bgcolor: channel?.is_bookmark ? COLORS.bg3 : COLORS.main
                                     }
@@ -353,7 +355,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                         >Danh sách audios</Typography>
                         <Box>
                             <List sx={{ width: '100%' }}>
-                                {audios.map(i => {
+                                {audios.map((i, idx) => {
                                     return (
                                         <ListItem
                                             sx={{
@@ -373,6 +375,13 @@ export default function ChannelDetail({ channelFromAPI }) {
                                             }
                                         >
                                             <ListItemButton role={undefined} onClick={() => (1)} dense>
+                                                <Typography
+                                                    sx={{
+                                                        ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                        color: COLORS.white,
+                                                        mr: '14px'
+                                                    }}
+                                                >{idx + 1}</Typography>
                                                 <ListItemText
                                                     sx={{
                                                         'span': {

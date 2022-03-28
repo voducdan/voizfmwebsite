@@ -363,7 +363,8 @@ export default function HomeContent() {
                         swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
                     }}
 
-                    slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN}
+                    slidesPerView={NUMBER_ITEMS_PER_LINE}
+                    spaceBetween={SPACE_BETWEEN}
                     slidesPerGroup={3}
                     style={{
                         height: `${getPlaylistImgWidth()}px`

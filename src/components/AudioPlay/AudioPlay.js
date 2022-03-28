@@ -91,7 +91,7 @@ export default function AudioPlay({ audio }) {
                     columnGap: '36px',
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: isSm ? '20px 0 32px 0' : '35px 0'
+                    padding: isSm ? '20px 0 32px 0' : '35px 0',
                 }}
             >
                 <Box

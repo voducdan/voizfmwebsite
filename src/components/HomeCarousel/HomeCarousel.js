@@ -5,7 +5,7 @@ import { useRef, useState, useEffect } from 'react';
 import Box from '@mui/material/Box';
 
 // import swiper
-import SwiperCore, { Autoplay } from 'swiper';
+import SwiperCore, { Autoplay, Navigation } from 'swiper';
 import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
 
 
@@ -23,7 +23,7 @@ const SwiperBtnNext = (props) => {
     const { isSm } = props;
     return {
         position: 'absolute',
-        transform: 'translateX(10px)',
+        transform: 'translateX(-15px)',
         zIndex: 2,
         cursor: 'pointer',
         ...(isSm && { display: 'none' })
@@ -31,7 +31,7 @@ const SwiperBtnNext = (props) => {
 }
 
 const SwiperBtnPrev = (props) => {
-    const { isSm } = props
+    const { isSm } = props;
     return {
         position: 'absolute',
         left: 0,
@@ -42,7 +42,7 @@ const SwiperBtnPrev = (props) => {
     }
 }
 
-SwiperCore.use([Autoplay]);
+SwiperCore.use([Autoplay, Navigation]);
 
 export default function HomeCarousel() {
 
@@ -50,24 +50,23 @@ export default function HomeCarousel() {
 
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
-
     const [current, setCurrent] = useState(0);
     const [images, setImages] = useState([]);
-    const navigationNewContentPrevRef = useRef(null);
-    const navigationNewContentNextRef = useRef(null);
+    const navigationBannerPrevRef = useRef(null);
+    const navigationBannerNextRef = useRef(null);
 
     useEffect(() => {
         async function fetchBannerImages() {
             const res = await api.getBannerImages();
             const data = await res.data.data;
             const imagesList = data.map(i => i.image);
-            setImages(imagesList);
+            setImages([...imagesList, ...imagesList]);
         }
 
         fetchBannerImages();
     }, [])
 
-    const handleChangeSlideClick = (isNext) => {
+    const handleChangeSliceClick = (isNext) => {
         let newCurrent = null;
         if (isNext) {
             newCurrent = current < (images.length - 1) ? current + 1 : current;
@@ -84,6 +83,11 @@ export default function HomeCarousel() {
         e.stopPropagation();
     }
 
+    const handleBannerSlideChange = (e) => {
+        const realIndex = Number(e.realIndex);
+        setCurrent(realIndex);
+    }
+
     return (
         <Box sx={{ height: isSm ? '280px' : '420px', position: 'relative', width: '100%' }}>
             <div style={{ height: '100%', width: '100%' }}>
@@ -98,7 +102,7 @@ export default function HomeCarousel() {
                             left: 0
                         }}
                         alt={image.id}
-                        key={image.id}
+                        key={idx}
                         src={image.original_url}
                     />
                 ))}
@@ -119,20 +123,21 @@ export default function HomeCarousel() {
                         disableOnInteraction: false
                     }}
                     navigation={{
-                        prevEl: navigationNewContentPrevRef.current,
-                        nextEl: navigationNewContentNextRef.current
+                        prevEl: navigationBannerPrevRef.current,
+                        nextEl: navigationBannerNextRef.current
                     }}
                     onBeforeInit={(swiper) => {
-                        swiper.params.navigation.prevEl = navigationNewContentPrevRef.current;
-                        swiper.params.navigation.nextEl = navigationNewContentNextRef.current;
+                        swiper.params.navigation.prevEl = navigationBannerPrevRef.current;
+                        swiper.params.navigation.nextEl = navigationBannerNextRef.current;
                     }}
+                    onSlideChange={handleBannerSlideChange}
                     slidesPerView={4}
                 >
                     {images.map((image, idx) => (
                         <SwiperSlide
                             onClick={handleClickThumbnail}
                             id={idx}
-                            key={image.id}
+                            key={idx}
                             style={{
                                 flexShrink: 'unset'
                             }}
@@ -155,20 +160,20 @@ export default function HomeCarousel() {
                     ))}
                 </Swiper>
                 <div
-                    onClick={() => { handleChangeSlideClick(false) }}
+                    onClick={() => { handleChangeSliceClick(false) }}
                     style={{
                         ...SwiperBtnPrev({ isSm })
                     }}
-                    ref={navigationNewContentPrevRef}
+                    ref={navigationBannerPrevRef}
                 >
                     <CarouselPrev />
                 </div>
                 <div
-                    onClick={() => { handleChangeSlideClick(true) }}
+                    onClick={() => { handleChangeSliceClick(true) }}
                     style={{
                         ...SwiperBtnNext({ isSm })
                     }}
-                    ref={navigationNewContentNextRef}
+                    ref={navigationBannerNextRef}
                 >
                     <CarouselNext />
                 </div>
