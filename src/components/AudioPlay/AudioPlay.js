@@ -1,17 +1,15 @@
 // import react
 import { useEffect, useState } from 'react';
 
-// import next router
-import { useRouter } from 'next/router';
-
 // import redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 import { selectPlayAudio } from '../../redux/playAudio';
+import { selectOpenSidebar } from '../../redux/openSidebar';
+import { setOpenAudioDetail, setOpenExpandMoreAudio } from '../../redux/playAudio';
 
 // import MUI components
 import {
     Box,
-    Avatar,
     Typography,
     TableContainer,
     Paper,
@@ -33,44 +31,87 @@ import { Share } from '../../components/Icons/index';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
-import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE } from '../../utils/constants';
+import { SCREEN_BREAKPOINTS, COLORS, TEXT_STYLE, DRAWER_WIDTH, HEADER_HEIGHT, HEADER_HEIGHT_MB } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
-export default function AudioPlay({ audio }) {
+export default function AudioPlay({ audioFromApi }) {
     const playing = useSelector(selectPlayAudio);
-
-    const router = useRouter();
+    const openSidebar = useSelector(selectOpenSidebar);
 
     const [id, setId] = useState(null);
     const [url, setUrl] = useState(null);
+    const [audio, setAudio] = useState({});
     const [openShareModal, setOpenShareModal] = useState(false);
+
+    const dispatch = useDispatch();
 
     const windowSize = useWindowSize()
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
     useEffect(() => {
+        if (audioFromApi) {
+            setAudio(audioFromApi);
+        }
+    }, [audioFromApi]);
+
+    useEffect(() => {
         if (id) {
-            setUrl(window.location.href);
+            setUrl(`${window.location.href}?audioId=${id}`);
         }
     }, [id]);
 
     useEffect(() => {
-        const { id } = router.query;
-        setId(id);
-    }, [router.query]);
+        if (audio) {
+            const { id } = audio;
+            setId(id);
+        }
+    }, [audio]);
 
     const handleOpenShareModal = () => {
         setOpenShareModal(true);
     }
 
+    const handleExpandLessAudioPlay = () => {
+        dispatch(setOpenAudioDetail(false));
+        dispatch(setOpenExpandMoreAudio(true));
+    }
+
     return (
         <Box
             sx={{
-                ...(isSm ? flexStyle('center', 'center') : flexStyle('flex-start', 'center')),
+                ...flexStyle('flex-start', 'center'),
                 flexDirection: 'column',
-                width: '95%',
-                margin: isSm ? `0px auto 302px auto` : 'auto',
+                position: 'fixed',
+                width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+                height: `calc(100vh - ${isSm ? HEADER_HEIGHT_MB : HEADER_HEIGHT} - ${isSm ? '299px' : '100px'})`,
+                top: 0,
+                overflowY: isSm ? 'scroll' : 'hidden',
+                boxSizing: 'border-box',
+                p: isSm ? '24px 36px' : '24px 48px',
+                margin: `${isSm ? HEADER_HEIGHT_MB : HEADER_HEIGHT} auto ${isSm ? 'auto' : '100px'} auto`,
+                ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
+                scrollbarGutter: 'stable',
+                '::-webkit-scrollbar': {
+                    width: '4px'
+                },
+
+                '::-webkit-scrollbar-button': {
+                    height: '10px'
+                },
+
+                '::-webkit-scrollbar-track': {
+                    borderRadius: '5px',
+                },
+
+                '::-webkit-scrollbar-thumb': {
+                    background: COLORS.bg3,
+                    borderRadius: '5px'
+                },
+
+                ':hover': {
+                    overflowY: 'auto'
+                },
                 '&::before': {
                     content: "''",
                     position: 'absolute',
@@ -81,7 +122,8 @@ export default function AudioPlay({ audio }) {
                     backgroundImage: "url('/images/audioplaybg.png')",
                     backgroundRepeat: 'no-repeat',
                     backgroundSize: 'cover',
-                    opacity: 0.4
+                    opacity: 0.4,
+                    zIndex: 1
                 }
             }}
         >
@@ -91,7 +133,8 @@ export default function AudioPlay({ audio }) {
                     columnGap: '36px',
                     width: '100%',
                     boxSizing: 'border-box',
-                    padding: isSm ? '20px 0 32px 0' : '35px 0',
+                    pb: isSm ? '60px' : '76px',
+                    zIndex: 2
                 }}
             >
                 <Box
@@ -103,41 +146,52 @@ export default function AudioPlay({ audio }) {
                     <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
                 </Box>
                 <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
-                <ExpandMoreIcon sx={{ color: COLORS.contentIcon }} />
+                <ExpandMoreIcon
+                    onClick={handleExpandLessAudioPlay}
+                    sx=
+                    {{
+                        color: COLORS.contentIcon,
+                        cursor: 'pointer'
+                    }}
+                />
             </Box>
             <Box
                 sx={{
                     ...(isSm ? flexStyle('center', 'center') : flexStyle('center', 'flex-start')),
                     ...(isSm && { flexDirection: 'column', rowGap: '32px' }),
                     width: '100%',
+                    ...(!isSm && {
+                        height: 'calc(100% - 106px)'
+                    }),
+                    boxSizing: 'border-box',
                     columnGap: '75px',
-                    mb: '100px'
                 }}
             >
                 <Box
                     sx={{
                         width: isSm ? '70%' : '45%',
+                        height: '100%',
                         ...(isSm ? flexStyle('center', 'flex-start') : flexStyle('flex-end', 'flex-start'))
                     }}
                 >
-                    <Avatar
-                        sx={{
-                            maxWidth: '100%',
-                            maxHeight: '100%',
-                            width: isSm ? '235px' : '335px',
-                            height: isSm ? '235px' : '335px',
+                    <img
+                        style={{
+                            width: '100%',
+                            height: '100%',
+                            maxWidth: isSm ? '224px' : '320px',
+                            maxHeight: isSm ? '224px' : '320px',
                             borderRadius: '15px',
                             'img': {
                                 objectFit: 'fill'
                             }
                         }}
-                        variant="rounded"
+                        // variant="rounded"
                         alt="playlist avt"
                         src={audio?.avatar?.original_url || audio?.playlist?.avatar?.original_url} />
                 </Box>
                 <Box
                     sx={{
-                        width: '55%'
+                        width: isSm ? '100%' : '55%'
                     }}
                 >
                     <Typography
@@ -277,27 +331,26 @@ export default function AudioPlay({ audio }) {
                             </TableBody>
                         </Table>
                     </TableContainer>
-                    {
-                        (playing && !isSm) && (
-                            <Button
-                                sx={{
-                                    ...TEXT_STYLE.title1,
-                                    color: COLORS.white,
-                                    textTransform: 'none',
-                                    width: '280px',
-                                    height: '48px',
-                                    border: `1px solid ${COLORS.blackStroker}`,
-                                    borderRadius: '6px',
-                                    marginTop: '40px',
-                                    cursor: 'text'
-                                }}
-                                variant="outlined"
-                                endIcon={<GraphicEqIcon />}
-                            >
-                                Đang phát
-                            </Button>
-                        )
-                    }
+                    <Button
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            width: '280px',
+                            height: '48px',
+                            border: `1px solid ${COLORS.blackStroker}`,
+                            borderRadius: '6px',
+                            marginTop: '40px',
+                            cursor: 'text',
+                            ...((playing || isSm) && {
+                                display: 'none'
+                            })
+                        }}
+                        variant="outlined"
+                        endIcon={<GraphicEqIcon />}
+                    >
+                        Đang phát
+                    </Button>
                 </Box>
             </Box>
         </Box>

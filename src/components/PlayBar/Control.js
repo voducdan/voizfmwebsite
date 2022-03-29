@@ -3,9 +3,10 @@ import { useState, useEffect, useRef } from 'react';
 
 // import redux
 import { useDispatch, useSelector } from 'react-redux';
-import { togglePlayAudio, pauseAudio } from '../../redux/playAudio';
-import { selectAudioHls } from '../../redux/playAudio';
+import { togglePlayAudio, setAudioHls, selectAudioHls } from '../../redux/playAudio';
+import { setAudioData } from '../../redux/audio';
 import { selectToken } from '../../redux/token';
+import { setCart, setAddToCartFlag } from '../../redux/payment';
 // import next router
 import { useRouter } from 'next/router';
 
@@ -17,6 +18,9 @@ import { styled, useTheme } from '@mui/material/styles';
 import {
     Box,
     Dialog,
+    DialogContent,
+    DialogContentText,
+    DialogActions,
     ListItemText,
     Typography,
     Slider,
@@ -25,7 +29,9 @@ import {
     ListItem,
     Radio,
     Button,
-    Badge
+    Badge,
+    Snackbar,
+    Alert
 } from '@mui/material';
 import PauseIcon from '@mui/icons-material/Pause';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
@@ -39,7 +45,6 @@ import { Speed, Clock } from '../Icons';
 
 // import services
 import API from '../../services/api';
-import { setOpen } from '../../redux/openSidebar';
 
 const WallPaper = styled('div')({
     width: '100%',
@@ -102,6 +107,10 @@ export default function Control(props) {
     const [openSpeed, setOpenSpeed] = useState(false);
     const [currentTimer, setCurrentTimer] = useState(0);
     const [currentSpeed, setCurrentSpeed] = useState(2);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [openSnackbar, setOpenSnackbar] = useState(false);
+    const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
+    const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
 
     const media = audio.current;
 
@@ -137,15 +146,11 @@ export default function Control(props) {
         media.addEventListener('timeupdate', (e) => {
             const currentTime = Math.floor(e.target.currentTime);
             setPosition(currentTime);
-            if (currentTime === audioData.duration && !media.loop) {
-                if (mode && mode === 'all' && nextAudioId) {
-                    navigate.push(`/audio-play/${nextAudioId}?mode=all`)
-                }
-                else {
-                    setPaused(true);
-                    media.currentTime = 0;
-                    setPosition(0);
-                }
+            if (currentTime === audioData.duration) {
+                fetchAudioUrl(nextAudioId);
+                // setPaused(true);
+                // media.currentTime = 0;
+                // setPosition(0);
             }
         });
 
@@ -178,6 +183,101 @@ export default function Control(props) {
         }, timer * 1000 * 60);
         countDownTimer();
     }, [timer]);
+
+    const handleAddToCart = async (moveToCart = false) => {
+        // add to cart store
+        const isItemExists = cart.length > 0 && cart.some(i => i.id === playlist.id);
+        if (isItemExists && moveToCart) {
+            router.push('/cart');
+        }
+        if (!isItemExists) {
+            try {
+                const res = await api.addToCart(playlist.id);
+                const result = await res.data;
+                if (result.code === 0) {
+                    setErrorMessage(result.error);
+                    setOpenSnackbar(true);
+                    setTimeout(() => {
+                        setOpenSnackbar(false);
+                    }, 1500)
+                    return;
+                }
+                const tmpCart = [...cart, playlist];
+                dispatch(setCart(tmpCart));
+                dispatch(setAddToCartFlag(1));
+                if (moveToCart) {
+                    router.push('/cart');
+                }
+            }
+            catch (err) {
+                const { status } = err.response;
+                if (status === 401) {
+                    dispatch(setOpenLogin(true));
+                    return;
+                }
+                const errList = err.response.data.error;
+                if (errList instanceof Object) {
+                    let errMessage = '';
+                    for (let e in errList) {
+                        const key = Object.keys(errList[e])[0];
+                        const value = errList[e][key]
+                        errMessage += `${key} ${value} \n`
+                    }
+                    setErrorMessage(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                    setOpenSnackbar(true);
+                    setTimeout(() => {
+                        setOpenSnackbar(false);
+                    }, 1500);
+                    return;
+                }
+                setErrorMessage(errList || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                setOpenSnackbar(true);
+                setTimeout(() => {
+                    setOpenSnackbar(false);
+                }, 1500);
+            }
+            return;
+        }
+        setErrorMessage('Sản phẩm đã được thêm vào.\n Vui lòng kiểm tra lại giỏ hàng!');
+        setOpenSnackbar(true);
+        setTimeout(() => {
+            setOpenSnackbar(false);
+        }, 1500);
+    }
+
+    const handleBuyPlaylist = () => {
+        handleAddToCart(true);
+    }
+
+    const fetchAudioUrl = async (id) => {
+        if (!id) {
+            return;
+        }
+        try {
+            const resAudioFile = await api.getAudioFile(id);
+            const data = await resAudioFile.data.data;
+            const resAudio = await api.getAudio(id);
+            const audioDataFromApi = await resAudio.data.data;
+            dispatch(setAudioHls(data.url));
+            dispatch(setAudioData(audioDataFromApi));
+        }
+        catch (err) {
+            console.log(err)
+            const status = err?.response?.status;
+            if (status === 400) {
+                setErrorMessage('Quý khách chưa đăng ký dịch vụ thành công. Vui lòng kiểm tra lại')
+                setOpenUpdateRequiredModal(true);
+                return;
+            }
+            if (status === 401) {
+                setErrorMessage('Bạn chưa có quyền truy cập audio này.')
+                setOpenUnauthorizedModal(true);
+                return;
+            }
+            setErrorMessage('Đã có lỗi xảy ra, vui lòng thử lại sau!')
+            setOpenSnackbar(true);
+        }
+    }
 
     const countDownTimer = () => {
         let eslapseTime = 0;
@@ -255,18 +355,10 @@ export default function Control(props) {
 
     const handleChangeAudio = (type) => {
         if (type === 'next' && nextAudioId) {
-            const nextUrl = `/audio-play/${nextAudioId}`;
-            if (mode) {
-                nextUrl += '?mode=all'
-            }
-            navigate.push(nextUrl);
+            fetchAudioUrl(nextAudioId);
         }
         if (type === 'prev' && prevAudioId) {
-            const prevUrl = `/audio-play/${prevAudioId}`;
-            if (mode) {
-                nextUrl += '?mode=all'
-            }
-            navigate.push(prevUrl);
+            fetchAudioUrl(prevAudioId);
         }
     }
 
@@ -699,6 +791,224 @@ export default function Control(props) {
                 </Box>
             </Widget>
             <WallPaper />
+            <Snackbar
+                open={openSnackbar}
+                autoHideDuration={6000}
+                onClose={() => { setOpenSnackbar(false) }}
+            >
+                <Alert onClose={() => { setOpenSnackbar(false) }} severity="error" sx={{ width: '100%' }}>
+                    {errorMessage}
+                </Alert>
+            </Snackbar>
+            <Dialog
+                open={openUnauthorizedModal}
+                onClose={() => { setOpenUnauthorizedModal(false) }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        width: isSm ? '95%' : '512px',
+                        bgcolor: COLORS.bg1,
+                        m: 0,
+                        p: '40px 56px',
+                        boxSizing: 'border-box',
+                        borderRadius: isSm ? '10px' : '30px',
+                        ...(isSm && { m: '0 16px' })
+                    }
+                }}
+            >
+                <DialogContent
+                    sx={{
+                        p: 0
+                    }}
+                >
+                    <DialogContentText
+                        sx={{
+                            ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
+                            color: COLORS.white,
+                            textAlign: 'center',
+                            mb: isSm ? '24px' : '32px',
+                            p: 0
+                        }}
+                    >
+                        Voiz FM
+                    </DialogContentText>
+                    <DialogContentText
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.contentIcon,
+                            textAlign: 'center',
+                            whiteSpace: 'pre-line',
+                            mb: '32px'
+                        }}
+                    >
+                        {errorMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center')
+                    }}
+                >
+                    <Box
+                        sx={{
+                            ...flexStyle('center', 'center'),
+                            flexDirection: 'column',
+                            rowGap: '24px'
+                        }}
+                    >
+                        <Button
+                            onClick={handleBuyPlaylist}
+                            sx={{
+                                ...TEXT_STYLE.title1,
+                                color: COLORS.white,
+                                textTransform: 'none',
+                                borderRadius: '8px',
+                                width: isSm ? '168px' : '192px',
+                                height: '48px',
+                                bgcolor: COLORS.main
+                            }}
+                            autoFocus
+                        >
+                            Mua lẻ sách
+                        </Button>
+                        <Button
+                            onClick={() => { setOpenUnauthorizedModal(false) }}
+                            sx={{
+                                ...TEXT_STYLE.content1,
+                                color: COLORS.contentIcon,
+                                textTransform: 'none'
+                            }}
+                        >
+                            Bỏ qua
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openUpdateRequiredModal}
+                onClose={() => { setOpenUpdateRequiredModal(false) }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        width: isSm ? '95%' : '512px',
+                        bgcolor: COLORS.bg1,
+                        m: 0,
+                        p: '40px 56px',
+                        boxSizing: 'border-box',
+                        borderRadius: isSm ? '10px' : '30px',
+                        ...(isSm && { m: '0 16px' })
+                    }
+                }}
+            >
+                <Box
+                    sx={{
+                        width: '100%',
+                        ...flexStyle('center', 'center'),
+                        mb: isSm ? '24px' : '32px'
+                    }}
+                >
+                    <img
+                        style={{
+                            width: isSm ? '134px' : '108px',
+                            height: isSm ? '134px' : '108px'
+                        }}
+                        src='/images/upgrade.png'
+                        alt='upgrade img'
+                    />
+                </Box>
+                <DialogContent
+                    sx={{
+                        p: 0
+                    }}
+                >
+                    <DialogContentText
+                        sx={{
+                            ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
+                            color: COLORS.white,
+                            textAlign: 'center',
+                            mb: '24px',
+                            p: 0
+                        }}
+                    >
+                        Nâng cấp ngay
+                    </DialogContentText>
+                    <DialogContentText
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.contentIcon,
+                            textAlign: 'center',
+                            whiteSpace: 'pre-line',
+                            mb: '32px'
+                        }}
+                    >
+                        {errorMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center')
+                    }}
+                >
+                    <Box
+                        sx={{
+                            ...flexStyle('center', 'center'),
+                            flexDirection: 'column',
+                            rowGap: '24px',
+                            width: '100%'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: '100%',
+                                ...flexStyle('center', 'center'),
+                                columnGap: '16px'
+                            }}
+                        >
+                            <Button
+                                onClick={handleBuyPlaylist}
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    borderRadius: '8px',
+                                    width: isSm ? '168px' : '192px',
+                                    height: '48px',
+                                    bgcolor: COLORS.bg1,
+                                    border: `1px solid ${COLORS.blackStroker}`,
+                                    width: '50%'
+                                }}
+                                autoFocus
+                            >
+                                Mua lẻ sách
+                            </Button>
+                            <Button
+                                onClick={() => { router.push('/up-vip') }}
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    borderRadius: '8px',
+                                    width: isSm ? '168px' : '192px',
+                                    height: '48px',
+                                    bgcolor: COLORS.main,
+                                    width: '50%'
+                                }}
+                                autoFocus
+                            >
+                                Đăng ký gói
+                            </Button>
+                        </Box>
+                        <Button
+                            onClick={() => { setOpenUpdateRequiredModal(false) }}
+                            sx={{
+                                ...TEXT_STYLE.content1,
+                                color: COLORS.contentIcon,
+                                textTransform: 'none'
+                            }}
+                        >
+                            Bỏ qua
+                        </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
         </Box>
     )
 }

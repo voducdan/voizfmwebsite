@@ -1,6 +1,13 @@
 // import react
 import { useState, useRef, useEffect } from 'react';
 
+// import redux
+import { useSelector, useDispatch } from 'react-redux';
+
+// import reducer, actions
+import { setOpenAudioDetail, selectOpenExpandMoreAudio, setOpenExpandMoreAudio } from '../../redux/playAudio';
+import { selectAudioData } from '../../redux/audio';
+
 // import next router
 import { useRouter } from 'next/router';
 
@@ -14,13 +21,15 @@ import {
     Stack,
     Divider,
     Snackbar,
-    Alert
+    Alert,
+    IconButton
 } from '@mui/material';
 import VolumeUp from '@mui/icons-material/VolumeUp';
 import VolumeOffIcon from '@mui/icons-material/VolumeOff';
 import FavoriteIcon from '@mui/icons-material/Favorite';
 import FavoriteBorderIcon from '@mui/icons-material/FavoriteBorder';
 import FilterListIcon from '@mui/icons-material/FilterList';
+import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 
 // import others components
 import Control from './Control';
@@ -41,9 +50,9 @@ export default function PlayBar() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const audio = useRef(null);
     const router = useRouter()
-    const { id } = router.query;
+    const openExpandMoreAudio = useSelector(selectOpenExpandMoreAudio);
+    const audioData = useSelector(selectAudioData);
     const [volume, setVolume] = useState(60);
-    const [audioData, setAudioData] = useState({});
     const [anchorAudioList, setAnchorAudioList] = useState(null);
     const [isLiked, setIsLiked] = useState(audioData?.meta_data?.is_liked);
     const [audiosList, setAudiosList] = useState([]);
@@ -51,16 +60,7 @@ export default function PlayBar() {
     const [nextAudioId, setNextAudioId] = useState(undefined);
     const [prevAudioId, setPrevAudioId] = useState(undefined);
 
-    useEffect(() => {
-        async function fetchAudio() {
-            const res = await api.getAudio(id);
-            const audio = await res.data.data;
-            setAudioData(audio)
-        };
-        if (id) {
-            fetchAudio();
-        }
-    }, [router.asPath]);
+    const dispatch = useDispatch();
 
     useEffect(() => {
         function compare(a, b) {
@@ -101,7 +101,7 @@ export default function PlayBar() {
             setPrevAudioId(null);
             return;
         }
-        const audioIdx = audiosList.findIndex(i => i.id === Number(id));
+        const audioIdx = audiosList.findIndex(i => i.id === Number(audioData.id));
         const nextIdx = audioIdx + 1;
         const prevIdx = audioIdx - 1;
 
@@ -143,6 +143,11 @@ export default function PlayBar() {
         audio.current.volume = value / 100;
     }
 
+    const handleExpandAudioDetail = () => {
+        dispatch(setOpenAudioDetail(true));
+        dispatch(setOpenExpandMoreAudio(false));
+    }
+
     return (
         <Box
             id='play-audio-bar'
@@ -161,6 +166,30 @@ export default function PlayBar() {
                 ...(isSm && { flexDirection: 'column-reverse', rowGap: '16px' })
             }}
         >
+            {
+                openExpandMoreAudio && (
+                    <Box
+                        onClick={handleExpandAudioDetail}
+                        sx={{
+                            position: 'absolute',
+                            width: '56px',
+                            height: '28px',
+                            right: isSm ? '24px' : '48px',
+                            top: '-30px',
+                            ...flexStyle('center', 'center'),
+                            p: 0,
+                            borderTopLeftRadius: '29px',
+                            borderTopRightRadius: '29px',
+                            borderTop: `1px solid ${COLORS.blackStroker}`,
+                            color: COLORS.contentIcon,
+                            bgcolor: COLORS.bg1,
+                            cursor: 'pointer'
+                        }}
+                    >
+                        <ExpandLessIcon />
+                    </Box>
+                )
+            }
             <audio
                 id='audio'
                 hidden
@@ -338,7 +367,7 @@ export default function PlayBar() {
                 anchorAudioList={anchorAudioList}
                 onCloseAudioList={onCloseAudioList}
                 playlistId={audioData?.playlist?.id}
-                audioId={Number(id)}
+                audioId={Number(audioData.id)}
                 audiosList={audiosList}
             />
         </Box>

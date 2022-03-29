@@ -5,6 +5,8 @@ import { useSelector, useDispatch } from 'react-redux';
 
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { selectAnchorEl, handleCloseSearch } from '../../redux/OpenSearch';
+import { selectAudioData } from '../../redux/audio';
+import { selectOpenAudioDetail, selectOpenPlayBar, setOpenAudioDetail, setOpenPlayBar } from '../../redux/playAudio';
 
 import { useRouter } from 'next/router';
 
@@ -18,6 +20,7 @@ import Footer from '../../components/Footer/Footer';
 import Login from '../../components/Login/Login';
 import PlayBar from '../../components/PlayBar/PlayBar';
 import SearchModal from '../../components/Search/SearchModal';
+import AudioPlay from '../../components/AudioPlay/AudioPlay';
 
 import store from '../../redux/store';
 
@@ -34,8 +37,18 @@ function Layout(props) {
     const openSidebar = useSelector(selectOpenSidebar);
     const [anchorEl, setAnchorEl] = useState(null);
     const anchorSearchElId = useSelector(selectAnchorEl);
+    const audio = useSelector(selectAudioData);
+    const openPlaybar = useSelector(selectOpenPlayBar);
+    const openAudioDetail = useSelector(selectOpenAudioDetail);
     const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
+
+    useEffect(() => {
+        if (Object.keys(audio).length > 0) {
+            dispatch(setOpenAudioDetail(true));
+            dispatch(setOpenPlayBar(true));
+        }
+    }, [audio]);
 
     useEffect(() => {
         if (!isSm && !openSidebar) {
@@ -64,26 +77,13 @@ function Layout(props) {
         }
         checkIncludeFooter();
         dispatch(handleCloseSearch());
+        dispatch(setOpenAudioDetail(false));
 
     }, [location.asPath])
 
     useEffect(() => {
         getSearchAnchorEl();
     }, [anchorSearchElId]);
-
-
-    const openPlayBar = () => {
-        const playAudioPathRegex = new RegExp('^/audio-play/[0-9]+');
-        if (playAudioPathRegex.test(location.asPath)) {
-            if (!isSm) {
-                return true;
-            }
-            if (!openSidebar) {
-                return true;
-            }
-        }
-        return false;
-    };
 
     const getSearchAnchorEl = () => {
         const el = document.getElementById(anchorSearchElId);
@@ -101,18 +101,25 @@ function Layout(props) {
             }
             <SidebarMenu />
 
-            <Box sx={{
-                flexGrow: 1,
-                height: `calc(100% - ${HEADER_HEIGHT})`,
-                marginTop: !isSm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
-                width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-                ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
-            }}>
+            <Box
+                sx={{
+                    flexGrow: 1,
+                    height: `calc(100% - ${HEADER_HEIGHT})`,
+                    marginTop: !isSm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
+                    width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+                    ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
+                }}
+            >
                 {children}
             </Box>
             {
-                openPlayBar() && (
+                openPlaybar && (
                     <PlayBar />
+                )
+            }
+            {
+                openAudioDetail && (
+                    <AudioPlay audioFromApi={audio} />
                 )
             }
             {includeFooter && <Footer />}

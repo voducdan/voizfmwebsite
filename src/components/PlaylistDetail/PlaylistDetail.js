@@ -14,6 +14,8 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
 import { selectUser } from '../../redux/user';
 import { setOpenLogin } from '../../redux/openLogin';
+import { setAudioHls, setOpenPlayBar, setOpenAudioDetail, selectAudioHls, selectOpenAudioDetail } from '../../redux/playAudio';
+import { setAudioData, selectAudioData } from '../../redux/audio';
 import { setVoicer } from '../../redux/voicer';
 
 // import swiper
@@ -101,6 +103,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const router = useRouter();
     const cart = useSelector(selectCart);
     const user = useSelector(selectUser);
+    const audioHls = useSelector(selectAudioHls);
+    const audioData = useSelector(selectAudioData);
+    const openAudioDetail = useSelector(selectOpenAudioDetail);
     const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
@@ -169,7 +174,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     }, [id]);
 
     useEffect(() => {
-        const { id } = router.query;
+        const { id, audioId } = router.query;
+        if (audioId) {
+            fetchAudioUrl(audioId);
+        }
         setId(id);
     }, [router.query]);
 
@@ -197,6 +205,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     useEffect(() => {
         setPaused(true);
     }, []);
+
+    useEffect(() => {
+        if (audioHls && audio) {
+            dispatch(setOpenPlayBar(true));
+            dispatch(setOpenAudioDetail(true));
+        }
+    }, [audioHls, audioData]);
+
+
 
     const handleSortAudioList = () => {
         let copiedPlaylistAudios = [...playlistAudios];
@@ -391,7 +408,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     }
 
     const handleAddToCart = async (moveToCart = false) => {
-        console.log(moveToCart)
         // add to cart store
         const isItemExists = cart.length > 0 && cart.some(i => i.id === playlist.id);
         if (isItemExists && moveToCart) {
@@ -402,8 +418,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 const res = await api.addToCart(playlist.id);
                 const result = await res.data;
                 if (result.code === 0) {
-                    setAddToCartError(true);
                     setAddToCartErrorMessage(result.error);
+                    setAddToCartError(true);
                     setTimeout(() => {
                         setAddToCartError(false);
                     }, 1500)
@@ -461,7 +477,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             if (user) {
                 await api.addListeningPlaylists(audioId, 0, playlist.id);
             }
-            fetchAudioUrl(audioId, '');
+            fetchAudioUrl(audioId);
         }
         catch (err) {
             const errList = err.response.data.error;
@@ -481,16 +497,17 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         }
     }
 
-    const fetchAudioUrl = async (id, mode) => {
+    const fetchAudioUrl = async (id) => {
         try {
-            const res = await api.getAudioFile(id);
-            if (mode === 'all') {
-                router.push(`/audio-play/${id}?mode=${mode}`);
-                return;
-            }
-            router.push(`/audio-play/${id}`);
+            const resAudioFile = await api.getAudioFile(id);
+            const data = await resAudioFile.data.data;
+            const resAudio = await api.getAudio(id);
+            const audioDataFromApi = await resAudio.data.data;
+            dispatch(setAudioHls(data.url));
+            dispatch(setAudioData(audioDataFromApi));
         }
         catch (err) {
+            console.log(err)
             const status = err?.response?.status;
             if (status === 400) {
                 setErrorMessage('Quý khách chưa đăng ký dịch vụ thành công. Vui lòng kiểm tra lại')
@@ -521,7 +538,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
                 }
-                fetchAudioUrl(playlistAudios[0].id, 'all');
+                fetchAudioUrl(playlistAudios[0].id);
                 return;
             }
             setErrorMessage('Playlist hiện không có audio nào!');
@@ -577,7 +594,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             sx={{
                 ...flexStyle('center', 'center'),
                 flexDirection: 'column',
-                position: 'relative'
+                position: 'relative',
+                ...(openAudioDetail && { display: 'none' })
             }}
         >
             <Box
