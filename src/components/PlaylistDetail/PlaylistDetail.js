@@ -731,7 +731,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         }}
                                         onClick={handleOpenShareModal}
                                     >
-                                        <Share bgfill='#373944' stroke='none' fill='white'></Share>
+                                        <Share bgfill='none' stroke={`${COLORS.contentIcon}`} fill={`${COLORS.contentIcon}`}></Share>
                                     </Box>
                                     <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal

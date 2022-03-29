@@ -116,6 +116,7 @@ export default function Login() {
     const [otpRetries, setOtpRetries] = useState(0);
     const [intervalId, setIntervalId] = useState(0);
     const [isUserInforValidated, setIsUserInforValidated] = useState(false);
+    const [isWaitFormRenewOtp, setIsWaitFormRenewOtp] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -160,6 +161,7 @@ export default function Login() {
 
     const onEnterPhone = async () => {
         // Post phone to server here
+        setIsWaitFormRenewOtp(false);
         try {
             const res = await api.getOTP(phoneNumber, countryCode);
             const data = await res.data;
@@ -174,12 +176,11 @@ export default function Login() {
                 setOtpCountDown(`00:${start < 10 ? '0' + start : start}`);
                 start -= 1;
                 if (start === -1) {
-                    dispatch(setOpenLogin(false));
-                    setStep(1);
                     setIsOTPWrong(false);
                     setOtpRetries(0);
                     clearInterval(x);
                     setOtpCountDown('');
+                    setIsWaitFormRenewOtp(true);
                 }
             }, 1000);
             setIntervalId(x);
@@ -352,6 +353,10 @@ export default function Login() {
         dispatch(setToken(accessToken));
         setStep(null);
         dispatch(handleCloseLogin());
+    }
+
+    const handleReviewOtp = () => {
+        onEnterPhone();
     }
 
     return (
@@ -599,13 +604,15 @@ export default function Login() {
                                 )
                             }
                             <Typography
+                                onClick={handleReviewOtp}
                                 sx={{
                                     ...TEXT_STYLE.title2,
                                     mt: isOTPWrong ? '12px' : '40px',
-                                    color: COLORS.bg4
+                                    color: COLORS.bg4,
+                                    cursor: 'pointer'
                                 }}
                             >
-                                Yêu cầu mã mới trong {otpCountDown}
+                                {isWaitFormRenewOtp ? 'Yêu cầu mã mới' : otpCountDown ? `Yêu cầu mã mới trong ${otpCountDown}` : ''}
                             </Typography>
                             <CustomDisabledButton
                                 disabled={!isOTPValid}

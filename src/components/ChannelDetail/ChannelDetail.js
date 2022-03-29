@@ -1,6 +1,11 @@
 // import react
 import { useEffect, useState } from 'react';
 
+// import redux
+import { useSelector, useDispatch } from 'react-redux';
+import { selectUser } from '../../redux/user';
+import { setOpenLogin } from '../../redux/openLogin';
+
 // import next router
 import { useRouter } from 'next/router';
 
@@ -17,13 +22,15 @@ import {
     Snackbar,
     Alert
 } from '@mui/material';
-import ShareOutlinedIcon from '@mui/icons-material/ShareOutlined';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
 import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 
 // import others components
-import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
+import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail';
+
+// import icons
+import { Share } from '../../components/Icons/index';
 
 // import utils
 import { SCREEN_BREAKPOINTS, TEXT_STYLE, COLORS, DRAWER_WIDTH } from '../../utils/constants';
@@ -64,6 +71,7 @@ export default function ChannelDetail({ channelFromAPI }) {
     const router = useRouter();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const { id } = useRouter().query;
+    const user = useSelector(selectUser);
     const [channel, setChannel] = useState(channelFromAPI);
     const [url, setUrl] = useState('');
     const [playlists, setPlaylists] = useState([]);
@@ -72,9 +80,11 @@ export default function ChannelDetail({ channelFromAPI }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [openShareModal, setOpenShareModal] = useState(false);
 
+    const dispatch = useDispatch();
+
     useEffect(() => {
         async function fetchPlaylists() {
-            const res = await api.getChannelPlaylists(id);
+            const res = await api.getChannelPlaylists(id, 1, channel?.channel_counter?.playlists_count);
             const data = await res.data.data;
             setPlaylists(data);
         }
@@ -95,6 +105,10 @@ export default function ChannelDetail({ channelFromAPI }) {
 
     const handleBookmark = () => {
         async function bookmarkChannel(cb) {
+            if (!user) {
+                dispatch(setOpenLogin(true));
+                return;
+            }
             try {
                 const res = await api.bookmarkChannel(id);
                 const data = await res.data;
@@ -257,7 +271,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     p: 0
                                 }}
                             >
-                                <ShareOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+                                <Share bgfill='none' fill='none' stroke={COLORS.contentIcon} />
                             </IconButton>
                             <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                             <Button
@@ -271,6 +285,9 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     bgcolor: channel?.is_bookmark ? COLORS.bg3 : COLORS.main,
                                     whiteSpace: 'nowrap',
                                     p: '4px 14px',
+                                    '& .MuiButton-startIcon': {
+                                        mr: '4px'
+                                    },
                                     ':hover': {
                                         bgcolor: channel?.is_bookmark ? COLORS.bg3 : COLORS.main
                                     }
@@ -289,19 +306,58 @@ export default function ChannelDetail({ channelFromAPI }) {
                     boxSizing: 'border-box',
                     ...flexStyle('center', 'stretch'),
                     ...(isSm && { flexDirection: 'column', rowGap: '16px' }),
-                    columnGap: '32px'
+                    columnGap: '32px',
+                    ...(!isSm && {
+                        maxHeight: '749px'
+                    })
                 }}
             >
                 <Box
                     sx={{
                         width: isSm ? '100%' : 'calc(40% - 16px)',
-                        bgcolor: COLORS.bg2
+                        bgcolor: COLORS.bg2,
+                        borderRadius: '10px',
+                        overflowY: isSm ? 'auto' : 'hidden',
+                        scrollbarGutter: 'stable',
+                        '::-webkit-scrollbar': {
+                            width: '4px'
+                        },
+
+                        '::-webkit-scrollbar-track': {
+                            borderRadius: '5px',
+                        },
+
+                        '::-webkit-scrollbar-thumb': {
+                            background: COLORS.bg3,
+                            borderRadius: '5px'
+                        },
+
+                        ':hover': {
+                            overflowY: 'auto'
+                        }
                     }}
                 >
                     <Box
                         sx={{
-                            p: isSm ? '26px 16px' : '26px 32px',
-                            boxSizing: 'border-box'
+                            p: isSm ? '26px 16px 40px 16px' : '26px 39px 31px 39px',
+                            boxSizing: 'border-box',
+                            ...(isSm && {
+                                maxHeight: '724px'
+                            }),
+                            overflowY: 'scroll',
+                            scrollbarGutter: 'stable',
+                            '::-webkit-scrollbar': {
+                                width: '4px'
+                            },
+
+                            '::-webkit-scrollbar-track': {
+                                borderRadius: '5px',
+                            },
+
+                            '::-webkit-scrollbar-thumb': {
+                                background: COLORS.bg3,
+                                borderRadius: '5px'
+                            }
                         }}
                     >
                         <Typography
@@ -337,12 +393,31 @@ export default function ChannelDetail({ channelFromAPI }) {
                 <Box
                     sx={{
                         width: isSm ? '100%' : 'calc(60% - 16px)',
-                        bgcolor: COLORS.bg2
+                        bgcolor: COLORS.bg2,
+                        borderRadius: '10px',
+                        overflowY: isSm ? 'auto' : 'hidden',
+                        scrollbarGutter: 'stable',
+                        '::-webkit-scrollbar': {
+                            width: '4px'
+                        },
+
+                        '::-webkit-scrollbar-track': {
+                            borderRadius: '5px',
+                        },
+
+                        '::-webkit-scrollbar-thumb': {
+                            background: COLORS.bg3,
+                            borderRadius: '5px'
+                        },
+
+                        ':hover': {
+                            overflowY: 'auto'
+                        }
                     }}
                 >
                     <Box
                         sx={{
-                            p: isSm ? '26px 16px' : '26px 32px',
+                            p: isSm ? '26px 16px 16px 16px' : '26px 32px 16px 32px',
                             boxSizing: 'border-box'
                         }}
                     >
