@@ -29,7 +29,7 @@ const infoBox = (icon, content) => (
     </Box >
 )
 
-export default function Footer(props) {
+export default function Footer({ isSm }) {
 
     const openSidebar = useSelector(selectOpenSidebar);
 
@@ -39,7 +39,21 @@ export default function Footer(props) {
             ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
             marginTop: '80px'
         }}>
-            <Logo />
+            <Box
+                sx={{
+                    display: 'flex',
+                    justifyContent: 'center',
+                    alignItems: 'flex-start',
+                    mb: '32px',
+                    ...(isSm && { justifyContent: 'flex-start', marginLeft: '49px' }),
+                }}
+            >
+                <img
+                    src="/images/logo.png"
+                    alt="voizfm logo"
+                    loading="lazy"
+                />
+            </Box>
             <Box sx={{
                 color: COLORS.bg4,
                 display: 'flex',
@@ -53,7 +67,15 @@ export default function Footer(props) {
                     ))
                 }
             </Box>
-            <Box sx={{ ...flexStyle, flexDirection: 'column', rowGap: '20px', marginTop: '35px', marginBottom: '70px' }}>
+            <Box
+                sx={{
+                    ...flexStyle,
+                    flexDirection: 'column',
+                    rowGap: '20px',
+                    marginTop: '35px',
+                    marginBottom: '70px'
+                }}
+            >
                 <Typography sx={{
                     ...TEXT_STYLE.title1,
 

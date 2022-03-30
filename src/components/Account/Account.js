@@ -246,6 +246,56 @@ export default function Account() {
                         borderRadius: '10px'
                     }}
                 >
+                    {
+                        isSm && (
+                            <Box
+                                sx={{
+                                    width: '95%',
+                                    ...flexStyle('center', 'center'),
+                                    columnGap: '10px',
+                                    m: '0 auto 32px auto'
+                                }}
+                            >
+                                <Box
+                                    sx={{
+                                        width: 'calc(100% - 91px)'
+                                    }}
+                                >
+                                    <Button
+                                        sx={{
+                                            width: '100%',
+                                            height: '48px',
+                                            bgcolor: COLORS.bg2,
+                                            color: COLORS.contentIcon,
+                                            textTransform: 'none',
+                                            ...TEXT_STYLE.title2
+                                        }}
+                                        startIcon={<Pencil />}
+                                        onClick={handleEditProfileOpen}
+                                    >Thay đổi thông tin cá nhân</Button>
+                                </Box>
+                                <Box
+                                    sx={{
+                                        width: '81px',
+                                        height: '48px',
+                                        bgcolor: COLORS.bg2,
+                                        borderRadius: '4px',
+                                        ...flexStyle('center', 'center')
+                                    }}
+                                >
+                                    <Button
+                                        id="account-more-button"
+                                        aria-controls="account-more"
+                                        aria-haspopup="true"
+                                        aria-expanded={openMore ? 'true' : undefined}
+                                        onClick={handleClickMore}
+                                    >
+                                        <HorizontalMore />
+                                    </Button>
+                                </Box>
+                            </Box>
+                        )
+                    }
                     <Box>
                         <StyledTabs
                             value={value}
@@ -260,81 +310,90 @@ export default function Account() {
                                 ))
                             }
 
-                            <Box sx={{
-                                width: isSm ? '90%' : '30%',
-                                marginLeft: '16px'
-                            }}>
-                                <Button
-                                    sx={{
-                                        width: '100%',
-                                        height: '36px',
-                                        bgcolor: COLORS.bg2,
-                                        color: COLORS.contentIcon,
-                                        textTransform: 'none',
-                                        ...TEXT_STYLE.title2
-                                    }}
-                                    startIcon={<Pencil />}
-                                    onClick={handleEditProfileOpen}
-                                >Thay đổi thông tin cá nhân</Button>
-                            </Box>
+                            {
+                                !isSm && (
+                                    <Box sx={{
+                                        width: '30%',
+                                        maxWidth: '240px',
+                                        marginLeft: '16px'
+                                    }}>
+                                        <Button
+                                            sx={{
+                                                width: '100%',
+                                                height: '36px',
+                                                bgcolor: COLORS.bg2,
+                                                color: COLORS.contentIcon,
+                                                textTransform: 'none',
+                                                ...TEXT_STYLE.title2
+                                            }}
+                                            startIcon={<Pencil />}
+                                            onClick={handleEditProfileOpen}
+                                        >Thay đổi thông tin cá nhân</Button>
+                                    </Box>
+                                )
+                            }
                             <EditProfileModal open={openEditProfile} setOpen={setopenEditProfile} />
-                            <Box
+                            {
+                                !isSm && (
+                                    <Box
+                                        sx={{
+                                            width: '81px',
+                                            height: '36px',
+                                            marginLeft: '11px',
+                                            bgcolor: COLORS.bg2,
+                                            borderRadius: '4px',
+                                            ...flexStyle('center', 'center')
+                                        }}
+                                    >
+                                        <Button
+                                            id="account-more-button"
+                                            aria-controls="account-more"
+                                            aria-haspopup="true"
+                                            aria-expanded={openMore ? 'true' : undefined}
+                                            onClick={handleClickMore}
+                                        >
+                                            <HorizontalMore />
+                                        </Button>
+                                    </Box>
+                                )
+                            }
+                            <Popover
                                 sx={{
-                                    width: '81px',
-                                    height: '36px',
-                                    marginLeft: '11px',
-                                    bgcolor: COLORS.bg2,
-                                    borderRadius: '4px',
-                                    ...flexStyle('center', 'center')
+                                    '& .MuiPopover-paper': {
+                                        p: '24px',
+                                        width: '360px',
+                                        bgcolor: COLORS.bg2,
+                                        mt: '18px',
+                                        boxSizing: 'border-box'
+                                    }
+                                }}
+                                id="account-more"
+                                anchorEl={accAnchorEl}
+                                anchorOrigin={{
+                                    vertical: 'bottom',
+                                    horizontal: 'right',
+                                }}
+                                transformOrigin={{
+                                    vertical: 'top',
+                                    horizontal: 'right',
+                                }}
+                                open={openMore}
+                                onClose={handleClose}
+                                MenuListProps={{
+                                    'aria-labelledby': 'account-more'
                                 }}
                             >
-                                <Button
-                                    id="account-more-button"
-                                    aria-controls="account-more"
-                                    aria-haspopup="true"
-                                    aria-expanded={openMore ? 'true' : undefined}
-                                    onClick={handleClickMore}
-                                >
-                                    <HorizontalMore />
-                                </Button>
-                                <Popover
-                                    sx={{
-                                        '& .MuiPopover-paper': {
-                                            p: '24px',
-                                            width: '360px',
-                                            bgcolor: COLORS.bg2,
-                                            mt: '18px',
-                                            boxSizing: 'border-box'
-                                        }
-                                    }}
-                                    id="account-more"
-                                    anchorEl={accAnchorEl}
-                                    anchorOrigin={{
-                                        vertical: 'bottom',
-                                        horizontal: 'right',
-                                    }}
-                                    transformOrigin={{
-                                        vertical: 'top',
-                                        horizontal: 'right',
-                                    }}
-                                    open={openMore}
-                                    onClose={handleClose}
-                                    MenuListProps={{
-                                        'aria-labelledby': 'account-more'
-                                    }}
-                                >
-                                    {
-                                        PopUpContent.map((item) => (
-                                            <PopUpButton
-                                                key={item.id} id={item.id}
-                                                startIcon={item.startIcon}
-                                                text={item.text}
-                                                setOpenInviteFriend={setOpenInviteFriend}
-                                                setValue={setValue} />
-                                        ))
-                                    }
-                                </Popover>
-                            </Box>
+                                {
+                                    PopUpContent.map((item) => (
+                                        <PopUpButton
+                                            key={item.id} id={item.id}
+                                            startIcon={item.startIcon}
+                                            text={item.text}
+                                            setOpenInviteFriend={setOpenInviteFriend}
+                                            setValue={setValue} />
+                                    ))
+                                }
+                            </Popover>
                         </StyledTabs>
                     </Box>
                     <HistoryTransaction value={value} isSm={isSm} />

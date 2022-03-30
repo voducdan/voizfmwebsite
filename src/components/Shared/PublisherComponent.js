@@ -24,36 +24,6 @@ import { flexStyle } from '../../utils/flexStyle'
 
 SwiperCore.use([Navigation, Pagination]);
 
-const SwiperBtnNext = (props) => {
-    const { isSm } = props;
-    return {
-        position: 'absolute',
-        right: 0,
-        width: '24px',
-        height: '24px',
-        top: '50%',
-        transform: 'translate(-40px, 70%)',
-        zIndex: 2,
-        cursor: 'pointer',
-        ...(isSm && { display: 'none' })
-    }
-}
-
-const SwiperBtnPrev = (props) => {
-    const { isSm } = props
-    return {
-        position: 'absolute',
-        left: 0,
-        width: '24px',
-        height: '24px',
-        top: '50%',
-        transform: 'translate(28px, 70%)',
-        zIndex: 2,
-        cursor: 'pointer',
-        ...(isSm && { display: 'none' })
-    }
-}
-
 const Title = (props) => {
     const { isSm, content } = props;
     return (
@@ -136,6 +106,7 @@ export default function PublisherComponent(props) {
     const num_items_per_line = !isSm ? 5 : 2.5;
 
     const [activePublisherPagination, setActivePublisherPagination] = useState(0);
+    const [showNavigationBtn, setShowNavigationBtn] = useState(false);
 
     const navigationPublisherPrevRef = useRef(null);
     const navigationPublisherNextRef = useRef(null);
@@ -146,6 +117,36 @@ export default function PublisherComponent(props) {
             return `<span id="publisher-pagination-${index}" class="${className}" style="visibility:hidden">${index + 2}</span>`;
         },
     };
+
+    const SwiperBtnNext = (props) => {
+        const { isSm } = props;
+        return {
+            position: 'absolute',
+            right: 0,
+            width: '24px',
+            height: '24px',
+            top: '50%',
+            transform: 'translate(-40px, 70%)',
+            zIndex: 2,
+            cursor: 'pointer',
+            ...((isSm || !showNavigationBtn) && { display: 'none' })
+        }
+    }
+
+    const SwiperBtnPrev = (props) => {
+        const { isSm } = props
+        return {
+            position: 'absolute',
+            left: 0,
+            width: '24px',
+            height: '24px',
+            top: '50%',
+            transform: 'translate(28px, 70%)',
+            zIndex: 2,
+            cursor: 'pointer',
+            ...((isSm || !showNavigationBtn) && { display: 'none' })
+        }
+    }
 
     const handleClickPublisherPaginationBullet = (e) => {
         const id = Number(e.target.id);
@@ -162,6 +163,8 @@ export default function PublisherComponent(props) {
 
     return (
         <Box
+            onMouseOver={() => { setShowNavigationBtn(true); }}
+            onMouseOut={() => { setShowNavigationBtn(false); }}
             sx={{
                 padding: isSm ? '32px 15px 23px 15px' : '32px 48px 23px 48px',
                 backgroundColor: COLORS.bg2,

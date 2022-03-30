@@ -82,6 +82,7 @@ export default function Cart() {
         async function fetchCart(cb) {
             const res = await api.getCart();
             const data = await res.data.data;
+            console.log(data)
             dispatch(setCart([...data]));
             cb(data);
         }

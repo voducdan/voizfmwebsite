@@ -338,6 +338,7 @@ export default function AudioLike() {
                                     src={i?.avatar?.thumb_url}
                                     authors={i?.author?.name}
                                     hasDelete={true}
+                                    promotion={i?.promotion}
                                     handleConfirmDeleteModalOpen={handleClickDeleteSingleAudio}
                                     children={<AudioDuration isSm={isSm} duration={i?.duration} />}
                                 />

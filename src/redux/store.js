@@ -11,6 +11,7 @@ import openSearchReducer from './OpenSearch';
 import paymentReducer from './payment';
 import userReducer from './user';
 import voicerReducer from './voicer';
+import footerReducer from './footer';
 
 export default configureStore({
     reducer: {
@@ -22,7 +23,8 @@ export default configureStore({
         openSearch: openSearchReducer,
         payment: paymentReducer,
         user: userReducer,
-        voicer: voicerReducer
+        voicer: voicerReducer,
+        footer: footerReducer
     },
 })
 

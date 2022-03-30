@@ -19,29 +19,6 @@ import useWindowSize from '../../utils/useWindowSize';
 // import services
 import API from '../../services/api';
 
-const SwiperBtnNext = (props) => {
-    const { isSm } = props;
-    return {
-        position: 'absolute',
-        transform: 'translateX(-15px)',
-        zIndex: 2,
-        cursor: 'pointer',
-        ...(isSm && { display: 'none' })
-    }
-}
-
-const SwiperBtnPrev = (props) => {
-    const { isSm } = props;
-    return {
-        position: 'absolute',
-        left: 0,
-        transform: 'translateX(-15px)',
-        zIndex: 2,
-        cursor: 'pointer',
-        ...(isSm && { display: 'none' })
-    }
-}
-
 SwiperCore.use([Autoplay, Navigation]);
 
 export default function HomeCarousel() {
@@ -52,8 +29,32 @@ export default function HomeCarousel() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const [current, setCurrent] = useState(0);
     const [images, setImages] = useState([]);
+    const [showNavigationBtn, setShowNavigationBtn] = useState(false);
     const navigationBannerPrevRef = useRef(null);
     const navigationBannerNextRef = useRef(null);
+
+    const SwiperBtnNext = (props) => {
+        const { isSm } = props;
+        return {
+            position: 'absolute',
+            transform: 'translateX(-15px)',
+            zIndex: 2,
+            cursor: 'pointer',
+            ...((isSm || !showNavigationBtn) && { display: 'none' })
+        }
+    }
+
+    const SwiperBtnPrev = (props) => {
+        const { isSm } = props;
+        return {
+            position: 'absolute',
+            left: 0,
+            transform: 'translateX(-15px)',
+            zIndex: 2,
+            cursor: 'pointer',
+            ...((isSm || !showNavigationBtn) && { display: 'none' })
+        }
+    }
 
     useEffect(() => {
         async function fetchBannerImages() {
@@ -89,7 +90,15 @@ export default function HomeCarousel() {
     }
 
     return (
-        <Box sx={{ height: isSm ? '280px' : '420px', position: 'relative', width: '100%' }}>
+        <Box
+            onMouseOver={() => { setShowNavigationBtn(true); }}
+            onMouseOut={() => { setShowNavigationBtn(false); }}
+            sx={{
+                height: isSm ? '280px' : '420px',
+                position: 'relative',
+                width: '100%'
+            }}
+        >
             <div style={{ height: '100%', width: '100%' }}>
                 {images.map((image, idx) => (
                     <img

@@ -189,7 +189,10 @@ export default function PlaylistHistory() {
                             name={i.name}
                             src={i?.avatar?.thumb_url}
                             authors={i?.authors}
-                            children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
+                            children={<PlaylistAudioCount
+                                isSm={isSm}
+                                promotion={i?.promotion}
+                                audioCount={i?.playlist_counter?.audios_count} />}
                         />
                     ))
                 }
@@ -204,7 +207,9 @@ export default function PlaylistHistory() {
                             src={i?.avatar?.thumb_url}
                             authors={i?.author?.name}
                             hasBookmark={false}
-                            children={<AudioDuration isSm={isSm} duration={i?.duration} />}
+                            promotion={i?.promotion}
+                            children={<AudioDuration isSm={isSm}
+                                duration={i?.duration} />}
                         />
                     ))
                 }

@@ -7,6 +7,7 @@ import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { selectAnchorEl, handleCloseSearch } from '../../redux/OpenSearch';
 import { selectAudioData } from '../../redux/audio';
 import { selectOpenAudioDetail, selectOpenPlayBar, setOpenAudioDetail, setOpenPlayBar } from '../../redux/playAudio';
+import { selectIncludeFooter, setFooter } from '../../redux/footer';
 
 import { useRouter } from 'next/router';
 
@@ -25,16 +26,16 @@ import AudioPlay from '../../components/AudioPlay/AudioPlay';
 import store from '../../redux/store';
 
 import useWindowSize from '../../utils/useWindowSize';
-import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH, EXCLUDE_FOOTER } from '../../utils/constants';
+import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH } from '../../utils/constants';
 
 function Layout(props) {
     const { children } = props;
     const location = useRouter();
-    const [includeFooter, setIncludeFooter] = useState(null);
 
     let windowSize = useWindowSize();
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const openSidebar = useSelector(selectOpenSidebar);
+    const includeFooter = useSelector(selectIncludeFooter);
     const [anchorEl, setAnchorEl] = useState(null);
     const anchorSearchElId = useSelector(selectAnchorEl);
     const audio = useSelector(selectAudioData);
@@ -57,28 +58,9 @@ function Layout(props) {
     }, [isSm, openSidebar]);
 
     useEffect(() => {
-        function checkFooter(pathName) {
-            for (let i of EXCLUDE_FOOTER) {
-                const isMatch = i.test(pathName);
-                if (isMatch) {
-                    return true;
-                }
-            }
-            return false;
-        }
-        function checkIncludeFooter() {
-            const pathName = location.asPath;
-            const excludeFooter = checkFooter(pathName);
-            if (excludeFooter) {
-                setIncludeFooter(false);
-            } else {
-                setIncludeFooter(true);
-            }
-        }
-        checkIncludeFooter();
+        dispatch(setFooter(true));
         dispatch(handleCloseSearch());
         dispatch(setOpenAudioDetail(false));
-
     }, [location.asPath])
 
     useEffect(() => {
@@ -122,7 +104,7 @@ function Layout(props) {
                     <AudioPlay audioFromApi={audio} />
                 )
             }
-            {includeFooter && <Footer />}
+            {includeFooter && <Footer isSm={isSm} />}
         </Box>
     )
 }

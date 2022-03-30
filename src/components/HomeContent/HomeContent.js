@@ -34,8 +34,7 @@ import API from '../../services/api'
 
 SwiperCore.use([Navigation, Autoplay, Pagination]);
 
-const SwiperBtnNext = (props) => {
-    const { isSm } = props;
+const SwiperBtnNext = () => {
     return {
         position: 'absolute',
         right: 0,
@@ -45,12 +44,10 @@ const SwiperBtnNext = (props) => {
         transform: 'translate(-40px, 70%)',
         zIndex: 2,
         cursor: 'pointer',
-        ...(isSm && { display: 'none' })
     }
 }
 
-const SwiperBtnPrev = (props) => {
-    const { isSm } = props
+const SwiperBtnPrev = () => {
     return {
         position: 'absolute',
         left: 0,
@@ -60,7 +57,6 @@ const SwiperBtnPrev = (props) => {
         transform: 'translate(28px, 70%)',
         zIndex: 2,
         cursor: 'pointer',
-        ...(isSm && { display: 'none' })
     }
 }
 
@@ -186,6 +182,7 @@ export default function HomeContent() {
     const [newContents, setNewContents] = useState([]);
     const [featuredsAuthors, setFeaturedAuthors] = useState([]);
     const [activeNewContentPagination, setActiveNewContentPagination] = useState(0);
+    const [showNewContentNavigationBtn, setShowNewContentNavigationBtn] = useState(false);
 
     const navigationNewContentPrevRef = useRef(null);
     const navigationNewContentNextRef = useRef(null);
@@ -337,6 +334,8 @@ export default function HomeContent() {
                 ))
             }
             <Box
+                onMouseOver={() => { setShowNewContentNavigationBtn(true); }}
+                onMouseOut={() => { setShowNewContentNavigationBtn(false); }}
                 sx={{
                     p: isSm ? '32px 20px 23px 20px' : '32px 48px 23px 48px',
                     backgroundColor: COLORS.bg2,
@@ -381,10 +380,16 @@ export default function HomeContent() {
                     ))}
                 </Swiper>
                 <div style={{
-                    ...SwiperBtnPrev({ isSm })
+                    ...SwiperBtnPrev(),
+                    ...((isSm || !showNewContentNavigationBtn) && {
+                        display: 'none'
+                    })
                 }} ref={navigationNewContentPrevRef} ><CarouselPrev></CarouselPrev></div>
                 <div style={{
-                    ...SwiperBtnNext({ isSm })
+                    ...SwiperBtnNext(),
+                    ...((isSm || !showNewContentNavigationBtn) && {
+                        display: 'none'
+                    })
                 }} ref={navigationNewContentNextRef} > <CarouselNext></CarouselNext></div>
             </Box>
 

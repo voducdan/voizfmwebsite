@@ -18,11 +18,15 @@ import {
     Avatar,
 } from '@mui/material';
 import Masonry from '@mui/lab/Masonry';
-import CommentIcon from '@mui/icons-material/Comment';
-import ThumbUpAltIcon from '@mui/icons-material/ThumbUpAlt';
 
 // import others components
 import CategoryBar from '../../components/Shared/CategoryBar';
+
+import {
+    Comment,
+    Like
+} from '../../components/Icons/index';
+
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -157,7 +161,7 @@ const DiscoveryItem = (props) => {
                                             columnGap: '9px'
                                         }}
                                     >
-                                        <CommentIcon sx={{ color: COLORS.white }} />
+                                        <Comment bgfill={COLORS.contentIcon} fill={COLORS.contentIcon} />
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.content2,
@@ -173,7 +177,7 @@ const DiscoveryItem = (props) => {
                                             columnGap: '9px'
                                         }}
                                     >
-                                        <ThumbUpAltIcon sx={{ color: COLORS.white }} />
+                                        <Like bgfill={COLORS.contentIcon} fill={COLORS.contentIcon} />
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.content2,

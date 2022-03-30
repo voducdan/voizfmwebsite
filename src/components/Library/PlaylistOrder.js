@@ -106,6 +106,7 @@ export default function PlaylistOrder() {
                             name={i.name}
                             src={i?.avatar?.thumb_url}
                             authors={i?.authors}
+                            promotion={i?.promotion}
                             children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
                         />
                     ))

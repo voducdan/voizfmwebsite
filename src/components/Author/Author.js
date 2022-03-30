@@ -230,7 +230,8 @@ export default function Author({ author }) {
                                                 name={i.name}
                                                 src={i?.avatar?.thumb_url}
                                                 authors={i?.authors}
-                                                children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />
+                                                children={<PlaylistAudioCount isSm={isSm}
+                                                    audioCount={i?.playlist_counter?.audios_count} />
                                                 }
                                             />
                                         ))

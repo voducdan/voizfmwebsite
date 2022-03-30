@@ -11,12 +11,18 @@ import { useRouter } from 'next/router';
 import { useSelector, useDispatch } from 'react-redux';
 
 // import reducer, actions
-import { setCart, selectCart, setAddToCartFlag } from '../../redux/payment';
+import { selectCart } from '../../redux/payment';
 import { selectUser } from '../../redux/user';
 import { setOpenLogin } from '../../redux/openLogin';
-import { setAudioHls, setOpenPlayBar, setOpenAudioDetail, selectAudioHls, selectOpenAudioDetail } from '../../redux/playAudio';
-import { setAudioData, selectAudioData } from '../../redux/audio';
+import { setOpenPlayBar, setOpenAudioDetail, selectAudioHls, selectOpenAudioDetail } from '../../redux/playAudio';
+import { selectAudioData } from '../../redux/audio';
 import { setVoicer } from '../../redux/voicer';
+import { setFooter } from '../../redux/footer';
+
+// import others components
+import handleAddToCart from '../../components/Shared/handleAddToCart';
+import handlePlayAudio from '../../components/Shared/handlePlayAudio';
+import fetchAudioUrl from '../../components/Shared/fetchAudioUrl';
 
 // import swiper
 import SwiperCore, { Navigation } from 'swiper';
@@ -47,7 +53,8 @@ import {
     DialogContentText,
     DialogActions,
     Snackbar,
-    Alert
+    Alert,
+    useForkRef
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -165,6 +172,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             setPlaylistAudios(data);
         }
         if (id) {
+            dispatch(setFooter(false));
             setUrl(window.location.href);
             fetchPlaylist();
             fetchRecommendedPlaylist();
@@ -176,7 +184,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     useEffect(() => {
         const { id, audioId } = router.query;
         if (audioId) {
-            fetchAudioUrl(audioId);
+            fetchAudioUrl(
+                dispatch,
+                audioId,
+                setErrorMessage,
+                setOpenUpdateRequiredModal,
+                setOpenUnauthorizedModal,
+                setOpenSnackbar
+            );
+
         }
         setId(id);
     }, [router.query]);
@@ -407,121 +423,18 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         }
     }
 
-    const handleAddToCart = async (moveToCart = false) => {
-        // add to cart store
-        const isItemExists = cart.length > 0 && cart.some(i => i.id === playlist.id);
-        if (isItemExists && moveToCart) {
-            router.push('/cart');
-        }
-        if (!isItemExists) {
-            try {
-                const res = await api.addToCart(playlist.id);
-                const result = await res.data;
-                if (result.code === 0) {
-                    setAddToCartErrorMessage(result.error);
-                    setAddToCartError(true);
-                    setTimeout(() => {
-                        setAddToCartError(false);
-                    }, 1500)
-                    return;
-                }
-                const tmpCart = [...cart, playlist];
-                dispatch(setCart(tmpCart));
-                dispatch(setAddToCartFlag(1));
-                if (moveToCart) {
-                    router.push('/cart');
-                }
-            }
-            catch (err) {
-                const { status } = err.response;
-                if (status === 401) {
-                    dispatch(setOpenLogin(true));
-                    return;
-                }
-                const errList = err.response.data.error;
-                if (errList instanceof Object) {
-                    let errMessage = '';
-                    for (let e in errList) {
-                        const key = Object.keys(errList[e])[0];
-                        const value = errList[e][key]
-                        errMessage += `${key} ${value} \n`
-                    }
-                    setAddToCartErrorMessage(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
-                    setAddToCartError(true);
-                    setTimeout(() => {
-                        setAddToCartError(false);
-                    }, 1500);
-                    return;
-                }
-                setAddToCartErrorMessage(errList);
-                setAddToCartError(true);
-                setTimeout(() => {
-                    setAddToCartError(false);
-                }, 1500);
-            }
-            return;
-        }
-        setAddToCartErrorMessage('Sản phẩm đã được thêm vào.\n Vui lòng kiểm tra lại giỏ hàng!');
-        setAddToCartError(true);
-        setTimeout(() => {
-            setAddToCartError(false);
-        }, 1500);
-    }
-
-    const handlePlayAudio = async (audioId) => {
-        try {
-            if (!user && playlist.promotion !== 'free') {
-                dispatch(setOpenLogin(true));
-                return;
-            }
-            if (user) {
-                await api.addListeningPlaylists(audioId, 0, playlist.id);
-            }
-            fetchAudioUrl(audioId);
-        }
-        catch (err) {
-            const errList = err.response.data.error;
-            if (errList instanceof Object) {
-                let errMessage = '';
-                for (let e in errList) {
-                    const key = Object.keys(errList[e])[0];
-                    const value = errList[e][key]
-                    errMessage += `${key} ${value} \n`
-                }
-                setErrorMessage(errMessage)
-                setOpenSnackbar(true);
-                return;
-            }
-            setErrorMessage(errList)
-            setOpenSnackbar(true);
-        }
-    }
-
-    const fetchAudioUrl = async (id) => {
-        try {
-            const resAudioFile = await api.getAudioFile(id);
-            const data = await resAudioFile.data.data;
-            const resAudio = await api.getAudio(id);
-            const audioDataFromApi = await resAudio.data.data;
-            dispatch(setAudioHls(data.url));
-            dispatch(setAudioData(audioDataFromApi));
-        }
-        catch (err) {
-            console.log(err)
-            const status = err?.response?.status;
-            if (status === 400) {
-                setErrorMessage('Quý khách chưa đăng ký dịch vụ thành công. Vui lòng kiểm tra lại')
-                setOpenUpdateRequiredModal(true);
-                return;
-            }
-            if (status === 401) {
-                setErrorMessage('Bạn chưa có quyền truy cập audio này.')
-                setOpenUnauthorizedModal(true);
-                return;
-            }
-            setErrorMessage('Đã có lỗi xảy ra, vui lòng thử lại sau!')
-            setOpenSnackbar(true);
-        }
+    const handlePlayOneAudio = async (audioId) => {
+        handlePlayAudio(
+            dispatch,
+            user,
+            audioId,
+            playlist.id,
+            playlist?.promotion,
+            setErrorMessage,
+            setOpenUpdateRequiredModal,
+            setOpenUnauthorizedModal,
+            setOpenSnackbar
+        );
     }
 
     const handleClickPlayAll = async (e) => {
@@ -538,7 +451,14 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
                 }
-                fetchAudioUrl(playlistAudios[0].id);
+                fetchAudioUrl(
+                    dispatch,
+                    playlistAudios[0].id,
+                    setErrorMessage,
+                    setOpenUpdateRequiredModal,
+                    setOpenUnauthorizedModal,
+                    setOpenSnackbar
+                );
                 return;
             }
             setErrorMessage('Playlist hiện không có audio nào!');
@@ -586,7 +506,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     }
 
     const handleBuyPlaylist = () => {
-        handleAddToCart(true);
+        handleAddToCart(
+            dispatch,
+            router,
+            cart,
+            playlist,
+            true,
+            setErrorMessage,
+            setOpenSnackbar
+        );
     }
 
     return (
@@ -731,7 +659,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         }}
                                         onClick={handleOpenShareModal}
                                     >
-                                        <Share bgfill='none' stroke={`${COLORS.contentIcon}`} fill={`${COLORS.contentIcon}`}></Share>
+                                        <Share bgfill='none' stroke={`${COLORS.contentIcon}`} fill='none'></Share>
                                     </Box>
                                     <ShareModal url={url} isSm={isSm} open={openShareModal} setOpen={setOpenShareModal}></ShareModal>
                                     <RateModal
@@ -1213,10 +1141,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                     return (
                                         <ListItem
                                             key={value.id}
-                                            onClick={() => { handlePlayAudio(value?.id) }}
+                                            onClick={() => { handlePlayOneAudio(value?.id) }}
                                             sx={{
                                                 paddingLeft: 0,
-                                                paddingRight: '0',
+                                                paddingRight: 0,
                                                 borderTop: `.5px solid ${COLORS.placeHolder}`,
                                                 height: '72px'
                                             }}
@@ -1274,7 +1202,17 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     (playlist?.promotion === 'vip' && !playlist?.is_purchased) && (
                         <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
                             <Button
-                                onClick={() => { handleAddToCart(false) }}
+                                onClick={() => {
+                                    handleAddToCart(
+                                        dispatch,
+                                        router,
+                                        cart,
+                                        playlist?.id,
+                                        false,
+                                        setAddToCartErrorMessage,
+                                        setAddToCartError
+                                    );
+                                }}
                                 sx={{
                                     border: '1px solid rgba(255, 255, 255, 0.1)',
                                     width: isSm ? '50%' : '20%',

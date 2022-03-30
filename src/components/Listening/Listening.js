@@ -325,6 +325,7 @@ export default function Listening() {
                                         src={i?.playlist?.avatar?.thumb_url}
                                         authors={i?.playlist?.authors}
                                         hasDelete={true}
+                                        promotion={i?.promotion}
                                         handleConfirmDeleteModalOpen={handleClickDeleteSingleAudio}
                                         children={<AudioDuration isSm={isSm} duration={i?.last_duration} listened_percent={i?.listened_percent} />}
                                     />

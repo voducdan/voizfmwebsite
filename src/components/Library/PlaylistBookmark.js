@@ -324,6 +324,7 @@ export default function PlaylistBookmark() {
                             isBookmark={i.is_bookmark}
                             hasBookmark={true}
                             handleBookmark={handleBookmark}
+                            promotion={i?.promotion}
                             children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
                         />
                     ))

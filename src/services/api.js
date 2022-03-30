@@ -169,8 +169,8 @@ export default class API {
         return this.init().delete(`/playlists/listenings/${id}`);
     }
 
-    getCategories = (code, type) => {
-        const params = { code, type };
+    getCategories = (code) => {
+        const params = { code };
         const queryString = this.buildQueryString(params);
         return this.init().get(`/categories?${queryString}`);
     }

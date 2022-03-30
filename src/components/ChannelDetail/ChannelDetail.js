@@ -5,6 +5,10 @@ import { useEffect, useState } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectUser } from '../../redux/user';
 import { setOpenLogin } from '../../redux/openLogin';
+import { selectOpenAudioDetail } from '../../redux/playAudio';
+
+// import reducer, actions
+import { selectCart } from '../../redux/payment';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -20,7 +24,8 @@ import {
     ListItemButton,
     ListItemText,
     Snackbar,
-    Alert
+    Alert,
+    Divider
 } from '@mui/material';
 import AddIcon from '@mui/icons-material/Add';
 import CheckIcon from '@mui/icons-material/Check';
@@ -28,6 +33,9 @@ import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 
 // import others components
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail';
+import PlayAudioDialog from '../../components/Shared/PlayAudioDialog';
+import handleAddToCart from '../../components/Shared/handleAddToCart';
+import handlePlayAudio from '../../components/Shared/handlePlayAudio';
 
 // import icons
 import { Share } from '../../components/Icons/index';
@@ -72,13 +80,18 @@ export default function ChannelDetail({ channelFromAPI }) {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const { id } = useRouter().query;
     const user = useSelector(selectUser);
+    const cart = useSelector(selectCart);
+    const openAudioDetail = useSelector(selectOpenAudioDetail);
     const [channel, setChannel] = useState(channelFromAPI);
     const [url, setUrl] = useState('');
     const [playlists, setPlaylists] = useState([]);
     const [audios, setAudios] = useState([]);
     const [openSnackbar, setOpenSnackbar] = useState(false);
-    const [errorMessage, setErrorMessage] = useState('');
     const [openShareModal, setOpenShareModal] = useState(false);
+    const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
+    const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
+    const [errorMessage, setErrorMessage] = useState('');
+    const [audio, setAudio] = useState(null);
 
     const dispatch = useDispatch();
 
@@ -140,18 +153,46 @@ export default function ChannelDetail({ channelFromAPI }) {
         setOpenShareModal(true)
     }
 
+    const handlePlayChannelAudio = (audio) => {
+        setAudio(audio);
+        handlePlayAudio(
+            dispatch,
+            user,
+            audio.id,
+            audio.playlist_id,
+            'free',
+            setErrorMessage,
+            setOpenUpdateRequiredModal,
+            setOpenUnauthorizedModal,
+            setOpenSnackbar
+        );
+    }
+
+    const handleBuyPlaylist = () => {
+
+        handleAddToCart(
+            dispatch,
+            router,
+            cart,
+            audio.playlist_id,
+            setErrorMessage,
+            setOpenSnackbar
+        );
+    }
+
     return (
         <Box
             sx={{
-                width: '100%'
+                width: '100%',
+                ...(openAudioDetail && { display: 'none' })
             }}
         >
             <Box
                 sx={{
                     width: '100%',
-                    height: isSm ? '272px' : '390px',
+                    minHeight: isSm ? '272px' : '390px',
                     ...flexStyle('flext-start', 'flex-start'),
-                    p: isSm ? '25px 18px 41px 17px' : '50px 50px 50px 160px',
+                    p: isSm ? '25px 18px 25px 17px' : '50px 50px 50px 160px',
                     boxSizing: 'border-box',
                     mb: isSm ? '16px' : '40px',
                     position: 'relative',
@@ -172,8 +213,8 @@ export default function ChannelDetail({ channelFromAPI }) {
                 <Box
                     sx={{
                         width: '100%',
-                        ...flexStyle('flex-start', 'center'),
-                        columnGap: isSm ? '30px' : '48px',
+                        ...flexStyle('flex-start', 'flex-start'),
+                        columnGap: isSm ? '24px' : '48px',
                         boxSizing: 'border-box',
                         height: '100%'
                     }}
@@ -188,8 +229,11 @@ export default function ChannelDetail({ channelFromAPI }) {
                             style={{
                                 width: isSm ? '110px' : '210px',
                                 height: isSm ? '110px' : '210px',
-                                borderRadius: '4px'
-                            }} alt={`image ${channel?.name}`} src={channel?.avatar?.thumb_url}
+                                borderRadius: '4px',
+                                border: `${isSm ? 5 : 6}px solid ${COLORS.bg3}`
+                            }}
+                            alt={`image ${channel?.name}`}
+                            src={channel?.avatar?.thumb_url}
                         />
                     </Box>
                     <Box
@@ -307,6 +351,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                     ...flexStyle('center', 'stretch'),
                     ...(isSm && { flexDirection: 'column', rowGap: '16px' }),
                     columnGap: '32px',
+                    mb: isSm ? 0 : '80px',
                     ...(!isSm && {
                         maxHeight: '749px'
                     })
@@ -383,7 +428,10 @@ export default function ChannelDetail({ channelFromAPI }) {
                                         name={i.name}
                                         src={i?.avatar?.thumb_url}
                                         authors={i?.authors}
-                                        children={<PlaylistAudioCount isSm={isSm} audioCount={i?.playlist_counter?.audios_count} />}
+                                        promotion={i?.promotion}
+                                        children={<PlaylistAudioCount isSm={isSm}
+                                            audioCount={i?.playlist_counter?.audios_count}
+                                        />}
                                     />
                                 ))
                             }
@@ -429,16 +477,21 @@ export default function ChannelDetail({ channelFromAPI }) {
                             }}
                         >Danh sách audios</Typography>
                         <Box>
-                            <List sx={{ width: '100%' }}>
+                            <List
+                                sx={{
+                                    width: '100%'
+                                }}
+                            >
                                 {audios.map((i, idx) => {
                                     return (
                                         <ListItem
                                             sx={{
                                                 paddingLeft: 0,
-                                                paddingRight: '20px',
+                                                paddingRight: 0,
                                                 borderTop: `.5px solid ${COLORS.placeHolder}`,
                                                 height: '72px'
                                             }}
+                                            onClick={() => { handlePlayChannelAudio(i) }}
                                             key={i?.id}
                                             secondaryAction={
                                                 <Typography
@@ -466,7 +519,8 @@ export default function ChannelDetail({ channelFromAPI }) {
                                                             textOverflow: 'ellipsis',
                                                             WebkitLineClamp: 2,
                                                             WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden'
+                                                            overflow: 'hidden',
+                                                            mr: '20px'
                                                         }
                                                     }}
                                                     id={`label-${i?.id}`} primary={i?.name} />
@@ -488,6 +542,23 @@ export default function ChannelDetail({ channelFromAPI }) {
                     {errorMessage}
                 </Alert>
             </Snackbar>
+            {!isSm && (
+                <Divider
+                    sx={{
+                        bgcolor: COLORS.blackStroker,
+                        m: '0 48px'
+                    }}
+                />
+            )}
+            <PlayAudioDialog
+                isSm={isSm}
+                openUnauthorizedModal={openUnauthorizedModal}
+                openUpdateRequiredModal={openUpdateRequiredModal}
+                errorMessage={errorMessage}
+                setOpenUnauthorizedModal={setOpenUnauthorizedModal}
+                setOpenUpdateRequiredModal={setOpenUpdateRequiredModal}
+                handleBuyPlaylist={handleBuyPlaylist}
+            />
         </Box>
     )
 }
