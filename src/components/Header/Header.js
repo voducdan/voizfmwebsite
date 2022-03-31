@@ -60,7 +60,13 @@ import { flexStyle } from '../../utils/flexStyle';
 
 const SearchBtn = (idx) => {
     return (
-        <IconButton aria-label="search" key={idx}>
+        <IconButton
+            aria-label="search"
+            key={idx}
+            sx={{
+                p: 0
+            }}
+        >
             <SearchIcon sx={{ color: COLORS.contentIcon }} />
         </IconButton>
     )
@@ -471,10 +477,13 @@ function Header({ router }) {
                             id="input-search"
                             placeholder="Tìm kiếm"
                             value={searchKeyword}
-                            sx={{ color: COLORS.placeHolder }}
+                            sx={{ color: COLORS.white }}
                             disableUnderline
                             startAdornment={
-                                <InputAdornment position="start" onClick={handleClickSearchBtn}>
+                                <InputAdornment
+                                    position="start"
+                                    onClick={handleClickSearchBtn}
+                                >
                                     {<SearchBtn />}
                                 </InputAdornment>
                             }

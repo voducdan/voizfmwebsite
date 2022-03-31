@@ -4,7 +4,6 @@ import { selectOpenSidebar } from '../../redux/openSidebar';
 import Box from '@mui/material/Box';
 import Typography from '@mui/material/Typography';
 
-import Logo from '../../components/Logo/Logo';
 import { Facebook, Instagram, Tiktok, Phone, Email, Location } from '../../components/Icons/index'
 
 import { COLORS, TEXT_STYLE, DRAWER_WIDTH } from '../../utils/constants'
@@ -30,13 +29,12 @@ const infoBox = (icon, content) => (
 )
 
 export default function Footer({ isSm }) {
-
     const openSidebar = useSelector(selectOpenSidebar);
 
     return (
         <Box sx={{
             width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-            ...(openSidebar && { marginLeft: `${DRAWER_WIDTH}px` }),
+            ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
             marginTop: '80px'
         }}>
             <Box
@@ -45,11 +43,11 @@ export default function Footer({ isSm }) {
                     justifyContent: 'center',
                     alignItems: 'flex-start',
                     mb: '32px',
-                    ...(isSm && { justifyContent: 'flex-start', marginLeft: '49px' }),
+                    ...(isSm && { justifyContent: 'center' }),
                 }}
             >
                 <img
-                    src="/images/logo.png"
+                    src="/images/logofooter.png"
                     alt="voizfm logo"
                     loading="lazy"
                 />

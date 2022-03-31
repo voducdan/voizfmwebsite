@@ -84,6 +84,7 @@ export default function EditProfileModal(props) {
     const [phoneNumber, setPhoneNumber] = useState('');
     const [step, setStep] = useState(0);
     const [countryCode, setCountryCode] = useState('84');
+    const [previewAvtUrl, setPreviewAvtUrl] = useState(null);
     const dispatch = useDispatch();
     const fileInput = useRef(null);
     const phonePrefixList = COUNTRY_CODES;
@@ -93,7 +94,7 @@ export default function EditProfileModal(props) {
             firstName: accountData?.first_name || "first_name",
             lastName: accountData?.last_name || "last_name",
             email: accountData?.email,
-            birthday: accountData?.birthday || format(new Date(), 'yyyy-MM-dd'),
+            birthday: accountData?.birthday || '',
             avatarUrl: accountData?.avatar?.original_url,
         };
         const tmpPhoneNumber = accountData?.phone_number || '';
@@ -107,13 +108,25 @@ export default function EditProfileModal(props) {
 
     const handleChangeUserInfo = (e) => {
         const name = e.target.name;
-        const value = e.target.value;
+        let value = null;
+        if (name === 'birthday') {
+            try {
+                value = format(new Date(birthday), 'yyyy-MM-dd');
+            }
+            catch (err) {
+                value = e.target.value;
+            }
+        }
+        else {
+            value = e.target.value;
+        }
         let user = { ...userInfo };
         user[name] = value;
         setUserInfo({ ...user });
     }
 
     const handleChangeBirthday = (birthday) => {
+        console.log(birthday)
         const formatedBirthday = format(new Date(birthday), 'yyyy-MM-dd');
         let user = { ...userInfo };
         user['birthday'] = formatedBirthday;
@@ -130,6 +143,8 @@ export default function EditProfileModal(props) {
             return;
         }
         const filename = file.name;
+        const tmpAvtUrl = URL.createObjectURL(file);
+        setPreviewAvtUrl(tmpAvtUrl);
         setAvatarFilename(filename);
     }
 
@@ -240,6 +255,8 @@ export default function EditProfileModal(props) {
                 return;
             }
             setUpdatedInfoMessage('Đã cập nhật thông tin trên hệ thống!');
+            URL.revokeObjectURL(previewAvtUrl);
+            setPreviewAvtUrl(null);
             dispatch(setUser(data.data));
         }
         catch (err) {
@@ -270,7 +287,23 @@ export default function EditProfileModal(props) {
                     bgcolor: COLORS.bg1,
                     maxWidth: '100%',
                     width: '100%',
-                    margin: 0
+                    margin: 0,
+                    '::-webkit-scrollbar': {
+                        width: '6px'
+                    },
+
+                    '::-webkit-scrollbar-track': {
+                        borderRadius: '5px',
+                    },
+
+                    '::-webkit-scrollbar-thumb': {
+                        background: COLORS.bg3,
+                        borderRadius: '5px'
+                    },
+
+                    ':hover': {
+                        overflowY: 'auto'
+                    }
                 }
 
             }}
@@ -365,7 +398,7 @@ export default function EditProfileModal(props) {
                                 height: isSm ? '140px' : '210px'
                             }}
                             alt="Remy Sharp"
-                            src={accountData?.avatar?.thumb_url}
+                            src={previewAvtUrl || accountData?.avatar?.thumb_url}
                         />
                     </Box>
                 </Box>
@@ -494,6 +527,7 @@ export default function EditProfileModal(props) {
                                                 startAdornment: InputProps?.startAdornment
                                             }}
                                             name='birthday'
+                                            onChange={handleChangeUserInfo}
                                             value={userInfo.birthday}
                                             placeholder="Ngày tháng năm sinh" variant="outlined"
                                         />
@@ -546,12 +580,26 @@ export default function EditProfileModal(props) {
                 sx={{
                     '& .MuiDialog-paper': {
                         bgcolor: COLORS.bg1,
+                        borderRadius: '30px',
+                        width: !isSm ? '512px' : '100%',
                         ...flexStyle('center', 'center')
                     }
                 }}
                 open={step === 2}
                 onClose={() => { setStep(0); setUpdatedInfoMessage('') }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={() => { setStep(0); setUpdatedInfoMessage('') }}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 0,
+                        color: COLORS.white
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
                 <Box sx={{
                     width: '80%',
                     ...flexStyle('center', 'center'),
@@ -569,10 +617,12 @@ export default function EditProfileModal(props) {
                             border: '1px solid #353535',
                             justifyContent: 'center',
                             height: '49px',
+                            width: '100%',
                             '& .MuiOutlinedInput-root': {
                                 height: '100%'
                             },
                             '& .MuiOutlinedInput-input': {
+                                textAlign: 'center',
                                 color: COLORS.white,
                                 ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                             }
@@ -596,12 +646,27 @@ export default function EditProfileModal(props) {
                 sx={{
                     '& .MuiDialog-paper': {
                         bgcolor: COLORS.bg1,
-                        ...flexStyle('center', 'center')
+                        ...flexStyle('center', 'center'),
+                        borderRadius: '30px',
+                        width: !isSm ? '512px' : '100%'
                     }
                 }}
                 open={step === 1}
                 onClose={() => { setStep(0); setUpdatedInfoMessage('') }}
             >
+                <IconButton
+                    aria-label="close"
+                    onClick={() => { setStep(0); setUpdatedInfoMessage('') }}
+                    sx={{
+                        position: 'absolute',
+                        right: 8,
+                        top: 0,
+                        color: COLORS.white
+                    }}
+                >
+                    <CloseIcon />
+                </IconButton>
+
                 <Box sx={{
                     marginTop: '32px',
                     width: '80%',

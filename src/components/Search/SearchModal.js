@@ -24,7 +24,7 @@ import Thumbnail from '../Thumbnail/Thumbnail';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
-import { TEXT_STYLE, COLORS, SCREEN_BREAKPOINTS } from '../../utils/constants';
+import { TEXT_STYLE, COLORS, DRAWER_WIDTH, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import getRecentlyKeywork from '../../utils/getRecentlyKeywordsFromLocal';
 
@@ -88,12 +88,12 @@ export default function Search() {
             ref={wrapperRef}
             sx={{
                 bgcolor: COLORS.bg2,
-                width: isSm ? '100%' : '40%',
+                width: isSm ? '100%' : `calc(60% - ${DRAWER_WIDTH}px - 24px)`,
                 borderRadius: '4px',
                 p: isSm ? '32px 23px' : '32px',
                 position: 'fixed',
                 top: '70px',
-                left: isSm ? 0 : '300px',
+                left: isSm ? 0 : `${DRAWER_WIDTH + 24}px`,
                 zIndex: '1300',
                 boxSizing: 'border-box'
             }}

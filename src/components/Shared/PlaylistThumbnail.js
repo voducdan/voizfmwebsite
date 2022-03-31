@@ -127,7 +127,7 @@ export default function PlaylistThumnail(props) {
 
                             <Typography
                                 sx={{
-                                    ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                    ...TEXT_STYLE.title1,
                                     color: COLORS.white,
                                     display: '-webkit-box',
                                     textOverflow: 'ellipsis',
@@ -149,7 +149,7 @@ export default function PlaylistThumnail(props) {
                                         <PersonOutlineOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                                         <Typography
                                             sx={{
-                                                ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                                ...TEXT_STYLE.content1,
                                                 color: COLORS.contentIcon,
                                                 display: '-webkit-box',
                                                 textOverflow: 'ellipsis',
@@ -167,7 +167,7 @@ export default function PlaylistThumnail(props) {
                                 !authorsString(authors) && (
                                     <Typography
                                         sx={{
-                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                            ...TEXT_STYLE.content1,
                                             color: COLORS.contentIcon
                                         }}
                                     >

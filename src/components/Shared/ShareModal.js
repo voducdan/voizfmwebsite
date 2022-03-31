@@ -124,11 +124,12 @@ export default function ShareModal(props) {
             label: 'QR Code',
             icon: (
                 <IconButton
-                    onClick={handleCreateQR}
                     sx={{
                         p: 0
-                    }}>
-                    <QR size={shareIconSize} />
+                    }}
+                    onClick={handleCreateQR}
+                >
+                    <Hyperlink size={shareIconSize} />
                 </IconButton>
             )
         },
@@ -146,12 +147,11 @@ export default function ShareModal(props) {
                     title={tooltipTitle}
                 >
                     <IconButton
+                        onClick={handleCopyLink}
                         sx={{
                             p: 0
-                        }}
-                        onClick={handleCopyLink}
-                    >
-                        <Hyperlink size={shareIconSize} />
+                        }}>
+                        <QR size={shareIconSize} />
                     </IconButton>
                 </Tooltip>
             )

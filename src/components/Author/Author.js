@@ -40,7 +40,7 @@ const PlaylistAudioCount = (props) => {
             <GraphicEqOutlinedIcon sx={{ color: COLORS.contentIcon, width: isSm ? '12px' : '16px', height: isSm ? '12px' : '16px' }} />
             <Typography
                 sx={{
-                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                    ...TEXT_STYLE.content1,
                     color: COLORS.contentIcon
                 }}
             >
@@ -87,7 +87,11 @@ export default function Author({ author }) {
     const getFeaturedAuthorWidth = () => {
         const el = document.getElementById('author-detail-info');
         const innerWidth = el.clientWidth;
-        const widthPerItems = (innerWidth - 64) / 3 - ((2 * 20) / 3);
+        // (innerWidth - ) padding*2 / NUM_ITEMS_PER_LINE - (((NUM_ITEMS_PER_LINE - 1) * columnGap) / NUM_ITEMS_PER_LINE)
+        const padding = isSm ? 36 : 64;
+        const numItemsPerLine = 3;
+        const columnGap = 20;
+        const widthPerItems = ((innerWidth - padding) / numItemsPerLine - (((numItemsPerLine - 1) * columnGap) / numItemsPerLine));
         return widthPerItems;
     }
 
@@ -268,7 +272,7 @@ export default function Author({ author }) {
                                     ...flexStyle('center', 'stretch'),
                                     flexWrap: 'wrap',
                                     columnGap: '20px',
-                                    rowGap: '33px'
+                                    rowGap: isSm ? '43px' : '35px'
                                 }}
                             >
                                 {
@@ -276,7 +280,7 @@ export default function Author({ author }) {
                                         <Box
                                             key={i?.id}
                                             sx={{
-                                                width: isSm ? '100px' : 'calc(100% / 3 - 13.4px)'
+                                                width: `calc(100% / 3 - ${isSm ? 17.5 : 13.5}px)`
                                             }}
                                         >
                                             <Link

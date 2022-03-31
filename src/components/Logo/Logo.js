@@ -12,7 +12,7 @@ export default function Logo(props) {
                 ...(props.windowWidth <= SCREEN_BREAKPOINTS.sm && { justifyContent: 'flex-start', marginLeft: '49px' }),
             }}>
             <img
-                src="/images/logo.png"
+                src="/images/logosidebar.png"
                 alt="voizfm logo"
                 loading="lazy"
             />

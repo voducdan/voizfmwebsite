@@ -261,7 +261,7 @@ export default function Login() {
                 for (let e in errList) {
                     const key = Object.keys(errList[e])[0];
                     const value = errList[e][key]
-                    errMessage += `${key} ${value} \n`
+                    errMessage += `${value} \n`
                 }
                 setError(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
                 return;
@@ -371,16 +371,39 @@ export default function Login() {
                         borderRadius: '30px',
                         margin: 0,
                         width: !isSm ? '512px' : '100%',
-                        height: !isSm ? 'auto' : '70%',
-                        paddingTop: '40px',
-                        paddingBottom: '56px',
+                        paddingTop: isSm ? '51px' : '40px',
+                        paddingBottom: isSm ? '65px' : '58px',
+                        boxSizing: 'border-box',
                         display: flexCenter.display,
-                        alignItems: flexCenter.alignItems
+                        alignItems: flexCenter.alignItems,
+                        scrollbarGutter: 'stable'
                     }
                 }}
                 sx={{
                     '& .MuiDialog-container': {
-                        alignItems: 'center'
+                        alignItems: isSm ? 'flex-end' : 'center'
+                    },
+                    '& .MuiDialog-paper': {
+                        '::-webkit-scrollbar': {
+                            width: '4px'
+                        },
+
+                        '::-webkit-scrollbar-button': {
+                            height: '10px'
+                        },
+
+                        '::-webkit-scrollbar-track': {
+                            borderRadius: '5px',
+                        },
+
+                        '::-webkit-scrollbar-thumb': {
+                            background: COLORS.bg3,
+                            borderRadius: '5px'
+                        },
+
+                        ':hover': {
+                            overflowY: 'auto'
+                        },
                     }
                 }}
             >
@@ -708,7 +731,7 @@ export default function Login() {
                                         name='first_name'
                                         onChange={handleChangeUserInfo}
                                         value={userInfo.first_name || ''}
-                                        placeholder="Họ tên lót" variant="outlined"
+                                        placeholder="Họ" variant="outlined"
                                     />
                                     <TextField
                                         sx={{

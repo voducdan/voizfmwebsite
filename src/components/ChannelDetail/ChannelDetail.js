@@ -62,7 +62,7 @@ const PlaylistAudioCount = (props) => {
             <GraphicEqOutlinedIcon sx={{ color: COLORS.contentIcon, width: isSm ? '12px' : '16px', height: isSm ? '12px' : '16px' }} />
             <Typography
                 sx={{
-                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                    ...TEXT_STYLE.content1,
                     color: COLORS.contentIcon
                 }}
             >
@@ -249,7 +249,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                             sx={{
                                 ...flexStyle('flex-start', 'center'),
                                 flexDirection: 'column',
-                                width: isSm ? '100%' : '60%'
+                                ...(isSm && { width: '100%' })
                             }}
                         >
                             <Box
@@ -283,7 +283,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     >{channel?.channel_counter?.bookmarks_count}</Typography>
                                     <Typography
                                         sx={{
-                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
+                                            ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
                                             color: COLORS.contentIcon
                                         }}
                                     >theo dõi</Typography>
@@ -306,7 +306,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                             sx={{
                                 ...(isSm ? flexStyle('flex-start', 'center') : flexStyle('flex-end', 'center')),
                                 columnGap: '10%',
-                                width: isSm ? '100%' : '30%'
+                                ...(isSm && { width: '100%' })
                             }}
                         >
                             <IconButton
@@ -325,6 +325,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     color: COLORS.white,
                                     borderRadius: '22px',
                                     height: isSm ? '28px' : '48px',
+                                    width: isSm ? '94px' : '170px',
                                     textTransform: 'none',
                                     bgcolor: channel?.is_bookmark ? COLORS.bg3 : COLORS.main,
                                     whiteSpace: 'nowrap',
@@ -496,7 +497,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                                             secondaryAction={
                                                 <Typography
                                                     sx={{
-                                                        ...TEXT_STYLE.content2,
+                                                        ...(isSm ? TEXT_STYLE.content3 : TEXT_STYLE.content2),
                                                         color: COLORS.bg4
                                                     }}
                                                 >{formatDuration(i?.duration)}</Typography>
