@@ -53,8 +53,7 @@ import {
     DialogContentText,
     DialogActions,
     Snackbar,
-    Alert,
-    useForkRef
+    Alert
 } from '@mui/material';
 import ExpandMoreIcon from '@mui/icons-material/ExpandMore';
 import ExpandLessIcon from '@mui/icons-material/ExpandLess';
@@ -136,6 +135,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [errorMessage, setErrorMessage] = useState('');
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
+    const [sortAsc, setSortAsc] = useState(false);
 
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
@@ -184,6 +184,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     useEffect(() => {
         const { id, audioId } = router.query;
         if (audioId) {
+            dispatch(setFooter(false));
             fetchAudioUrl(
                 dispatch,
                 audioId,
@@ -235,6 +236,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         let copiedPlaylistAudios = [...playlistAudios];
         copiedPlaylistAudios = copiedPlaylistAudios.reverse();
         setPlaylistAudios([...copiedPlaylistAudios]);
+        setSortAsc(!sortAsc);
     }
 
     const handleBookmark = () => {
@@ -1105,7 +1107,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                 onClick={handleSortAudioList}
                                 sx={{
                                     color: COLORS.contentIcon,
-                                    cursor: 'pointer'
+                                    cursor: 'pointer',
+                                    ...(sortAsc && {
+                                        transform: 'rotateX(180deg)'
+                                    })
                                 }}
                             />
                         </Box>

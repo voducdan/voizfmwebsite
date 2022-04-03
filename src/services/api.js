@@ -120,16 +120,22 @@ export default class API {
         return this.init().post(`/discoveries/${discoveryId}/likes`)
     }
 
-    getPlaylistHistory = () => {
-        return this.init().get(`/profiles/playlist_histories`)
+    getPlaylistHistory = (page = 1, limit = 99999) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/profiles/playlist_histories?${queryString}`)
     }
 
-    getAudioHistory = () => {
-        return this.init().get(`/profiles/audio_histories`)
+    getAudioHistory = (page = 1, limit = 99999) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/profiles/audio_histories?${queryString}`)
     }
 
-    getPlaylistOrders = () => {
-        return this.init().get(`/profiles/playlist_orders`)
+    getPlaylistOrders = (page = 1, limit = 99999) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/profiles/playlist_orders?${queryString}`)
     }
 
     getPlaylistBookmarks = (page, limit) => {
@@ -217,8 +223,8 @@ export default class API {
         return this.init().get(`/playlists/recommendation`);
     }
 
-    getSearchResults = (type, keyword, next_offset = null, language = null, next_query_type = null, limit = 20) => {
-        const params = { keyword, limit, next_offset, language, next_query_type };
+    getSearchResults = (type, keyword, next_offset = null, language = null, next_query_type = null) => {
+        const params = { keyword, next_offset, language, next_query_type };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/search/${type}?${queryString}`);
     }
@@ -366,10 +372,10 @@ export default class API {
     }
 
     getVoicerPlaylists = (id) => {
-        return this.init().get(`/voicers/${id}/playlists`);
+        return this.init().get(`/voicers/${id}/playlists?limit=9999`);
     }
 
     getVersion = () => {
-        return this.init().get('/versions?platform=watch');
+        return this.init().get('/versions?platform=website');
     }
 }

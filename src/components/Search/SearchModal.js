@@ -17,14 +17,16 @@ import {
     Divider,
     Chip
 } from '@mui/material';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 
 // import others components
 import Thumbnail from '../Thumbnail/Thumbnail';
+import {
+    AccessTime
+} from '../../components/Icons/index';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
-import { TEXT_STYLE, COLORS, DRAWER_WIDTH, SCREEN_BREAKPOINTS } from '../../utils/constants';
+import { TEXT_STYLE, COLORS, DRAWER_WIDTH, SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import getRecentlyKeywork from '../../utils/getRecentlyKeywordsFromLocal';
 
@@ -83,33 +85,60 @@ export default function Search() {
         fetchCommonKeywords();
     }, []);
 
+    const getPlaylistImgWidth = (spaceBetween) => {
+        const numItemPerLine = isSm ? 3 : 5;
+        const width = wrapperRef.current.clientWidth;
+        let innerWidth = width - 48;
+        const spaceToBeSubstrcted = ((numItemPerLine - 1) * spaceBetween) / numItemPerLine;
+        return (innerWidth / numItemPerLine) - spaceToBeSubstrcted;
+    }
+
     return (
         <Box
             ref={wrapperRef}
             sx={{
                 bgcolor: COLORS.bg2,
-                width: isSm ? '100%' : `calc(60% - ${DRAWER_WIDTH}px - 24px)`,
+                width: isSm ? '100%' : `calc((60 * (100% - ${DRAWER_WIDTH}px - 48px)) / 100)`,
+                maxHeight: isSm ? `calc(100vh - ${HEADER_HEIGHT_MB})` : `calc(100vh - ${HEADER_HEIGHT})`,
                 borderRadius: '4px',
-                p: isSm ? '32px 23px' : '32px',
                 position: 'fixed',
                 top: '70px',
+                p: isSm ? '32px 0' : '32px 0',
                 left: isSm ? 0 : `${DRAWER_WIDTH + 24}px`,
                 zIndex: '1300',
-                boxSizing: 'border-box'
+                overflow: isSm ? 'scroll' : 'auto',
+                boxSizing: 'border-box',
+                '::-webkit-scrollbar': {
+                    width: '6px'
+                },
+
+                '::-webkit-scrollbar-track': {
+                    borderRadius: '5px',
+                },
+
+                '::-webkit-scrollbar-thumb': {
+                    background: COLORS.bg3,
+                    borderRadius: '5px'
+                },
+
+                ':hover': {
+                    overflowY: 'auto'
+                }
             }}
         >
             {
                 !searchStatus && (
                     <Box
                         sx={{
-                            width: '100%',
+                            width: '100%'
                         }}
                     >
                         <Box
                             sx={{
                                 ...flexStyle('center', 'flex-start'),
                                 flexDirection: 'column',
-                                rowGap: '16px'
+                                rowGap: '16px',
+                                width: '100%'
                             }}
                         >
                             {
@@ -124,14 +153,20 @@ export default function Search() {
                                         <Box
                                             sx={{
                                                 ...flexStyle('flex-start', 'center'),
-                                                columnGap: '8px'
+                                                columnGap: '8px',
+                                                width: '100%',
+                                                p: isSm ? '0 23px' : '0 32px',
+                                                boxSizing: 'border-box',
+                                                cursor: 'pointer'
                                             }}
                                         >
-                                            <AccessTimeIcon sx={{ color: COLORS.contentIcon }} />
+                                            <AccessTime />
                                             <Typography
                                                 sx={{
                                                     ...TEXT_STYLE.content2,
-                                                    color: COLORS.white
+                                                    color: COLORS.white,
+                                                    overflow: 'hidden',
+                                                    textOverflow: 'ellipsis'
                                                 }}
                                             >{i}</Typography>
                                         </Box>
@@ -141,7 +176,12 @@ export default function Search() {
 
                         </Box>
                         <Divider sx={{ borderBottomColor: COLORS.placeHolder, m: '32px 0 ' }} />
-                        <Box>
+                        <Box
+                            sx={{
+                                p: isSm ? '0 15px ' : '0 32px',
+                                boxSizing: 'border-box'
+                            }}
+                        >
                             <Typography
                                 sx={{
                                     ...TEXT_STYLE.title1,
@@ -182,7 +222,9 @@ export default function Search() {
                         <Box
                             sx={{
                                 width: '100%',
-                                mt: '32px'
+                                mt: '32px',
+                                p: isSm ? '0 15px ' : '0 32px',
+                                boxSizing: 'border-box'
                             }}
                         >
                             <Typography
@@ -208,12 +250,26 @@ export default function Search() {
                                             className="playlist-recommendation-item"
                                             href={`/playlists/${i?.id}`}
                                             style={{
-                                                textDecoration: 'none',
-                                                width: 'calc(100% / 5 - 6.4px)'
+                                                textDecoration: 'none'
                                             }}
                                             key={i.id}
                                         >
-                                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={i?.avatar?.thumb_url} alt={`images ${i?.id}`} />
+                                            <Box
+                                                sx={{
+                                                    width: isSm ? 'calc(100% / 3 - 6.4px)' : 'calc(100% / 5 - 6.4px)'
+                                                }}
+                                            >
+                                                <Thumbnail
+                                                    style={{
+                                                        width: '100%',
+                                                        height: `${getPlaylistImgWidth(8)}px`,
+                                                        borderRadius: 3
+                                                    }}
+                                                    promotion={i?.promotion || ''}
+                                                    avtSrc={i?.avatar?.thumb_url}
+                                                    alt={`images ${i?.id}`}
+                                                />
+                                            </Box>
                                         </Link>
                                     ))
                                 }
@@ -233,6 +289,9 @@ export default function Search() {
                             rowGap: '18px'
                         }}
                     >
+                        <Box>
+
+                        </Box>
                         {
                             playlistResults.map(i => (
                                 <Link

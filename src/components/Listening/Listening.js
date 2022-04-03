@@ -17,12 +17,13 @@ import {
     Snackbar,
     Alert
 } from '@mui/material';
-import AccessTimeIcon from '@mui/icons-material/AccessTime';
 import DeleteIcon from '@mui/icons-material/Delete';
 
 // import others components
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
-
+import {
+    AccessTime
+} from '../../components/Icons/index';
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
 import { TEXT_STYLE, COLORS, SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB } from '../../utils/constants';
@@ -67,7 +68,7 @@ const AudioDuration = (props) => {
                     columnGap: '6px'
                 }}
             >
-                <AccessTimeIcon sx={{ color: COLORS.contentIcon, width: isSm ? '12px' : '16px', height: isSm ? '12px' : '16px' }} />
+                <AccessTime />
                 <Typography
                     sx={{
                         ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),

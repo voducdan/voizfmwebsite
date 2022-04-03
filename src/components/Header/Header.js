@@ -276,6 +276,9 @@ function Header({ router }) {
     const handleSearchKeyUp = (e) => {
         const { keyCode } = e;
         if (keyCode === 13) {
+            if (!searchKeyword.trim()) {
+                return;
+            }
             setShowHeaderItems(true);
             setSearchStatus();
             navigate.push({
@@ -286,6 +289,9 @@ function Header({ router }) {
     }
 
     const handleClickSearchBtn = () => {
+        if (!searchKeyword.trim()) {
+            return;
+        }
         setShowHeaderItems(true);
         setSearchStatus();
         navigate.push({
@@ -330,7 +336,7 @@ function Header({ router }) {
         const res = await api.getSearchResults(type, keyword);
         const data = await res.data.data;
         dispatch(setPlaylistResult(data));
-    }, 300), []);
+    }, 100), []);
 
     const handleCloseSidebarWhenClickAccountIcon = (e) => {
         dispatch(setOpen(false));
@@ -477,7 +483,10 @@ function Header({ router }) {
                             id="input-search"
                             placeholder="Tìm kiếm"
                             value={searchKeyword}
-                            sx={{ color: COLORS.white }}
+                            sx={{
+                                color: COLORS.white,
+                                ...TEXT_STYLE.content1
+                            }}
                             disableUnderline
                             startAdornment={
                                 <InputAdornment

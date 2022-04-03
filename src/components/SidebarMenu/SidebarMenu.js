@@ -5,6 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenSidebar, setOpen } from '../../redux/openSidebar';
 import { selectToken } from '../../redux/token';
+import { setOpenLogin } from '../../redux/openLogin';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -48,16 +49,20 @@ import Logo from '../Logo/Logo';
 import { COLORS, TEXT_STYLE, FONT_COLOR, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
 import useWindowSize from '../../utils/useWindowSize'
 
-const RequestsBook = () => (
-    <Button sx={{
-        backgroundColor: COLORS.main,
-        borderRadius: '33px',
-        margin: '13.5px 37px 31px 25px',
-        height: '48px',
-        width: '188px',
-        textTransform: 'inherit',
-        ...TEXT_STYLE.content1
-    }} variant="contained" startIcon={Book()}>
+const RequestsBook = ({ handleClickRequestBook }) => (
+    <Button
+        onClick={handleClickRequestBook}
+        sx={{
+            backgroundColor: COLORS.main,
+            borderRadius: '33px',
+            margin: '13.5px 37px 31px 25px',
+            height: '48px',
+            width: '188px',
+            textTransform: 'inherit',
+            ...TEXT_STYLE.content1
+        }}
+        variant="contained" s
+        tartIcon={Book()}>
         Đề nghị sách
     </Button>
 )
@@ -203,6 +208,14 @@ export default function SidebarMenu() {
         e.stopPropagation();
     }
 
+    const handleClickRequestBook = () => {
+        if (!token) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
+        navigate.push('/book-request')
+    }
+
     return (
         <Drawer
             sx={{
@@ -331,13 +344,11 @@ export default function SidebarMenu() {
                     </Box>
                 ))}
             </List>
-            <Link
-                href='/book-request'
-            >
-                <a
-                    style={{ textDecoration: 'none' }}
-                ><RequestsBook /></a>
-            </Link>
+            <Box>
+                <RequestsBook
+                    handleClickRequestBook={handleClickRequestBook}
+                />
+            </Box>
         </Drawer >
     )
 }

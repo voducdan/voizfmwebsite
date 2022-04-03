@@ -7,9 +7,11 @@ import {
     Typography,
     Divider
 } from '@mui/material';
-import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 // import others components
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
+import {
+    GraphicEQ
+} from '../../components/Icons/index';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -48,7 +50,7 @@ const PlaylistAudioCount = (props) => {
                 columnGap: '6px'
             }}
         >
-            <GraphicEqOutlinedIcon sx={{ color: COLORS.contentIcon, width: isSm ? '12px' : '16px', height: isSm ? '12px' : '16px' }} />
+            <GraphicEQ />
             <Typography
                 sx={{
                     ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
@@ -103,6 +105,7 @@ export default function PlaylistOrder() {
                     playlistOrders.map(i => (
                         <PlaylistThumnail
                             key={i?.id}
+                            id={i?.id}
                             name={i.name}
                             src={i?.avatar?.thumb_url}
                             authors={i?.authors}

@@ -1,6 +1,12 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import redux
+import { useSelector } from 'react-redux';
+
+// Import redux reducer, actions
+import { selectToken } from '../../redux/token';
+
 // import MUI components
 import {
     Box,
@@ -26,13 +32,11 @@ import { OpenBook } from '../../components/Icons/index';
 // import service
 import API from '../../services/api';
 
-// import date-fns
-import { format } from 'date-fns'
-
 export default function BookRequest() {
     const api = new API();
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
+    const token = useSelector(selectToken);
     const [requestName, setRequestName] = useState('');
     const [requestSuccess, setRequestSuccess] = useState(false);
     const [requestedBooks, setRequestedBooks] = useState([]);
@@ -44,7 +48,9 @@ export default function BookRequest() {
             const data = res.data.data;
             setRequestedBooks(data);
         }
-        fetchRequestedBook();
+        if (token) {
+            fetchRequestedBook();
+        }
     }, [])
 
     useEffect(() => {

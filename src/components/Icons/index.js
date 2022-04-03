@@ -56,6 +56,9 @@ import OpenBook from './OpenBook';
 import Like from './Like';
 import Comment from './Comment';
 import Tick from './Tick';
+import User from './User';
+import GraphicEQ from './GraphicEQ';
+import AccessTime from './AccessTime';
 
 export {
     Bookmark,
@@ -115,5 +118,8 @@ export {
     Comment,
     Like,
     Tick,
-    FreeMedal
+    FreeMedal,
+    User,
+    GraphicEQ,
+    AccessTime
 }
