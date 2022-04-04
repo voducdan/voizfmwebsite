@@ -59,6 +59,7 @@ import Tick from './Tick';
 import User from './User';
 import GraphicEQ from './GraphicEQ';
 import AccessTime from './AccessTime';
+import Pencil1 from './Pencil1';
 
 export {
     Bookmark,
@@ -121,5 +122,6 @@ export {
     FreeMedal,
     User,
     GraphicEQ,
-    AccessTime
+    AccessTime,
+    Pencil1
 }

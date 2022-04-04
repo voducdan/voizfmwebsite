@@ -61,8 +61,8 @@ const RequestsBook = ({ handleClickRequestBook }) => (
             textTransform: 'inherit',
             ...TEXT_STYLE.content1
         }}
-        variant="contained" s
-        tartIcon={Book()}>
+        variant="contained"
+        startIcon={Book()}>
         Đề nghị sách
     </Button>
 )

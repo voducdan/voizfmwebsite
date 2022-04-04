@@ -14,12 +14,14 @@ import {
     FormControl,
     Input,
     InputAdornment,
-    Avatar,
-    Snackbar
+    Avatar
 } from '@mui/material';
-import EditOutlinedIcon from '@mui/icons-material/EditOutlined';
 import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CheckIcon from '@mui/icons-material/Check';
+
+import {
+    Pencil1
+} from '../../components/Icons/index';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -156,7 +158,7 @@ export default function BookRequest() {
                                     borderBottom: `1px solid ${COLORS.bg2}`
                                 }
                             }}
-                            startAdornment={<InputAdornment position="start"><EditOutlinedIcon sx={{ color: COLORS.placeHolder }} /></InputAdornment>}
+                            startAdornment={<InputAdornment position="start"><Pencil1 /></InputAdornment>}
                             endAdornment={
                                 <InputAdornment
                                     onClick={handleSendRequest}
