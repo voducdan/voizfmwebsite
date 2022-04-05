@@ -3,16 +3,18 @@ import { useState, useEffect, useRef } from 'react';
 
 // import redux
 import { useDispatch, useSelector } from 'react-redux';
+import { selectUser } from '../../redux/user';
 import { togglePlayAudio, setAudioHls, selectAudioHls } from '../../redux/playAudio';
 import { setAudioData } from '../../redux/audio';
 import { selectToken } from '../../redux/token';
 import { setCart, setAddToCartFlag } from '../../redux/payment';
-// import next router
-import { useRouter } from 'next/router';
 
 // import hls
 import Hls from 'hls.js';
 
+// import firebase
+import { firebase } from "../../../firebase.config";
+import { update, ref, onValue } from 'firebase/database'
 // import MUI component
 import { styled, useTheme } from '@mui/material/styles';
 import {
@@ -41,6 +43,7 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
+import Sha256Encrypt from '../../utils/sha256';
 import { Speed, Clock } from '../Icons';
 
 // import services
@@ -93,9 +96,8 @@ export default function Control(props) {
     const { audioData, audio, nextAudioId, prevAudioId, isSm } = props;
     const theme = useTheme();
     const playBtn = useRef(null);
-    const navigate = useRouter();
-    const { mode } = navigate.query;
     const dispatch = useDispatch();
+    const user = useSelector(selectUser);
     const audioUrl = useSelector(selectAudioHls);
     const token = useSelector(selectToken);
     const [position, setPosition] = useState(0);
@@ -113,6 +115,18 @@ export default function Control(props) {
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
 
     const media = audio.current;
+
+    useEffect(() => {
+        const userRef = ref(firebase, `/users/${user?.uuid}`);
+        onValue(userRef, (snapshot) => {
+            const changedVal = snapshot.val();
+            const tokenPlaying = changedVal.token_playing;
+            console.log(tokenPlaying)
+            if (!paused && !tokenPlaying.startsWith(user?.uuid)) {
+                setPaused(true);
+            }
+        });
+    }, []);
 
     useEffect(() => {
         if (!audioUrl) {
@@ -148,9 +162,6 @@ export default function Control(props) {
             setPosition(currentTime);
             if (currentTime === audioData.duration) {
                 fetchAudioUrl(nextAudioId);
-                // setPaused(true);
-                // media.currentTime = 0;
-                // setPosition(0);
             }
         });
 
@@ -297,6 +308,16 @@ export default function Control(props) {
     const onPlayClick = () => {
         setPaused(!paused);
         dispatch(togglePlayAudio());
+        if (paused) {
+            const updates = {};
+            const uniqueToken = user.uuid + new Date().getTime();
+            const userKey = '/users/' + user.uuid;
+            const postData = { token_playing: uniqueToken };
+            updates[userKey] = postData;
+            update(ref(firebase), updates)
+                .then(val => console.log(val))
+                .catch(err => console.log(err));
+        }
     }
 
     const handleTimerClick = () => {
