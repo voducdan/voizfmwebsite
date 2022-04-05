@@ -12,6 +12,9 @@ import { setCart, setAddToCartFlag } from '../../redux/payment';
 // import hls
 import Hls from 'hls.js';
 
+// import date-fns
+import { format } from 'date-fns'
+
 // import firebase
 import { firebase } from "../../../firebase.config";
 import { update, ref, onValue } from 'firebase/database'
@@ -43,7 +46,6 @@ import SkipPreviousIcon from '@mui/icons-material/SkipPrevious';
 import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
-import Sha256Encrypt from '../../utils/sha256';
 import { Speed, Clock } from '../Icons';
 
 // import services
@@ -113,6 +115,7 @@ export default function Control(props) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
+    const [audioListenings, setAudioListenings] = useState([]);
 
     const media = audio.current;
 
@@ -120,8 +123,10 @@ export default function Control(props) {
         const userRef = ref(firebase, `/users/${user?.uuid}`);
         onValue(userRef, (snapshot) => {
             const changedVal = snapshot.val();
+            if (!changedVal) {
+                return;
+            }
             const tokenPlaying = changedVal.token_playing;
-            console.log(tokenPlaying)
             if (!paused && !tokenPlaying.startsWith(user?.uuid)) {
                 setPaused(true);
             }
@@ -163,6 +168,13 @@ export default function Control(props) {
             if (currentTime === audioData.duration) {
                 fetchAudioUrl(nextAudioId);
             }
+            const audioListenning = {
+                "audio_id": audioData.id,
+                "duration_listening": currentTime,
+                "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                "listen_from": "website"
+            }
+            setAudioListenings([...audioListenings, audioListenning]);
         });
 
     }, [audioUrl]);
@@ -177,6 +189,13 @@ export default function Control(props) {
         else {
             if (media.paused) {
                 media.play();
+                const audioListenning = {
+                    "audio_id": audioData.id,
+                    "duration_listening": 0,
+                    "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                    "listen_from": "website"
+                }
+                setAudioListenings([...audioListenings, audioListenning]);
             }
             media.muted = false;
         }

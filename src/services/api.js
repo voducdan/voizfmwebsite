@@ -378,4 +378,10 @@ export default class API {
     getVersion = () => {
         return this.init().get('/versions?platform=website');
     }
+
+    trackingAudio = (data) => {
+        return this.init().post('/audios/listening', {
+            audio_listenings: data
+        });
+    }
 }
