@@ -8,6 +8,7 @@ import { togglePlayAudio, setAudioHls, selectAudioHls } from '../../redux/playAu
 import { setAudioData } from '../../redux/audio';
 import { selectToken } from '../../redux/token';
 import { setCart, setAddToCartFlag } from '../../redux/payment';
+import { setAudioListenings } from '../../redux/audioListening';
 
 // import hls
 import Hls from 'hls.js';
@@ -115,7 +116,7 @@ export default function Control(props) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
-    const [audioListenings, setAudioListenings] = useState([]);
+    const [audioListenings, setAudioListeningsState] = useState([]);
 
     const media = audio.current;
 
@@ -168,13 +169,24 @@ export default function Control(props) {
             if (currentTime === audioData.duration) {
                 fetchAudioUrl(nextAudioId);
             }
+            let distinctAudioId  =  audioListenings.map(i=>i.audio_id);
+            let audioIdx = distinctAudioId.indexOf(audioData.id);
+            console.log(audioListenings)
+            if(  audioIdx!== -1){
+                const copiedAudioListennings = JSON.parse(JSON.stringify([...audioListenings]));
+                copiedAudioListennings[audioIdx]['duration_listening'] = currentTime;
+                setAudioListeningsState([...copiedAudioListennings]);
+                dispatch(setAudioListenings(copiedAudioListennings));
+                return;
+            }
             const audioListenning = {
                 "audio_id": audioData.id,
                 "duration_listening": currentTime,
                 "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
                 "listen_from": "website"
             }
-            setAudioListenings([...audioListenings, audioListenning]);
+            setAudioListeningsState([...audioListenings, audioListenning]);
+            dispatch(setAudioListenings([...audioListenings, audioListenning]));
         });
 
     }, [audioUrl]);
@@ -187,16 +199,16 @@ export default function Control(props) {
             media.pause();
         }
         else {
-            if (media.paused) {
-                media.play();
-                const audioListenning = {
-                    "audio_id": audioData.id,
-                    "duration_listening": 0,
-                    "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                    "listen_from": "website"
-                }
-                setAudioListenings([...audioListenings, audioListenning]);
-            }
+            // if (media.paused) {
+            //     media.play();
+            //     const audioListenning = {
+            //         "audio_id": audioData.id,
+            //         "duration_listening": 0,
+            //         "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+            //         "listen_from": "website"
+            //     }
+            //     setAudioListeningsState([...audioListenings, audioListenning]);
+            // }
             media.muted = false;
         }
     }, [paused]);
@@ -327,7 +339,7 @@ export default function Control(props) {
     const onPlayClick = () => {
         setPaused(!paused);
         dispatch(togglePlayAudio());
-        if (paused) {
+        if (paused && user) {
             const updates = {};
             const uniqueToken = user.uuid + new Date().getTime();
             const userKey = '/users/' + user.uuid;

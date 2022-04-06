@@ -18,6 +18,7 @@ import { setOpenPlayBar, setOpenAudioDetail, selectAudioHls, selectOpenAudioDeta
 import { selectAudioData } from '../../redux/audio';
 import { setVoicer } from '../../redux/voicer';
 import { setFooter } from '../../redux/footer';
+import { selectAudioListenings, setAudioListenings } from '../../redux/audioListening';
 
 // import others components
 import handleAddToCart from '../../components/Shared/handleAddToCart';
@@ -112,6 +113,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const audioHls = useSelector(selectAudioHls);
     const audioData = useSelector(selectAudioData);
     const openAudioDetail = useSelector(selectOpenAudioDetail);
+    const audioListenings = useSelector(selectAudioListenings);
     const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
@@ -452,6 +454,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             if (playlistAudios.length > 0) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
+                    const res = await api.trackingAudio(audioListenings);
+                    console.log(res)
+                    dispatch(setAudioListenings([]));
                 }
                 fetchAudioUrl(
                     dispatch,
