@@ -71,7 +71,7 @@ const selectPlaylistResults = (state)=>state.openSearch.playlistResults
 const AudioListeningSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
     name: 'audioListening',
     initialState: {
-        audioListenings: true
+        audioListenings: []
     },
     reducers: {
         setAudioListenings: (state, action)=>{
@@ -167,6 +167,49 @@ const selectOpenSidebar = (state)=>state.openSidebar.open
         audioListening: _audioListening__WEBPACK_IMPORTED_MODULE_11__/* ["default"] */ .ZP
     }
 }));
+
+
+/***/ }),
+
+/***/ 7691:
+/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
+
+/* harmony export */ __webpack_require__.d(__webpack_exports__, {
+/* harmony export */   "o4": () => (/* binding */ setToken),
+/* harmony export */   "gy": () => (/* binding */ removeToken),
+/* harmony export */   "rK": () => (/* binding */ selectToken),
+/* harmony export */   "ZP": () => (__WEBPACK_DEFAULT_EXPORT__)
+/* harmony export */ });
+/* unused harmony export saveToken */
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5184);
+/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__);
+/* harmony import */ var _services_authentication__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
+// Import redux toolkit
+
+// import service
+
+const tokenSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
+    name: 'token',
+    initialState: {
+        token: _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .getToken */ .LP()
+    },
+    reducers: {
+        setToken: (state, action)=>{
+            state.token = action.payload;
+            _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .saveToken */ .Fr(action.payload);
+        },
+        saveToken: ()=>{
+            _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .saveToken */ .Fr();
+        },
+        removeToken: ()=>{
+            _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .removeToken */ .gy();
+        }
+    }
+});
+const { setToken , saveToken , removeToken  } = tokenSlice.actions;
+const selectToken = (state)=>state.token.token
+;
+/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tokenSlice.reducer);
 
 
 /***/ }),

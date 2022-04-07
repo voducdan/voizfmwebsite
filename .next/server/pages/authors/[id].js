@@ -517,13 +517,6 @@ module.exports = require("@mui/material/SvgIcon");
 
 /***/ }),
 
-/***/ 5184:
-/***/ ((module) => {
-
-module.exports = require("@reduxjs/toolkit");
-
-/***/ }),
-
 /***/ 2167:
 /***/ ((module) => {
 

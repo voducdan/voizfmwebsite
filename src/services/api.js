@@ -2,7 +2,6 @@ import * as axios from 'axios';
 
 import { getToken } from './authentication';
 import Sha256Encrypt from '../utils/sha256';
-import token from '../redux/token';
 
 export default class API {
     constructor() {
@@ -16,26 +15,26 @@ export default class API {
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         this.xSignature = xSignature;
-        let headers = {
+        this.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Access-Control-Allow-Credentials': true
+            'Access-Control-Allow-Credentials': true,
+            'referrerPolicy': 'no-referrer-when-downgrade',
+            'Referer': 'stream.voiz.app'
         };
-
         if (!!this.api_token) {
-            headers['X-Authorization'] = this.api_token;
+            this.headers['X-Authorization'] = this.api_token;
         };
 
         if (!!this.xSignature) {
-            headers['X-Signature'] = this.xSignature;
+            this.headers['X-Signature'] = this.xSignature;
         };
 
         this.client = axios.create({
             baseURL: this.base_url,
             timeout: 10000,
-            headers: headers
+            headers: this.headers
         });
-
 
 
         return this.client

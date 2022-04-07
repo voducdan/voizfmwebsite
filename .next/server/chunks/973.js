@@ -3,49 +3,6 @@ exports.id = 973;
 exports.ids = [973];
 exports.modules = {
 
-/***/ 7691:
-/***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
-
-/* harmony export */ __webpack_require__.d(__webpack_exports__, {
-/* harmony export */   "o4": () => (/* binding */ setToken),
-/* harmony export */   "gy": () => (/* binding */ removeToken),
-/* harmony export */   "rK": () => (/* binding */ selectToken),
-/* harmony export */   "ZP": () => (__WEBPACK_DEFAULT_EXPORT__)
-/* harmony export */ });
-/* unused harmony export saveToken */
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__ = __webpack_require__(5184);
-/* harmony import */ var _reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0___default = /*#__PURE__*/__webpack_require__.n(_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__);
-/* harmony import */ var _services_authentication__WEBPACK_IMPORTED_MODULE_1__ = __webpack_require__(134);
-// Import redux toolkit
-
-// import service
-
-const tokenSlice = (0,_reduxjs_toolkit__WEBPACK_IMPORTED_MODULE_0__.createSlice)({
-    name: 'token',
-    initialState: {
-        token: _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .getToken */ .LP()
-    },
-    reducers: {
-        setToken: (state, action)=>{
-            state.token = action.payload;
-            _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .saveToken */ .Fr(action.payload);
-        },
-        saveToken: ()=>{
-            _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .saveToken */ .Fr();
-        },
-        removeToken: ()=>{
-            _services_authentication__WEBPACK_IMPORTED_MODULE_1__/* .removeToken */ .gy();
-        }
-    }
-});
-const { setToken , saveToken , removeToken  } = tokenSlice.actions;
-const selectToken = (state)=>state.token.token
-;
-/* harmony default export */ const __WEBPACK_DEFAULT_EXPORT__ = (tokenSlice.reducer);
-
-
-/***/ }),
-
 /***/ 2055:
 /***/ ((__unused_webpack_module, __webpack_exports__, __webpack_require__) => {
 
@@ -68,10 +25,7 @@ function Sha256Encrypt(content) {
     return external_js_sha256_.sha256.hmac(secretKey, content);
 };
 
-// EXTERNAL MODULE: ./src/redux/token.js
-var token = __webpack_require__(7691);
 ;// CONCATENATED MODULE: ./src/services/api.js
-
 
 
 
@@ -81,28 +35,30 @@ class API {
         this.client = null;
         this.base_url = `${"https"}://${"stg-api-nd.voiz.vn/v1"}`;
     }
-    init = (token1, xSignature)=>{
-        this.api_token = token1 || (0,authentication/* getToken */.LP)();
+    init = (token, xSignature)=>{
+        this.api_token = token || (0,authentication/* getToken */.LP)();
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         this.xSignature = xSignature;
-        let headers = {
+        this.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Access-Control-Allow-Credentials': true
+            'Access-Control-Allow-Credentials': true,
+            'referrerPolicy': 'no-referrer-when-downgrade',
+            'Referer': 'stream.voiz.app'
         };
         if (!!this.api_token) {
-            headers['X-Authorization'] = this.api_token;
+            this.headers['X-Authorization'] = this.api_token;
         }
         ;
         if (!!this.xSignature) {
-            headers['X-Signature'] = this.xSignature;
+            this.headers['X-Signature'] = this.xSignature;
         }
         ;
         this.client = external_axios_.create({
             baseURL: this.base_url,
             timeout: 10000,
-            headers: headers
+            headers: this.headers
         });
         return this.client;
     };

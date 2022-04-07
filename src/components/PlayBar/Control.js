@@ -169,12 +169,11 @@ export default function Control(props) {
             if (currentTime === audioData.duration) {
                 fetchAudioUrl(nextAudioId);
             }
-            let distinctAudioId  =  audioListenings.map(i=>i.audio_id);
+            let distinctAudioId = audioListenings.map(i => i.audio_id);
             let audioIdx = distinctAudioId.indexOf(audioData.id);
-            console.log(audioListenings)
-            if(  audioIdx!== -1){
+            if (audioIdx !== -1) {
                 const copiedAudioListennings = JSON.parse(JSON.stringify([...audioListenings]));
-                copiedAudioListennings[audioIdx]['duration_listening'] = currentTime;
+                copiedAudioListennings[audioIdx]['duration_listening'] = copiedAudioListennings[audioIdx]['duration_listening'] + currentTime;
                 setAudioListeningsState([...copiedAudioListennings]);
                 dispatch(setAudioListenings(copiedAudioListennings));
                 return;
@@ -199,16 +198,6 @@ export default function Control(props) {
             media.pause();
         }
         else {
-            // if (media.paused) {
-            //     media.play();
-            //     const audioListenning = {
-            //         "audio_id": audioData.id,
-            //         "duration_listening": 0,
-            //         "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-            //         "listen_from": "website"
-            //     }
-            //     setAudioListeningsState([...audioListenings, audioListenning]);
-            // }
             media.muted = false;
         }
     }, [paused]);

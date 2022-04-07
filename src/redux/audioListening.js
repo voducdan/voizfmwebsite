@@ -3,7 +3,7 @@ import { createSlice } from '@reduxjs/toolkit'
 const AudioListeningSlice = createSlice({
     name: 'audioListening',
     initialState: {
-        audioListenings: true
+        audioListenings: []
     },
     reducers: {
         setAudioListenings: (state, action) => {
