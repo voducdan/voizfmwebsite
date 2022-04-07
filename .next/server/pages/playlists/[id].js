@@ -245,6 +245,7 @@ function PlatlistDetail({ playlistFromAPI  }) {
     const audioData = (0,react_redux__WEBPACK_IMPORTED_MODULE_4__.useSelector)(_redux_audio__WEBPACK_IMPORTED_MODULE_9__/* .selectAudioData */ .a$);
     const openAudioDetail = (0,react_redux__WEBPACK_IMPORTED_MODULE_4__.useSelector)(_redux_playAudio__WEBPACK_IMPORTED_MODULE_8__/* .selectOpenAudioDetail */ .vx);
     const audioListenings = (0,react_redux__WEBPACK_IMPORTED_MODULE_4__.useSelector)(_redux_audioListening__WEBPACK_IMPORTED_MODULE_12__/* .selectAudioListenings */ .h4);
+    console.log(audioListenings);
     const { 0: url , 1: setUrl  } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)('');
     const { 0: id1 , 1: setId  } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)(null);
     const { 0: playlist , 1: setPlaylist  } = (0,react__WEBPACK_IMPORTED_MODULE_1__.useState)({});
@@ -641,7 +642,7 @@ function PlatlistDetail({ playlistFromAPI  }) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
                     const res = await api.trackingAudio(audioListenings);
-                    console.log(res);
+                    console.log(res.data);
                     dispatch((0,_redux_audioListening__WEBPACK_IMPORTED_MODULE_12__/* .setAudioListenings */ .hr)([]));
                 }
                 (0,_components_Shared_fetchAudioUrl__WEBPACK_IMPORTED_MODULE_15__/* ["default"] */ .Z)(dispatch, playlistAudios[0].id, setErrorMessage, setOpenUpdateRequiredModal, setOpenUnauthorizedModal, setOpenSnackbar);

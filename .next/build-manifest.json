@@ -5,9 +5,9 @@
   "devFiles": [],
   "ampDevFiles": [],
   "lowPriorityFiles": [
-    "static/qgNiZjVkgRl2hNOTk0S_L/_buildManifest.js",
-    "static/qgNiZjVkgRl2hNOTk0S_L/_ssgManifest.js",
-    "static/qgNiZjVkgRl2hNOTk0S_L/_middlewareManifest.js"
+    "static/8Zw2s4o1DYPa3MNXlKsuf/_buildManifest.js",
+    "static/8Zw2s4o1DYPa3MNXlKsuf/_ssgManifest.js",
+    "static/8Zw2s4o1DYPa3MNXlKsuf/_middlewareManifest.js"
   ],
   "pages": {
     "/": [
@@ -23,7 +23,7 @@
       "static/chunks/framework-5f4595e5518b5600.js",
       "static/chunks/main-a054bbf31fb90f6a.js",
       "static/css/04fd0afdcd1d243e.css",
-      "static/chunks/pages/_app-104be072b4895e49.js"
+      "static/chunks/pages/_app-a324e257ad836019.js"
     ],
     "/_error": [
       "static/chunks/webpack-5a514192048cebb3.js",
@@ -136,7 +136,7 @@
       "static/chunks/main-a054bbf31fb90f6a.js",
       "static/chunks/873-1e30483c0d05f3fd.js",
       "static/chunks/914-23c094d3e95e09f8.js",
-      "static/chunks/pages/playlists/[id]-302f2518b4b62916.js"
+      "static/chunks/pages/playlists/[id]-821d7f39cedbd095.js"
     ],
     "/playlists/rankings": [
       "static/chunks/webpack-5a514192048cebb3.js",

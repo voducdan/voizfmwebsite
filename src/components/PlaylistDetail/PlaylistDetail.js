@@ -114,6 +114,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const audioData = useSelector(selectAudioData);
     const openAudioDetail = useSelector(selectOpenAudioDetail);
     const audioListenings = useSelector(selectAudioListenings);
+    console.log(audioListenings)
     const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
@@ -455,7 +456,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
                     const res = await api.trackingAudio(audioListenings);
-                    console.log(res)
+                    console.log(res.data)
                     dispatch(setAudioListenings([]));
                 }
                 fetchAudioUrl(

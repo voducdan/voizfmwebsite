@@ -18,9 +18,7 @@ export default class API {
         this.headers = {
             'Content-Type': 'application/json',
             'Accept': 'application/json',
-            'Access-Control-Allow-Credentials': true,
-            'referrerPolicy': 'no-referrer-when-downgrade',
-            'Referer': 'stream.voiz.app'
+            'Access-Control-Allow-Credentials': true
         };
         if (!!this.api_token) {
             this.headers['X-Authorization'] = this.api_token;
