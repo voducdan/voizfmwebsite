@@ -132,6 +132,7 @@ export default function Control(props) {
                 setPaused(true);
             }
         });
+        updateAudisListening(audioData.id, 0);
     }, []);
 
     useEffect(() => {
@@ -169,23 +170,7 @@ export default function Control(props) {
             if (currentTime === audioData.duration) {
                 fetchAudioUrl(nextAudioId);
             }
-            let distinctAudioId = audioListenings.map(i => i.audio_id);
-            let audioIdx = distinctAudioId.indexOf(audioData.id);
-            if (audioIdx !== -1) {
-                const copiedAudioListennings = JSON.parse(JSON.stringify([...audioListenings]));
-                copiedAudioListennings[audioIdx]['duration_listening'] = copiedAudioListennings[audioIdx]['duration_listening'] + currentTime;
-                setAudioListeningsState([...copiedAudioListennings]);
-                dispatch(setAudioListenings(copiedAudioListennings));
-                return;
-            }
-            const audioListenning = {
-                "audio_id": audioData.id,
-                "duration_listening": currentTime,
-                "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                "listen_from": "website"
-            }
-            setAudioListeningsState([...audioListenings, audioListenning]);
-            dispatch(setAudioListenings([...audioListenings, audioListenning]));
+            updateAudisListening(audioData.id, currentTime);
         });
 
     }, [audioUrl]);
@@ -214,6 +199,26 @@ export default function Control(props) {
         }, timer * 1000 * 60);
         countDownTimer();
     }, [timer]);
+
+    const updateAudisListening = (audioId, currentTime) => {
+        let distinctAudioId = audioListenings.map(i => i.audio_id);
+        let audioIdx = distinctAudioId.indexOf(audioId);
+        if (audioIdx !== -1) {
+            const copiedAudioListennings = JSON.parse(JSON.stringify([...audioListenings]));
+            copiedAudioListennings[audioIdx]['duration_listening'] = copiedAudioListennings[audioIdx]['duration_listening'] + currentTime;
+            setAudioListeningsState([...copiedAudioListennings]);
+            dispatch(setAudioListenings(copiedAudioListennings));
+            return;
+        }
+        const audioListenning = {
+            "audio_id": audioId,
+            "duration_listening": currentTime,
+            "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+            "listen_from": "website"
+        }
+        setAudioListeningsState([...audioListenings, audioListenning]);
+        dispatch(setAudioListenings([...audioListenings, audioListenning]));
+    }
 
     const handleAddToCart = async (moveToCart = false) => {
         // add to cart store
@@ -396,9 +401,11 @@ export default function Control(props) {
 
     const handleChangeAudio = (type) => {
         if (type === 'next' && nextAudioId) {
+            updateAudisListening(nextAudioId, 0);
             fetchAudioUrl(nextAudioId);
         }
         if (type === 'prev' && prevAudioId) {
+            updateAudisListening(prevAudioId, 0);
             fetchAudioUrl(prevAudioId);
         }
     }
