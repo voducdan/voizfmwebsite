@@ -59,6 +59,7 @@ export default function Cart() {
     const cart = useSelector(selectCart);
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
+    const [isDiscountCodeValid, setIsDiscountCodeValid] = useState(true);
     const [totalPrice, setTotalPrice] = useState(0);
     const [finalPrice, setFinalPrice] = useState(0);
     const [checkControl, setCheckControl] = useState({});
@@ -193,6 +194,7 @@ export default function Cart() {
 
     const handleInputDiscountCode = (e) => {
         setDiscountCode(e.target.value);
+        setIsDiscountCodeValid(true);
     }
 
     const handleClickPlaylist = (id) => {
@@ -204,6 +206,26 @@ export default function Cart() {
             return;
         }
         setConfirmDeleteCartItemModal(true);
+    }
+
+    const handleValidateDiscountCode = async () => {
+        try {
+            // call api to validate
+            const packageIds = selectedItem.map(i => i.id);
+            const discountData = {
+                package_id: packageIds,
+                coupon_code: discountCode,
+                package_type: 'playlist'
+            }
+            const res = await api.checkDiscountCode(discountData);
+            const data = await res.data;
+            console.log(data);
+            setIsDiscountCodeValid(true);
+        }
+        catch (err) {
+            setIsDiscountCodeValid(false);
+        }
+
     }
 
     return (
@@ -490,7 +512,7 @@ export default function Cart() {
                                                     ml: 1,
                                                     flex: 1,
                                                     ...TEXT_STYLE.content2,
-                                                    color: COLORS.placeHolder,
+                                                    color: COLORS.white,
                                                     margin: 0,
                                                     width: '80%',
                                                     border: `1px solid ${COLORS.placeHolder}`,
@@ -504,7 +526,43 @@ export default function Cart() {
                                                 placeholder="Nhập mã giảm giá (Nếu có)"
                                                 inputProps={{ 'aria-label': 'discount-code' }}
                                             />
+                                            <Button
+                                                onClick={handleValidateDiscountCode}
+                                                sx={{
+                                                    width: '20%',
+                                                    textTransform: 'none',
+                                                    bgcolor: COLORS.main,
+                                                    ...TEXT_STYLE.title2,
+                                                    color: COLORS.white,
+                                                    height: '100%',
+                                                    borderRadius: 0
+                                                }}
+                                            >Sử dụng</Button>
                                         </Paper>
+                                        {
+                                            !isDiscountCodeValid && (
+                                                <Box
+                                                    sx={{
+                                                        mt: '8px',
+                                                        ...TEXT_STYLE.title2,
+                                                        color: COLORS.white,
+                                                        fontWeight: 400,
+                                                    }}
+                                                >
+                                                    Mã giảm giá&nbsp;
+                                                    <span
+                                                        style={{
+                                                            fontWeight: '700!important',
+                                                            ...TEXT_STYLE.title2,
+                                                            color: COLORS.white
+                                                        }}
+                                                    >
+                                                        {discountCode}
+                                                    </span>
+                                                    &nbsp;không hợp lệ.
+                                                </Box>
+                                            )
+                                        }
                                     </Box>
                                 )
                             }

@@ -383,4 +383,8 @@ export default class API {
             audio_listenings: data
         });
     }
+
+    checkDiscountCode = (data) => {
+        return this.init().post('/web/use_coupon', data);
+    }
 }
