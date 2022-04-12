@@ -73,6 +73,9 @@ const PaymentUI = (props) => {
     const removeCartItem = async () => {
         try {
             const cartItems = JSON.parse(localStorage.getItem('localPaymentData'));
+            if (cartItems.package_type === 'plan_package') {
+                return;
+            }
             let promises = [];
             for (let i of cartItems.selectedItem) {
                 promises.push(api.removeCartItem(i.id));
@@ -160,31 +163,38 @@ const PaymentUI = (props) => {
             checkBillingStatus(paymentDataObj.payment_reference_id);
             return;
         }
-        navigate.push('/checkout');
+        navigate.push('/cart');
     }, []);
 
     const handleExpireTime = () => {
         navigate.push('/checkout');
     }
 
+    const fetchUserInfo = async () => {
+        const res = await api.getUserInfo();
+        const data = await res.data.data;
+        if (data.error) {
+            return;
+        }
+        dispatch(setUser(data));
+    }
+
     const handleFinishPayment = () => {
         if (paymentStatus === 1 || paymentStatus === 3) {
             setIsPaymentFinish(false);
-            const copiedUser = { ...user };
-            copiedUser['promotion'] = 'vip';
-            dispatch(setUser(copiedUser));
+            fetchUserInfo();
             dispatch(setItems({
                 selectedItem: [],
                 discountCode: '',
                 totalPrice: 0,
                 finalPrice: 0
             }));
-            navigate.push('/');
+            navigate.push('/cart');
             return;
         }
         if (paymentStatus === 6) {
             setIsPaymentFinish(false);
-            navigate.push('/checkout');
+            navigate.push('/cart');
             return;
         }
         setIsPaymentFinish(false);

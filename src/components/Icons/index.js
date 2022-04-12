@@ -60,6 +60,7 @@ import User from './User';
 import GraphicEQ from './GraphicEQ';
 import AccessTime from './AccessTime';
 import Pencil1 from './Pencil1';
+import Send from './Send';
 
 export {
     Bookmark,
@@ -123,5 +124,6 @@ export {
     User,
     GraphicEQ,
     AccessTime,
-    Pencil1
+    Pencil1,
+    Send,
 }

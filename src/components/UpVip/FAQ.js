@@ -168,20 +168,24 @@ export default function FAQ() {
                     margin: '56px auto 80px auto'
                 }}
             >
-                <Button
-                    sx={{
-                        ...TEXT_STYLE.title1,
-                        color: COLORS.white,
-                        textTransform: 'none',
-                        height: '48px',
-                        width: '100%',
-                        border: `1px solid ${COLORS.blackStroker}`,
-                        borderRadius: '8px'
-                    }}
-                    variant="outlined"
+                <Link
+                    href='http://m.me/VoizFM'
                 >
-                    Bạn cần được tư vấn trực tiếp?
-                </Button>
+                    <Button
+                        sx={{
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
+                            textTransform: 'none',
+                            height: '48px',
+                            width: '100%',
+                            border: `1px solid ${COLORS.blackStroker}`,
+                            borderRadius: '8px'
+                        }}
+                        variant="outlined"
+                    >
+                        Bạn cần được tư vấn trực tiếp?
+                    </Button>
+                </Link>
             </Box>
             <Divider sx={{ width: '90%', margin: 'auto', borderColor: COLORS.blackStroker }} />
         </Box>

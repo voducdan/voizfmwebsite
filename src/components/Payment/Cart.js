@@ -1,6 +1,9 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import next link
+import Link from 'next/link';
+
 // import next router
 import { useRouter } from 'next/router';
 
@@ -44,7 +47,7 @@ import { flexStyle } from '../../utils/flexStyle';
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
-import formatDuration from '../../utils/formatDuration';
+import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
 
 // import service
 import API from '../../services/api';
@@ -60,6 +63,8 @@ export default function Cart() {
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
     const [isDiscountCodeValid, setIsDiscountCodeValid] = useState(true);
+    const [isPaymentFinish, setIsPaymentFinish] = useState(false);
+    const [paymentStatusMessage, setPaymentStatusMessage] = useState('');
     const [totalPrice, setTotalPrice] = useState(0);
     const [finalPrice, setFinalPrice] = useState(0);
     const [checkControl, setCheckControl] = useState({});
@@ -99,6 +104,21 @@ export default function Cart() {
     }, []);
 
     useEffect(() => {
+        const { message, resultCode } = navigate.query || {};
+        if (!message) {
+            return;
+        }
+        if (resultCode === '0') {
+            removeCartItem();
+            localStorage.removeItem('paymentData');
+            localStorage.removeItem('localPaymentData');
+        }
+        setIsPaymentFinish(true);
+        setPaymentStatusMessage(message);
+
+    }, [navigate.query]);
+
+    useEffect(() => {
         setSelectedItem(paymentData.selectedItem);
         setDiscountCode(paymentData.discountCode);
     }, [paymentData]);
@@ -113,6 +133,38 @@ export default function Cart() {
         }
         calculatePrice();
     }, [selectedItem]);
+
+    const removeCartItem = async () => {
+        try {
+            const cartItems = JSON.parse(localStorage.getItem('localPaymentData'));
+            if (cartItems.package_type === 'plan_package') {
+                return;
+            }
+            let promises = [];
+            for (let i of cartItems.selectedItem) {
+                promises.push(api.removeCartItem(i.id));
+            }
+
+            await Promise.all(promises);
+            const res = await api.getCart();
+            const data = await res.data.data;
+            dispatch(setCart([...data]));
+        }
+        catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setPaymentStatusMessage(errMessage);
+                return;
+            }
+            setPaymentStatusMessage(errList);
+        }
+    }
 
     const handleSelectAllItem = (event) => {
         const checked = event.target.checked;
@@ -377,7 +429,7 @@ export default function Cart() {
                                                                 color: COLORS.contentIcon
                                                             }}
                                                         >
-                                                            Thời lượng: {formatDuration(item.total_duration)}
+                                                            Thời lượng: {convertSecondsToReadableString(item.total_duration, 'short')}
                                                         </Typography>
                                                     </CardContent>
                                                 </Box>
@@ -623,16 +675,21 @@ export default function Cart() {
                                 </Button>
                                 {
                                     selectedItem.length > 0 && (
-                                        <Typography
-                                            sx={{
-                                                ...TEXT_STYLE.content2,
-                                                color: COLORS.white,
-                                                textAlign: 'right',
-                                                mt: '24px'
-                                            }}
+                                        <Link
+                                            href='http://m.me/VoizFM'
                                         >
-                                            Bạn có muốn chuyển khoản?
-                                        </Typography>
+                                            <Typography
+                                                sx={{
+                                                    ...TEXT_STYLE.content2,
+                                                    color: COLORS.white,
+                                                    textAlign: 'right',
+                                                    mt: '24px',
+                                                    cursor: 'pointer'
+                                                }}
+                                            >
+                                                Bạn có muốn chuyển khoản?
+                                            </Typography>
+                                        </Link>
                                     )
                                 }
 
@@ -731,6 +788,37 @@ export default function Cart() {
                         autoFocus
                     >
                         Đồng ý
+                    </Button>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={isPaymentFinish}
+                onClose={() => { setIsPaymentFinish(false) }}
+                PaperProps={{
+                    style: {
+                        backgroundColor: COLORS.bg1
+                    }
+                }}
+            >
+                <DialogContent>
+                    <DialogContentText
+                        sx={{
+                            color: COLORS.white
+                        }}
+                    >
+                        {paymentStatusMessage}
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center'),
+                        'whiteSpace': 'pre-line'
+                    }}
+                >
+                    <Button
+                        onClick={() => { setIsPaymentFinish(false) }}
+                        autoFocus>
+                        Đóng
                     </Button>
                 </DialogActions>
             </Dialog>

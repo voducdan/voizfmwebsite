@@ -1,6 +1,9 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import next link
+import Link from 'next/link';
+
 // import next router
 import { useRouter } from 'next/router';
 
@@ -290,16 +293,20 @@ export default function VipPackage() {
                         mt: '8px'
                     }}
                 >Không tự động gia hạn, phù hợp cho người mới bắt đầu</Typography>
-                <Typography
-                    sx={{
-                        ...TEXT_STYLE.content1,
-                        color: COLORS.bg4,
-                        mt: '40px',
-                        mb: '80px',
-                        textDecoration: 'underline'
-                    }}
-                >Hỗ trợ khi gặp vấn đề trong thanh toán</Typography>
-
+                <Link
+                    href='http://m.me/VoizFM'
+                >
+                    <Typography
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.bg4,
+                            mt: '40px',
+                            mb: '80px',
+                            textDecoration: 'underline',
+                            cursor: 'pointer'
+                        }}
+                    >Hỗ trợ khi gặp vấn đề trong thanh toán</Typography>
+                </Link>
             </Box>
         </Box>
     )

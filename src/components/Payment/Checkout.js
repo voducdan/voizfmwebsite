@@ -148,7 +148,7 @@ export default function Checkout() {
                 "package_type": prevPaymentInfo.package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
-                "redirect_url": window.location.origin
+                "redirect_url": window.location.origin + '/cart'
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;

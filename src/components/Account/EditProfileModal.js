@@ -258,6 +258,7 @@ export default function EditProfileModal(props) {
             URL.revokeObjectURL(previewAvtUrl);
             setPreviewAvtUrl(null);
             dispatch(setUser(data.data));
+            props.setOpen(false);
         }
         catch (err) {
             const errList = err.response.data.error;

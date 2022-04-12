@@ -16,11 +16,10 @@ import {
     InputAdornment,
     Avatar
 } from '@mui/material';
-import ArrowRightAltIcon from '@mui/icons-material/ArrowRightAlt';
 import CheckIcon from '@mui/icons-material/Check';
 
 import {
-    Pencil1
+    Pencil1, Send
 } from '../../components/Icons/index';
 
 // import utils
@@ -166,19 +165,16 @@ export default function BookRequest() {
                                     sx=
                                     {{
                                         bgcolor: isFormValid ? COLORS.main : COLORS.bg3,
-                                        width: isSm ? '32px' : '48px',
+                                        width: isSm ? '54px' : '70px',
                                         height: isSm ? '32px' : '48px',
                                         maxHeight: isSm ? '32px' : '48px',
                                         maxWidth: isSm ? '32px' : '48px',
                                         borderRadius: '50%',
-                                        cursor: 'pointer'
+                                        cursor: 'pointer',
+                                        ...flexStyle('center', 'center')
                                     }}
                                 >
-                                    <ArrowRightAltIcon
-                                        sx={{
-                                            color: COLORS.white,
-                                            p: isSm ? '4px' : '12px'
-                                        }} />
+                                    <Send />
                                 </InputAdornment>}
                         />
                     </FormControl>
