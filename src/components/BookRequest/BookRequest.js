@@ -236,7 +236,7 @@ export default function BookRequest() {
                                     key={idx}
                                     sx={{
                                         width: '100%',
-                                        ...flexStyle('space-between', 'center'),
+                                        ...(isSm ? flexStyle('space-between', 'flex-start') : flexStyle('space-between', 'center')),
                                         ...(isSm && { flexDirection: 'column', rowGap: '8px' })
                                     }}
                                 >
@@ -252,7 +252,7 @@ export default function BookRequest() {
                                         </Box>
                                         <Box
                                             sx={{
-                                                ...flexStyle('center', 'flex-starrt'),
+                                                ...flexStyle('center', 'flex-start'),
                                                 flexDirection: 'column',
                                                 rowGap: '15px'
                                             }}

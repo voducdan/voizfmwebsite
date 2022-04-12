@@ -187,7 +187,18 @@ export default function Login() {
         }
         catch (err) {
             setHasError(true);
-            setError(err.message);
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setError(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
+                return;
+            }
+            setError(errList);
         }
     }
 

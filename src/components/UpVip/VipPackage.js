@@ -192,7 +192,8 @@ export default function VipPackage() {
         const paymentData = {
             selectedItem: [{
                 id: vipPackages[selectedPackage]['id'],
-                name: vipPackages[selectedPackage]['name']
+                name: vipPackages[selectedPackage]['name'],
+                pay_price: vipPackages[selectedPackage]['price']
             }],
             discountCode: vipPackages[selectedPackage]['sale_code'] || null,
             package_type: 'plan_package',

@@ -171,6 +171,7 @@ export default function PlayBar() {
 
     return (
         <Box
+            onClick={handleExpandAudioDetail}
             id='play-audio-bar'
             sx={{
                 bgcolor: COLORS.bg1,
@@ -184,6 +185,7 @@ export default function PlayBar() {
                 bottom: 0,
                 borderTop: `1px solid ${COLORS.blackStroker}`,
                 height: isSm ? 'auto' : '100px',
+                cursor: 'pointer',
                 ...(isSm && { flexDirection: 'column-reverse', rowGap: '16px' })
             }}
         >

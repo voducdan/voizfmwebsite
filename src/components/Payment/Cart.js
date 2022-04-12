@@ -55,6 +55,7 @@ export default function Cart() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const navigate = useRouter();
     const paymentData = useSelector(selectPaymentData);
+    console.log(paymentData)
     const cart = useSelector(selectCart);
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
@@ -82,18 +83,17 @@ export default function Cart() {
         async function fetchCart(cb) {
             const res = await api.getCart();
             const data = await res.data.data;
-            console.log(data)
             dispatch(setCart([...data]));
             cb(data);
         }
-        dispatch(setItems(
-            {
-                selectedItem: [],
-                discountCode: '',
-                totalPrice: 0,
-                finalPrice: 0
-            }
-        ));
+        // dispatch(setItems(
+        //     {
+        //         selectedItem: [],
+        //         discountCode: '',
+        //         totalPrice: 0,
+        //         finalPrice: 0
+        //     }
+        // ));
         fetchCart(initCheckControl);
     }, []);
 
@@ -195,6 +195,16 @@ export default function Cart() {
         setDiscountCode(e.target.value);
     }
 
+    const handleClickPlaylist = (id) => {
+        navigate.push(`/playlists/${id}`)
+    }
+
+    const handleClickDeleteMultipleItem = () => {
+        if (selectedItem.length === 0) {
+            return;
+        }
+        setConfirmDeleteCartItemModal(true);
+    }
 
     return (
         <Box
@@ -245,9 +255,9 @@ export default function Cart() {
                                             ...TEXT_STYLE.content1,
                                             color: COLORS.contentIcon
                                         }}
-                                    >Chọn tất cả (4 sản phẩm)</ListItemText>
+                                    >Chọn tất cả ({cart.length} sản phẩm)</ListItemText>
                                     <ListItemIcon
-                                        onClick={() => { setConfirmDeleteCartItemModal(true) }}
+                                        onClick={handleClickDeleteMultipleItem}
                                         sx={{
                                             alignItems: 'center',
                                             columnGap: '14px'
@@ -287,12 +297,31 @@ export default function Cart() {
                                                     width: '75%'
                                                 }}
                                             >
-                                                <CardMedia
-                                                    component="img"
-                                                    sx={{ width: '83px', height: '83px' }}
-                                                    image={item.avatar.thumb_url}
-                                                    alt="Live from space album cover"
-                                                />
+                                                <Box
+                                                    sx={{
+                                                        width: '83px',
+                                                        height: '83px',
+                                                        position: 'relative',
+                                                        '&::before': {
+                                                            content: item?.promotion.includes('vip') ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                                                            position: 'absolute',
+                                                            right: 0,
+                                                            top: 0,
+                                                            zIndex: 8
+                                                        }
+                                                    }}
+                                                >
+                                                    <CardMedia
+                                                        onClick={() => { handleClickPlaylist(item?.id) }}
+                                                        component="img"
+                                                        sx={{
+                                                            width: '100%',
+                                                            height: '100%'
+                                                        }}
+                                                        image={item.avatar.thumb_url}
+                                                        alt="Live from space album cover"
+                                                    />
+                                                </Box>
                                                 <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '70%' }}>
                                                     <CardContent sx={{
                                                         ...flexStyle('center', 'flex-start'),
@@ -302,6 +331,7 @@ export default function Cart() {
                                                     }}
                                                     >
                                                         <Typography
+                                                            onClick={() => { handleClickPlaylist(item?.id) }}
                                                             sx={{
                                                                 ...TEXT_STYLE.title1,
                                                                 color: COLORS.white,
@@ -313,7 +343,8 @@ export default function Cart() {
                                                         <Typography
                                                             sx={{
                                                                 ...TEXT_STYLE.content2,
-                                                                color: COLORS.contentIcon
+                                                                color: COLORS.contentIcon,
+                                                                whiteSpace: 'break-spaces'
                                                             }}
                                                         >
                                                             Tác giả: {item?.author_string}
@@ -333,7 +364,7 @@ export default function Cart() {
                                             <ListItemIcon
                                                 sx={{
                                                     alignItems: 'center',
-                                                    columnGap: '50px',
+                                                    columnGap: isSm ? '8px' : '50px',
                                                     width: '20%',
                                                     justifyContent: 'flex-end'
                                                 }}
@@ -345,7 +376,7 @@ export default function Cart() {
                                                                 ...TEXT_STYLE.content1,
                                                                 color: COLORS.contentIcon
                                                             }}
-                                                        >{formatPrice(item.sale_price)}</Typography>
+                                                        >{formatPrice(item.sale_price)}đ</Typography>
                                                     )
                                                 }
                                                 <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />

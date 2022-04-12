@@ -129,10 +129,8 @@ export default class API {
         return this.init().get(`/profiles/audio_histories?${queryString}`)
     }
 
-    getPlaylistOrders = (page = 1, limit = 99999) => {
-        const params = { page, limit };
-        const queryString = this.buildQueryString(params);
-        return this.init().get(`/profiles/playlist_orders?${queryString}`)
+    getPlaylistOrders = () => {
+        return this.init().get('/profiles/playlist_orders')
     }
 
     getPlaylistBookmarks = (page, limit) => {
@@ -153,6 +151,10 @@ export default class API {
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
         return this.init().get(`/profiles/audio_histories/likes?${queryString}`);
+    }
+
+    getOrderedCombo = () => {
+        return this.init().get('/profiles/combo_packages');
     }
 
     getListeningPlaylists = () => {

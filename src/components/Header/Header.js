@@ -8,15 +8,13 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
-import { selectCart, setCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
+import { selectCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
 import { setUser, selectUser } from '../../redux/user';
 import { selectToken, removeToken } from '../../redux/token';
+import { selectAudioListenings, setAudioListenings } from '../../redux/audioListening';
 
 // import next router
 import { useRouter, withRouter } from 'next/router';
-
-// import next link
-import Link from 'next/link';
 
 // Import MUI component
 import { styled } from '@mui/material/styles';
@@ -88,11 +86,10 @@ const BookmarkIcon = (props) => {
 }
 
 const CartIcon = (props) => {
-    const { handleCloseSidebarWhenClickAccountIcon, numItemsInCart, idx, addToCartFlag } = props;
+    const { handleClickCartIcon, numItemsInCart, idx, addToCartFlag } = props;
     return (
-        <Link
-            onClick={handleCloseSidebarWhenClickAccountIcon}
-            href={`/cart`}
+        <Box
+            onClick={handleClickCartIcon}
             key={idx}
         >
             <Tooltip open={Boolean(addToCartFlag)} title="Thêm vào giỏ hàng thành công!">
@@ -100,7 +97,7 @@ const CartIcon = (props) => {
                     <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />
                 </Badge>
             </Tooltip>
-        </Link>
+        </Box>
     )
 }
 
@@ -153,6 +150,7 @@ function Header({ router }) {
     const token = useSelector(selectToken);
     const addToCartFlag = useSelector(selectAddToCartFlag);
     const user = useSelector(selectUser);
+    const audioListenings = useSelector(selectAudioListenings);
     const [avtSrc, setAvtSrc] = useState(null);
     const [numItemsInCart, setNumItemsInCart] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -343,15 +341,32 @@ function Header({ router }) {
         setUserPaneAnchorEl(e.currentTarget);
     };
 
+    const handleClickCartIcon = () => {
+        if (!user) {
+            dispatch(handleOpenLogin());
+            return;
+        }
+        router.push('/cart')
+    }
+
     const handleGoToAccountPage = () => {
         setUserPaneAnchorEl(null);
         router.push('/account');
     }
 
-    const handleLogout = () => {
-        dispatch(removeToken());
-        setUserPaneAnchorEl(null);
-        window.location.href = '/';
+    const handleLogout = async () => {
+        try {
+            if (user) {
+                const res = await api.trackingAudio(audioListenings);
+                dispatch(setAudioListenings([]));
+            }
+            dispatch(removeToken());
+            setUserPaneAnchorEl(null);
+            window.location.href = '/';
+        }
+        catch (err) {
+            console.log(err)
+        }
     }
 
     return (
@@ -526,7 +541,17 @@ function Header({ router }) {
                                 }}
                             >
                                 {headerItems.map((item, idx) => (
-                                    item({ numItemsInCart, idx, avtSrc, addToCartFlag, onOpenLogin, handleCloseSidebarWhenClickAccountIcon })
+                                    item(
+                                        {
+                                            numItemsInCart,
+                                            idx,
+                                            avtSrc,
+                                            addToCartFlag,
+                                            onOpenLogin,
+                                            handleCloseSidebarWhenClickAccountIcon,
+                                            handleClickCartIcon
+                                        }
+                                    )
                                 ))}
                             </Box>
                         )

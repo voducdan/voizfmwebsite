@@ -200,14 +200,14 @@ export default function Search() {
                                 {
                                     commonKeywords.map((i, idx) => (
                                         <Link
-                                            href={`/search?searchKey=${i.name}`}
+                                            href={`/search?searchKey=${i?.name}`}
                                             style={{
                                                 textDecoration: 'none'
                                             }}
                                             key={idx}
                                         >
                                             <Chip
-                                                label={i.name}
+                                                label={i?.name}
                                                 sx={{
                                                     bgcolor: COLORS.bg3,
                                                     color: COLORS.VZ_Text_content,
@@ -252,7 +252,7 @@ export default function Search() {
                                             style={{
                                                 textDecoration: 'none'
                                             }}
-                                            key={i.id}
+                                            key={i?.id}
                                         >
                                             <Box
                                                 sx={{
@@ -295,8 +295,8 @@ export default function Search() {
                         {
                             playlistResults.map(i => (
                                 <Link
-                                    key={i.id}
-                                    href={`/playlists/${i.id}`}
+                                    key={i?.id}
+                                    href={`/playlists/${i?.id}`}
                                     style={{
                                         textDecoration: 'none'
                                     }}
@@ -314,7 +314,7 @@ export default function Search() {
                                                 height: '100%'
                                             }}
                                         >
-                                            <img src={i.avatar.thumb_url} style={{ width: '100%', height: '100%' }} />
+                                            <img src={i?.avatar?.thumb_url} style={{ width: '100%', height: '100%' }} />
                                         </Box>
                                         <Box
                                             sx={{
@@ -332,7 +332,7 @@ export default function Search() {
                                                     WebkitBoxOrient: 'vertical',
                                                     overflow: 'hidden'
                                                 }}
-                                            >{i.name}</Typography>
+                                            >{i?.name}</Typography>
                                             <Typography
                                                 sx={{
                                                     ...TEXT_STYLE.content2,

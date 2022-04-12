@@ -2,32 +2,29 @@
 import { useState, useEffect } from 'react';
 
 // import redux
-import { useSelector } from 'react-redux';
+import { useSelector, useDispatch } from 'react-redux';
 
 // import next router
 import { useRouter } from 'next/router';
 
 // Import redux reducer, actions
-import { selectPaymentInfo } from '../../redux/payment';
+import { selectPaymentInfo, setItems } from '../../redux/payment';
+import { selectUser, setUser } from '../../redux/user';
 
 // import MUI components
 import {
-    TableContainer,
-    Table,
-    TableBody,
-    TableCell,
-    TableRow,
     Box,
     Dialog,
     DialogContent,
     DialogContentText,
     DialogActions,
-    Button
+    Button,
+    Typography
 } from '@mui/material';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
-import { COLORS } from '../../utils/constants';
+import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import formatPrice from '../../utils/formatPrice';
 
 // import service
@@ -50,6 +47,9 @@ const PaymentUI = (props) => {
     const [paymentStatus, setPaymentStatus] = useState(null);
     const [paymentStatusMessage, setPaymentStatusMessage] = useState('');
     const [paymentInfoFromStorage, setPaymentInfoFromStorage] = useState({});
+    const user = useSelector(selectUser);
+
+    const dispatch = useDispatch();
 
     useEffect(() => {
         if (paymentInfo) {
@@ -143,6 +143,15 @@ const PaymentUI = (props) => {
     const handleFinishPayment = () => {
         if (paymentStatus === 1 || paymentStatus === 3) {
             setIsPaymentFinish(false);
+            const copiedUser = { ...user };
+            copiedUser['promotion'] = 'vip';
+            dispatch(setUser(copiedUser));
+            dispatch(setItems({
+                selectedItem: [],
+                discountCode: '',
+                totalPrice: 0,
+                finalPrice: 0
+            }));
             navigate.push('/');
             return;
         }
@@ -159,87 +168,230 @@ const PaymentUI = (props) => {
             return (
                 <Box
                     sx={{
-                        ...flexStyle('center', 'center')
+                        ...flexStyle('center', 'flex-start'),
+                        flexDirection: 'column',
+                        p: '32px 48px',
+                        boxSizing: 'border-box'
                     }}
                 >
-                    <Box >
-                        <TableContainer>
-                            <Table aria-label="simple table">
-                                <TableBody>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                            component="th"
-                                            scope="row">
-                                            {'Loại đơn hàng'}
-                                        </TableCell>
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                        >{Object.keys(paymentInfoFromStorage).length > 0 ? JSON.parse(paymentInfoFromStorage?.additional_info)['field1'] : ''}</TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                            component="th"
-                                            scope="row">
-                                            {'Tổng tiền'}
-                                        </TableCell>
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                        >{formatPrice(paymentInfoFromStorage?.amount)}</TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                            component="th"
-                                            scope="row">
-                                            {'Đơn vị tiền tệ'}
-                                        </TableCell>
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                        >{paymentInfoFromStorage?.currency}</TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                            component="th"
-                                            scope="row">
-                                            {'Giao dịch hết hạn sau'}
-                                        </TableCell>
-                                        <TableCell
-                                            sx={tblTextStyle}
-
-                                        >
-                                            {countDountStr}
-                                        </TableCell>
-                                    </TableRow>
-                                    <TableRow
-                                        sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
-                                    >
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                            component="th"
-                                            scope="row">
-                                            {'Mã giao dịch'}
-                                        </TableCell>
-                                        <TableCell
-                                            sx={tblTextStyle}
-                                        >{paymentInfoFromStorage?.payment_reference_id}</TableCell>
-                                    </TableRow>
-                                </TableBody>
-                            </Table>
-                        </TableContainer>
+                    <Box
+                        sx={{
+                            mb: '32px'
+                        }}
+                    >
+                        <Typography
+                            sx={{
+                                ...TEXT_STYLE.h2,
+                                color: COLORS.white
+                            }}
+                        >
+                            Thanh Toán ShopeePay
+                        </Typography>
                     </Box>
-                    <Box>
-                        <img src={paymentInfoFromStorage?.url || ''} alt="qrcode" />
+                    <Box
+                        sx={{
+                            width: '100%',
+                            ...flexStyle('center', 'center'),
+                            columnGap: '32px'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: 'calc(60% - 16px)',
+                                bgcolor: COLORS.bg2,
+                                ...flexStyle('center', 'center'),
+                                flexDirection: 'column',
+                                height: '531px',
+                                p: '40px 0',
+                                boxSizing: 'border-box',
+                                borderRadius: '10px'
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    width: '100%',
+                                    ...flexStyle('center', 'center'),
+                                    columnGap: '44px',
+                                    mb: '30px'
+                                }}
+                            >
+                                <img
+                                    style={{
+                                        height: '62px',
+                                        width: '204px'
+                                    }}
+                                    src="/images/voizpaymentlogo.png"
+                                    alt="voizpaymentlogo" />
+                                <img
+                                    style={{
+                                        height: '80px',
+                                        width: '181px'
+                                    }}
+                                    src="/images/shopeepayment.png"
+                                    alt="shopeepayment" />
+                            </Box>
+                            <Box
+                                sx={{
+                                    mb: '40px',
+                                    width: '80%',
+                                    textAlign: 'center'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.title4,
+                                        color: COLORS.white
+                                    }}
+                                >
+                                    Sử Dụng &nbsp;
+                                    <span
+                                        style={{
+                                            ...TEXT_STYLE.title4,
+                                            color: COLORS.second
+                                        }}
+                                    >
+                                        App Shopee Pay &nbsp;
+                                    </span>
+                                    Và Thực Hiện Quét Mã Để Thanh Toán
+                                </Typography>
+                            </Box>
+                            <Box>
+                                <img
+                                    style={{
+                                        maxWidth: '280px',
+                                        maxHeight: '280px',
+                                        width: '280px',
+                                        height: '280px',
+                                        objectFit: 'contain'
+                                    }}
+                                    src={paymentInfoFromStorage?.url || ''}
+                                    alt="qrcode"
+                                />
+                            </Box>
+                        </Box>
+                        <Box
+                            sx={{
+                                width: 'calc(40% - 16px)',
+                                bgcolor: COLORS.bg2,
+                                ...flexStyle('center', 'center'),
+                                flexDirection: 'column',
+                                height: '531px',
+                                p: '0px 12px 40px 12px',
+                                boxSizing: 'border-box',
+                                borderRadius: '10px'
+                            }}
+                        >
+                            <Box
+                                sx={{
+                                    height: 'calc(100% / 4)',
+                                    width: '100%',
+                                    ...flexStyle('center', 'center'),
+                                    flexDirection: 'column',
+                                    borderBottom: `1px solid ${COLORS.white}`,
+                                    rowGap: '10px'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h2,
+                                        color: COLORS.white
+                                    }}
+                                >
+                                    Giao dịch hết hạn sau
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h1,
+                                        color: COLORS.second
+                                    }}
+                                >
+                                    {countDountStr}
+                                </Typography>
+                            </Box>
+                            <Box
+                                sx={{
+                                    height: 'calc(100% / 4)',
+                                    width: '100%',
+                                    ...flexStyle('center', 'center'),
+                                    flexDirection: 'column',
+                                    borderBottom: `1px solid ${COLORS.white}`,
+                                    rowGap: '10px'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h2,
+                                        color: COLORS.white
+                                    }}
+                                >
+                                    Giao dịch yêu cầu
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h1,
+                                        color: '#C4C4C4'
+                                    }}
+                                >
+                                    {Object.keys(paymentInfoFromStorage).length > 0 ? JSON.parse(paymentInfoFromStorage?.additional_info)['field1'] : ''}
+                                </Typography>
+                            </Box>
+                            <Box
+                                sx={{
+                                    height: 'calc(100% / 4)',
+                                    width: '100%',
+                                    ...flexStyle('center', 'center'),
+                                    flexDirection: 'column',
+                                    borderBottom: `1px solid ${COLORS.white}`,
+                                    rowGap: '10px'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h2,
+                                        color: COLORS.white
+                                    }}
+                                >
+                                    Đơn giá
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h1,
+                                        color: COLORS.second
+                                    }}
+                                >
+                                    {formatPrice(paymentInfoFromStorage?.amount)} {paymentInfoFromStorage?.currency}
+                                </Typography>
+                            </Box>
+                            <Box
+                                sx={{
+                                    height: 'calc(100% / 4)',
+                                    width: '100%',
+                                    ...flexStyle('center', 'center'),
+                                    flexDirection: 'column',
+                                    borderBottom: `1px solid ${COLORS.white}`,
+                                    rowGap: '10px',
+                                    textOverflow: 'ellipsis'
+                                }}
+                            >
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h2,
+                                        color: COLORS.white
+                                    }}
+                                >
+                                    Mã giao dịch
+                                </Typography>
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h1,
+                                        color: '#C4C4C4',
+                                        textOverflow: 'ellipsis'
+                                    }}
+                                >
+                                    {paymentInfoFromStorage?.payment_reference_id}
+                                </Typography>
+                            </Box>
+                        </Box>
                     </Box>
                     <Dialog
                         open={isPaymentFinish}

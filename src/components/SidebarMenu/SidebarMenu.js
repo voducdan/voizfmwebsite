@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenSidebar, setOpen } from '../../redux/openSidebar';
 import { selectToken } from '../../redux/token';
 import { setOpenLogin } from '../../redux/openLogin';
+import { selectUser } from '../../redux/user';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -23,7 +24,11 @@ import {
     ListItemText,
     Typography,
     Button,
-    Box
+    Box,
+    Dialog,
+    DialogActions,
+    DialogContent,
+    DialogContentText
 } from '@mui/material';
 import HeadphonesOutlinedIcon from '@mui/icons-material/HeadphonesOutlined';
 
@@ -40,14 +45,15 @@ import {
     SummaryBook,
     ChildrenBook,
     Book
-} from '../Icons/index'
+} from '../Icons/index';
 
 // import images
 import Logo from '../Logo/Logo';
 
 // import utils
-import { COLORS, TEXT_STYLE, FONT_COLOR, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants'
-import useWindowSize from '../../utils/useWindowSize'
+import { COLORS, TEXT_STYLE, FONT_COLOR, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
+import { flexStyle } from '../../utils/flexStyle';
+import useWindowSize from '../../utils/useWindowSize';
 
 const RequestsBook = ({ handleClickRequestBook }) => (
     <Button
@@ -76,8 +82,10 @@ export default function SidebarMenu() {
     const [current, setCurrent] = useState(null);
     const [navigatorLink, setNavigatorLink] = useState([]);
     const [categories, setCategories] = useState([]);
+    const [openIsVip, setOpenIsVip] = useState(false);
     const openSidebar = useSelector(selectOpenSidebar);
     const token = useSelector(selectToken);
+    const user = useSelector(selectUser);
     const dispatch = useDispatch();
 
     let open = openSidebar
@@ -204,6 +212,11 @@ export default function SidebarMenu() {
         if (isSm) {
             dispatch(setOpen(false));
         }
+        if (item[0].url === 'up-vip' && user && user.promotion === 'vip') {
+            setOpenIsVip(true);
+            return;
+        }
+
         navigate.push(`/${item[0].url}`);
         e.stopPropagation();
     }
@@ -349,6 +362,37 @@ export default function SidebarMenu() {
                     handleClickRequestBook={handleClickRequestBook}
                 />
             </Box>
+            <Dialog
+                open={openIsVip}
+                onClose={() => { setOpenIsVip(false) }}
+                PaperProps={{
+                    style: {
+                        backgroundColor: COLORS.bg1
+                    }
+                }}
+            >
+                <DialogContent>
+                    <DialogContentText
+                        sx={{
+                            color: COLORS.white
+                        }}
+                    >
+                        Bạn đã là thành viên VIP
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center'),
+                        'whiteSpace': 'pre-line'
+                    }}
+                >
+                    <Button
+                        onClick={() => { setOpenIsVip(false) }}
+                        autoFocus>
+                        Đóng
+                    </Button>
+                </DialogActions>
+            </Dialog>
         </Drawer >
     )
 }

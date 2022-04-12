@@ -146,6 +146,15 @@ export default function PlaylistRanking() {
         e.stopPropagation();
     }
 
+    const formatRating = (rate) => {
+        try {
+            return Number(rate).toFixed(1);
+        }
+        catch (err) {
+            return 0;
+        }
+    }
+
     return (
         <Box
             sx={{
@@ -394,7 +403,7 @@ export default function PlaylistRanking() {
                                                         ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                                         color: COLORS.contentIcon
                                                     }}
-                                                >{i?.playlist_counter?.content_avg} ({i?.playlist_counter?.ratings_count})</Typography>
+                                                >{formatRating(i?.playlist_counter?.content_avg)} ({i?.playlist_counter?.ratings_count})</Typography>
                                             </Box>
                                         </Box>
                                     </Box>

@@ -454,9 +454,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             if (playlistAudios.length > 0) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
-                    console.log(audioListenings)
                     const res = await api.trackingAudio(audioListenings);
-                    console.log(res.data)
                     dispatch(setAudioListenings([]));
                 }
                 fetchAudioUrl(
@@ -1210,7 +1208,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 }}
             >
                 {
-                    (playlist?.promotion === 'vip' && !playlist?.is_purchased) && (
+                    (['vip', 'coin'].includes(playlist?.promotion) && !playlist?.is_purchased) && (
                         <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
                             <Button
                                 onClick={() => {
@@ -1258,25 +1256,30 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         >Đã mua</Button>
                     )
                 }
-                <Box
-                    onClick={handleUpVip}
-                    sx={{
-                        width: isSm ? '50%' : '20%',
-                    }}
-                >
-                    <Button
-                        sx={{
-                            bgcolor: COLORS.main,
-                            borderRadius: '6px',
-                            width: '100%',
-                            ...TEXT_STYLE.title1,
-                            color: COLORS.white,
-                            textTransform: 'none',
-                            height: '48px',
-                            p: '14px 20px'
-                        }}
-                    >Mua gói VIP</Button>
-                </Box>
+                {
+                    user?.promotion !== 'vip' && (
+                        <Box
+                            onClick={handleUpVip}
+                            sx={{
+                                width: isSm ? '50%' : '20%',
+                            }}
+                        >
+                            <Button
+                                onClick={() => { router.push('/up-vip') }}
+                                sx={{
+                                    bgcolor: COLORS.main,
+                                    borderRadius: '6px',
+                                    width: '100%',
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    height: '48px',
+                                    p: '14px 20px'
+                                }}
+                            >Mua gói VIP</Button>
+                        </Box>
+                    )
+                }
             </Box>
             <Dialog
                 open={openUnauthorizedModal}

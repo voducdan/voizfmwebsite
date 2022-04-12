@@ -1,11 +1,11 @@
 // import react
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
 
 // Import redux reducer, actions
-import { selectPaymentData, selectCart, setCart, setPaymentInfo } from '../../redux/payment';
+import { selectPaymentData, selectCart, setCart, setPaymentInfo, setItems } from '../../redux/payment';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -115,34 +115,41 @@ export default function Checkout() {
     const [expandBill, setExpandBill] = useState(false);
     const [isPaymentError, setIsPaymentError] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('shopee');
+    const [prevPaymentInfo, setPrevPaymentInfo] = useState({});
     const paymentData = useSelector(selectPaymentData);
     const cart = useSelector(selectCart);
     const dispatch = useDispatch();
-    const {
-        selectedItem,
-        discountCode,
-        package_type,
-        totalPrice,
-        finalPrice
-    } = paymentData;
+
+    useEffect(() => {
+        let copiedPaymentData = { ...paymentData };
+        if (copiedPaymentData.selectedItem.length === 0) {
+            const localPaymentData = JSON.parse(localStorage.getItem('localPaymentData'));
+            if (localPaymentData && localPaymentData.selectedItem.length > 0) {
+                copiedPaymentData = { ...localPaymentData }
+            }
+        }
+        console.log(copiedPaymentData)
+        setPrevPaymentInfo(copiedPaymentData);
+    }, []);
 
     const hanleExpandBill = () => {
         setExpandBill(!expandBill);
     }
 
     const onEditCart = () => {
+        dispatch(setItems(paymentData));
         navigate.push('/cart');
     };
 
     const handleCheckout = async () => {
         try {
-            const packageIds = selectedItem.map(i => i.id);
+            const packageIds = prevPaymentInfo.selectedItem.map(i => i.id);
             const payload = {
-                "discount_code": discountCode || '',
-                "package_type": package_type,
+                "discount_code": prevPaymentInfo.discountCode || '',
+                "package_type": prevPaymentInfo.package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
-                "redirect_url": "http://13.214.152.147/"
+                "redirect_url": "https://stg-website.voiz.vn/"
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
@@ -150,12 +157,13 @@ export default function Checkout() {
                 setIsPaymentError(true);
                 return;
             }
-            const selectedItemId = selectedItem.map(i => i.id);
+            const selectedItemId = prevPaymentInfo.selectedItem.map(i => i.id);
             const remainedItems = cart.filter(i => !selectedItemId.includes(i.id));
             dispatch(setCart([...remainedItems]));
             dispatch(setPaymentInfo({ ...data.data }));
             // save to local storage
             localStorage.setItem('paymentData', JSON.stringify(data.data));
+            localStorage.setItem('localPaymentData', JSON.stringify(paymentData));
             if (['momo', 'appota', 'vnpay'].includes(paymentMethod)) {
                 window.location = data.data.url;
                 return;
@@ -185,7 +193,7 @@ export default function Checkout() {
                 }}
             >Thanh toán</Typography>
             {
-                selectedItem.length > 0 && (
+                prevPaymentInfo?.selectedItem?.length > 0 && (
                     <Box
                         sx={{
                             ...flexStyle('flex-start', 'flex-start'),
@@ -307,7 +315,7 @@ export default function Checkout() {
                                                     color: COLORS.contentIcon
                                                 }}
 
-                                            >{selectedItem.length} sản phẩm</Typography>
+                                            >{prevPaymentInfo?.selectedItem?.length} sản phẩm</Typography>
                                             <ListItemButton
                                                 sx={{
                                                     padding: 0
@@ -348,12 +356,13 @@ export default function Checkout() {
                             >
                                 <Collapse sx={{ mt: '16px' }} in={expandBill} timeout="auto" unmountOnExit>
                                     {
-                                        selectedItem.map(i => (
+                                        prevPaymentInfo?.selectedItem.map(i => (
                                             <Box
                                                 key={i.id}
                                                 sx={{
                                                     ...flexStyle('space-between', 'center'),
-                                                    mb: '16px'
+                                                    mb: '16px',
+                                                    columnGap: '10px'
                                                 }}
                                             >
                                                 <Typography
@@ -361,13 +370,22 @@ export default function Checkout() {
                                                         ...TEXT_STYLE.content2,
                                                         color: COLORS.white
                                                     }}
-                                                >{i.name}</Typography>
+                                                >
+                                                    {i.name}
+                                                </Typography>
                                                 {i.sale_coin_price && (<Typography
                                                     sx={{
                                                         ...TEXT_STYLE.content3,
                                                         color: COLORS.contentIcon
                                                     }}
                                                 >{formatPrice(i.sale_coin_price)} đ</Typography>
+                                                )}
+                                                {!i.sale_coin_price && (<Typography
+                                                    sx={{
+                                                        ...TEXT_STYLE.content3,
+                                                        color: COLORS.contentIcon
+                                                    }}
+                                                >{formatPrice(i.pay_price)} đ</Typography>
                                                 )}
                                             </Box>
                                         ))
@@ -396,7 +414,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(totalPrice)} đ</Typography>
+                                    >{formatPrice(prevPaymentInfo?.totalPrice)} đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -415,7 +433,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(totalPrice - finalPrice)} đ</Typography>
+                                    >{formatPrice(prevPaymentInfo?.totalPrice - prevPaymentInfo?.finalPrice)} đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -441,7 +459,7 @@ export default function Checkout() {
                                                 ...TEXT_STYLE.h2,
                                                 color: COLORS.white
                                             }}
-                                        >{formatPrice(finalPrice)} đ</Typography>
+                                        >{formatPrice(prevPaymentInfo?.finalPrice)} đ</Typography>
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.caption12,
@@ -471,7 +489,7 @@ export default function Checkout() {
                 )
             }
             {
-                selectedItem.length === 0 && (
+                prevPaymentInfo?.selectedItem?.length === 0 && (
                     <Box
                         sx={{
                             textAlign: 'center',

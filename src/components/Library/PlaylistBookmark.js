@@ -207,7 +207,11 @@ const tabStyle = () => ({
     '&.MuiTab-root': {
         ...TEXT_STYLE.title1,
         color: COLORS.contentIcon,
-        textTransform: 'none'
+        textTransform: 'none',
+        alignItems: 'flex-start',
+        p: 0,
+        minWidth: 0,
+        mr: '16px'
     },
     '&.Mui-selected': {
         color: COLORS.white
