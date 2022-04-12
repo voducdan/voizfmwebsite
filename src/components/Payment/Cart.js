@@ -44,6 +44,7 @@ import { flexStyle } from '../../utils/flexStyle';
 import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
+import formatDuration from '../../utils/formatDuration';
 
 // import service
 import API from '../../services/api';
@@ -55,7 +56,6 @@ export default function Cart() {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const navigate = useRouter();
     const paymentData = useSelector(selectPaymentData);
-    console.log(paymentData)
     const cart = useSelector(selectCart);
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
@@ -162,7 +162,7 @@ export default function Cart() {
 
     const handleRemoveItem = async (id) => {
         // handle api call
-        const res = await api.removeCartItem(id);
+        await api.removeCartItem(id);
         // handle remove item local
         const cartItems = [...cart];
         const remainedItems = cartItems.filter(i => i.id !== id);
@@ -355,11 +355,10 @@ export default function Cart() {
                                                                 color: COLORS.contentIcon
                                                             }}
                                                         >
-                                                            Thời lượng: {item.total_duration}
+                                                            Thời lượng: {formatDuration(item.total_duration)}
                                                         </Typography>
                                                     </CardContent>
                                                 </Box>
-
                                             </Card>
                                             <ListItemIcon
                                                 sx={{
@@ -373,10 +372,20 @@ export default function Cart() {
                                                     item.sale_price && (
                                                         <Typography
                                                             sx={{
-                                                                ...TEXT_STYLE.content1,
-                                                                color: COLORS.contentIcon
+                                                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                                color: COLORS.white
                                                             }}
                                                         >{formatPrice(item.sale_price)}đ</Typography>
+                                                    )
+                                                }
+                                                {
+                                                    !item.sale_price && (
+                                                        <Typography
+                                                            sx={{
+                                                                ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+                                                                color: COLORS.white
+                                                            }}
+                                                        >{formatPrice(item.pay_price)}đ</Typography>
                                                     )
                                                 }
                                                 <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />

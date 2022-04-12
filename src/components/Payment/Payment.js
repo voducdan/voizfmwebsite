@@ -10,6 +10,7 @@ import { useRouter } from 'next/router';
 // Import redux reducer, actions
 import { selectPaymentInfo, setItems } from '../../redux/payment';
 import { selectUser, setUser } from '../../redux/user';
+import { setCart } from '../../redux/payment';
 
 // import MUI components
 import {
@@ -30,14 +31,8 @@ import formatPrice from '../../utils/formatPrice';
 // import service
 import API from '../../services/api';
 
-const tblTextStyle = {
-    borderBottom: 'none',
-    color: COLORS.white
-}
-
 const PaymentUI = (props) => {
     const { method, paymentInfo } = props;
-
     const api = new API();
 
     const navigate = useRouter();
@@ -75,6 +70,35 @@ const PaymentUI = (props) => {
         })
     }
 
+    const removeCartItem = async () => {
+        try {
+            const cartItems = JSON.parse(localStorage.getItem('localPaymentData'));
+            let promises = [];
+            for (let i of cartItems.selectedItem) {
+                promises.push(api.removeCartItem(i.id));
+            }
+
+            await Promise.all(promises);
+            const res = await api.getCart();
+            const data = await res.data.data;
+            dispatch(setCart([...data]));
+        }
+        catch (err) {
+            const errList = err.response.data.error;
+            if (errList instanceof Object) {
+                let errMessage = '';
+                for (let e in errList) {
+                    const key = Object.keys(errList[e])[0];
+                    const value = errList[e][key]
+                    errMessage += `${value} \n`
+                }
+                setPaymentStatusMessage(errMessage);
+                return;
+            }
+            setPaymentStatusMessage(errList);
+        }
+    }
+
     const checkBillingStatus = async (payment_reference_id) => {
         const params = {
             payment_reference_id: payment_reference_id
@@ -83,10 +107,12 @@ const PaymentUI = (props) => {
             const res = await api.checkBillingStatus(params);
             const data = await res.data.data;
             if (data.status === 1 || data.status === 3) {
+                await removeCartItem();
                 setIsPaymentFinish(true);
                 setPaymentStatusMessage('Thanh toán thành công!');
                 setPaymentStatus(data.status);
                 localStorage.removeItem('paymentData');
+                localStorage.removeItem('localPaymentData');
                 return;
             }
             if (data.status === 6) {
@@ -94,6 +120,7 @@ const PaymentUI = (props) => {
                 setPaymentStatusMessage('Thanh toán không thành công, vui lòng thử lại!');
                 setPaymentStatus(data.status);
                 localStorage.removeItem('paymentData');
+                localStorage.removeItem('localPaymentData');
                 return;
             }
             if (data.status === 5 || data.status === 2) {
@@ -114,7 +141,7 @@ const PaymentUI = (props) => {
                 setPaymentStatusMessage(errMessage);
                 return;
             }
-            etIsPaymentFinish(true);
+            setIsPaymentFinish(true);
             setPaymentStatusMessage(errList);
         }
     }

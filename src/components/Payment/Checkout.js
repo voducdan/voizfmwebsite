@@ -128,7 +128,6 @@ export default function Checkout() {
                 copiedPaymentData = { ...localPaymentData }
             }
         }
-        console.log(copiedPaymentData)
         setPrevPaymentInfo(copiedPaymentData);
     }, []);
 
@@ -149,7 +148,7 @@ export default function Checkout() {
                 "package_type": prevPaymentInfo.package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
-                "redirect_url": "https://stg-website.voiz.vn/"
+                "redirect_url": window.location.origin
             }
             const res = await api.payment(paymentMethod, payload);
             const data = await res.data;
@@ -163,7 +162,7 @@ export default function Checkout() {
             dispatch(setPaymentInfo({ ...data.data }));
             // save to local storage
             localStorage.setItem('paymentData', JSON.stringify(data.data));
-            localStorage.setItem('localPaymentData', JSON.stringify(paymentData));
+            localStorage.setItem('localPaymentData', JSON.stringify(prevPaymentInfo));
             if (['momo', 'appota', 'vnpay'].includes(paymentMethod)) {
                 window.location = data.data.url;
                 return;
