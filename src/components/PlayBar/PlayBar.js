@@ -310,7 +310,6 @@ export default function PlayBar() {
                 }}
             >
                 <Control
-                    audioData={audioData}
                     audio={audio}
                     nextAudioId={nextAudioId}
                     prevAudioId={prevAudioId}
