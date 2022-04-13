@@ -18,7 +18,6 @@ import { setOpenPlayBar, setOpenAudioDetail, selectAudioHls, selectOpenAudioDeta
 import { selectAudioData } from '../../redux/audio';
 import { setVoicer } from '../../redux/voicer';
 import { setFooter } from '../../redux/footer';
-import { selectAudioListenings, setAudioListenings } from '../../redux/audioListening';
 
 // import others components
 import handleAddToCart from '../../components/Shared/handleAddToCart';
@@ -85,6 +84,7 @@ import formatDuration from '../../utils/formatDuration';
 
 // import service
 import API from '../../services/api';
+import { setAudioListenings, getAudioListenings } from '../../services/audioListenning';
 
 const ShowTextBtn = (content) => (
     <Button
@@ -113,7 +113,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const audioHls = useSelector(selectAudioHls);
     const audioData = useSelector(selectAudioData);
     const openAudioDetail = useSelector(selectOpenAudioDetail);
-    const audioListenings = useSelector(selectAudioListenings);
     const [url, setUrl] = useState('');
     const [id, setId] = useState(null);
     const [playlist, setPlaylist] = useState({});
@@ -141,6 +140,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
+    const audioListenings = getAudioListenings();
 
     const dispatch = useDispatch();
 
@@ -454,8 +454,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             if (playlistAudios.length > 0) {
                 if (user) {
                     await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
-                    const res = await api.trackingAudio(audioListenings);
-                    dispatch(setAudioListenings([]));
+                    await api.trackingAudio(audioListenings);
+                    setAudioListenings([]);
                 }
                 fetchAudioUrl(
                     dispatch,

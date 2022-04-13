@@ -12,7 +12,6 @@ import paymentReducer from './payment';
 import userReducer from './user';
 import voicerReducer from './voicer';
 import footerReducer from './footer';
-import audioListening from './audioListening';
 
 export default configureStore({
     reducer: {
@@ -25,8 +24,7 @@ export default configureStore({
         payment: paymentReducer,
         user: userReducer,
         voicer: voicerReducer,
-        footer: footerReducer,
-        audioListening: audioListening
+        footer: footerReducer
     },
 })
 

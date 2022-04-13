@@ -8,7 +8,6 @@ import { togglePlayAudio, setAudioHls, selectAudioHls } from '../../redux/playAu
 import { setAudioData } from '../../redux/audio';
 import { selectToken } from '../../redux/token';
 import { setCart, setAddToCartFlag } from '../../redux/payment';
-import { setAudioListenings } from '../../redux/audioListening';
 
 // import hls
 import Hls from 'hls.js';
@@ -51,6 +50,7 @@ import { Speed, Clock } from '../Icons';
 
 // import services
 import API from '../../services/api';
+import { setAudioListenings, getAudioListenings } from '../../services/audioListenning';
 
 const WallPaper = styled('div')({
     width: '100%',
@@ -116,8 +116,7 @@ export default function Control(props) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
-    const [audioListenings, setAudioListeningsState] = useState([]);
-
+    const audioListenings = getAudioListenings();
     const media = audio.current;
 
     useEffect(() => {
@@ -132,6 +131,8 @@ export default function Control(props) {
                 setPaused(true);
             }
         });
+        console.log(checkUserUseVipSubcription());
+
         updateAudisListening(audioData.id, 0);
     }, []);
 
@@ -170,7 +171,19 @@ export default function Control(props) {
             if (currentTime === audioData.duration) {
                 fetchAudioUrl(nextAudioId);
             }
-            updateAudisListening(audioData.id, currentTime);
+            if (!checkUserUseVipSubcription()) {
+                updateAudisListening(audioData.id, currentTime);
+                return;
+            }
+
+            if (currentTime % 120 === 0) {
+                trackingAudio({
+                    "audio_id": audioData.id,
+                    "duration_listening": currentTime,
+                    "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                    "listen_from": "website"
+                })
+            }
         });
 
     }, [audioUrl]);
@@ -200,14 +213,36 @@ export default function Control(props) {
         countDownTimer();
     }, [timer]);
 
+    const trackingAudio = async (data) => {
+        try {
+            await api.trackingAudio(data);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const checkUserUseVipSubcription = () => {
+        const currentHour = new Date().getHours();
+        const currentMin = new Date().getMinutes();
+        if (user &&
+            user.promotion === 'free' &&
+            user.user_resource.remaining_seconds > 0 &&
+            !audioData.is_purchased &&
+            audioData.playlist.promotion === 'vip' &&
+            (currentHour < 12 || currentHour > 12 || (currentHour === 12 && currentMin > 30))) {
+            return true;
+        }
+        return false;
+    }
+
     const updateAudisListening = (audioId, currentTime) => {
         let distinctAudioId = audioListenings.map(i => i.audio_id);
         let audioIdx = distinctAudioId.indexOf(audioId);
         if (audioIdx !== -1) {
-            const copiedAudioListennings = JSON.parse(JSON.stringify([...audioListenings]));
+            const copiedAudioListennings = [...audioListenings];
             copiedAudioListennings[audioIdx]['duration_listening'] = copiedAudioListennings[audioIdx]['duration_listening'] + currentTime;
-            setAudioListeningsState([...copiedAudioListennings]);
-            dispatch(setAudioListenings(copiedAudioListennings));
+            setAudioListenings(copiedAudioListennings);
             return;
         }
         const audioListenning = {
@@ -216,8 +251,7 @@ export default function Control(props) {
             "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
             "listen_from": "website"
         }
-        setAudioListeningsState([...audioListenings, audioListenning]);
-        dispatch(setAudioListenings([...audioListenings, audioListenning]));
+        setAudioListenings([...audioListenings, audioListenning]);
     }
 
     const handleAddToCart = async (moveToCart = false) => {

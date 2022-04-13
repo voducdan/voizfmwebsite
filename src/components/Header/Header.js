@@ -11,7 +11,6 @@ import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } f
 import { selectCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
 import { setUser, selectUser } from '../../redux/user';
 import { selectToken, removeToken } from '../../redux/token';
-import { selectAudioListenings, setAudioListenings } from '../../redux/audioListening';
 
 // import next router
 import { useRouter, withRouter } from 'next/router';
@@ -55,6 +54,7 @@ import _debounce from 'lodash/debounce';
 // import service
 import API from '../../services/api';
 import { flexStyle } from '../../utils/flexStyle';
+import { setAudioListenings, getAudioListenings } from '../../services/audioListenning';
 
 const SearchBtn = (idx) => {
     return (
@@ -150,7 +150,6 @@ function Header({ router }) {
     const token = useSelector(selectToken);
     const addToCartFlag = useSelector(selectAddToCartFlag);
     const user = useSelector(selectUser);
-    const audioListenings = useSelector(selectAudioListenings);
     const [avtSrc, setAvtSrc] = useState(null);
     const [numItemsInCart, setNumItemsInCart] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
@@ -160,6 +159,7 @@ function Header({ router }) {
     const [userPaneAnchorEl, setUserPaneAnchorEl] = useState(null);
 
     const openUserPane = Boolean(userPaneAnchorEl);
+    const audioListenings = getAudioListenings();
 
     const headerItems = [BookmarkIcon, CartIcon, userAvt];
 
@@ -357,8 +357,8 @@ function Header({ router }) {
     const handleLogout = async () => {
         try {
             if (user) {
-                const res = await api.trackingAudio(audioListenings);
-                dispatch(setAudioListenings([]));
+                await api.trackingAudio(audioListenings);
+                setAudioListenings([]);
             }
             dispatch(removeToken());
             setUserPaneAnchorEl(null);
