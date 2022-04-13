@@ -110,7 +110,6 @@ const PanelContent = (props) => {
 
     const validateForm = () => {
         for (let i of Object.keys(userInfo)) {
-            console.log(userInfo[i])
             if (!userInfo[i]) {
                 setIsFormValid(false);
                 return;

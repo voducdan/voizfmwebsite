@@ -129,7 +129,6 @@ export default function PlaylistOrder() {
     }, []);
 
     const handleChange = (_, newValue) => {
-        console.log(newValue)
         setValue(newValue);
     };
 

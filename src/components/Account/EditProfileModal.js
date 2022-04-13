@@ -126,7 +126,6 @@ export default function EditProfileModal(props) {
     }
 
     const handleChangeBirthday = (birthday) => {
-        console.log(birthday)
         const formatedBirthday = format(new Date(birthday), 'yyyy-MM-dd');
         let user = { ...userInfo };
         user['birthday'] = formatedBirthday;
