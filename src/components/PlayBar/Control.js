@@ -5,7 +5,7 @@ import { useState, useEffect, useRef } from 'react';
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../redux/user';
 import { togglePlayAudio, setAudioHls, selectAudioHls } from '../../redux/playAudio';
-import { setAudioData } from '../../redux/audio';
+import { setAudioData, selectAudioData } from '../../redux/audio';
 import { selectToken } from '../../redux/token';
 import { setCart, setAddToCartFlag } from '../../redux/payment';
 
@@ -96,13 +96,14 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export default function Control(props) {
     const api = new API();
 
-    const { audioData, audio, nextAudioId, prevAudioId, isSm } = props;
+    const { audio, nextAudioId, prevAudioId, isSm } = props;
     const theme = useTheme();
     const playBtn = useRef(null);
     const dispatch = useDispatch();
     const user = useSelector(selectUser);
     const audioUrl = useSelector(selectAudioHls);
     const token = useSelector(selectToken);
+    const audioData = useSelector(selectAudioData);
     const [position, setPosition] = useState(0);
     const [paused, setPaused] = useState(false);
     const [timer, setTimer] = useState(0);
@@ -131,8 +132,6 @@ export default function Control(props) {
                 setPaused(true);
             }
         });
-        console.log(checkUserUseVipSubcription());
-
         updateAudisListening(audioData.id, 0);
     }, []);
 
@@ -152,6 +151,7 @@ export default function Control(props) {
                         promise.then(_ => {
                             media.muted = false;
                         }).catch(error => {
+                            console.log(error)
                             dispatch(togglePlayAudio());
                             setPaused(true);
                         });
@@ -242,16 +242,17 @@ export default function Control(props) {
         if (audioIdx !== -1) {
             const copiedAudioListennings = [...audioListenings];
             copiedAudioListennings[audioIdx]['duration_listening'] = copiedAudioListennings[audioIdx]['duration_listening'] + currentTime;
-            setAudioListenings(copiedAudioListennings);
-            return;
+            setAudioListenings([...copiedAudioListennings]);
         }
-        const audioListenning = {
-            "audio_id": audioId,
-            "duration_listening": currentTime,
-            "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-            "listen_from": "website"
+        else {
+            const audioListenning = {
+                "audio_id": audioId,
+                "duration_listening": currentTime,
+                "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                "listen_from": "website"
+            }
+            setAudioListenings([...audioListenings, audioListenning]);
         }
-        setAudioListenings([...audioListenings, audioListenning]);
     }
 
     const handleAddToCart = async (moveToCart = false) => {

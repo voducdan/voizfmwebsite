@@ -293,8 +293,9 @@ export default function VipPackage() {
                         mt: '8px'
                     }}
                 >Không tự động gia hạn, phù hợp cho người mới bắt đầu</Typography>
-                <Link
+                <a
                     href='http://m.me/VoizFM'
+                    target='_blank'
                 >
                     <Typography
                         sx={{
@@ -306,7 +307,7 @@ export default function VipPackage() {
                             cursor: 'pointer'
                         }}
                     >Hỗ trợ khi gặp vấn đề trong thanh toán</Typography>
-                </Link>
+                </a>
             </Box>
         </Box>
     )

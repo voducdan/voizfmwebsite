@@ -129,7 +129,10 @@ export default function Cart() {
                 const price = selectedItem.reduce((a, b) => ({ sale_price: (a.sale_price + b.sale_price) }), { sale_price: 0 })['sale_price'];
                 setTotalPrice(price);
                 setFinalPrice(price);
+                return;
             }
+            setTotalPrice(0);
+            setFinalPrice(0);
         }
         calculatePrice();
     }, [selectedItem]);
@@ -360,7 +363,13 @@ export default function Cart() {
                                                     maxWidth: '5%',
                                                 }}
                                             >
-                                                <Checkbox checked={checkControl[item.id] || false} onChange={(event) => { handleSelectCartItem(event, item.id) }} sx={{ color: COLORS.contentIcon }} />
+                                                <Checkbox
+                                                    checked={checkControl[item.id] || false}
+                                                    onChange={(event) => { handleSelectCartItem(event, item.id) }}
+                                                    sx={{
+                                                        color: COLORS.contentIcon
+                                                    }}
+                                                />
                                             </ListItemIcon>
                                             <Card
                                                 sx={{
@@ -443,7 +452,7 @@ export default function Cart() {
                                                 }}
                                             >
                                                 {
-                                                    item.sale_price && (
+                                                    item.sale_price === 'undefined' && (
                                                         <Typography
                                                             sx={{
                                                                 ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
@@ -453,7 +462,7 @@ export default function Cart() {
                                                     )
                                                 }
                                                 {
-                                                    !item.sale_price && (
+                                                    item.sale_price !== 'undefined' && (
                                                         <Typography
                                                             sx={{
                                                                 ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
@@ -606,7 +615,8 @@ export default function Cart() {
                                                         style={{
                                                             fontWeight: '700!important',
                                                             ...TEXT_STYLE.title2,
-                                                            color: COLORS.white
+                                                            color: COLORS.white,
+                                                            wordBreak: 'break-all'
                                                         }}
                                                     >
                                                         {discountCode}
@@ -675,8 +685,9 @@ export default function Cart() {
                                 </Button>
                                 {
                                     selectedItem.length > 0 && (
-                                        <Link
+                                        <a
                                             href='http://m.me/VoizFM'
+                                            target='_blank'
                                         >
                                             <Typography
                                                 sx={{
@@ -689,7 +700,7 @@ export default function Cart() {
                                             >
                                                 Bạn có muốn chuyển khoản?
                                             </Typography>
-                                        </Link>
+                                        </a>
                                     )
                                 }
 

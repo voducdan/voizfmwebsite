@@ -500,6 +500,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             dispatch(setOpenLogin(true));
             return;
         }
+        router.push('/up-vip');
     }
 
     const formatRating = (rate) => {
@@ -1259,13 +1260,12 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 {
                     user?.promotion !== 'vip' && (
                         <Box
-                            onClick={handleUpVip}
                             sx={{
                                 width: isSm ? '50%' : '20%',
                             }}
                         >
                             <Button
-                                onClick={() => { router.push('/up-vip') }}
+                                onClick={handleUpVip}
                                 sx={{
                                     bgcolor: COLORS.main,
                                     borderRadius: '6px',

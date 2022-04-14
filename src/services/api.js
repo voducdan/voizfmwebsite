@@ -91,8 +91,10 @@ export default class API {
         return this.init().get(`/web/plan_packages`)
     }
 
-    getDiscoveries = () => {
-        return this.init().get(`/discoveries`)
+    getDiscoveries = (limit = 9999, page = 1) => {
+        const params = { limit, page };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/discoveries?${queryString}`)
     }
 
     getDiscovery = (id, page, limit = 10) => {

@@ -337,7 +337,20 @@ export default function PlaylistRanking() {
                                             cursor: 'pointer'
                                         }}
                                     >
-                                        <Box>
+                                        <Box
+                                            sx={{
+                                                position: 'relative',
+                                                ...(i?.promotion && {
+                                                    '&::before': {
+                                                        content: i?.promotion.includes('vip') ? "url('/images/dvip.png')" : i?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                                                        position: 'absolute',
+                                                        right: 0,
+                                                        top: 0,
+                                                        zIndex: 8
+                                                    }
+                                                })
+                                            }}
+                                        >
                                             <img
                                                 src={i?.avatar?.thumb_url}
                                                 alt={`image ${i?.name}`}

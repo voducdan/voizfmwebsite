@@ -79,7 +79,6 @@ export default function SidebarMenu() {
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const navigate = useRouter();
     const sidebar = useRef(null);
-    const [current, setCurrent] = useState(null);
     const [navigatorLink, setNavigatorLink] = useState([]);
     const [categories, setCategories] = useState([]);
     const [openIsVip, setOpenIsVip] = useState(false);
@@ -208,11 +207,14 @@ export default function SidebarMenu() {
         const id = Number(e.currentTarget.id);
         const allItems = [...navigatorLink, ...categories];
         const item = allItems.filter(i => i.id === id);
-        setCurrent(id);
         if (isSm) {
             dispatch(setOpen(false));
         }
-        if (item[0].url === 'up-vip' && user && user.promotion === 'vip') {
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
+        if (item[0].url === 'up-vip' && user.promotion === 'vip') {
             setOpenIsVip(true);
             return;
         }
@@ -285,7 +287,7 @@ export default function SidebarMenu() {
                         key={icon.id}
                         sx={{
                             m: '8px 0',
-                            ...((icon.id === current || navigate.pathname === icon.url) && {
+                            ...((navigate.pathname === '/' + icon.url) && {
                                 bgcolor: COLORS.bg2
                             })
                         }}
@@ -305,12 +307,12 @@ export default function SidebarMenu() {
                                 ...TEXT_STYLE.content1,
                             }}
                             >
-                                {icon.icon({ stroke: (icon.id === current || navigate.pathname === icon.url) ? '#FFFFFF' : '#ACACAC', fill: (icon.id === current || navigate.pathname === icon.url) ? '#FFFFFF' : '#ACACAC' })}
+                                {icon.icon({ stroke: (navigate.pathname === '/' + icon.url) ? '#FFFFFF' : '#ACACAC', fill: (navigate.pathname === '/' + icon.url) ? '#FFFFFF' : '#ACACAC' })}
                             </ListItemIcon>
                             <ListItemText disableTypography primary={<Typography sx={{
                                 color: FONT_COLOR,
                                 ...TEXT_STYLE.content1,
-                                ...((icon.id === current || navigate.pathname === icon.url) && {
+                                ...((navigate.pathname === '/' + icon.url) && {
                                     color: COLORS.white
                                 })
                             }}>{icon.text}</Typography>} />
@@ -325,7 +327,7 @@ export default function SidebarMenu() {
                         key={icon.id}
                         sx={{
                             m: '8px 0',
-                            ...((icon.id === current || navigate.pathname === icon.url) && {
+                            ...((navigate.pathname === '/' + icon.url) && {
                                 bgcolor: COLORS.bg2
                             })
                         }}
@@ -349,7 +351,7 @@ export default function SidebarMenu() {
                             <ListItemText disableTypography primary={<Typography style={{
                                 color: FONT_COLOR,
                                 ...TEXT_STYLE.content1,
-                                ...((icon.id === current || navigate.pathname === icon.url) && {
+                                ...((navigate.pathname === '/' + icon.url) && {
                                     color: COLORS.white
                                 })
                             }}>{icon.text}</Typography>} />

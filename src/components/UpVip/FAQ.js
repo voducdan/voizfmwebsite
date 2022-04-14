@@ -168,8 +168,9 @@ export default function FAQ() {
                     margin: '56px auto 80px auto'
                 }}
             >
-                <Link
+                <a
                     href='http://m.me/VoizFM'
+                    target='_blank'
                 >
                     <Button
                         sx={{
@@ -185,7 +186,7 @@ export default function FAQ() {
                     >
                         Bạn cần được tư vấn trực tiếp?
                     </Button>
-                </Link>
+                </a>
             </Box>
             <Divider sx={{ width: '90%', margin: 'auto', borderColor: COLORS.blackStroker }} />
         </Box>
