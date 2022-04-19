@@ -383,7 +383,7 @@ export default function Cart() {
                                                         height: '83px',
                                                         position: 'relative',
                                                         '&::before': {
-                                                            content: item?.promotion.includes('vip') ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                                                            content: item?.promotion.includes('vip') ? "url('/images/dvip.png')" : item?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
                                                             position: 'absolute',
                                                             right: 0,
                                                             top: 0,
