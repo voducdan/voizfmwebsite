@@ -45,6 +45,7 @@ import { COLORS, TEXT_STYLE, SCREEN_BREAKPOINTS } from '../../utils/constants';
 import useWindowSize from '../../utils/useWindowSize';
 import formatPrice from '../../utils/formatPrice';
 import convertSecondsToReadableString from '../../utils/convertSecondsToReadableString';
+import { messages } from '../../utils/paymentCodeHandler';
 
 // import service
 import API from '../../services/api';
@@ -89,30 +90,34 @@ export default function Cart() {
             dispatch(setCart([...data]));
             cb(data);
         }
-        // dispatch(setItems(
-        //     {
-        //         selectedItem: [],
-        //         discountCode: '',
-        //         totalPrice: 0,
-        //         finalPrice: 0
-        //     }
-        // ));
         fetchCart(initCheckControl);
     }, []);
 
     useEffect(() => {
-        const { message, resultCode } = navigate.query || {};
-        if (!message) {
+        const { resultCode, errorCode, partnerCode, vnp_BankCode, vnp_ResponseCode } = navigate.query || {};
+        let message = '';
+        if (!resultCode && !vnp_ResponseCode && !errorCode) {
             return;
         }
-        if (resultCode === '0') {
+        if (resultCode === '0' || vnp_ResponseCode === '00') {
             removeCartItem();
-            localStorage.removeItem('paymentData');
             localStorage.removeItem('localPaymentData');
+            localStorage.removeItem('paymentData');
         }
-        setIsPaymentFinish(true);
-        setPaymentStatusMessage(message);
-
+        if (!JSON.parse(localStorage.getItem('notified'))) {
+            if (vnp_BankCode === 'VNPAY') {
+                message = messages['vnpay'][vnp_ResponseCode];
+            }
+            else if (partnerCode === 'APPOTAPAY') {
+                message = messages['appota'][resultCode] || messages['appota'][errorCode]
+            }
+            else if (partnerCode.startsWith('MOMO')) {
+                message = messages['momo'][resultCode]
+            }
+            setIsPaymentFinish(true);
+            setPaymentStatusMessage(message);
+            localStorage.setItem('notified', true);
+        }
     }, [navigate.query]);
 
     useEffect(() => {
@@ -554,7 +559,6 @@ export default function Cart() {
                                             >{formatPrice(totalPrice)}đ</Typography>
                                         </Box>
                                         <Paper
-                                            component="form"
                                             sx={{
                                                 display: 'flex',
                                                 alignItems: 'center',
@@ -582,6 +586,7 @@ export default function Cart() {
                                                 value={discountCode}
                                                 onChange={handleInputDiscountCode}
                                                 placeholder="Nhập mã giảm giá (Nếu có)"
+                                                autoComplete="off"
                                                 inputProps={{ 'aria-label': 'discount-code' }}
                                             />
                                             <Button
@@ -824,7 +829,7 @@ export default function Cart() {
                     }}
                 >
                     <Button
-                        onClick={() => { setIsPaymentFinish(false) }}
+                        onClick={() => { setIsPaymentFinish(false); }}
                         autoFocus>
                         Đóng
                     </Button>

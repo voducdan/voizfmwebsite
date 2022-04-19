@@ -422,7 +422,9 @@ const PaymentUI = (props) => {
                                     sx={{
                                         ...TEXT_STYLE.h1,
                                         color: '#C4C4C4',
-                                        textOverflow: 'ellipsis'
+                                        textOverflow: 'ellipsis',
+                                        wordBreak: 'break-all',
+                                        textAlign: 'center'
                                     }}
                                 >
                                     {paymentInfoFromStorage?.payment_reference_id}

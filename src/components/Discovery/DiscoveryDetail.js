@@ -234,9 +234,9 @@ export default function DiscoveryDetail({ discovery }) {
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const coverImgHeight = isSm ? 200 : 380;
 
-    async function fetchDiscoveryComment() {
+    async function fetchDiscoveryComment(page) {
         try {
-            const res = await api.getDiscoveryComment(id, commentPage);
+            const res = await api.getDiscoveryComment(id, page);
             const data = await res.data.data;
             const appendedComments = [...comments, ...data];
             setComments(appendedComments);
@@ -247,7 +247,7 @@ export default function DiscoveryDetail({ discovery }) {
     };
 
     useEffect(() => {
-        fetchDiscoveryComment();
+        fetchDiscoveryComment(commentPage);
     }, [commentPage]);
 
     useEffect(() => {
@@ -377,7 +377,7 @@ export default function DiscoveryDetail({ discovery }) {
     const handleLoadMoreComment = () => {
         if (comments.length < inlineDiscovery.discovery_counter.comments_count) {
             const nextCommentPage = commentPage + 1;
-            fetchDiscoveryComment(nextCommentPage);
+            // fetchDiscoveryComment(nextCommentPage);
             setCommentPage(nextCommentPage);
         }
     };
@@ -612,24 +612,27 @@ export default function DiscoveryDetail({ discovery }) {
                             ...flexStyle('center', 'center')
                         }}
                     >
-                        <Button
-                            onClick={handleLoadMoreComment}
-                            disabled={comments.length >= inlineDiscovery?.discovery_counter?.comments_count}
-                            sx={{
-                                textTransform: 'none',
-                                ...TEXT_STYLE.title2,
-                                color: COLORS.white,
-                                bgcolor: COLORS.main,
-                                width: '170px',
-                                height: '40px',
-                                borderRadius: '50px',
-                                ':hover': {
-                                    bgcolor: COLORS.main
-                                }
-                            }}
-                        >
-                            Tải thêm góp ý
-                        </Button>
+                        {
+                            comments.length >= 10 && (
+                                <Button
+                                    onClick={handleLoadMoreComment}
+                                    sx={{
+                                        textTransform: 'none',
+                                        ...TEXT_STYLE.title2,
+                                        color: COLORS.white,
+                                        bgcolor: COLORS.main,
+                                        width: '170px',
+                                        height: '40px',
+                                        borderRadius: '50px',
+                                        ':hover': {
+                                            bgcolor: COLORS.main
+                                        }
+                                    }}
+                                >
+                                    Tải thêm góp ý
+                                </Button>
+                            )
+                        }
                     </Box>
                 </Box>
                 <Box

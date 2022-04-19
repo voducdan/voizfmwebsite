@@ -117,7 +117,7 @@ export default function HomeCarousel() {
                         }}
                         alt={image.id}
                         key={idx}
-                        src={image.original_url}
+                        src={image?.original_url}
                     />
                 ))}
             </div>
@@ -135,7 +135,7 @@ export default function HomeCarousel() {
             >
                 <Box sx={{
                     position: 'relative',
-                    width:'100%'
+                    width: '100%'
                 }}>
                     <Swiper
                         autoplay={{

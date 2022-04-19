@@ -163,6 +163,7 @@ export default function Checkout() {
             // save to local storage
             localStorage.setItem('paymentData', JSON.stringify(data.data));
             localStorage.setItem('localPaymentData', JSON.stringify(prevPaymentInfo));
+            localStorage.setItem('notified', false);
             if (['momo', 'appota', 'vnpay'].includes(paymentMethod)) {
                 window.location = data.data.url;
                 return;

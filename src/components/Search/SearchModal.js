@@ -320,12 +320,11 @@ export default function Search() {
                             width: '100%',
                             ...flexStyle('center', 'flex-start'),
                             flexDirection: 'column',
-                            rowGap: '18px'
+                            rowGap: '32px',
+                            boxSizing: 'border-box',
+                            pl: isSm ? '24px' : '40px'
                         }}
                     >
-                        <Box>
-
-                        </Box>
                         {
                             playlistResults.map(i => (
                                 <Link
@@ -348,7 +347,14 @@ export default function Search() {
                                                 height: '100%'
                                             }}
                                         >
-                                            <img src={i?.avatar?.thumb_url} style={{ width: '100%', height: '100%' }} />
+                                            <img
+                                                src={i?.avatar?.thumb_url}
+                                                style={{
+                                                    width: '100%',
+                                                    height: '100%',
+                                                    borderRadius: '4px'
+                                                }}
+                                            />
                                         </Box>
                                         <Box
                                             sx={{

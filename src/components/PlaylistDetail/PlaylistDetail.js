@@ -431,6 +431,19 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     }
 
     const handlePlayOneAudio = async (audioId) => {
+        if (user) {
+            await api.trackingAudio(audioListenings);
+            await api.addListeningPlaylists(audioId, 0, playlist.id);
+
+            const audioListenning = {
+                "audio_id": audioId,
+                "duration_listening": 0,
+                "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                "listen_from": "website"
+            }
+            setAudioListenings([audioListenning]);
+            localStorage.setItem('currAudioId', audioId);
+        }
         handlePlayAudio(
             dispatch,
             user,

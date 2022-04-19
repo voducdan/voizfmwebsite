@@ -103,7 +103,7 @@ export default class API {
         return this.init().get(`/discoveries/${id}?${queryString}`)
     }
 
-    getDiscoveryComment = (discoveryId, page, limit = 4) => {
+    getDiscoveryComment = (discoveryId, page, limit = 10) => {
         return this.init().get(`/discoveries/${discoveryId}/comments?limit=${limit}&page=${page}`)
     }
 
