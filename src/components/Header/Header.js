@@ -6,6 +6,7 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
+import { pauseAudio } from '../../redux/playAudio';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
 import { selectCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
@@ -54,7 +55,7 @@ import _debounce from 'lodash/debounce';
 // import service
 import API from '../../services/api';
 import { flexStyle } from '../../utils/flexStyle';
-import { setAudioListenings, getAudioListenings } from '../../services/audioListenning';
+import { getAudioListenings, removeAudioListenings } from '../../services/audioListenning';
 
 const SearchBtn = (idx) => {
     return (
@@ -279,6 +280,7 @@ function Header({ router }) {
             }
             setShowHeaderItems(true);
             setSearchStatus();
+            e.target.blur();
             navigate.push({
                 pathname: '/search',
                 query: { searchKey: searchKeyword }
@@ -292,6 +294,7 @@ function Header({ router }) {
         }
         setShowHeaderItems(true);
         setSearchStatus();
+
         navigate.push({
             pathname: '/search',
             query: { searchKey: searchKeyword }
@@ -358,9 +361,9 @@ function Header({ router }) {
         try {
             if (user) {
                 await api.trackingAudio(audioListenings);
-                setAudioListenings([]);
+                dispatch(removeToken());
+                removeAudioListenings();
             }
-            dispatch(removeToken());
             setUserPaneAnchorEl(null);
             window.location.href = '/';
         }
@@ -497,6 +500,7 @@ function Header({ router }) {
                             onKeyUp={handleSearchKeyUp}
                             id="input-search"
                             placeholder="Tìm kiếm"
+                            autoComplete="off"
                             value={searchKeyword}
                             sx={{
                                 color: COLORS.white,

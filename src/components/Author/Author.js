@@ -293,7 +293,8 @@ export default function Author({ author }) {
                                                     sx={{
                                                         ...flexStyle('center', 'center'),
                                                         flexDirection: 'column',
-                                                        rowGap: '8px'
+                                                        rowGap: '8px',
+                                                        cursor:'pointer'
                                                     }}
                                                 >
                                                     <Avatar

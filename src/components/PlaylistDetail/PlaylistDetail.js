@@ -30,6 +30,9 @@ import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-r
 
 import ShowMoreText from "react-show-more-text";
 
+// import date-fns
+import { format } from 'date-fns';
+
 // import MUI components
 import {
     Box,
@@ -453,9 +456,17 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             }
             if (playlistAudios.length > 0) {
                 if (user) {
-                    await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
                     await api.trackingAudio(audioListenings);
-                    setAudioListenings([]);
+                    await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
+
+                    const audioListenning = {
+                        "audio_id": playlistAudios[0].id,
+                        "duration_listening": 0,
+                        "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                        "listen_from": "website"
+                    }
+                    setAudioListenings([audioListenning]);
+                    localStorage.setItem('currAudioId', playlistAudios[0].id);
                 }
                 fetchAudioUrl(
                     dispatch,
@@ -471,7 +482,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             setOpenSnackbar(true);
         }
         catch (err) {
-            const errList = err.response.data.error;
+            const errList = err?.response?.data?.error || err.message;
             let errMessage = '';
             if (errList instanceof Object) {
                 for (let e in errList) {
@@ -831,9 +842,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         padding: isSm ? '26px 0 0 15px' : '26px 32px',
                         borderRadius: '10px',
                         height: isSm ? 'auto' : '100%',
-                        scrollbarGutter: 'stable',
                         overflow: isSm ? 'auto' : 'hidden',
                         boxSizing: 'border-box',
+                        scrollbarGutter: 'stable',
                         '::-webkit-scrollbar': {
                             width: '4px'
                         },
@@ -871,7 +882,26 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             sx={{
                                 width: '100%',
                                 bgcolor: 'transparent',
-                                boxShadow: 'none'
+                                boxShadow: 'none',
+                                overflowX: 'hidden',
+                                scrollbarGutter: 'stable',
+                                '::-webkit-scrollbar': {
+                                    width: '4px',
+                                    height: '4px'
+                                },
+
+                                '::-webkit-scrollbar-track': {
+                                    borderRadius: '5px',
+                                },
+
+                                '::-webkit-scrollbar-thumb': {
+                                    background: COLORS.bg3,
+                                    borderRadius: '5px'
+                                },
+
+                                ':hover': {
+                                    overflowX: 'auto'
+                                }
                             }}
                             component={Paper}>
                             <Table

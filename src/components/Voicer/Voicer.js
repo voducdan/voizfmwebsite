@@ -13,7 +13,8 @@ import { useRouter } from 'next/router';
 // import MUI component
 import {
     Box,
-    Typography
+    Typography,
+    Divider
 } from '@mui/material';
 import GraphicEqOutlinedIcon from '@mui/icons-material/GraphicEqOutlined';
 // import others components
@@ -156,6 +157,12 @@ export default function Voicer() {
                     ))
                 }
             </Box>
+            <Divider
+                sx={{
+                    background: COLORS.blackStroker,
+                    m: '80px 50px 0 50px'
+                }}
+            />
         </Box>
     )
 }

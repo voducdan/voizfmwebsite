@@ -203,6 +203,7 @@ function RateModal(props) {
                     placeholder="Những đóng góp khác, ví dụ: Cảm nhận nội dung, góp ý nhạc nền, thắc mắc về sách,..."
                     multiline rows={5}
                     variant="outlined"
+                    autoComplete="off"
                 />
                 <Box
                     sx={{

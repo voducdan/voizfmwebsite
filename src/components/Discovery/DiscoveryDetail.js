@@ -665,6 +665,7 @@ export default function DiscoveryDetail({ discovery }) {
                             onClick={handleClickCommentInput}
                             readOnly={readOnlyComment}
                             tabIndex="-1"
+                            autoComplete="off"
                             startAdornment={<BorderColorOutlinedIcon sx={{ color: COLORS.placeHolder }} position="start">$</BorderColorOutlinedIcon>}
                         />
                     </FormControl>

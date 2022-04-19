@@ -83,16 +83,19 @@ export default function PlaylistThumnail(props) {
                     })
                 }}
             >
-                <img
-                    style={{
-                        width: '100px',
-                        height: '100px',
-                        borderRadius: hasDelete ? '50%' : '4px'
-                    }}
-                    // img src currently not working
-                    src={src}
-                    alt={`images ${name}`}
-                />
+                <Link
+                    href={`/playlists/${id}`}
+                >
+                    <img
+                        style={{
+                            width: '100px',
+                            height: '100px',
+                            borderRadius: hasDelete ? '50%' : '4px'
+                        }}
+                        src={src}
+                        alt={`images ${name}`}
+                    />
+                </Link>
                 {
                     hasDelete && (
                         <PlayArrowIcon

@@ -10,6 +10,9 @@ import { selectSearchStatus, selectPlaylistResults, handleCloseSearch } from '..
 // import next link
 import Link from 'next/link';
 
+// import swiper
+import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-react.js';
+
 // import MUI components
 import {
     Typography,
@@ -234,46 +237,77 @@ export default function Search() {
                                     mb: '16px'
                                 }}
                             >Có thể bạn muốn nghe</Typography>
-                            <Box
-                                sx={{
-                                    ...flexStyle('flex-start', 'center'),
-                                    width: '100%',
-                                    flexWrap: 'wrap',
-                                    columnGap: '8px',
-                                    rowGap: '8px'
-                                }}
-                            >
-
-                                {
-                                    playlistRecommendation.map(i => (
-                                        <Link
-                                            className="playlist-recommendation-item"
-                                            href={`/playlists/${i?.id}`}
-                                            style={{
-                                                textDecoration: 'none'
-                                            }}
-                                            key={i?.id}
-                                        >
-                                            <Box
-                                                sx={{
-                                                    width: isSm ? 'calc(100% / 3 - 6.4px)' : 'calc(100% / 5 - 6.4px)'
-                                                }}
-                                            >
-                                                <Thumbnail
+                            {
+                                isSm && (
+                                    <Swiper
+                                        slidesPerView={3.5}
+                                        spaceBetween={8}
+                                    >
+                                        {
+                                            playlistRecommendation.map(i => (
+                                                <SwiperSlide
+                                                    key={i?.id}
                                                     style={{
-                                                        width: '100%',
-                                                        height: `${getPlaylistImgWidth(8)}px`,
-                                                        borderRadius: 3
+                                                        height: `${getPlaylistImgWidth()}px`
                                                     }}
-                                                    promotion={i?.promotion || ''}
-                                                    avtSrc={i?.avatar?.thumb_url}
-                                                    alt={`images ${i?.id}`}
-                                                />
-                                            </Box>
-                                        </Link>
-                                    ))
-                                }
-                            </Box>
+                                                >
+                                                    <Link
+                                                        href={`/playlists/${i?.id}`}
+                                                    >
+                                                        <a>
+                                                            <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={i?.avatar?.thumb_url} alt={`images ${i?.name}`} ></Thumbnail>
+                                                        </a>
+                                                    </Link>
+                                                </SwiperSlide>
+                                            ))
+                                        }
+                                    </Swiper>
+                                )
+                            }
+                            {
+                                !isSm && (
+
+                                    <Box
+                                        sx={{
+                                            ...flexStyle('flex-start', 'center'),
+                                            width: '100%',
+                                            flexWrap: 'wrap',
+                                            columnGap: '8px',
+                                            rowGap: '8px'
+                                        }}
+                                    >
+                                        {
+                                            playlistRecommendation.map(i => (
+                                                <Link
+                                                    className="playlist-recommendation-item"
+                                                    href={`/playlists/${i?.id}`}
+                                                    style={{
+                                                        textDecoration: 'none'
+                                                    }}
+                                                    key={i?.id}
+                                                >
+                                                    <Box
+                                                        sx={{
+                                                            width: isSm ? 'calc(100% / 3 - 6.4px)' : 'calc(100% / 5 - 6.4px)'
+                                                        }}
+                                                    >
+                                                        <Thumbnail
+                                                            style={{
+                                                                width: '100%',
+                                                                height: `${getPlaylistImgWidth(8)}px`,
+                                                                borderRadius: 3
+                                                            }}
+                                                            promotion={i?.promotion || ''}
+                                                            avtSrc={i?.avatar?.thumb_url}
+                                                            alt={`images ${i?.id}`}
+                                                        />
+                                                    </Box>
+                                                </Link>
+                                            ))
+                                        }
+                                    </Box>
+                                )
+                            }
                         </Box>
 
                     </Box>

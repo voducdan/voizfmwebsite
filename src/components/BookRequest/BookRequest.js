@@ -14,7 +14,8 @@ import {
     FormControl,
     Input,
     InputAdornment,
-    Avatar
+    Avatar,
+    Divider
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 
@@ -210,15 +211,19 @@ export default function BookRequest() {
                         mt: '60px'
                     }}
                 >
-                    <Typography
-                        sx={{
-                            ...TEXT_STYLE.title1,
-                            color: COLORS.white,
-                            mb: '32px'
-                        }}
-                    >
-                        Góp ý của bạn
-                    </Typography>
+                    {
+                        requestedBooks.length > 0 && (
+                            <Typography
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    mb: '32px'
+                                }}
+                            >
+                                Góp ý của bạn
+                            </Typography>
+                        )
+                    }
                     <Box
                         sx={{
                             ...flexStyle('center', 'flex-start'),
@@ -297,6 +302,12 @@ export default function BookRequest() {
                     </Box>
                 </Box>
             </Box>
+            <Divider
+                sx={{
+                    background: COLORS.blackStroker,
+                    m: '227px 50px 0 50px'
+                }}
+            />
         </Box>
     )
 }

@@ -13,7 +13,7 @@ import { setCart, setAddToCartFlag } from '../../redux/payment';
 import Hls from 'hls.js';
 
 // import date-fns
-import { format } from 'date-fns'
+import { format } from 'date-fns';
 
 // import firebase
 import { firebase } from "../../../firebase.config";
@@ -51,6 +51,7 @@ import { Speed, Clock } from '../Icons';
 // import services
 import API from '../../services/api';
 import { setAudioListenings, getAudioListenings } from '../../services/audioListenning';
+import { getToken } from '../../services/authentication';
 
 const WallPaper = styled('div')({
     width: '100%',
@@ -117,7 +118,6 @@ export default function Control(props) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
-    const audioListenings = getAudioListenings();
     const media = audio.current;
 
     useEffect(() => {
@@ -132,8 +132,36 @@ export default function Control(props) {
                 setPaused(true);
             }
         });
-        updateAudisListening(audioData.id, 0);
     }, []);
+
+    useEffect(() => {
+        media.addEventListener('timeupdate', (e) => {
+            const currentTime = Math.floor(e.target.currentTime);
+            setPosition(currentTime);
+        });
+    }, [audioData]);
+
+    useEffect(() => {
+        const audioId = Number(localStorage.getItem('currAudioId'));
+        if (position === audioData.duration) {
+            fetchAudioUrl(nextAudioId);
+        }
+        updateAudioListening(audioId, 1);
+        const audioListenings = getAudioListenings();
+        if (checkUserUseVipSubcription()) {
+            const audioListenings = getAudioListenings();
+            const totalTime = audioListenings.reduce((a, b) => ({ duration_listening: (a.duration_listening + b.duration_listening) }), { duration_listening: 0 })['duration_listening'];
+            if (totalTime % 120 === 0) {
+                trackingAudio({
+                    "audio_id": audioId,
+                    "duration_listening": position,
+                    "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                    "listen_from": "website"
+                })
+            }
+        }
+
+    }, [position])
 
     useEffect(() => {
         if (!audioUrl) {
@@ -165,26 +193,6 @@ export default function Control(props) {
                 media.play();
             });
         }
-        media.addEventListener('timeupdate', (e) => {
-            const currentTime = Math.floor(e.target.currentTime);
-            setPosition(currentTime);
-            if (currentTime === audioData.duration) {
-                fetchAudioUrl(nextAudioId);
-            }
-            if (!checkUserUseVipSubcription()) {
-                updateAudisListening(audioData.id, currentTime);
-                return;
-            }
-
-            if (currentTime % 120 === 0) {
-                trackingAudio({
-                    "audio_id": audioData.id,
-                    "duration_listening": currentTime,
-                    "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
-                    "listen_from": "website"
-                })
-            }
-        });
 
     }, [audioUrl]);
 
@@ -197,7 +205,9 @@ export default function Control(props) {
         }
         else {
             media.muted = false;
+            media.play();
         }
+        dispatch(togglePlayAudio());
     }, [paused]);
 
     useEffect(() => {
@@ -216,6 +226,7 @@ export default function Control(props) {
     const trackingAudio = async (data) => {
         try {
             await api.trackingAudio(data);
+            removeAudioListenings();
         }
         catch (err) {
             console.log(err)
@@ -236,7 +247,11 @@ export default function Control(props) {
         return false;
     }
 
-    const updateAudisListening = (audioId, currentTime) => {
+    const updateAudioListening = (audioId, currentTime) => {
+        if (!getToken()) {
+            return;
+        }
+        const audioListenings = getAudioListenings();
         let distinctAudioId = audioListenings.map(i => i.audio_id);
         let audioIdx = distinctAudioId.indexOf(audioId);
         if (audioIdx !== -1) {
@@ -436,11 +451,11 @@ export default function Control(props) {
 
     const handleChangeAudio = (type) => {
         if (type === 'next' && nextAudioId) {
-            updateAudisListening(nextAudioId, 0);
+            localStorage.setItem('currAudioId', nextAudioId)
             fetchAudioUrl(nextAudioId);
         }
         if (type === 'prev' && prevAudioId) {
-            updateAudisListening(prevAudioId, 0);
+            localStorage.setItem('currAudioId', prevAudioId)
             fetchAudioUrl(prevAudioId);
         }
     }

@@ -37,9 +37,12 @@ export default function HomeCarousel() {
         const { isSm } = props;
         return {
             position: 'absolute',
-            transform: 'translateX(-15px)',
+            transform: 'translate(-15px,-50%)',
             zIndex: 2,
+            left: 0,
+            top: '50%',
             cursor: 'pointer',
+            display: 'block',
             ...((isSm || !showNavigationBtn) && { display: 'none' })
         }
     }
@@ -48,10 +51,12 @@ export default function HomeCarousel() {
         const { isSm } = props;
         return {
             position: 'absolute',
-            left: 0,
-            transform: 'translateX(-15px)',
+            right: 0,
+            transform: 'translate(-10px, -50%)',
             zIndex: 2,
+            top: '50%',
             cursor: 'pointer',
+            display: 'block',
             ...((isSm || !showNavigationBtn) && { display: 'none' })
         }
     }
@@ -116,76 +121,84 @@ export default function HomeCarousel() {
                     />
                 ))}
             </div>
-            <Box sx={{
-                position: 'absolute',
-                width: isSm ? '80%' : '30%',
-                minWidth: isSm ? '288px' : '452px',
-                bottom: 33,
-                display: 'flex',
-                justifyContent: 'flex-end',
-                alignItems: 'center',
-                right: { sm: 48, xs: 0 }
-            }}>
-                <Swiper
-                    autoplay={{
-                        delay: 5000,
-                        disableOnInteraction: false
-                    }}
-                    navigation={{
-                        prevEl: navigationBannerPrevRef.current,
-                        nextEl: navigationBannerNextRef.current
-                    }}
-                    onBeforeInit={(swiper) => {
-                        swiper.params.navigation.prevEl = navigationBannerPrevRef.current;
-                        swiper.params.navigation.nextEl = navigationBannerNextRef.current;
-                    }}
-                    onSlideChange={handleBannerSlideChange}
-                    slidesPerView={4}
-                >
-                    {images.map((image, idx) => (
-                        <SwiperSlide
-                            onClick={handleClickThumbnail}
-                            id={idx}
-                            key={idx}
-                            style={{
-                                flexShrink: 'unset'
-                            }}
-                        >
-                            <img
+            <Box
+                sx={{
+                    position: 'absolute',
+                    width: isSm ? '80%' : '30%',
+                    minWidth: isSm ? '288px' : '452px',
+                    bottom: 33,
+                    display: 'flex',
+                    justifyContent: 'flex-end',
+                    alignItems: 'center',
+                    right: { sm: 48, xs: 0 }
+                }}
+            >
+                <Box sx={{
+                    position: 'relative',
+                    width:'100%'
+                }}>
+                    <Swiper
+                        autoplay={{
+                            delay: 5000,
+                            disableOnInteraction: false
+                        }}
+                        navigation={{
+                            prevEl: navigationBannerPrevRef.current,
+                            nextEl: navigationBannerNextRef.current
+                        }}
+                        onBeforeInit={(swiper) => {
+                            swiper.params.navigation.prevEl = navigationBannerPrevRef.current;
+                            swiper.params.navigation.nextEl = navigationBannerNextRef.current;
+                        }}
+                        onSlideChange={handleBannerSlideChange}
+                        slidesPerView={4}
+                    >
+                        {images.map((image, idx) => (
+                            <SwiperSlide
+                                onClick={handleClickThumbnail}
+                                id={idx}
+                                key={idx}
                                 style={{
-                                    width: isSm ? 65 : 95,
-                                    height: isSm ? 35 : 45,
-                                    marginLeft: '16px',
-                                    ...(idx === 0 && { marginLeft: 0 }),
-                                    borderRadius: '6px',
-                                    cursor: 'pointer',
-                                    ...(idx === current && {
-                                        border: '2px solid white',
-                                    })
+                                    flexShrink: 'unset'
                                 }}
-                                alt={image.id}
-                                src={image.thumb_url} />
-                        </SwiperSlide>
-                    ))}
-                </Swiper>
-                <div
-                    onClick={() => { handleChangeSliceClick(false) }}
-                    style={{
-                        ...SwiperBtnPrev({ isSm })
-                    }}
-                    ref={navigationBannerPrevRef}
-                >
-                    <CarouselPrev />
-                </div>
-                <div
-                    onClick={() => { handleChangeSliceClick(true) }}
-                    style={{
-                        ...SwiperBtnNext({ isSm })
-                    }}
-                    ref={navigationBannerNextRef}
-                >
-                    <CarouselNext />
-                </div>
+                            >
+                                <img
+                                    style={{
+                                        width: '100%',
+                                        maxWidth: isSm ? 65 : 95,
+                                        marginRight: '16px',
+                                        height: isSm ? 35 : 45,
+                                        ...(idx === 0 && { marginLeft: 0 }),
+                                        borderRadius: '6px',
+                                        cursor: 'pointer',
+                                        ...(idx === current && {
+                                            border: '2px solid white',
+                                        })
+                                    }}
+                                    alt={image.id}
+                                    src={image.thumb_url} />
+                            </SwiperSlide>
+                        ))}
+                    </Swiper>
+                    <div
+                        onClick={() => { handleChangeSliceClick(true) }}
+                        style={{
+                            ...SwiperBtnPrev({ isSm })
+                        }}
+                        ref={navigationBannerPrevRef}
+                    >
+                        <CarouselNext />
+                    </div>
+                    <div
+                        onClick={() => { handleChangeSliceClick(false) }}
+                        style={{
+                            ...SwiperBtnNext({ isSm })
+                        }}
+                        ref={navigationBannerNextRef}
+                    >
+                        <CarouselPrev />
+                    </div>
+                </Box>
             </Box>
         </Box>
     )

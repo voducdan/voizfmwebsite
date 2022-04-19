@@ -13,7 +13,8 @@ import { Swiper, SwiperSlide } from '../../../node_modules/swiper/react/swiper-r
 import {
     Box,
     Typography,
-    Chip
+    Chip,
+    Divider
 } from '@mui/material';
 import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import StarIcon from '@mui/icons-material/Star';
@@ -394,7 +395,12 @@ export default function PlaylistRanking() {
                                                 <Typography
                                                     sx={{
                                                         ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                                        color: COLORS.contentIcon
+                                                        color: COLORS.contentIcon,
+                                                        display: '-webkit-box',
+                                                        textOverflow: 'ellipsis',
+                                                        WebkitLineClamp: 1,
+                                                        WebkitBoxOrient: 'vertical',
+                                                        overflow: 'hidden'
                                                     }}
                                                 >{i?.author_string}</Typography>
                                             </Box>
@@ -427,6 +433,15 @@ export default function PlaylistRanking() {
                     }
                 </Box>
             </Box>
+            {!isSm && (
+
+                <Divider
+                    sx={{
+                        background: COLORS.blackStroker,
+                        m: '100px 46px 0 46px'
+                    }}
+                />
+            )}
         </Box >
     )
 }

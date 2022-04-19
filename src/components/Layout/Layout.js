@@ -28,12 +28,13 @@ import AudioPlay from '../../components/AudioPlay/AudioPlay';
 import store from '../../redux/store';
 
 import useWindowSize from '../../utils/useWindowSize';
-import { flexStyle } from '../../utils/flexStyle';
 import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH } from '../../utils/constants';
 
 import API from '../../services/api';
+import { removeAudioListenings, getAudioListenings } from '../../services/audioListenning';
 
 function Layout(props) {
+    const api = new API();
     const { children } = props;
     const location = useRouter();
 
@@ -49,7 +50,21 @@ function Layout(props) {
     const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
 
-
+    useEffect(() => {
+        async function sendTrackingAudio(audioListenings) {
+            try {
+                await api.trackingAudio(audioListenings);
+            }
+            catch (err) {
+                console.log(err)
+            }
+        }
+        const audioListenings = getAudioListenings();
+        if (audioListenings && audioListenings.length > 0) {
+            sendTrackingAudio(audioListenings);
+            removeAudioListenings();
+        }
+    }, []);
 
     useEffect(() => {
         if (Object.keys(audio).length > 0) {

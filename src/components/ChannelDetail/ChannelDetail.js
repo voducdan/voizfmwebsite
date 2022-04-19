@@ -196,6 +196,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                     boxSizing: 'border-box',
                     mb: isSm ? '16px' : '40px',
                     position: 'relative',
+                    zIndex:1,
                     '&::before': {
                         content: "''",
                         position: 'absolute',
@@ -206,7 +207,8 @@ export default function ChannelDetail({ channelFromAPI }) {
                         backgroundImage: "url('/images/bgchannelDetail.png')",
                         backgroundRepeat: 'no-repeat',
                         backgroundSize: 'cover',
-                        opacity: 0.4
+                        opacity: 0.4,
+                        zIndex:-1
                     }
                 }}
             >
@@ -263,7 +265,8 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     sx={{
                                         width: '100%',
                                         ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-                                        color: COLORS.white
+                                        color: COLORS.white,
+                                        cursor:'text'
                                     }}
                                 >{channel?.name}</Typography>
                                 <Box
@@ -284,7 +287,8 @@ export default function ChannelDetail({ channelFromAPI }) {
                                     <Typography
                                         sx={{
                                             ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
-                                            color: COLORS.contentIcon
+                                            color: COLORS.contentIcon,
+                                            cursor:'text'
                                         }}
                                     >theo dõi</Typography>
                                 </Box>
@@ -297,7 +301,8 @@ export default function ChannelDetail({ channelFromAPI }) {
                                 <Typography
                                     sx={{
                                         ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                        color: COLORS.VZ_Text_content
+                                        color: COLORS.VZ_Text_content,
+                                        cursor:'text'
                                     }}
                                 >{channel?.description}</Typography>
                             </Box>

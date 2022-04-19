@@ -54,6 +54,7 @@ import Logo from '../Logo/Logo';
 import { COLORS, TEXT_STYLE, FONT_COLOR, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import useWindowSize from '../../utils/useWindowSize';
+import { includes } from 'lodash';
 
 const RequestsBook = ({ handleClickRequestBook }) => (
     <Button
@@ -210,7 +211,7 @@ export default function SidebarMenu() {
         if (isSm) {
             dispatch(setOpen(false));
         }
-        if (!user) {
+        if (!user && ['up-vip', 'library'].includes(item[0].url)) {
             dispatch(setOpenLogin(true));
             return;
         }

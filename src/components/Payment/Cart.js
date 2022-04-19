@@ -1,9 +1,6 @@
 // import react
 import { useState, useEffect } from 'react';
 
-// import next link
-import Link from 'next/link';
-
 // import next router
 import { useRouter } from 'next/router';
 

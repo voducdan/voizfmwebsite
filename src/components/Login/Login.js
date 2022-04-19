@@ -533,7 +533,12 @@ export default function Login() {
                                                 color: COLORS.white,
                                                 ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                             }
-                                        }} id="phone-number" placeholder="987654321" variant="outlined" onChange={onPhoneChange} />
+                                        }}
+                                        id="phone-number"
+                                        placeholder="987654321"
+                                        variant="outlined"
+                                        autoComplete="off"
+                                        onChange={onPhoneChange} />
                                 </Box>
                                 <CustomDisabledButton
                                     disabled={!isPhoneValid}
@@ -622,7 +627,13 @@ export default function Login() {
                                         ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3),
                                         textAlign: 'center'
                                     }
-                                }} id="phone-number" placeholder="123456" variant="outlined" onChange={onOTPChange} />
+                                }}
+                                id="phone-number"
+                                placeholder="123456"
+                                variant="outlined"
+                                autoComplete="off"
+                                onChange={onOTPChange}
+                            />
                             {
                                 isOTPWrong && (
                                     <Typography
@@ -742,7 +753,9 @@ export default function Login() {
                                         name='first_name'
                                         onChange={handleChangeUserInfo}
                                         value={userInfo.first_name || ''}
-                                        placeholder="Họ" variant="outlined"
+                                        placeholder="Họ"
+                                        variant="outlined"
+                                        autoComplete="off"
                                     />
                                     <TextField
                                         sx={{
@@ -751,7 +764,9 @@ export default function Login() {
                                         name='last_name'
                                         onChange={handleChangeUserInfo}
                                         value={userInfo.last_name || ''}
-                                        placeholder="Tên" variant="outlined"
+                                        placeholder="Tên"
+                                        variant="outlined"
+                                        autoComplete="off"
                                     />
                                 </Box>
                                 <Box
@@ -775,7 +790,9 @@ export default function Login() {
                                         name='email'
                                         onChange={handleChangeUserInfo}
                                         value={userInfo.email || ''}
-                                        placeholder="Địa chỉ email" variant="outlined"
+                                        placeholder="Địa chỉ email"
+                                        variant="outlined"
+                                        autoComplete="off"
                                     />
                                 </Box>
                             </Box>
@@ -992,7 +1009,12 @@ export default function Login() {
                                             color: COLORS.white,
                                             ...(!isSm ? TEXT_STYLE.h2 : TEXT_STYLE.h3)
                                         }
-                                    }} id="phone-number" placeholder="987654321" variant="outlined" onChange={onPhoneChange} />
+                                    }} id="phone-number"
+                                    placeholder="987654321"
+                                    variant="outlined"
+                                    autoComplete="off"
+                                    onChange={onPhoneChange}
+                                />
                             </Box>
                         </Box>
                     </DialogContent>
