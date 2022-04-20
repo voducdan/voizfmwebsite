@@ -91,7 +91,7 @@ export default class API {
         return this.init().get(`/web/plan_packages`)
     }
 
-    getDiscoveries = (limit = 9999, page = 1) => {
+    getDiscoveries = (limit = 15, page = 1) => {
         const params = { limit, page };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/discoveries?${queryString}`)
@@ -388,5 +388,9 @@ export default class API {
 
     checkDiscountCode = (data) => {
         return this.init().post('/web/use_coupon', data);
+    }
+
+    verifyAccount = (data) => {
+        return this.init().post('/auth/verification', data);
     }
 }

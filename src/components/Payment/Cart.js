@@ -61,6 +61,7 @@ export default function Cart() {
     const [selectedItem, setSelectedItem] = useState(paymentData.selectedItem);
     const [discountCode, setDiscountCode] = useState(paymentData.discountCode);
     const [isDiscountCodeValid, setIsDiscountCodeValid] = useState(true);
+    const [checkDiscountCode, setCheckDiscountCode] = useState(false);
     const [isPaymentFinish, setIsPaymentFinish] = useState(false);
     const [paymentStatusMessage, setPaymentStatusMessage] = useState('');
     const [totalPrice, setTotalPrice] = useState(0);
@@ -251,7 +252,7 @@ export default function Cart() {
 
     const handleInputDiscountCode = (e) => {
         setDiscountCode(e.target.value);
-        setIsDiscountCodeValid(true);
+        setCheckDiscountCode(false);
     }
 
     const handleClickPlaylist = (id) => {
@@ -282,6 +283,7 @@ export default function Cart() {
         catch (err) {
             setIsDiscountCodeValid(false);
         }
+        setCheckDiscountCode(true);
 
     }
 
@@ -603,7 +605,7 @@ export default function Cart() {
                                             >Sử dụng</Button>
                                         </Paper>
                                         {
-                                            !isDiscountCodeValid && (
+                                            checkDiscountCode && (
                                                 <Box
                                                     sx={{
                                                         mt: '8px',
@@ -623,7 +625,7 @@ export default function Cart() {
                                                     >
                                                         {discountCode}
                                                     </span>
-                                                    &nbsp;không hợp lệ.
+                                                    &nbsp;{isDiscountCodeValid ? '' : 'không'} hợp lệ.
                                                 </Box>
                                             )
                                         }

@@ -573,10 +573,16 @@ export default function DiscoveryDetail({ discovery }) {
                         }}
                         onClick={handleLikeDiscovery}
                     >
-                        <Like
-                            bgfill={inlineDiscovery.is_liked ? COLORS.main : COLORS.white}
-                            fill={inlineDiscovery.is_liked ? COLORS.main : COLORS.white}
-                        />
+                        <Box
+                            sx={{
+                                cursor: 'pointer'
+                            }}
+                        >
+                            <Like
+                                bgfill={inlineDiscovery.is_liked ? COLORS.main : COLORS.white}
+                                fill={inlineDiscovery.is_liked ? COLORS.main : COLORS.white}
+                            />
+                        </Box>
                         <Typography
                             sx={{
                                 ...TEXT_STYLE.content2,

@@ -109,6 +109,7 @@ export default function Login() {
     const [error, setError] = useState('');
     const [userInfo, setUserInfo] = useState({});
     const [accessToken, setAccessToken] = useState(null);
+    const [uuid, setUuid] = useState(null);
     const [isGoogle, setIsGoogle] = useState(false);
     const [isFacebook, setIsFacebook] = useState(false);
     const [otpCountDown, setOtpCountDown] = useState('');
@@ -309,6 +310,11 @@ export default function Login() {
             const res = await api.loginFacebook(payload);
             const data = await res.data;
             setAccessToken(data.data.access_token);
+            if(data.verification){
+                setStep(null);
+                return;
+            }
+            setUuid(data.data.uuid);
             setStep(5);
             setIsFacebook(true);
         }
@@ -332,6 +338,11 @@ export default function Login() {
             const res = await api.loginGoogle(payload);
             const data = await res.data;
             setAccessToken(data.data.access_token);
+            if(data.verification){
+                setStep(null);
+                return;
+            }
+            setUuid(data.data.uuid);
             setStep(5);
             setIsGoogle(true);
         }
@@ -360,7 +371,13 @@ export default function Login() {
         return;
     }
 
-    const handleSkipPhone = () => {
+    const handleSkipPhone = async () => {
+        try {
+            await api.verifyAccount({'uuid':uuid});
+        }
+        catch(err){
+            console.log(err)
+        }
         dispatch(setToken(accessToken));
         setStep(null);
         dispatch(handleCloseLogin());

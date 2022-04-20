@@ -281,13 +281,16 @@ export default function SidebarMenu() {
                     </a>
                 </Link>
             </Box>
-            <Divider />
-            <List>
+            <List
+                sx={{
+                    pt: 0
+                }}
+            >
                 {navigatorLink.map(icon => (
                     <Box
                         key={icon.id}
                         sx={{
-                            m: '8px 0',
+                            m: icon.id === 1 ? '0 0 8px 0' : '8px 0',
                             ...((navigate.pathname === '/' + icon.url) && {
                                 bgcolor: COLORS.bg2
                             })

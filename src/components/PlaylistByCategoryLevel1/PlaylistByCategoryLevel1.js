@@ -220,9 +220,14 @@ function AudioBook({ router }) {
                 return;
             }
             else {
-                const res = await api.getCategoryPlaylists(categoryCode, 35);
-                const results = await res.data.data;
-                setPlaylists(results);
+                try {
+                    const res = await api.getCategoryPlaylists(categoryCode, 35);
+                    const results = await res.data.data;
+                    setPlaylists(results);
+                }
+                catch (err) {
+                    console.log(err)
+                }
             }
         }
 
@@ -265,6 +270,17 @@ function AudioBook({ router }) {
         setPlaylistsRandom([...playlistsRandom, ...data]);
     }
 
+    const handleLoadMorePlaylist = async () => {
+        try {
+            const ignore_ids = [... new Set(playlists.map(i => i.id))];
+            const res = await api.getCategoryPlaylists(categoryCode, 35, ignore_ids);
+            const results = await res.data.data;
+            setPlaylists([...playlists, ...results]);
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
     return (
         <Box
             sx={{
@@ -357,6 +373,30 @@ function AudioBook({ router }) {
                                             </a>
                                         </Link>
                                     ))}
+                                </Box>
+                                <Box
+                                    sx={{
+                                        mt: '26px',
+                                        mb: '80px',
+                                        textAlign: 'center',
+                                        width: '100%'
+                                    }}
+                                >
+                                    <Button
+                                        variant="outlined"
+                                        sx={{
+                                            textTransform: 'none',
+                                            color: COLORS.white,
+                                            ...TEXT_STYLE.title1,
+                                            borderRadius: '8px',
+                                            height: '48px',
+                                            width: '142px',
+                                            border: `1px solid ${COLORS.blackStroker}`
+                                        }}
+                                        onClick={handleLoadMorePlaylist}
+                                    >
+                                        Xem thêm
+                                    </Button>
                                 </Box>
                             </Box>
 

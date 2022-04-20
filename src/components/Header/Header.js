@@ -373,7 +373,14 @@ function Header({ router }) {
     }
 
     return (
-        <AppBar position="fixed" open={openSidebar} windowwidth={windowSize.width}>
+        <AppBar
+            position="fixed"
+            sx={{
+                boxShadow: 'none',
+                border: `1px solid ${COLORS.blackStroker}`
+            }}
+            open={openSidebar}
+            windowwidth={windowSize.width}>
             <Popover
                 open={openUserPane}
                 anchorEl={userPaneAnchorEl}
