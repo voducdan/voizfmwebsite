@@ -100,7 +100,7 @@ export default function Cart() {
         if (!resultCode && !vnp_ResponseCode && !errorCode) {
             return;
         }
-        if (resultCode === '0' || vnp_ResponseCode === '00') {
+        if (resultCode === '0' || vnp_ResponseCode === '00' || errorCode === '0') {
             removeCartItem();
             localStorage.removeItem('localPaymentData');
             localStorage.removeItem('paymentData');

@@ -16,12 +16,12 @@ import {
     Chip,
     Divider
 } from '@mui/material';
-import AccountCircleOutlinedIcon from '@mui/icons-material/AccountCircleOutlined';
 import StarIcon from '@mui/icons-material/Star';
 
 // import icons
 import {
-    AudioBook
+    AudioBook,
+    AccountCircle
 } from '../Icons/index'
 
 
@@ -357,7 +357,8 @@ export default function PlaylistRanking() {
                                                 alt={`image ${i?.name}`}
                                                 style={{
                                                     width: isSm ? '80px' : '100px',
-                                                    height: isSm ? '80px' : '100px'
+                                                    height: isSm ? '80px' : '100px',
+                                                    borderRadius: '3px'
                                                 }}
                                             />
                                         </Box>
@@ -385,13 +386,7 @@ export default function PlaylistRanking() {
                                                     mb: isSm ? '4px' : '16px'
                                                 }}
                                             >
-                                                <AccountCircleOutlinedIcon sx={{
-                                                    color: COLORS.contentIcon,
-                                                    ...(isSm && {
-                                                        width: '16px',
-                                                        height: '16px'
-                                                    })
-                                                }} />
+                                                <AccountCircle />
                                                 <Typography
                                                     sx={{
                                                         ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),

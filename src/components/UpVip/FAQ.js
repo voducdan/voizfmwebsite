@@ -52,10 +52,11 @@ export default function FAQ() {
 
     return (
         <Box>
-
             <Box
                 sx={{
-                    bgcolor: COLORS.bg2
+                    bgcolor: COLORS.bg2,
+                    pb: '32px',
+                    boxSizing: 'border-box'
                 }}
             >
                 <Box>

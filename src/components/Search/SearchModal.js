@@ -62,7 +62,6 @@ export default function Search() {
     const [playlistRecommendation, setPlaylistRecommendation] = useState([]);
     const searchStatus = useSelector(selectSearchStatus);
     const playlistResults = useSelector(selectPlaylistResults);
-
     useEffect(() => {
         async function fetchCommonKeywords() {
             const res = await api.getCommonKeyword();

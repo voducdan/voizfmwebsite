@@ -257,6 +257,7 @@ export default function Checkout() {
                                                     borderBottom: `0.6px solid #443c3c`,
                                                     width: '100%',
                                                     margin: 0,
+                                                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1)
                                                 }}
                                                 checked={i.code === paymentMethod}
                                                 value={i.code}
@@ -378,14 +379,14 @@ export default function Checkout() {
                                                         ...TEXT_STYLE.content3,
                                                         color: COLORS.contentIcon
                                                     }}
-                                                >{formatPrice(i.sale_coin_price)} đ</Typography>
+                                                >{formatPrice(i.sale_coin_price)}đ</Typography>
                                                 )}
                                                 {!i.sale_coin_price && (<Typography
                                                     sx={{
                                                         ...TEXT_STYLE.content3,
                                                         color: COLORS.contentIcon
                                                     }}
-                                                >{formatPrice(i.pay_price)} đ</Typography>
+                                                >{formatPrice(i.pay_price)}đ</Typography>
                                                 )}
                                             </Box>
                                         ))
@@ -414,7 +415,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(prevPaymentInfo?.totalPrice)} đ</Typography>
+                                    >{formatPrice(prevPaymentInfo?.totalPrice)}đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -433,7 +434,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(prevPaymentInfo?.totalPrice - prevPaymentInfo?.finalPrice)} đ</Typography>
+                                    >{formatPrice(prevPaymentInfo?.totalPrice - prevPaymentInfo?.finalPrice)}đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
@@ -459,7 +460,7 @@ export default function Checkout() {
                                                 ...TEXT_STYLE.h2,
                                                 color: COLORS.white
                                             }}
-                                        >{formatPrice(prevPaymentInfo?.finalPrice)} đ</Typography>
+                                        >{formatPrice(prevPaymentInfo?.finalPrice)}đ</Typography>
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.caption12,

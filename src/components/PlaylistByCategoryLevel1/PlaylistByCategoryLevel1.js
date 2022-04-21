@@ -171,6 +171,8 @@ function AudioBook({ router }) {
     const [playlists, setPlaylists] = useState([]);
     const [playlistsRandom, setPlaylistsRandom] = useState([]);
     const [initPlaylists, setInitPlaylists] = useState([]);
+    const [hasLoadMore, setHasLoadMore] = useState(true);
+    const [hasLoadMoreRandom, setHasLoadMoreRandom] = useState(true);
 
     useEffect(() => {
         const code = pathname.replace('-', '_').slice(1);
@@ -267,6 +269,9 @@ function AudioBook({ router }) {
         const ignore_ids = playlistsRandom.map(i => i.id).join(',')
         const res = await api.getCategoryPlaylists(code, NUM_PLAYLIST_RANDOM, ignore_ids, 'latest', 1);
         const data = await res.data.data;
+        if (data.length < NUM_PLAYLIST_RANDOM) {
+            setHasLoadMoreRandom(false);
+        }
         setPlaylistsRandom([...playlistsRandom, ...data]);
     }
 
@@ -275,6 +280,9 @@ function AudioBook({ router }) {
             const ignore_ids = [... new Set(playlists.map(i => i.id))];
             const res = await api.getCategoryPlaylists(categoryCode, 35, ignore_ids);
             const results = await res.data.data;
+            if (results.length < 35) {
+                setHasLoadMore(false);
+            }
             setPlaylists([...playlists, ...results]);
         }
         catch (err) {
@@ -374,30 +382,34 @@ function AudioBook({ router }) {
                                         </Link>
                                     ))}
                                 </Box>
-                                <Box
-                                    sx={{
-                                        mt: '26px',
-                                        mb: '80px',
-                                        textAlign: 'center',
-                                        width: '100%'
-                                    }}
-                                >
-                                    <Button
-                                        variant="outlined"
-                                        sx={{
-                                            textTransform: 'none',
-                                            color: COLORS.white,
-                                            ...TEXT_STYLE.title1,
-                                            borderRadius: '8px',
-                                            height: '48px',
-                                            width: '142px',
-                                            border: `1px solid ${COLORS.blackStroker}`
-                                        }}
-                                        onClick={handleLoadMorePlaylist}
-                                    >
-                                        Xem thêm
-                                    </Button>
-                                </Box>
+                                {
+                                    hasLoadMore && (
+                                        <Box
+                                            sx={{
+                                                mt: '26px',
+                                                mb: '80px',
+                                                textAlign: 'center',
+                                                width: '100%'
+                                            }}
+                                        >
+                                            <Button
+                                                variant="outlined"
+                                                sx={{
+                                                    textTransform: 'none',
+                                                    color: COLORS.white,
+                                                    ...TEXT_STYLE.title1,
+                                                    borderRadius: '8px',
+                                                    height: '48px',
+                                                    width: '142px',
+                                                    border: `1px solid ${COLORS.blackStroker}`
+                                                }}
+                                                onClick={handleLoadMorePlaylist}
+                                            >
+                                                Xem thêm
+                                            </Button>
+                                        </Box>
+                                    )
+                                }
                             </Box>
 
                         </Box>
@@ -441,30 +453,34 @@ function AudioBook({ router }) {
                                 </Link>
                             ))
                         }
-                        <Box
-                            sx={{
-                                mt: '26px',
-                                mb: '80px',
-                                textAlign: 'center',
-                                width: '100%'
-                            }}
-                        >
-                            <Button
-                                onClick={handleLoadMoreRandomPlaylist}
-                                variant="outlined"
-                                sx={{
-                                    textTransform: 'none',
-                                    color: COLORS.white,
-                                    ...TEXT_STYLE.title1,
-                                    borderRadius: '8px',
-                                    height: '48px',
-                                    width: '142px',
-                                    border: `1px solid ${COLORS.blackStroker}`
-                                }}
-                            >
-                                Xem thêm
-                            </Button>
-                        </Box>
+                        {
+                            hasLoadMoreRandom && (
+                                <Box
+                                    sx={{
+                                        mt: '26px',
+                                        mb: '80px',
+                                        textAlign: 'center',
+                                        width: '100%'
+                                    }}
+                                >
+                                    <Button
+                                        onClick={handleLoadMoreRandomPlaylist}
+                                        variant="outlined"
+                                        sx={{
+                                            textTransform: 'none',
+                                            color: COLORS.white,
+                                            ...TEXT_STYLE.title1,
+                                            borderRadius: '8px',
+                                            height: '48px',
+                                            width: '142px',
+                                            border: `1px solid ${COLORS.blackStroker}`
+                                        }}
+                                    >
+                                        Xem thêm
+                                    </Button>
+                                </Box>
+                            )
+                        }
                     </Box>
                 )
             }

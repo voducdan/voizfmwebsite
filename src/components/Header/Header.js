@@ -6,7 +6,6 @@ import { useSelector, useDispatch } from 'react-redux';
 
 // Import redux reducer, actions
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
-import { pauseAudio } from '../../redux/playAudio';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
 import { selectCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
@@ -263,7 +262,7 @@ function Header({ router }) {
     const onSearchInput = (e) => {
         const { value } = e.target;
         setSearchKeyword(value);
-        if (value === '') {
+        if (!value.trim()) {
             dispatch(handleStopSearch());
         }
         else {
@@ -274,8 +273,9 @@ function Header({ router }) {
 
     const handleSearchKeyUp = (e) => {
         const { keyCode } = e;
+        const trimedSearchKey = searchKeyword.trim();
         if (keyCode === 13) {
-            if (!searchKeyword.trim()) {
+            if (!trimedSearchKey) {
                 return;
             }
             setShowHeaderItems(true);
@@ -283,13 +283,14 @@ function Header({ router }) {
             e.target.blur();
             navigate.push({
                 pathname: '/search',
-                query: { searchKey: searchKeyword }
+                query: { searchKey: trimedSearchKey }
             });
         }
     }
 
     const handleClickSearchBtn = () => {
-        if (!searchKeyword.trim()) {
+        const trimedSearchKey = searchKeyword.trim();
+        if (!trimedSearchKey) {
             return;
         }
         setShowHeaderItems(true);
@@ -297,7 +298,7 @@ function Header({ router }) {
 
         navigate.push({
             pathname: '/search',
-            query: { searchKey: searchKeyword }
+            query: { searchKey: trimedSearchKey }
         });
     }
 
@@ -336,6 +337,7 @@ function Header({ router }) {
     const debounceOnSearch = useCallback(_debounce(async (type, keyword) => {
         const res = await api.getSearchResults(type, keyword);
         const data = await res.data.data;
+
         dispatch(setPlaylistResult(data));
     }, 100), []);
 

@@ -226,6 +226,7 @@ export default function DiscoveryDetail({ discovery }) {
     const [isCommentError, setIsCommentError] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [readOnlyComment, setReadOnlyComment] = useState(false);
+    const [hasLoadMore, setHasLoadMore] = useState(true);
 
     const { id } = useRouter().query;
 
@@ -239,6 +240,9 @@ export default function DiscoveryDetail({ discovery }) {
             const res = await api.getDiscoveryComment(id, page);
             const data = await res.data.data;
             const appendedComments = [...comments, ...data];
+            if (appendedComments.length === inlineDiscovery?.discovery_counter?.comments_count) {
+                setHasLoadMore(false);
+            }
             setComments(appendedComments);
         }
         catch (err) {
@@ -612,34 +616,38 @@ export default function DiscoveryDetail({ discovery }) {
                             <CommentItem user={user} commentInputRef={commentInputRef} updateLike={updateLike} api={api} key={item.id} data={item} />
                         ))
                     }
-                    <Box
-                        sx={{
-                            width: '100%',
-                            ...flexStyle('center', 'center')
-                        }}
-                    >
-                        {
-                            comments.length >= 10 && (
-                                <Button
-                                    onClick={handleLoadMoreComment}
-                                    sx={{
-                                        textTransform: 'none',
-                                        ...TEXT_STYLE.title2,
-                                        color: COLORS.white,
-                                        bgcolor: COLORS.main,
-                                        width: '170px',
-                                        height: '40px',
-                                        borderRadius: '50px',
-                                        ':hover': {
-                                            bgcolor: COLORS.main
-                                        }
-                                    }}
-                                >
-                                    Tải thêm góp ý
-                                </Button>
-                            )
-                        }
-                    </Box>
+                    {
+                        hasLoadMore && (
+                            <Box
+                                sx={{
+                                    width: '100%',
+                                    ...flexStyle('center', 'center')
+                                }}
+                            >
+                                {
+                                    comments.length >= 10 && (
+                                        <Button
+                                            onClick={handleLoadMoreComment}
+                                            sx={{
+                                                textTransform: 'none',
+                                                ...TEXT_STYLE.title2,
+                                                color: COLORS.white,
+                                                bgcolor: COLORS.main,
+                                                width: '170px',
+                                                height: '40px',
+                                                borderRadius: '50px',
+                                                ':hover': {
+                                                    bgcolor: COLORS.main
+                                                }
+                                            }}
+                                        >
+                                            Tải thêm góp ý
+                                        </Button>
+                                    )
+                                }
+                            </Box>
+                        )
+                    }
                 </Box>
                 <Box
                     sx={{

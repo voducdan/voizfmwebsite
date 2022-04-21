@@ -140,6 +140,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
     const [sortAsc, setSortAsc] = useState(false);
+    const [audioId, setudioId] = useState(null);
 
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
@@ -189,6 +190,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     useEffect(() => {
         const { id, audioId } = router.query;
         if (audioId) {
+            setudioId(audioId);
             dispatch(setFooter(false));
             fetchAudioUrl(
                 dispatch,
@@ -548,7 +550,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         );
     }
 
-    return (
+    return audioId ? '' : (
         <Box
             sx={{
                 ...flexStyle('center', 'center'),

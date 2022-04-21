@@ -372,8 +372,10 @@ export default class API {
         return this.init().post('web/auth/facebook', data);
     }
 
-    getVoicerPlaylists = (id) => {
-        return this.init().get(`/voicers/${id}/playlists?limit=9999`);
+    getVoicerPlaylists = (id, page, limit = 10) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/voicers/${id}/playlists?${queryString}`);
     }
 
     getVersion = () => {

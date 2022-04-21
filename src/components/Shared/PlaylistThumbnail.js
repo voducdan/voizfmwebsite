@@ -63,8 +63,7 @@ export default function PlaylistThumnail(props) {
                 bgcolor: 'inherit',
                 boxShadow: 'none',
                 width: clientWidth,
-                height: '100px',
-                cursor: 'pointer'
+                height: '100px'
             }}
         >
             <Box
@@ -90,7 +89,8 @@ export default function PlaylistThumnail(props) {
                         style={{
                             width: '100px',
                             height: '100px',
-                            borderRadius: hasDelete ? '50%' : '4px'
+                            borderRadius: hasDelete ? '50%' : '4px',
+                            cursor: 'pointer'
                         }}
                         src={src}
                         alt={`images ${name}`}
@@ -142,7 +142,8 @@ export default function PlaylistThumnail(props) {
                                 flexDirection: 'column',
                                 flex: '1 0 auto',
                                 rowGap: '6px',
-                                width: '50%'
+                                width: '50%',
+                                cursor: 'pointer'
                             }}
                         >
 

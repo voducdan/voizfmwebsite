@@ -232,6 +232,13 @@ export default function SidebarMenu() {
         navigate.push('/book-request')
     }
 
+    const handleClickLogo = () => {
+        if (isSm) {
+            dispatch(setOpen(false));
+        }
+        navigate.push('/');
+    }
+
     return (
         <Drawer
             sx={{
@@ -272,14 +279,10 @@ export default function SidebarMenu() {
             open={open}
             ref={sidebar}
         >
-            <Box>
-                <Link
-                    href='/'
-                >
-                    <a>
-                        <Logo windowWidth={windowSize.width} />
-                    </a>
-                </Link>
+            <Box
+                onClick={handleClickLogo}
+            >
+                <Logo windowWidth={windowSize.width} />
             </Box>
             <List
                 sx={{

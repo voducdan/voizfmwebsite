@@ -255,7 +255,7 @@ export default function Author({ author }) {
                     >
                         <Box
                             sx={{
-                                p: isSm ? '26px 18px' : '26px 32px',
+                                p: isSm ? '40px 16px' : '48px 30px',
                                 boxSizing: 'border-box',
                                 width: '100%'
                             }}
@@ -294,7 +294,7 @@ export default function Author({ author }) {
                                                         ...flexStyle('center', 'center'),
                                                         flexDirection: 'column',
                                                         rowGap: '8px',
-                                                        cursor:'pointer'
+                                                        cursor: 'pointer'
                                                     }}
                                                 >
                                                     <Avatar

@@ -61,6 +61,7 @@ import GraphicEQ from './GraphicEQ';
 import AccessTime from './AccessTime';
 import Pencil1 from './Pencil1';
 import Send from './Send';
+import AccountCircle from './AccountCircle';
 
 export {
     Bookmark,
@@ -126,4 +127,5 @@ export {
     AccessTime,
     Pencil1,
     Send,
+    AccountCircle
 }
