@@ -310,8 +310,16 @@ export default function Login() {
             const res = await api.loginFacebook(payload);
             const data = await res.data;
             setAccessToken(data.data.access_token);
-            if(data.verification){
+            if (data.verification || phoneNumber) {
+                try {
+                    await api.verifyAccount({ 'uuid': data.data.uuid });
+                }
+                catch (err) {
+                    console.log(err)
+                }
+                dispatch(setToken(accessToken));
                 setStep(null);
+                dispatch(handleCloseLogin());
                 return;
             }
             setUuid(data.data.uuid);
@@ -338,8 +346,16 @@ export default function Login() {
             const res = await api.loginGoogle(payload);
             const data = await res.data;
             setAccessToken(data.data.access_token);
-            if(data.verification){
+            if (data.verification || phoneNumber) {
+                try {
+                    await api.verifyAccount({ 'uuid': data.data.uuid });
+                }
+                catch (err) {
+                    console.log(err)
+                }
+                dispatch(setToken(accessToken));
                 setStep(null);
+                dispatch(handleCloseLogin());
                 return;
             }
             setUuid(data.data.uuid);
@@ -373,9 +389,9 @@ export default function Login() {
 
     const handleSkipPhone = async () => {
         try {
-            await api.verifyAccount({'uuid':uuid});
+            await api.verifyAccount({ 'uuid': uuid });
         }
-        catch(err){
+        catch (err) {
             console.log(err)
         }
         dispatch(setToken(accessToken));
@@ -594,7 +610,6 @@ export default function Login() {
                                     render={renderProps => (
                                         <Button
                                             onClick={renderProps.onClick}
-                                            disabled={renderProps.disabled}
                                             sx={{
                                                 textTransform: 'none',
                                                 height: '48px'
@@ -608,7 +623,6 @@ export default function Login() {
                                     )}
                                     cookiePolicy={'single_host_origin'}
                                     clientId={`${process.env.NEXT_PUBLIC_GOOGLE_CLIENT_ID}`}
-                                    buttonText="Google"
                                     onSuccess={responseGoogleSuccess}
                                     onFailure={responseGoogleFalure}
                                 />

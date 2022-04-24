@@ -12,11 +12,11 @@ import {
 } from '@mui/material';
 import CheckIcon from '@mui/icons-material/Check';
 import AddIcon from '@mui/icons-material/Add';
-import DeleteIcon from '@mui/icons-material/Delete';
 import PlayArrowIcon from '@mui/icons-material/PlayArrow';
 
 import {
-    User
+    User,
+    Trash
 } from '../../components/Icons/index';
 
 // import utils
@@ -83,7 +83,7 @@ export default function PlaylistThumnail(props) {
                 }}
             >
                 <Link
-                    href={`/playlists/${id}`}
+                    href={isAudio ? `/playlists/${playlistId}?audioId=${id}` : `/playlists/${id}`}
                 >
                     <img
                         style={{
@@ -222,7 +222,7 @@ export default function PlaylistThumnail(props) {
                     {
                         hasDelete && (
                             <IconButton onClick={handleConfirmDeleteModalOpen} id={id} aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content, p: '0 5px 5px 5px' }}>
-                                <DeleteIcon fontSize="small" />
+                                <Trash />
                             </IconButton>
                         )
                     }

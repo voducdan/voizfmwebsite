@@ -1,6 +1,9 @@
 // import react
 import { useRef, useState, useEffect } from 'react';
 
+// import next link
+import Link from 'next/link';
+
 // import MUI components
 import Box from '@mui/material/Box';
 
@@ -65,8 +68,7 @@ export default function HomeCarousel() {
         async function fetchBannerImages() {
             const res = await api.getBannerImages();
             const data = await res.data.data;
-            const imagesList = data.map(i => i.image);
-            setImages([...imagesList, ...imagesList]);
+            setImages([...data, ...data]);
         }
 
         fetchBannerImages();
@@ -94,6 +96,15 @@ export default function HomeCarousel() {
         setCurrent(realIndex);
     }
 
+    const parseDeepLink = (i) => {
+        const bannerType = i.banner_type;
+        const id = i.deep_link.split('=')[1]
+        if (['playlist', 'channel', 'review', 'audio'].includes(bannerType)) {
+            return `/${bannerType === 'review' ? 'discoverie' : bannerType}s/${id}`
+        }
+        return '';
+    }
+
     return (
         <Box
             onMouseOver={() => { setShowNavigationBtn(true); }}
@@ -105,20 +116,25 @@ export default function HomeCarousel() {
             }}
         >
             <div style={{ height: '100%', width: '100%' }}>
-                {images.map((image, idx) => (
-                    <img
-                        style={{
-                            ...(idx !== current && { display: 'none' }),
-                            objectFit: 'fill',
-                            width: '100%',
-                            position: 'absolute',
-                            height: '100%',
-                            left: 0
-                        }}
-                        alt={image.id}
-                        key={idx}
-                        src={image?.original_url}
-                    />
+                {images.map((i, idx) => (
+                    <Link
+                        href={parseDeepLink(i)}
+                    >
+                        <img
+                            style={{
+                                ...(idx !== current && { display: 'none' }),
+                                objectFit: 'fill',
+                                width: '100%',
+                                position: 'absolute',
+                                height: '100%',
+                                left: 0,
+                                cursor: 'pointer'
+                            }}
+                            alt={i?.image?.id}
+                            key={idx}
+                            src={i?.image?.original_url}
+                        />
+                    </Link>
                 ))}
             </div>
             <Box
@@ -153,7 +169,7 @@ export default function HomeCarousel() {
                         onSlideChange={handleBannerSlideChange}
                         slidesPerView={4}
                     >
-                        {images.map((image, idx) => (
+                        {images.map((i, idx) => (
                             <SwiperSlide
                                 onClick={handleClickThumbnail}
                                 id={idx}
@@ -175,8 +191,8 @@ export default function HomeCarousel() {
                                             border: '2px solid white',
                                         })
                                     }}
-                                    alt={image.id}
-                                    src={image.thumb_url} />
+                                    alt={i?.image?.id}
+                                    src={i?.image?.thumb_url} />
                             </SwiperSlide>
                         ))}
                     </Swiper>

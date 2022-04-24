@@ -667,7 +667,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                             color: COLORS.contentIcon
                                                         },
                                                         '& .MuiRating-icon': {
-                                                            ml: isSm ? '22px' : '24px'
+                                                            ml: isSm ? '22px' : '24px',
+                                                            transform: 'scale(1)'
                                                         }
                                                     }}
                                                     onChange={(_, newValue) => { handleOpenRateModal(newValue) }}
@@ -1303,7 +1304,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     )
                 }
                 {
-                    user?.promotion !== 'vip' && (
+                    ['free', 'coin'].includes(user?.promotion) && (
                         <Box
                             sx={{
                                 width: isSm ? '50%' : '20%',

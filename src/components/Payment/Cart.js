@@ -8,7 +8,7 @@ import { useRouter } from 'next/router';
 import { useDispatch, useSelector } from 'react-redux';
 
 // Import redux reducer, actions
-import { setItems, setCart, selectPaymentData, selectCart } from '../../redux/payment';
+import { setItems, setCart, selectPaymentData, selectCart, setPaymentInfo } from '../../redux/payment';
 
 // import MUI components
 import {
@@ -34,10 +34,9 @@ import {
     DialogContentText,
     DialogActions
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 // import icons
-import { CartEmpty } from '../../components/Icons/index';
+import { CartEmpty, Trash } from '../../components/Icons/index';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
@@ -69,6 +68,7 @@ export default function Cart() {
     const [checkControl, setCheckControl] = useState({});
     const [checkAllControl, setCheckAllControl] = useState(false);
     const [confirmDeleteCartItemModal, setConfirmDeleteCartItemModal] = useState(false);
+    const [fetchCartDone, setFetchCartDone] = useState(false);
 
     const dispatch = useDispatch();
 
@@ -89,7 +89,13 @@ export default function Cart() {
             const res = await api.getCart();
             const data = await res.data.data;
             dispatch(setCart([...data]));
+            setFetchCartDone(true);
             cb(data);
+        }
+        if (selectedItem.length === 1 && selectedItem[0].type === 'vip_package') {
+            const tmpPaymentData = { ...paymentData };
+            tmpPaymentData['selectedItem'] = [];
+            dispatch(setItems({ ...tmpPaymentData }));
         }
         fetchCart(initCheckControl);
     }, []);
@@ -128,7 +134,7 @@ export default function Cart() {
 
     useEffect(() => {
         function calculatePrice() {
-            if (selectedItem.length > 0) {
+            if (selectedItem.length > 0 && selectedItem[0].type !== 'vip_package') {
                 const price = selectedItem.reduce((a, b) => ({ sale_price: (a.sale_price + b.sale_price) }), { sale_price: 0 })['sale_price'];
                 setTotalPrice(price);
                 setFinalPrice(price);
@@ -143,7 +149,7 @@ export default function Cart() {
     const removeCartItem = async () => {
         try {
             const cartItems = JSON.parse(localStorage.getItem('localPaymentData'));
-            if (cartItems.package_type === 'plan_package') {
+            if (cartItems && cartItems.package_type === 'plan_package') {
                 return;
             }
             let promises = [];
@@ -157,7 +163,7 @@ export default function Cart() {
             dispatch(setCart([...data]));
         }
         catch (err) {
-            const errList = err.response.data.error;
+            const errList = err?.response?.data?.error || err;
             if (errList instanceof Object) {
                 let errMessage = '';
                 for (let e in errList) {
@@ -297,7 +303,7 @@ export default function Cart() {
         >
             <Typography
                 sx={{
-                    ...TEXT_STYLE.h2,
+                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                     color: COLORS.white,
                     mb: '32px',
                     ...(isSm && { pt: '24px', pl: '16px' })
@@ -324,27 +330,40 @@ export default function Cart() {
                             <MenuList
                                 sx={{
                                     bgcolor: COLORS.bg2,
-                                    boxSizing: 'border-box'
+                                    boxSizing: 'border-box',
+                                    borderRadius: '10px'
                                 }}
                             >
-                                <MenuItem>
-                                    <ListItemIcon>
+                                <MenuItem
+                                    sx={{
+                                        ...(!isSm && { pl: '30px' })
+                                    }}
+                                >
+                                    <ListItemIcon
+                                        sx={{
+                                            'span': {
+                                                p: 0
+                                            }
+                                        }}
+                                    >
                                         <Checkbox checked={checkAllControl} onChange={handleSelectAllItem} sx={{ color: COLORS.contentIcon }} />
                                     </ListItemIcon>
                                     <ListItemText
                                         sx={{
-                                            ...TEXT_STYLE.content1,
+                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                             color: COLORS.contentIcon
                                         }}
-                                    >Chọn tất cả ({cart.length} sản phẩm)</ListItemText>
+                                    >
+                                        Chọn tất cả ({cart.length} sản phẩm)
+                                    </ListItemText>
                                     <ListItemIcon
                                         onClick={handleClickDeleteMultipleItem}
                                         sx={{
                                             alignItems: 'center',
-                                            columnGap: '14px'
+                                            columnGap: '14px',
                                         }}
                                     >
-                                        <DeleteIcon sx={{ color: COLORS.contentIcon }} />
+                                        <Trash />
                                         <Typography
                                             sx={{
                                                 ...TEXT_STYLE.content1,
@@ -359,26 +378,34 @@ export default function Cart() {
                                         <MenuItem key={item.id}
                                             sx={{
                                                 width: '100%',
-                                                columnGap: '13px'
+                                                columnGap: '13px',
+                                                ...(!isSm && { pl: '30px' })
                                             }}
                                         >
-                                            <ListItemIcon
-                                                sx={{
-                                                    maxWidth: '5%',
-                                                }}
-                                            >
-                                                <Checkbox
-                                                    checked={checkControl[item.id] || false}
-                                                    onChange={(event) => { handleSelectCartItem(event, item.id) }}
-                                                    sx={{
-                                                        color: COLORS.contentIcon
-                                                    }}
-                                                />
-                                            </ListItemIcon>
+                                            {
+                                                !isSm && (
+                                                    <ListItemIcon
+                                                        sx={{
+                                                            maxWidth: '5%',
+                                                            'span': {
+                                                                p: 0
+                                                            }
+                                                        }}
+                                                    >
+                                                        <Checkbox
+                                                            checked={checkControl[item.id] || false}
+                                                            onChange={(event) => { handleSelectCartItem(event, item.id) }}
+                                                            sx={{
+                                                                color: COLORS.contentIcon
+                                                            }}
+                                                        />
+                                                    </ListItemIcon>
+                                                )
+                                            }
                                             <Card
                                                 sx={{
-                                                    ...flexStyle('flex-start', 'center'),
-                                                    columnGap: '13px',
+                                                    ...(isSm ? flexStyle('flex-start', 'flex-start') : flexStyle('flex-start', 'center')),
+                                                    columnGap: isSm ? '8px' : '13px',
                                                     bgcolor: 'inherit',
                                                     boxShadow: 'none',
                                                     width: '75%'
@@ -386,41 +413,70 @@ export default function Cart() {
                                             >
                                                 <Box
                                                     sx={{
-                                                        width: '83px',
-                                                        height: '83px',
-                                                        position: 'relative',
-                                                        '&::before': {
-                                                            content: item?.promotion.includes('vip') ? "url('/images/dvip.png')" : item?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
-                                                            position: 'absolute',
-                                                            right: 0,
-                                                            top: 0,
-                                                            zIndex: 8
-                                                        }
+                                                        maxWidth: isSm ? '40%' : '100%',
+                                                        height: '100%',
+                                                        ...(isSm ? flexStyle('flex-start', 'center') : flexStyle('flex-start', 'flex-start')),
+                                                        columnGap: '16px'
                                                     }}
                                                 >
+                                                    {isSm && (
+                                                        <ListItemIcon
+                                                            sx={{
+                                                                width: '5%',
+                                                                minWidth: '24px!important',
+                                                                'span': {
+                                                                    p: 0
+                                                                }
+                                                            }}
+                                                        >
+                                                            <Checkbox
+                                                                checked={checkControl[item.id] || false}
+                                                                onChange={(event) => { handleSelectCartItem(event, item.id) }}
+                                                                sx={{
+                                                                    color: COLORS.contentIcon
+                                                                }}
+                                                            />
+                                                        </ListItemIcon>
+                                                    )}
                                                     <CardMedia
                                                         onClick={() => { handleClickPlaylist(item?.id) }}
                                                         component="img"
                                                         sx={{
-                                                            width: '100%',
-                                                            height: '100%'
+                                                            width: isSm ? '56px' : '83px',
+                                                            height: isSm ? '56px' : '83px',
+                                                            position: 'relative',
+                                                            borderRadius: '3px',
+                                                            '&::before': {
+                                                                content: item?.promotion.includes('vip') ? "url('/images/mvip.png')" : item?.promotion === 'coin' ? "url('/images/mcoin.png')" : "url('/images/mfree.png')",
+                                                                position: 'absolute',
+                                                                right: 0,
+                                                                top: 0,
+                                                                zIndex: 8
+                                                            }
                                                         }}
                                                         image={item.avatar.thumb_url}
                                                         alt="Live from space album cover"
                                                     />
                                                 </Box>
-                                                <Box sx={{ display: 'flex', flexDirection: 'column', maxWidth: '70%' }}>
+                                                <Box
+                                                    sx={{
+                                                        display: 'flex',
+                                                        flexDirection: 'column',
+                                                        maxWidth: isSm ? '60%' : '70%'
+                                                    }}
+                                                >
                                                     <CardContent sx={{
                                                         ...flexStyle('center', 'flex-start'),
                                                         flexDirection: 'column',
                                                         flex: '1 0 auto',
-                                                        rowGap: '6px'
+                                                        rowGap: '6px',
+                                                        ...(isSm && { p: 0 })
                                                     }}
                                                     >
                                                         <Typography
                                                             onClick={() => { handleClickPlaylist(item?.id) }}
                                                             sx={{
-                                                                ...TEXT_STYLE.title1,
+                                                                ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.title1),
                                                                 color: COLORS.white,
                                                                 whiteSpace: 'break-spaces'
                                                             }}
@@ -429,7 +485,7 @@ export default function Cart() {
                                                         </Typography>
                                                         <Typography
                                                             sx={{
-                                                                ...TEXT_STYLE.content2,
+                                                                ...(isSm ? TEXT_STYLE.content3 : TEXT_STYLE.content2),
                                                                 color: COLORS.contentIcon,
                                                                 whiteSpace: 'break-spaces'
                                                             }}
@@ -438,7 +494,7 @@ export default function Cart() {
                                                         </Typography>
                                                         <Typography
                                                             sx={{
-                                                                ...TEXT_STYLE.content2,
+                                                                ...(isSm ? TEXT_STYLE.content3 : TEXT_STYLE.content2),
                                                                 color: COLORS.contentIcon
                                                             }}
                                                         >
@@ -475,7 +531,7 @@ export default function Cart() {
                                                         >{formatPrice(item.pay_price)}đ</Typography>
                                                     )
                                                 }
-                                                <DeleteIcon onClick={() => { handleRemoveItem(item.id) }} sx={{ color: COLORS.contentIcon }} />
+                                                <Trash onClick={() => { handleRemoveItem(item.id) }} />
                                             </ListItemIcon>
                                         </MenuItem>
                                     ))
@@ -492,11 +548,11 @@ export default function Cart() {
                             }}
                         >
                             {
-                                selectedItem.length > 0 && (
+                                (selectedItem.length > 0 && selectedItem[0].type !== 'vip_package') && (
                                     <Box>
                                         <Typography
                                             sx={{
-                                                ...TEXT_STYLE.h3,
+                                                ...(isSm ? TEXT_STYLE.title1 : TEXT_STYLE.h3),
                                                 color: COLORS.white,
                                                 mb: '32px',
                                                 textAlign: 'left'
@@ -505,7 +561,7 @@ export default function Cart() {
                                         <FormControl fullWidth>
                                             <Typography
                                                 sx={{
-                                                    ...TEXT_STYLE.content1,
+                                                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                                     color: COLORS.contentIcon,
                                                     mb: '16px',
                                                     textAlign: 'left'
@@ -521,7 +577,7 @@ export default function Cart() {
                                                 }}
                                                 onChange={() => { console.log(1) }}
                                                 sx={{
-                                                    ...TEXT_STYLE.title1,
+                                                    ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                                                     color: COLORS.white,
                                                     '& .MuiOutlinedInput-input': {
                                                         padding: '14px'
@@ -549,13 +605,13 @@ export default function Cart() {
                                         >
                                             <Typography
                                                 sx={{
-                                                    ...TEXT_STYLE.content1,
+                                                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                                     color: COLORS.contentIcon
                                                 }}
                                             >Số tiền</Typography>
                                             <Typography
                                                 sx={{
-                                                    ...TEXT_STYLE.h2,
+                                                    ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                                     color: COLORS.white
                                                 }}
                                             >{formatPrice(totalPrice)}đ</Typography>
@@ -581,13 +637,15 @@ export default function Cart() {
                                                     width: '80%',
                                                     border: `1px solid ${COLORS.placeHolder}`,
                                                     height: '50px',
+                                                    borderTopLeftRadius: '4px',
+                                                    borderBottomLeftRadius: '4px',
                                                     'input': {
                                                         padding: '13px 18px'
                                                     }
                                                 }}
                                                 value={discountCode}
                                                 onChange={handleInputDiscountCode}
-                                                placeholder="Nhập mã giảm giá (Nếu có)"
+                                                placeholder="Nhập mã giảm giá (nếu có)"
                                                 autoComplete="off"
                                                 inputProps={{ 'aria-label': 'discount-code' }}
                                             />
@@ -600,7 +658,9 @@ export default function Cart() {
                                                     ...TEXT_STYLE.title2,
                                                     color: COLORS.white,
                                                     height: '100%',
-                                                    borderRadius: 0
+                                                    borderRadius: 0,
+                                                    borderTopRightRadius: '4px',
+                                                    borderBottomRightRadius: '4px',
                                                 }}
                                             >Sử dụng</Button>
                                         </Paper>
@@ -633,19 +693,16 @@ export default function Cart() {
                                 )
                             }
 
-                            <Box
-                                sx={{
-                                    mt: '32px'
-                                }}
-                            >
+                            <Box>
                                 <Box
                                     sx={{
-                                        ...flexStyle('space-between', 'center')
+                                        ...flexStyle('space-between', 'flex-start'),
+                                        mt: isSm ? '35px' : '32px'
                                     }}
                                 >
                                     <Typography
                                         sx={{
-                                            ...TEXT_STYLE.content1,
+                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                             color: COLORS.contentIcon
                                         }}
 
@@ -659,7 +716,7 @@ export default function Cart() {
                                     >
                                         <Typography
                                             sx={{
-                                                ...TEXT_STYLE.h2,
+                                                ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                                                 color: COLORS.white
                                             }}
                                         >{formatPrice(finalPrice)}đ</Typography>
@@ -685,7 +742,7 @@ export default function Cart() {
                                     }}
                                     onClick={handlePayment}
                                 >
-                                    Thanh toán
+                                    Tiến hành thanh toán
                                 </Button>
                                 {
                                     selectedItem.length > 0 && (
@@ -697,7 +754,7 @@ export default function Cart() {
                                                 sx={{
                                                     ...TEXT_STYLE.content2,
                                                     color: COLORS.white,
-                                                    textAlign: 'right',
+                                                    textAlign: isSm ? 'center' : 'right',
                                                     mt: '24px',
                                                     cursor: 'pointer'
                                                 }}
@@ -715,7 +772,7 @@ export default function Cart() {
             }
 
             {
-                cart.length === 0 && (
+                fetchCartDone && cart.length === 0 && (
                     <Box
                         sx={{
                             textAlign: 'center',
@@ -837,6 +894,6 @@ export default function Cart() {
                     </Button>
                 </DialogActions>
             </Dialog>
-        </Box>
+        </Box >
     )
 }

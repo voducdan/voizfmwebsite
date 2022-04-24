@@ -159,8 +159,10 @@ export default class API {
         return this.init().get('/profiles/combo_packages');
     }
 
-    getListeningPlaylists = () => {
-        return this.init().get(`/playlists/listenings`);
+    getListeningPlaylists = (page = 1, limit = 9999999) => {
+        const params = { page, limit };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/playlists/listenings?$${queryString}`);
     }
 
     addListeningPlaylists = (audioId, lastDuration, playlistId) => {

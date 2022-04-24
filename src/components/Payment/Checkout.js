@@ -312,7 +312,7 @@ export default function Checkout() {
                                         >
                                             <Typography
                                                 sx={{
-                                                    ...TEXT_STYLE.content1,
+                                                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                                                     color: COLORS.contentIcon
                                                 }}
 
@@ -325,8 +325,10 @@ export default function Checkout() {
                                             >
                                                 <ListItemText
                                                     sx={{
-                                                        ...TEXT_STYLE.content2,
-                                                        color: COLORS.white
+                                                        color: COLORS.white,
+                                                        'span': {
+                                                            ...TEXT_STYLE.content2
+                                                        }
                                                     }}
                                                     primary={expandBill ? "Thu gọn" : "Xem thông tin"}
                                                 />

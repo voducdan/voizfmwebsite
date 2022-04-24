@@ -91,10 +91,13 @@ const CartIcon = (props) => {
         <Box
             onClick={handleClickCartIcon}
             key={idx}
+            sx={{
+                cursor: 'pointer'
+            }}
         >
             <Tooltip open={Boolean(addToCartFlag)} title="Thêm vào giỏ hàng thành công!">
                 <Badge badgeContent={numItemsInCart || 0} color="error">
-                    <ShoppingCartOutlinedIcon sx={{ color: COLORS.contentIcon }} />
+                    <Cart />
                 </Badge>
             </Tooltip>
         </Box>

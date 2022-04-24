@@ -281,6 +281,9 @@ export default function SidebarMenu() {
         >
             <Box
                 onClick={handleClickLogo}
+                sx={{
+                    cursor: 'pointer'
+                }}
             >
                 <Logo windowWidth={windowSize.width} />
             </Box>

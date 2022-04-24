@@ -130,8 +130,9 @@ export default function FAQ() {
             </Box>
             <Box
                 sx={{
-                    width: '80%',
-                    margin: '32px auto 0 auto',
+                    width: '100%',
+                    p: isSm ? '32px 16px 0 16px' : '32px 160px 0 160px',
+                    boxSizing: 'border-box',
                     ...flexStyle('space-between', 'center')
                 }}
             >
@@ -172,6 +173,9 @@ export default function FAQ() {
                 <a
                     href='http://m.me/VoizFM'
                     target='_blank'
+                    style={{
+                        textDecoration: 'none'
+                    }}
                 >
                     <Button
                         sx={{
@@ -189,7 +193,11 @@ export default function FAQ() {
                     </Button>
                 </a>
             </Box>
-            <Divider sx={{ width: '90%', margin: 'auto', borderColor: COLORS.blackStroker }} />
+            {
+                !isSm && (
+                    <Divider sx={{ width: '90%', margin: 'auto', borderColor: COLORS.blackStroker }} />
+                )
+            }
         </Box>
     )
 }

@@ -61,6 +61,7 @@ const VipPackagePaper = (props) => {
                 bgcolor: bgcolor,
                 height: `${height}px`,
                 borderRadius: '10px',
+                cursor: 'pointer',
                 ...(idx === selectedPackage && { border: '2px solid #F68C2D' })
             }}
             elevation={elevation}>
@@ -86,7 +87,7 @@ const VipPackagePaper = (props) => {
             >{formatPrice(data.price)}đ</Typography>
             <Typography
                 sx={{
-                    ...(isSm ? TEXT_STYLE.VZ_Text_content : TEXT_STYLE.h2),
+                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h2),
                     color: isSm ? COLORS.white : COLORS.contentIcon,
                     textAlign: 'center',
                     mt: isSm ? '5px' : '16px'
@@ -194,6 +195,7 @@ export default function VipPackage() {
     const handleRegisterVip = () => {
         const paymentData = {
             selectedItem: [{
+                type: 'vip_package',
                 id: vipPackages[selectedPackage]['id'],
                 name: vipPackages[selectedPackage]['name'],
                 pay_price: vipPackages[selectedPackage]['price']
@@ -217,11 +219,11 @@ export default function VipPackage() {
             >
                 <Typography
                     sx={{
-                        ...TEXT_STYLE.h1,
+                        ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
                         color: COLORS.white,
                         textAlign: 'center'
                     }}
-                >Các gói thành viên VIP</Typography>
+                >Gói thành viên VIP</Typography>
             </Box>
             <Box
                 sx={{
@@ -282,13 +284,13 @@ export default function VipPackage() {
             >
                 <Typography
                     sx={{
-                        ...TEXT_STYLE.title1,
+                        ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
                         color: COLORS.white
                     }}
                 >Nghe thoải mái *, trừ dần theo thực tế sử dụng</Typography>
                 <Typography
                     sx={{
-                        ...TEXT_STYLE.content1,
+                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                         color: COLORS.VZ_Text_content,
                         mt: '8px'
                     }}
@@ -299,7 +301,7 @@ export default function VipPackage() {
                 >
                     <Typography
                         sx={{
-                            ...TEXT_STYLE.content1,
+                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                             color: COLORS.bg4,
                             mt: '40px',
                             mb: '80px',

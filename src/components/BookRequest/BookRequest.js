@@ -123,13 +123,16 @@ export default function BookRequest() {
                         }}
                     >Đề nghị sách</Typography>
                 </Box>
-                <Box>
+                <Box
+                    sx={{
+                        mt: isSm ? '14px' : '26px',
+                        mb: isSm ? '65px' : '108px'
+                    }}
+                >
                     <Typography
                         sx={{
                             ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
-                            color: COLORS.white,
-                            mt: isSm ? '18px' : '26px',
-                            mb: isSm ? '65px' : '108px'
+                            color: COLORS.white
                         }}
                     >Vui lòng nhập tựa sách bạn muốn yêu cầu</Typography>
                 </Box>
@@ -150,7 +153,7 @@ export default function BookRequest() {
                                 fontWeight: 500,
                                 fontSize: '1rem',
                                 lineHeight: '20px',
-                                pb: '24px',
+                                pb: isSm ? '10px' : '4px',
                                 'input': {
                                     ml: '8px',
                                 },

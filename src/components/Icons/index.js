@@ -62,6 +62,7 @@ import AccessTime from './AccessTime';
 import Pencil1 from './Pencil1';
 import Send from './Send';
 import AccountCircle from './AccountCircle';
+import Trash from './Trash';
 
 export {
     Bookmark,
@@ -127,5 +128,6 @@ export {
     AccessTime,
     Pencil1,
     Send,
-    AccountCircle
+    AccountCircle,
+    Trash
 }

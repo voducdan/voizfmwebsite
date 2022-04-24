@@ -17,11 +17,10 @@ import {
     Snackbar,
     Alert
 } from '@mui/material';
-import DeleteIcon from '@mui/icons-material/Delete';
 
 // import others components
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail'
-import { AccessTime } from '../../components/Icons/index'
+import { AccessTime, Trash } from '../../components/Icons/index'
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle'
@@ -258,7 +257,7 @@ export default function AudioLike() {
                                 color: COLORS.white,
                                 textTransform: 'none'
                             }}
-                            endIcon={<DeleteIcon fontSize="small" sx={{ color: COLORS.VZ_Text_content }} />}
+                            endIcon={<Trash fontSize="small" />}
                         >Xóa tất cả</Button>
                     )
                 }
