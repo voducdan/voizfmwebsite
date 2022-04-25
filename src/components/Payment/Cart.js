@@ -101,7 +101,7 @@ export default function Cart() {
     }, []);
 
     useEffect(() => {
-        const { resultCode, errorCode, partnerCode, vnp_BankCode, vnp_ResponseCode } = navigate.query || {};
+        const { resultCode, errorCode, partnerCode, vnp_BankTranNo, vnp_ResponseCode } = navigate.query || {};
         let message = '';
         if (!resultCode && !vnp_ResponseCode && !errorCode) {
             return;
@@ -112,13 +112,13 @@ export default function Cart() {
             localStorage.removeItem('paymentData');
         }
         if (!JSON.parse(localStorage.getItem('notified'))) {
-            if (vnp_BankCode === 'VNPAY') {
+            if (vnp_BankTranNo && vnp_BankTranNo.startsWith('VNP')) {
                 message = messages['vnpay'][vnp_ResponseCode];
             }
-            else if (partnerCode === 'APPOTAPAY') {
+            else if (partnerCode && partnerCode === 'APPOTAPAY') {
                 message = messages['appota'][resultCode] || messages['appota'][errorCode]
             }
-            else if (partnerCode.startsWith('MOMO')) {
+            else if (partnerCode && partnerCode.startsWith('MOMO')) {
                 message = messages['momo'][resultCode]
             }
             setIsPaymentFinish(true);

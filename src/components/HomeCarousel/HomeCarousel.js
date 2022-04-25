@@ -68,7 +68,7 @@ export default function HomeCarousel() {
         async function fetchBannerImages() {
             const res = await api.getBannerImages();
             const data = await res.data.data;
-            setImages([...data, ...data]);
+            setImages([...data]);
         }
 
         fetchBannerImages();
@@ -77,10 +77,10 @@ export default function HomeCarousel() {
     const handleChangeSliceClick = (isNext) => {
         let newCurrent = null;
         if (isNext) {
-            newCurrent = current < (images.length - 1) ? current + 1 : current;
+            newCurrent = current < (images.length - 1) ? current + 1 : current === images.length - 1 ? 0 : current;
         }
         else {
-            newCurrent = current > 0 ? current - 1 : current;
+            newCurrent = current > 0 ? current - 1 : current === 0 ? images.length - 1 : current;
         }
         setCurrent(newCurrent);
     }
@@ -93,6 +93,10 @@ export default function HomeCarousel() {
 
     const handleBannerSlideChange = (e) => {
         const realIndex = Number(e.realIndex);
+        if (realIndex === images.length - 1) {
+            setCurrent(0);
+            return;
+        }
         setCurrent(realIndex);
     }
 
@@ -119,6 +123,7 @@ export default function HomeCarousel() {
                 {images.map((i, idx) => (
                     <Link
                         href={parseDeepLink(i)}
+                        key={idx}
                     >
                         <img
                             style={{
@@ -131,7 +136,6 @@ export default function HomeCarousel() {
                                 cursor: 'pointer'
                             }}
                             alt={i?.image?.id}
-                            key={idx}
                             src={i?.image?.original_url}
                         />
                     </Link>
@@ -140,8 +144,7 @@ export default function HomeCarousel() {
             <Box
                 sx={{
                     position: 'absolute',
-                    width: isSm ? '80%' : '30%',
-                    minWidth: isSm ? '288px' : '452px',
+                    width: isSm ? '288px' : '452px',
                     bottom: 33,
                     display: 'flex',
                     justifyContent: 'flex-end',
@@ -154,6 +157,7 @@ export default function HomeCarousel() {
                     width: '100%'
                 }}>
                     <Swiper
+                        loop={true}
                         autoplay={{
                             delay: 5000,
                             disableOnInteraction: false
@@ -180,8 +184,7 @@ export default function HomeCarousel() {
                             >
                                 <img
                                     style={{
-                                        width: '100%',
-                                        maxWidth: isSm ? 65 : 95,
+                                        width: isSm ? '65px' : '95px',
                                         marginRight: '16px',
                                         height: isSm ? 35 : 45,
                                         ...(idx === 0 && { marginLeft: 0 }),
@@ -197,7 +200,8 @@ export default function HomeCarousel() {
                         ))}
                     </Swiper>
                     <div
-                        onClick={() => { handleChangeSliceClick(true) }}
+                        id='next'
+                        onClick={() => { handleChangeSliceClick(false) }}
                         style={{
                             ...SwiperBtnPrev({ isSm })
                         }}
@@ -206,7 +210,8 @@ export default function HomeCarousel() {
                         <CarouselNext />
                     </div>
                     <div
-                        onClick={() => { handleChangeSliceClick(false) }}
+                        id='prev'
+                        onClick={() => { handleChangeSliceClick(true) }}
                         style={{
                             ...SwiperBtnNext({ isSm })
                         }}

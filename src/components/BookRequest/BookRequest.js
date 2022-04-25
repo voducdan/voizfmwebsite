@@ -75,7 +75,7 @@ export default function BookRequest() {
     const handleSendRequest = async () => {
         const res = await api.requestedBook({ body: requestName })
         const data = await res.data.data;
-        const tmpRequestedBooks = [data, ...requestedBooks];
+        const tmpRequestedBooks = [...requestedBooks, data];
         setRequestedBooks(tmpRequestedBooks);
         setRequestSuccess(true);
         setRequestName('');
@@ -203,7 +203,7 @@ export default function BookRequest() {
                                         ...TEXT_STYLE.content1,
                                         color: COLORS.white
                                     }}
-                                >Nội dung bạn yêu cầu đã được gửi</Typography>
+                                >Nội dung bạn yêu cầu đã được gửi.</Typography>
                             </Box>
                         )
                     }
