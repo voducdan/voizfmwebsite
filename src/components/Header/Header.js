@@ -1,6 +1,9 @@
 // Import react module
 import { useEffect, useState, useCallback } from 'react';
 
+// import universal cookie
+import Cookies from 'universal-cookie';
+
 // import redux
 import { useSelector, useDispatch } from 'react-redux';
 
@@ -38,7 +41,6 @@ import {
 } from '@mui/material';
 import SearchIcon from '@mui/icons-material/Search';
 import ClearIcon from '@mui/icons-material/Clear';
-import ShoppingCartOutlinedIcon from '@mui/icons-material/ShoppingCartOutlined';
 import LogoutIcon from '@mui/icons-material/Logout';
 
 // Import utils
@@ -143,6 +145,7 @@ const AppBar = styled(MuiAppBar, {
 
 function Header({ router }) {
     const api = new API();
+    const cookies = new Cookies();
     const windowSize = useWindowSize();
     const pathname = router.pathname;
     const search = router.search;
@@ -366,6 +369,7 @@ function Header({ router }) {
         try {
             if (user) {
                 await api.trackingAudio(audioListenings);
+                cookies.remove('token');
                 dispatch(removeToken());
                 removeAudioListenings();
             }

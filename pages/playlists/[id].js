@@ -34,8 +34,9 @@ const PlaylistDetailPage = ({ playlist }) => {
 }
 
 export async function getServerSideProps(context) {
-    const api = new API();
     const { params } = context;
+    const { token } = context.req.cookies;
+    const api = new API(token);
     let playlist = null;
     try {
         const res = await api.getPlaylistDetail(params.id);

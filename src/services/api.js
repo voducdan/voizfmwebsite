@@ -4,14 +4,14 @@ import { getToken } from './authentication';
 import Sha256Encrypt from '../utils/sha256';
 
 export default class API {
-    constructor() {
-        this.api_token = getToken();
+    constructor(token) {
+        this.api_token = token || getToken();
         this.client = null;
         this.base_url = `${process.env.NEXT_PUBLIC_API_PROTOCAL}://${process.env.NEXT_PUBLIC_BASE_URL}`;
     }
 
-    init = (token, xSignature) => {
-        this.api_token = token || getToken();
+
+    init = (xSignature) => {
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         this.xSignature = xSignature;
@@ -53,7 +53,7 @@ export default class API {
             content += `&access_token=${this.api_token}`
         }
         const xSignature = Sha256Encrypt(content);
-        return this.init(null, xSignature).get(`/web/audios/${id}/files`)
+        return this.init(xSignature).get(`/web/audios/${id}/files`)
     }
 
     getAudioHls = (url) => {

@@ -4,6 +4,9 @@ import { useState, useEffect } from 'react';
 // import next router
 import { useRouter } from 'next/router';
 
+// import universal cookie
+import Cookies from 'universal-cookie';
+
 // import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenLogin, handleCloseLogin, setOpenLogin } from '../../redux/openLogin';
@@ -92,6 +95,7 @@ const textFieldStyle = {
 
 export default function Login() {
     const api = new API();
+    const cookies = new Cookies(); 
 
     const navigate = useRouter();
 
@@ -226,6 +230,7 @@ export default function Login() {
             setAccessToken(accessToken);
             if (data.data['verification']) {
                 dispatch(setToken(accessToken));
+                cookies.set('token', accessToken);
                 setStep(4);
                 return;
             }
@@ -264,6 +269,7 @@ export default function Login() {
             }
             setStep(4);
             dispatch(setToken(accessToken));
+            cookies.set('token', accessToken);
         }
         catch (err) {
             setHasError(true);
@@ -318,6 +324,7 @@ export default function Login() {
                     console.log(err)
                 }
                 dispatch(setToken(accessToken));
+                cookies.set('token', accessToken);
                 setStep(null);
                 dispatch(handleCloseLogin());
                 return;
@@ -354,6 +361,7 @@ export default function Login() {
                     console.log(err)
                 }
                 dispatch(setToken(accessToken));
+                cookies.set('token', accessToken);
                 setStep(null);
                 dispatch(handleCloseLogin());
                 return;
@@ -395,6 +403,7 @@ export default function Login() {
             console.log(err)
         }
         dispatch(setToken(accessToken));
+        cookies.set('token', accessToken);
         setStep(null);
         dispatch(handleCloseLogin());
     }
