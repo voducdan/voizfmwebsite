@@ -69,7 +69,8 @@ const RandomPlayList = (props) => {
                 bgcolor: COLORS.bg2,
                 height: height,
                 borderRadius: '4px',
-                columnGap: isSm ? '11px' : '18px'
+                columnGap: isSm ? '11px' : '18px',
+                p: '4px'
             }}
         >
 

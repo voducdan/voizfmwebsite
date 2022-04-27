@@ -438,14 +438,11 @@ export default function Cart() {
                                                             />
                                                         </ListItemIcon>
                                                     )}
-                                                    <CardMedia
-                                                        onClick={() => { handleClickPlaylist(item?.id) }}
-                                                        component="img"
+                                                    <Box
                                                         sx={{
                                                             width: isSm ? '56px' : '83px',
                                                             height: isSm ? '56px' : '83px',
                                                             position: 'relative',
-                                                            borderRadius: '3px',
                                                             '&::before': {
                                                                 content: item?.promotion.includes('vip') ? "url('/images/mvip.png')" : item?.promotion === 'coin' ? "url('/images/mcoin.png')" : "url('/images/mfree.png')",
                                                                 position: 'absolute',
@@ -454,9 +451,19 @@ export default function Cart() {
                                                                 zIndex: 8
                                                             }
                                                         }}
-                                                        image={item.avatar.thumb_url}
-                                                        alt="Live from space album cover"
-                                                    />
+                                                    >
+                                                        <CardMedia
+                                                            onClick={() => { handleClickPlaylist(item?.id) }}
+                                                            component="img"
+                                                            sx={{
+                                                                width: '100%',
+                                                                height: '100%',
+                                                                borderRadius: '3px'
+                                                            }}
+                                                            image={item.avatar.thumb_url}
+                                                            alt="Live from space album cover"
+                                                        />
+                                                    </Box>
                                                 </Box>
                                                 <Box
                                                     sx={{
@@ -470,7 +477,10 @@ export default function Cart() {
                                                         flexDirection: 'column',
                                                         flex: '1 0 auto',
                                                         rowGap: '6px',
-                                                        ...(isSm && { p: 0 })
+                                                        ...(isSm && { p: 0 }),
+                                                        ':last-child': {
+                                                            pb: '16px'
+                                                        }
                                                     }}
                                                     >
                                                         <Typography
@@ -504,11 +514,11 @@ export default function Cart() {
                                                 </Box>
                                             </Card>
                                             <ListItemIcon
+                                                // onClick={() => { console.log(1111) }}
                                                 sx={{
                                                     alignItems: 'center',
-                                                    columnGap: isSm ? '8px' : '50px',
                                                     width: '20%',
-                                                    justifyContent: 'flex-end'
+                                                    justifyContent: 'space-between'
                                                 }}
                                             >
                                                 {
@@ -531,7 +541,11 @@ export default function Cart() {
                                                         >{formatPrice(item.pay_price)}đ</Typography>
                                                     )
                                                 }
-                                                <Trash onClick={() => { handleRemoveItem(item.id) }} />
+                                                <Box
+                                                    onClick={() => { handleRemoveItem(item.id) }}
+                                                >
+                                                    <Trash />
+                                                </Box>
                                             </ListItemIcon>
                                         </MenuItem>
                                     ))
@@ -670,7 +684,7 @@ export default function Cart() {
                                                     sx={{
                                                         mt: '8px',
                                                         ...TEXT_STYLE.title2,
-                                                        color: COLORS.white,
+                                                        color: isDiscountCodeValid ? COLORS.white : COLORS.error,
                                                         fontWeight: 400,
                                                     }}
                                                 >
@@ -679,7 +693,7 @@ export default function Cart() {
                                                         style={{
                                                             fontWeight: '700!important',
                                                             ...TEXT_STYLE.title2,
-                                                            color: COLORS.white,
+                                                            color: isDiscountCodeValid ? COLORS.white : COLORS.error,
                                                             wordBreak: 'break-all'
                                                         }}
                                                     >

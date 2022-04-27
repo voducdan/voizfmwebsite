@@ -7,6 +7,7 @@ import { selectOpenSidebar, setOpen } from '../../redux/openSidebar';
 import { selectToken } from '../../redux/token';
 import { setOpenLogin } from '../../redux/openLogin';
 import { selectUser } from '../../redux/user';
+import { selectOpenPlayBar } from '../../redux/playAudio';
 
 // import next router
 import { useRouter } from 'next/router';
@@ -54,9 +55,8 @@ import Logo from '../Logo/Logo';
 import { COLORS, TEXT_STYLE, FONT_COLOR, DRAWER_WIDTH, HEADER_HEIGHT, SCREEN_BREAKPOINTS, HEADER_HEIGHT_MB } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import useWindowSize from '../../utils/useWindowSize';
-import { includes } from 'lodash';
 
-const RequestsBook = ({ handleClickRequestBook }) => (
+const RequestsBook = ({ isSm, openPlaybar, handleClickRequestBook }) => (
     <Button
         onClick={handleClickRequestBook}
         sx={{
@@ -66,7 +66,10 @@ const RequestsBook = ({ handleClickRequestBook }) => (
             height: '48px',
             width: '188px',
             textTransform: 'inherit',
-            ...TEXT_STYLE.content1
+            ...TEXT_STYLE.content1,
+            ...(openPlaybar && {
+                mb: isSm ? '300px' : '120px',
+            })
         }}
         variant="contained"
         startIcon={Book()}>
@@ -86,6 +89,7 @@ export default function SidebarMenu() {
     const openSidebar = useSelector(selectOpenSidebar);
     const token = useSelector(selectToken);
     const user = useSelector(selectUser);
+    const openPlaybar = useSelector(selectOpenPlayBar);
     const dispatch = useDispatch();
 
     let open = openSidebar
@@ -371,6 +375,8 @@ export default function SidebarMenu() {
             </List>
             <Box>
                 <RequestsBook
+                    isSm={isSm}
+                    openPlaybar={openPlaybar}
                     handleClickRequestBook={handleClickRequestBook}
                 />
             </Box>

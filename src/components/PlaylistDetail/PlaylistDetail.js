@@ -248,6 +248,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
     const handleBookmark = () => {
         async function bookmarkPlaylist() {
+            if (!user) {
+                dispatch(setOpenLogin(true));
+                return;
+            }
             try {
                 const res = await api.bookmarkPlaylist(playlist.id);
                 const data = await res.data;

@@ -302,7 +302,8 @@ const SearchResult = (props) => {
                                             sx={{
                                                 width: isSm ? '40px' : '100px',
                                                 height: isSm ? '40px' : '100px',
-                                                position: 'relative'
+                                                position: 'relative',
+                                                cursor: 'pointer'
                                             }}
                                         >
                                             <img
@@ -354,7 +355,8 @@ const SearchResult = (props) => {
                                                             textOverflow: 'ellipsis',
                                                             WebkitLineClamp: 1,
                                                             WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden'
+                                                            overflow: 'hidden',
+                                                            cursor: 'pointer'
                                                         }}
                                                     >
                                                         {i?.name}
@@ -429,7 +431,8 @@ const SearchResult = (props) => {
                                             sx={{
                                                 width: isSm ? '40px' : '100px',
                                                 height: isSm ? '40px' : '100px',
-                                                position: 'relative'
+                                                position: 'relative',
+                                                cursor: 'pointer'
                                             }}
                                         >
                                             <img
@@ -481,7 +484,8 @@ const SearchResult = (props) => {
                                                             textOverflow: 'ellipsis',
                                                             WebkitLineClamp: 1,
                                                             WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden'
+                                                            overflow: 'hidden',
+                                                            cursor: 'pointer'
                                                         }}
                                                     >
                                                         {i?.name}
@@ -508,7 +512,9 @@ function Search() {
     const [searchMeta, setSearchMeta] = useState({});
     const [resetStateFlag, setResetStateFlag] = useState(false);
     const queryParams = useQuery();
+    const router = useRouter();
     const searchKey = queryParams.get('searchKey');
+    const tab = queryParams.get('type');
     const NUMBER_ITEMS_PER_LINE = isSm ? 3 : 5;
     const SIDE_PADDING = 48;
     const SPACE_BETWEEN = isSm ? 16 : 24;
@@ -534,6 +540,11 @@ function Search() {
 
     useEffect(() => {
         updateRecentlyKeywords();
+        if (tab) {
+            setType(tab);
+        } else {
+            setType('playlists')
+        }
     }, []);
 
     const fetchSearchResult = async (params) => {
@@ -574,6 +585,13 @@ function Search() {
     }
 
     const handleClickSearchTab = (type) => {
+        router.push(
+            {
+                pathname: router.pathname,
+                query: { searchKey, type }
+            },
+            undefined, { shallow: true }
+        );
         setType(type);
     }
 
