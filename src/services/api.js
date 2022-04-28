@@ -11,7 +11,7 @@ export default class API {
     }
 
 
-    init = (xSignature) => {
+    init = (accessToken, xSignature) => {
         this.oauth2 = 'oauth2';
         this.oauth2_id = null;
         this.xSignature = xSignature;
@@ -20,10 +20,13 @@ export default class API {
             'Accept': 'application/json',
             'Access-Control-Allow-Credentials': true
         };
+        if (accessToken) {
+            this.headers['X-Authorization'] = accessToken;
+        }
+
         if (!!this.api_token) {
             this.headers['X-Authorization'] = this.api_token;
         };
-
         if (!!this.xSignature) {
             this.headers['X-Signature'] = this.xSignature;
         };
@@ -53,7 +56,7 @@ export default class API {
             content += `&access_token=${this.api_token}`
         }
         const xSignature = Sha256Encrypt(content);
-        return this.init(xSignature).get(`/web/audios/${id}/files`)
+        return this.init(null, xSignature).get(`/web/audios/${id}/files`)
     }
 
     getAudioHls = (url) => {

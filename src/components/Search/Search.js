@@ -606,11 +606,13 @@ function Search() {
     }
 
     const updateRecentlyKeywords = () => {
+        if (!searchKey) {
+            return;
+        }
         let recentlyKeywork = getRecentlyKeywork() || [];
-        recentlyKeywork.push(searchKey);
-        recentlyKeywork = [...new Set(recentlyKeywork)];
-        if (recentlyKeywork.length > 5) {
-            recentlyKeywork = recentlyKeywork.slice(1);
+        recentlyKeywork = [...new Set([searchKey, ...recentlyKeywork])];
+        if (recentlyKeywork.length > 3) {
+            recentlyKeywork = recentlyKeywork.slice(0, 3);
         }
         setRecentlyKeywork(recentlyKeywork)
     }

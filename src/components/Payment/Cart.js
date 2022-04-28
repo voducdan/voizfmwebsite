@@ -257,7 +257,7 @@ export default function Cart() {
     }
 
     const handleInputDiscountCode = (e) => {
-        setDiscountCode(e.target.value);
+        setDiscountCode(e.target.value.trim());
         setCheckDiscountCode(false);
     }
 
@@ -283,7 +283,6 @@ export default function Cart() {
             }
             const res = await api.checkDiscountCode(discountData);
             const data = await res.data;
-            console.log(data);
             setIsDiscountCodeValid(true);
         }
         catch (err) {

@@ -78,6 +78,8 @@ const RandomPlayList = (props) => {
                 sx={{
                     position: 'relative',
                     borderRadius: '3px',
+                    width: height,
+                    height: height,
                     ...(promotion && {
                         '&::before': {
                             content: promotion === 'vip' ? "url('/images/dvip.png')" : promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",

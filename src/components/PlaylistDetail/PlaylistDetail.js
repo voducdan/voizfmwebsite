@@ -677,7 +677,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                     }}
                                                     onChange={(_, newValue) => { handleOpenRateModal(newValue) }}
                                                     name='desktop-content-rating'
-                                                    value={contentRating}
+                                                    value={0}
                                                     precision={1}
                                                 />
                                             </Box>
@@ -925,24 +925,36 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                             }}
                             component={Paper}>
                             <Table
-                                aria-label="playlist info tbl">
+                                aria-label="playlist info tbl"
+                                sx={{
+                                    width: 'auto'
+                                }}
+                            >
                                 <TableBody>
                                     {playlistInfo.map((row, idx) => (
                                         <TableRow
                                             key={idx}
-                                            sx={{ '&:last-child td, &:last-child th': { border: 0 } }}
+                                            sx={{
+                                                '&:last-child td, &:last-child th': {
+                                                    border: 0
+                                                },
+                                                width: '100%'
+                                            }}
                                         >
                                             <TableCell
                                                 sx={{
                                                     borderBottom: 'none',
                                                     padding: '0 10px 16px 0',
                                                     whiteSpace: 'nowrap',
+                                                    width: '30%',
+                                                    maxWidth: '70px',
                                                     ...(isSm && {
                                                         width: '10px'
                                                     })
 
                                                 }}
-                                                component="th" scope="row"
+                                            // component="th"
+                                            // scope="row"
                                             >
                                                 {row.label}
                                             </TableCell>

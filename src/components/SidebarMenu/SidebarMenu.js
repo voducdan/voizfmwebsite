@@ -12,9 +12,6 @@ import { selectOpenPlayBar } from '../../redux/playAudio';
 // import next router
 import { useRouter } from 'next/router';
 
-// import next link
-import Link from 'next/link';
-
 // import MUI components
 import {
     Divider,
@@ -131,7 +128,7 @@ export default function SidebarMenu() {
                 },
                 {
                     id: 6,
-                    icon: () => (<HeadphonesOutlinedIcon />),
+                    icon: ({ fill }) => (<HeadphonesOutlinedIcon sx={{ color: fill }} />),
                     text: 'Nội dung đang nghe',
                     url: 'listenings'
                 }

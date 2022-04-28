@@ -134,7 +134,7 @@ export default function BookRequest() {
                             ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h1),
                             color: COLORS.white
                         }}
-                    >Vui lòng nhập tựa sách bạn muốn yêu cầu</Typography>
+                    >Vui lòng nhập tựa sách bạn muốn yêu cầu.</Typography>
                 </Box>
                 <Box
                     sx={{
@@ -148,7 +148,7 @@ export default function BookRequest() {
                             value={requestName}
                             onChange={handleChange}
                             sx={{
-                                color: COLORS.placeHolder,
+                                color: COLORS.white,
                                 fontFamily: 'Mulish',
                                 fontWeight: 500,
                                 fontSize: '1rem',

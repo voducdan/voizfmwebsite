@@ -23,7 +23,9 @@ import {
     ListItemButton,
     ListItemText,
     Collapse,
-    Snackbar
+    Snackbar,
+    Paper,
+    InputBase
 } from '@mui/material';
 import EditIcon from '@mui/icons-material/Edit';
 import ArrowDropDownIcon from '@mui/icons-material/ArrowDropDown';
@@ -116,6 +118,9 @@ export default function Checkout() {
     const [isPaymentError, setIsPaymentError] = useState(false);
     const [paymentMethod, setPaymentMethod] = useState('shopee');
     const [prevPaymentInfo, setPrevPaymentInfo] = useState({});
+    const [checkDiscountCode, setCheckDiscountCode] = useState(false);
+    const [isDiscountCodeValid, setIsDiscountCodeValid] = useState(true);
+    const [discountCode, setDiscountCode] = useState('');
     const paymentData = useSelector(selectPaymentData);
     const cart = useSelector(selectCart);
     const dispatch = useDispatch();
@@ -174,6 +179,31 @@ export default function Checkout() {
             console.log(err);
             setIsPaymentError(true);
         }
+    }
+
+    const handleInputDiscountCode = (e) => {
+        setDiscountCode(e.target.value.trim());
+        setCheckDiscountCode(false);
+    }
+
+    const handleValidateDiscountCode = async () => {
+        try {
+            // call api to validate
+            const packageIds = prevPaymentInfo.selectedItem.map(i => i.id);
+            const discountData = {
+                package_id: packageIds,
+                coupon_code: discountCode,
+                package_type: 'plan_package'
+            }
+            const res = await api.checkDiscountCode(discountData);
+            const data = await res.data;
+            setIsDiscountCodeValid(true);
+        }
+        catch (err) {
+            setIsDiscountCodeValid(false);
+        }
+        setCheckDiscountCode(true);
+
     }
 
     return (
@@ -419,7 +449,80 @@ export default function Checkout() {
                                         }}
                                     >{formatPrice(prevPaymentInfo?.totalPrice)}đ</Typography>
                                 </Box>
-                                <Box
+                                <Paper
+                                    sx={{
+                                        display: 'flex',
+                                        alignItems: 'center',
+                                        width: '100%',
+                                        bgcolor: 'inherit',
+                                        boxShadow: 'none',
+                                        borderRadius: '4px',
+                                        height: '50px'
+                                    }}
+                                >
+                                    <InputBase
+                                        sx={{
+                                            ml: 1,
+                                            flex: 1,
+                                            ...TEXT_STYLE.content2,
+                                            color: COLORS.white,
+                                            margin: 0,
+                                            width: '80%',
+                                            border: `1px solid ${COLORS.placeHolder}`,
+                                            height: '50px',
+                                            borderTopLeftRadius: '4px',
+                                            borderBottomLeftRadius: '4px',
+                                            'input': {
+                                                padding: '13px 18px'
+                                            }
+                                        }}
+                                        value={discountCode}
+                                        onChange={handleInputDiscountCode}
+                                        placeholder="Nhập mã giảm giá (nếu có)"
+                                        autoComplete="off"
+                                        inputProps={{ 'aria-label': 'discount-code' }}
+                                    />
+                                    <Button
+                                        onClick={handleValidateDiscountCode}
+                                        sx={{
+                                            width: '20%',
+                                            textTransform: 'none',
+                                            bgcolor: COLORS.main,
+                                            ...TEXT_STYLE.title2,
+                                            color: COLORS.white,
+                                            height: '100%',
+                                            borderRadius: 0,
+                                            borderTopRightRadius: '4px',
+                                            borderBottomRightRadius: '4px',
+                                        }}
+                                    >Sử dụng</Button>
+                                </Paper>
+                                {
+                                    checkDiscountCode && (
+                                        <Box
+                                            sx={{
+                                                mt: '8px',
+                                                ...TEXT_STYLE.title2,
+                                                color: isDiscountCodeValid ? COLORS.white : COLORS.error,
+                                                fontWeight: 400,
+                                            }}
+                                        >
+                                            Mã giảm giá&nbsp;
+                                            <span
+                                                style={{
+                                                    fontWeight: '700!important',
+                                                    ...TEXT_STYLE.title2,
+                                                    color: isDiscountCodeValid ? COLORS.white : COLORS.error,
+                                                    wordBreak: 'break-all'
+                                                }}
+                                            >
+                                                {discountCode}
+                                            </span>
+                                            &nbsp;{isDiscountCodeValid ? '' : 'không'} hợp lệ.
+                                        </Box>
+                                    )
+                                }
+                                {/* <Box
                                     sx={{
                                         ...flexStyle('space-between', 'center'),
                                         mb: '24px'
@@ -437,11 +540,12 @@ export default function Checkout() {
                                             color: COLORS.white
                                         }}
                                     >{formatPrice(prevPaymentInfo?.totalPrice - prevPaymentInfo?.finalPrice)}đ</Typography>
-                                </Box>
+                                </Box> */}
                                 <Box
                                     sx={{
                                         ...flexStyle('space-between', 'center'),
-                                        mb: '24px'
+                                        mb: '24px',
+                                        mt: isSm ? '35px' : '32px'
                                     }}
                                 >
                                     <Typography

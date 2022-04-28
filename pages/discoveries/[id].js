@@ -11,7 +11,8 @@ const DiscoveryDetailPage = ({ discovery }) => {
 }
 
 export async function getServerSideProps(context) {
-    const api = new API();
+    const { token } = context.req.cookies;
+    const api = new API(token);
 
     const pageLimit = 10;
     const { params } = context;
