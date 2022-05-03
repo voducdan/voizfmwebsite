@@ -3,7 +3,7 @@
 import { useState, useEffect, useMemo } from 'react';
 
 // import next router
-import { useRouter, withRouter } from 'next/router';
+import { useRouter } from 'next/router';
 
 // import next link
 import Link from 'next/link';
@@ -36,11 +36,6 @@ import formatDuration from '../../utils/formatDuration';
 
 // import service
 import API from '../../services/api';
-
-function useQuery() {
-    const { query } = useRouter();
-    return useMemo(() => new URLSearchParams(query), [query]);
-}
 
 const tabs = [
     {
@@ -512,7 +507,6 @@ function Search() {
     const router = useRouter();
     const searchKey = router.query.searchKey;
     const tab = router.query.type;
-    console.log(tab)
     const NUMBER_ITEMS_PER_LINE = isSm ? 3 : 5;
     const SIDE_PADDING = isSm ? 16 : 48;
     const SPACE_BETWEEN = isSm ? 16 : 24;
@@ -538,12 +532,15 @@ function Search() {
 
     useEffect(() => {
         updateRecentlyKeywords();
+    }, []);
+
+    useEffect(() => {
         if (tab) {
             setType(tab);
         } else {
             setType('playlists')
         }
-    }, []);
+    }, [tab]);
 
 
     const fetchSearchResult = async (params) => {
@@ -756,4 +753,4 @@ function Search() {
     )
 }
 
-export default withRouter(Search)
+export default Search
