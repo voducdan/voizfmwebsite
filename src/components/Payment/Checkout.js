@@ -83,7 +83,7 @@ const paymentMethods = [
 
 
 const RadioLable = (props) => {
-    const { src, paymentMethod } = props;
+    const { src, paymentMethod, isSm } = props;
     return (
         <Box
             sx={{
@@ -100,7 +100,7 @@ const RadioLable = (props) => {
             />
             <Typography
                 sx={{
-                    ...TEXT_STYLE.content1,
+                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
                     color: COLORS.white
                 }}
             >{paymentMethod}</Typography>
@@ -188,6 +188,9 @@ export default function Checkout() {
 
     const handleValidateDiscountCode = async () => {
         try {
+            if (!discountCode) {
+                return;
+            }
             // call api to validate
             const packageIds = prevPaymentInfo.selectedItem.map(i => i.id);
             const discountData = {
@@ -292,7 +295,7 @@ export default function Checkout() {
                                                 checked={i.code === paymentMethod}
                                                 value={i.code}
                                                 control={<Radio />}
-                                                label={<RadioLable src={i.src} paymentMethod={i.name}
+                                                label={<RadioLable isSm={isSm} src={i.src} paymentMethod={i.name}
                                                 />}
                                             />
                                         ))
@@ -449,54 +452,58 @@ export default function Checkout() {
                                         }}
                                     >{formatPrice(prevPaymentInfo?.totalPrice)}đ</Typography>
                                 </Box>
-                                <Paper
-                                    sx={{
-                                        display: 'flex',
-                                        alignItems: 'center',
-                                        width: '100%',
-                                        bgcolor: 'inherit',
-                                        boxShadow: 'none',
-                                        borderRadius: '4px',
-                                        height: '50px'
-                                    }}
-                                >
-                                    <InputBase
-                                        sx={{
-                                            ml: 1,
-                                            flex: 1,
-                                            ...TEXT_STYLE.content2,
-                                            color: COLORS.white,
-                                            margin: 0,
-                                            width: '80%',
-                                            border: `1px solid ${COLORS.placeHolder}`,
-                                            height: '50px',
-                                            borderTopLeftRadius: '4px',
-                                            borderBottomLeftRadius: '4px',
-                                            'input': {
-                                                padding: '13px 18px'
-                                            }
-                                        }}
-                                        value={discountCode}
-                                        onChange={handleInputDiscountCode}
-                                        placeholder="Nhập mã giảm giá (nếu có)"
-                                        autoComplete="off"
-                                        inputProps={{ 'aria-label': 'discount-code' }}
-                                    />
-                                    <Button
-                                        onClick={handleValidateDiscountCode}
-                                        sx={{
-                                            width: '20%',
-                                            textTransform: 'none',
-                                            bgcolor: COLORS.main,
-                                            ...TEXT_STYLE.title2,
-                                            color: COLORS.white,
-                                            height: '100%',
-                                            borderRadius: 0,
-                                            borderTopRightRadius: '4px',
-                                            borderBottomRightRadius: '4px',
-                                        }}
-                                    >Sử dụng</Button>
-                                </Paper>
+                                {
+                                    (paymentData && paymentData.package_type === 'plan_package') && (
+                                        <Paper
+                                            sx={{
+                                                display: 'flex',
+                                                alignItems: 'center',
+                                                width: '100%',
+                                                bgcolor: 'inherit',
+                                                boxShadow: 'none',
+                                                borderRadius: '4px',
+                                                height: '50px'
+                                            }}
+                                        >
+                                            <InputBase
+                                                sx={{
+                                                    ml: 1,
+                                                    flex: 1,
+                                                    ...TEXT_STYLE.content2,
+                                                    color: COLORS.white,
+                                                    margin: 0,
+                                                    width: '80%',
+                                                    border: `1px solid ${COLORS.placeHolder}`,
+                                                    height: '50px',
+                                                    borderTopLeftRadius: '4px',
+                                                    borderBottomLeftRadius: '4px',
+                                                    'input': {
+                                                        padding: '13px 18px'
+                                                    }
+                                                }}
+                                                value={discountCode}
+                                                onChange={handleInputDiscountCode}
+                                                placeholder="Nhập mã giảm giá (nếu có)"
+                                                autoComplete="off"
+                                                inputProps={{ 'aria-label': 'discount-code' }}
+                                            />
+                                            <Button
+                                                onClick={handleValidateDiscountCode}
+                                                sx={{
+                                                    width: '20%',
+                                                    textTransform: 'none',
+                                                    bgcolor: COLORS.main,
+                                                    ...TEXT_STYLE.title2,
+                                                    color: COLORS.white,
+                                                    height: '100%',
+                                                    borderRadius: 0,
+                                                    borderTopRightRadius: '4px',
+                                                    borderBottomRightRadius: '4px',
+                                                }}
+                                            >Sử dụng</Button>
+                                        </Paper>
+                                    )
+                                }
                                 {
                                     checkDiscountCode && (
                                         <Box

@@ -125,8 +125,8 @@ export default function BookRequest() {
                 </Box>
                 <Box
                     sx={{
-                        mt: isSm ? '14px' : '26px',
-                        mb: isSm ? '65px' : '108px'
+                        mt: isSm ? '14px' : '24px',
+                        mb: isSm ? '59px' : '80px'
                     }}
                 >
                     <Typography
@@ -142,7 +142,10 @@ export default function BookRequest() {
                         position: 'relative'
                     }}
                 >
-                    <FormControl fullWidth sx={{ m: 1 }} variant="standard">
+                    <FormControl
+                        fullWidth
+                        variant="standard"
+                    >
                         <Input
                             placeholder='Nhập càng nhiều càng tốt nhé!'
                             value={requestName}
@@ -153,15 +156,30 @@ export default function BookRequest() {
                                 fontWeight: 500,
                                 fontSize: '1rem',
                                 lineHeight: '20px',
-                                pb: isSm ? '10px' : '4px',
+                                alignItems: 'flex-end',
+                                height: isSm ? '32px' : '48px',
+                                '::after': {
+                                    border: 'none'
+                                },
                                 'input': {
                                     ml: '8px',
+                                    p: 0
                                 },
                                 '::before': {
-                                    borderBottom: `1px solid ${COLORS.bg2}`
+                                    borderBottom: `1px solid ${COLORS.bg2}`,
+                                    bottom: isSm ? '-18px' : '-24px'
                                 }
                             }}
-                            startAdornment={<InputAdornment position="start"><Pencil1 /></InputAdornment>}
+                            startAdornment={
+                                <InputAdornment
+                                    position="start"
+                                    sx={{
+                                        height: '100%'
+                                    }}
+                                >
+                                    <Pencil1 />
+                                </InputAdornment>
+                            }
                             endAdornment={
                                 <InputAdornment
                                     onClick={handleSendRequest}
@@ -295,6 +313,7 @@ export default function BookRequest() {
                                             sx={{
                                                 ...TEXT_STYLE.content3,
                                                 color: COLORS.contentIcon,
+                                                textAlign: 'right',
                                                 pl: isSm ? '46px' : 0
                                             }}
                                         >{item?.published_at}</Typography>
@@ -311,6 +330,6 @@ export default function BookRequest() {
                     m: '227px 50px 0 50px'
                 }}
             />
-        </Box>
+        </Box >
     )
 }

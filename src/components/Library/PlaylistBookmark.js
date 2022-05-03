@@ -284,7 +284,8 @@ export default function PlaylistBookmark() {
                 }
                 const playlistBookmarksTmp = [...playlistBookmarks];
                 const playlistId = playlistBookmarksTmp.findIndex(i => i.id === id);
-                playlistBookmarksTmp[playlistId]['is_bookmark'] = !playlistBookmarksTmp[playlistId]['is_bookmark'];
+                // playlistBookmarksTmp[playlistId]['is_bookmark'] = !playlistBookmarksTmp[playlistId]['is_bookmark'];
+                playlistBookmarksTmp.splice(playlistId, 1);
                 setPlaylistBookmarks([...playlistBookmarksTmp]);
             }
             catch (err) {

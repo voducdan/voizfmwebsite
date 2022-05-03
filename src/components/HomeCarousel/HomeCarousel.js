@@ -103,8 +103,8 @@ export default function HomeCarousel() {
     const parseDeepLink = (i) => {
         const bannerType = i.banner_type;
         const id = i.deep_link.split('=')[1]
-        if (['playlist', 'channel', 'review', 'audio'].includes(bannerType)) {
-            return `/${bannerType === 'review' ? 'discoverie' : bannerType}s/${id}`
+        if (['playlist', 'channel', 'discovery', 'audio'].includes(bannerType)) {
+            return `/${bannerType === 'discovery' ? 'discoverie' : bannerType}s/${id}`
         }
         return '';
     }

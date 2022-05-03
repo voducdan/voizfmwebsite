@@ -283,6 +283,10 @@ export default function DiscoveryDetail({ discovery }) {
     }
 
     const handleComment = async () => {
+        if (!user) {
+            dispatch(setOpenLogin(true));
+            return;
+        }
         if (commentContent) {
             await sendComment(inlineDiscovery.id, { content: commentContent });
         }

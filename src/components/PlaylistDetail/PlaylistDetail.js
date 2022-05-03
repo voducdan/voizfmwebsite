@@ -67,7 +67,7 @@ import AddIcon from '@mui/icons-material/Add';
 import FilterListIcon from '@mui/icons-material/FilterList';
 
 // import icons
-import { Share, Play } from '../../components/Icons/index';
+import { Share, Play, StarEmpty, StarFill } from '../../components/Icons/index';
 
 
 // import other components
@@ -141,6 +141,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
     const [sortAsc, setSortAsc] = useState(false);
     const [audioId, setudioId] = useState(null);
+    const [hoverRating, setHoverRating] = useState(false);
 
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
@@ -667,17 +668,18 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                                 <Rating
                                                     sx={{
                                                         mr: '10px',
-                                                        '& .MuiRating-iconEmpty': {
-                                                            color: COLORS.contentIcon
-                                                        },
                                                         '& .MuiRating-icon': {
                                                             ml: isSm ? '22px' : '24px',
                                                             transform: 'scale(1)'
                                                         }
                                                     }}
+                                                    emptyIcon={<StarEmpty fill={COLORS.contentIcon} />}
+                                                    icon={<StarFill fill={(contentRating > 0 || hoverRating) ? '#F68C2D' : COLORS.contentIcon} />}
                                                     onChange={(_, newValue) => { handleOpenRateModal(newValue) }}
+                                                    onMouseOver={() => { setHoverRating(true) }}
+                                                    onMouseOut={() => { setHoverRating(false) }}
                                                     name='desktop-content-rating'
-                                                    value={0}
+                                                    value={contentRating}
                                                     precision={1}
                                                 />
                                             </Box>
@@ -731,6 +733,9 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             pr: '14px',
                                             ':hover': {
                                                 bgcolor: playlist?.is_bookmark ? COLORS.bg3 : COLORS.main
+                                            },
+                                            '& .MuiButton-startIcon': {
+                                                mr: 0
                                             }
                                         }}
                                         startIcon={playlist?.is_bookmark ? <CheckIcon /> : <AddIcon />}
@@ -772,14 +777,16 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                             <Rating
                                                 sx={{
                                                     mr: '10px',
-                                                    '& .MuiRating-iconEmpty': {
-                                                        color: COLORS.contentIcon
-                                                    },
                                                     '& .MuiRating-icon': {
-                                                        ml: isSm ? '22px' : '24px'
+                                                        ml: isSm ? '22px' : '24px',
+                                                        transform: 'scale(1)'
                                                     }
                                                 }}
+                                                emptyIcon={<StarEmpty fill={COLORS.contentIcon} />}
+                                                icon={<StarFill fill={(contentRating > 0 || hoverRating) ? '#F68C2D' : COLORS.contentIcon} />}
                                                 onChange={(_, newValue) => { handleOpenRateModal(newValue) }}
+                                                onMouseOver={() => { setHoverRating(true) }}
+                                                onMouseOut={() => { setHoverRating(false) }}
                                                 name='mb-content-rating'
                                                 value={contentRating}
                                                 precision={1}

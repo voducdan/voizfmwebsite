@@ -295,7 +295,8 @@ const SearchResult = (props) => {
                                             bgcolor: 'inherit',
                                             boxShadow: 'none',
                                             width: '100%',
-                                            height: '100%'
+                                            height: '100%',
+                                            cursor: 'pointer'
                                         }}
                                     >
                                         <Box
@@ -303,7 +304,6 @@ const SearchResult = (props) => {
                                                 width: isSm ? '40px' : '100px',
                                                 height: isSm ? '40px' : '100px',
                                                 position: 'relative',
-                                                cursor: 'pointer'
                                             }}
                                         >
                                             <img
@@ -356,7 +356,6 @@ const SearchResult = (props) => {
                                                             WebkitLineClamp: 1,
                                                             WebkitBoxOrient: 'vertical',
                                                             overflow: 'hidden',
-                                                            cursor: 'pointer'
                                                         }}
                                                     >
                                                         {i?.name}
@@ -424,15 +423,15 @@ const SearchResult = (props) => {
                                             bgcolor: 'inherit',
                                             boxShadow: 'none',
                                             width: '100%',
-                                            height: '100%'
+                                            height: '100%',
+                                            cursor: 'pointer'
                                         }}
                                     >
                                         <Box
                                             sx={{
                                                 width: isSm ? '40px' : '100px',
                                                 height: isSm ? '40px' : '100px',
-                                                position: 'relative',
-                                                cursor: 'pointer'
+                                                position: 'relative'
                                             }}
                                         >
                                             <img
@@ -484,8 +483,7 @@ const SearchResult = (props) => {
                                                             textOverflow: 'ellipsis',
                                                             WebkitLineClamp: 1,
                                                             WebkitBoxOrient: 'vertical',
-                                                            overflow: 'hidden',
-                                                            cursor: 'pointer'
+                                                            overflow: 'hidden'
                                                         }}
                                                     >
                                                         {i?.name}
@@ -516,7 +514,7 @@ function Search() {
     const searchKey = queryParams.get('searchKey');
     const tab = queryParams.get('type');
     const NUMBER_ITEMS_PER_LINE = isSm ? 3 : 5;
-    const SIDE_PADDING = 48;
+    const SIDE_PADDING = isSm ? 16 : 48;
     const SPACE_BETWEEN = isSm ? 16 : 24;
 
     useEffect(() => {
@@ -540,12 +538,15 @@ function Search() {
 
     useEffect(() => {
         updateRecentlyKeywords();
+    }, []);
+
+    useEffect(() => {
         if (tab) {
             setType(tab);
         } else {
             setType('playlists')
         }
-    }, []);
+    }, [tab]);
 
     const fetchSearchResult = async (params) => {
         try {

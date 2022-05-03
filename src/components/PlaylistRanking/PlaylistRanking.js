@@ -341,6 +341,8 @@ export default function PlaylistRanking() {
                                         <Box
                                             sx={{
                                                 position: 'relative',
+                                                width: isSm ? '80px' : '100px',
+                                                height: isSm ? '80px' : '100px',
                                                 ...(i?.promotion && {
                                                     '&::before': {
                                                         content: i?.promotion.includes('vip') ? "url('/images/dvip.png')" : i?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",

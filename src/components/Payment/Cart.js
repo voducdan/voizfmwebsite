@@ -101,18 +101,19 @@ export default function Cart() {
     }, []);
 
     useEffect(() => {
-        const { resultCode, errorCode, partnerCode, vnp_BankTranNo, vnp_ResponseCode } = navigate.query || {};
+        const { resultCode, errorCode, partnerCode, vnp_BankTranNo, vnp_BankCode, vnp_ResponseCode } = navigate.query || {};
         let message = '';
         if (!resultCode && !vnp_ResponseCode && !errorCode) {
             return;
         }
+
         if (resultCode === '0' || vnp_ResponseCode === '00' || errorCode === '0') {
             removeCartItem();
             localStorage.removeItem('localPaymentData');
             localStorage.removeItem('paymentData');
         }
         if (!JSON.parse(localStorage.getItem('notified'))) {
-            if (vnp_BankTranNo && vnp_BankTranNo.startsWith('VNP')) {
+            if ((vnp_BankTranNo && vnp_BankTranNo.startsWith('VNP')) || (vnp_BankCode && vnp_BankCode.startsWith('VNP'))) {
                 message = messages['vnpay'][vnp_ResponseCode];
             }
             else if (partnerCode && partnerCode === 'APPOTAPAY') {
@@ -274,6 +275,9 @@ export default function Cart() {
 
     const handleValidateDiscountCode = async () => {
         try {
+            if (!discountCode) {
+                return;
+            }
             // call api to validate
             const packageIds = selectedItem.map(i => i.id);
             const discountData = {
@@ -349,8 +353,10 @@ export default function Cart() {
                                     </ListItemIcon>
                                     <ListItemText
                                         sx={{
-                                            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                                            color: COLORS.contentIcon
+                                            'span': {
+                                                ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                                color: COLORS.contentIcon
+                                            }
                                         }}
                                     >
                                         Chọn tất cả ({cart.length} sản phẩm)
@@ -755,7 +761,7 @@ export default function Cart() {
                                     }}
                                     onClick={handlePayment}
                                 >
-                                    Tiến hành thanh toán
+                                    {selectedItem.length > 0 ? 'Thanh toán' : 'Tiến hành thanh toán'}
                                 </Button>
                                 {
                                     selectedItem.length > 0 && (

@@ -70,7 +70,7 @@ const VipPackagePaper = (props) => {
                     <Typography
                         sx={{
                             ...TEXT_STYLE.h2,
-                            color: COLORS.white,
+                            color: idx >= 1 ? COLORS.second : COLORS.white,
                             textAlign: 'center',
                             mt: '26px'
                         }}

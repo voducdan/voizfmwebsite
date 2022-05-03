@@ -191,7 +191,7 @@ export default function ChannelDetail({ channelFromAPI }) {
                 sx={{
                     width: '100%',
                     minHeight: isSm ? '272px' : '390px',
-                    ...flexStyle('flext-start', 'flex-start'),
+                    ...(isSm ? flexStyle('flext-start', 'flex-start') : flexStyle('flext-start', 'center')),
                     p: isSm ? '25px 18px 25px 17px' : '50px 50px 50px 160px',
                     boxSizing: 'border-box',
                     mb: isSm ? '16px' : '40px',

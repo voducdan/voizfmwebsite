@@ -228,6 +228,9 @@ function AudioBook({ router }) {
                 try {
                     const res = await api.getCategoryPlaylists(categoryCode, 35);
                     const results = await res.data.data;
+                    if (results.length < 35) {
+                        setHasLoadMore(false);
+                    }
                     setPlaylists(results);
                 }
                 catch (err) {
@@ -236,6 +239,7 @@ function AudioBook({ router }) {
             }
         }
 
+        setHasLoadMore(true);
         fetchPlaylists();
     }, [categoryCode])
 
