@@ -509,10 +509,9 @@ function Search() {
     const [searchResults, setSearchResults] = useState(null);
     const [searchMeta, setSearchMeta] = useState({});
     const [resetStateFlag, setResetStateFlag] = useState(false);
-    const queryParams = useQuery();
     const router = useRouter();
-    const searchKey = queryParams.get('searchKey');
-    const tab = queryParams.get('type');
+    const searchKey = router.query.searchKey;
+    const tab = router.query.type;
     console.log(tab)
     const NUMBER_ITEMS_PER_LINE = isSm ? 3 : 5;
     const SIDE_PADDING = isSm ? 16 : 48;
