@@ -541,6 +541,7 @@ function Search() {
     }, []);
 
     useEffect(() => {
+        console.log(tab)
         if (tab) {
             setType(tab);
         } else {
