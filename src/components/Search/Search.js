@@ -538,16 +538,14 @@ function Search() {
 
     useEffect(() => {
         updateRecentlyKeywords();
-    }, []);
-
-    useEffect(() => {
         console.log(tab)
         if (tab) {
             setType(tab);
         } else {
             setType('playlists')
         }
-    }, [tab]);
+    }, []);
+
 
     const fetchSearchResult = async (params) => {
         try {
