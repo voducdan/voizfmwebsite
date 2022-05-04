@@ -107,7 +107,7 @@ const SearchResult = (props) => {
                         width: '100%',
                         ...flexStyle('flex-start', 'center'),
                         flexDirection: 'column',
-                        rowGap: isSm ? 0 : '24px',
+                        rowGap: isSm ? 0 : '8px',
                         mb: '48px'
                     }}
                 >
@@ -117,7 +117,7 @@ const SearchResult = (props) => {
                                 key={i?.id}
                                 sx={{
                                     width: '100%',
-                                    height: isSm ? '74px' : '100px',
+                                    height: isSm ? '74px' : '116px',
                                     cursor: 'pointer',
                                     ...flexStyle('flex-start', 'center')
                                 }}
@@ -128,12 +128,12 @@ const SearchResult = (props) => {
                                 >
                                     <Card
                                         sx={{
-                                            ...flexStyle('flex-start', 'center'),
+                                            ...(isSm ? flexStyle('flex-start', 'center') : flexStyle('flex-start', 'flex-start')),
                                             columnGap: isSm ? '10px' : '20px',
                                             bgcolor: 'inherit',
                                             boxShadow: 'none',
                                             width: '100%',
-                                            height: '100%'
+                                            height: '100%',
                                         }}
                                     >
                                         <Box
@@ -181,7 +181,6 @@ const SearchResult = (props) => {
                                                 sx={{
                                                     ...flexStyle('space-between', 'center'),
                                                     width: '100%',
-                                                    borderBottom: `1px solid ${COLORS.bg2}`,
                                                     height: '100%',
                                                 }}
                                             >
@@ -250,6 +249,12 @@ const SearchResult = (props) => {
                                                     )
                                                 }
                                             </Box>
+                                            <Divider
+                                                sx={{
+                                                    borderColor: COLORS.bg2,
+                                                    width: '100%'
+                                                }}
+                                            />
                                         </CardContent>
                                     </Card>
                                 </Link>
@@ -651,7 +656,7 @@ function Search() {
                         textOverflow: 'ellipsis'
                     }}
                 >
-                    Kết Quả Tìm Kiếm"{searchKey}"
+                    Kết Quả Tìm Kiếm " {searchKey}"
                 </Typography>
             </Box>
             <Box

@@ -95,7 +95,7 @@ const textFieldStyle = {
 
 export default function Login() {
     const api = new API();
-    const cookies = new Cookies(); 
+    const cookies = new Cookies();
 
     const navigate = useRouter();
 
@@ -279,7 +279,7 @@ export default function Login() {
                 for (let e in errList) {
                     const key = Object.keys(errList[e])[0];
                     const value = errList[e][key]
-                    errMessage += `${value} \n`
+                    errMessage += `${key ? key.replace(/(^\w|\s\w)(\S*)/g, (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()) : ''} ${value} \n`
                 }
                 setError(errMessage || 'Đã xảy ra lỗi, vui lòng thử lại!');
                 return;
@@ -409,7 +409,10 @@ export default function Login() {
     }
 
     const handleReviewOtp = () => {
-        onEnterPhone();
+        if (!otpCountDown) {
+            onEnterPhone();
+        }
+
     }
 
     return (

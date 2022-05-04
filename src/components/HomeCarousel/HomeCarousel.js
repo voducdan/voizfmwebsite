@@ -106,6 +106,9 @@ export default function HomeCarousel() {
         if (['playlist', 'channel', 'discovery', 'audio'].includes(bannerType)) {
             return `/${bannerType === 'discovery' ? 'discoverie' : bannerType}s/${id}`
         }
+        if (bannerType === 'website') {
+            return id;
+        }
         return '';
     }
 

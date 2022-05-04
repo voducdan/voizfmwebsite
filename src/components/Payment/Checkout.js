@@ -345,7 +345,7 @@ export default function Checkout() {
                                         >
                                             <Typography
                                                 sx={{
-                                                    ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+                                                    ...TEXT_STYLE.content2,
                                                     color: COLORS.contentIcon
                                                 }}
 

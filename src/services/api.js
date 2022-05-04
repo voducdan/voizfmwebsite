@@ -249,8 +249,8 @@ export default class API {
         return this.init().get(`/authors/${id}/playlists?${queryString}`);
     }
 
-    getPlaylistRanking = (type, code) => {
-        const params = { ranking_type: type, code };
+    getPlaylistRanking = (type, code, limit = 999999) => {
+        const params = { ranking_type: type, code, limit };
         const queryString = this.buildQueryString(params)
         return this.init().get(`/playlists/rankings?${queryString}`);
     }
