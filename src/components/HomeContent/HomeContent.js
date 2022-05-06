@@ -211,12 +211,6 @@ export default function HomeContent() {
             setNewContents(data);
         }
 
-        async function fetchFeaturedAuthors(page = 1, limit = 10) {
-            const res = await api.getFeaturedAuthors(page, limit);
-            const data = await res.data.data;
-            setFeaturedAuthors(data);
-        }
-
         async function fetchCategoryLevel1Playlists() {
             let playlists = [];
             for (let category of CATEGORIES_LEVEL1) {
@@ -249,7 +243,6 @@ export default function HomeContent() {
             setPlaylistsBycategoryLevel2(playlists);
         }
 
-        fetchFeaturedAuthors();
         fetchNewContent();
         fetchCategoryLevel1Playlists();
         fetchCategoryLevel2Playlists();
