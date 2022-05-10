@@ -18,6 +18,7 @@
     NEXT_PUBLIC_FIREBASE_MESSAGESENDER_ID=1070814418454
     NEXT_PUBLIC_FIREBASE_EMAIL=dan.vo@wewe.vn
     NEXT_PUBLIC_FIREBASE_PASSWORD=voizfm@123
+    ```
 * Install packages
     ```npm i```
 * Start server
