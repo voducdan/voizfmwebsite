@@ -109,6 +109,14 @@ export default function HomeCarousel() {
         if (bannerType === 'website') {
             return id;
         }
+
+        if(bannerType === 'vip_user_action'){
+            const discovery_id = id.split('&')[0];
+            return `/discoveries/${discovery_id}`;
+        }
+        if(bannerType === 'free_user_action'){
+            return '/up-vip'
+        }
         return '';
     }
 
@@ -124,8 +132,9 @@ export default function HomeCarousel() {
         >
             <div style={{ height: '100%', width: '100%' }}>
                 {images.map((i, idx) => (
-                    <Link
+                    <a
                         href={parseDeepLink(i)}
+                        target='_blank'
                         key={idx}
                     >
                         <img
@@ -141,7 +150,7 @@ export default function HomeCarousel() {
                             alt={i?.image?.id}
                             src={i?.image?.original_url}
                         />
-                    </Link>
+                    </a>
                 ))}
             </div>
             <Box
