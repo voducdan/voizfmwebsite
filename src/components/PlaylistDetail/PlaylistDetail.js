@@ -136,6 +136,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
+    const [openDonwloadAppModal, setOpenDonwloadAppModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
     const [afterRateContent, setAfterRateContent] = useState('Cảm ơn đánh giá của bạn. Bạn có thể thay đổi điểm đánh giá  bất cứ lúc nào.');
     const [addToCartErrorMessage, setAddToCartErrorMessage] = useState('');
@@ -437,7 +438,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         }
     }
 
-    const handlePlayOneAudio = async (audioId) => {
+    const handlePlayOneAudio = async (audioId, idx) => {
         if (user) {
             await api.trackingAudio(audioListenings);
             await api.addListeningPlaylists(audioId, 0, playlist.id);
@@ -450,6 +451,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             }
             setAudioListenings([audioListenning]);
             localStorage.setItem('currAudioId', audioId);
+        }
+        if (idx >= 1) {
+            setOpenDonwloadAppModal(true);
+            return;
         }
         handlePlayAudio(
             dispatch,
@@ -1220,7 +1225,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                     return (
                                         <ListItem
                                             key={value.id}
-                                            onClick={() => { handlePlayOneAudio(value?.id) }}
+                                            onClick={() => { handlePlayOneAudio(value?.id, idx) }}
                                             sx={{
                                                 paddingLeft: 0,
                                                 paddingRight: 0,
@@ -1556,6 +1561,103 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         >
                             Bỏ qua
                         </Button>
+                    </Box>
+                </DialogActions>
+            </Dialog>
+            <Dialog
+                open={openDonwloadAppModal}
+                onClose={() => { setOpenDonwloadAppModal(false) }}
+                sx={{
+                    '& .MuiPaper-root': {
+                        width: isSm ? '95%' : '512px',
+                        bgcolor: COLORS.bg1,
+                        m: 0,
+                        p: '40px 56px',
+                        boxSizing: 'border-box',
+                        borderRadius: isSm ? '10px' : '30px',
+                        position: 'relative',
+                        overflow: 'visible',
+                        ...(isSm && { m: '0 16px' })
+                    }
+                }}
+            >
+                <Box
+                    sx={{
+                        position: 'absolute',
+                        top: isSm ? '-24%' : '-37%',
+                        left: '50%',
+                        transform: 'translate(-50%,50%)',
+                        width: isSm ? '60px' : '80px',
+                        height: isSm ? '60px' : '80px',
+                        ...flexStyle('center', 'center')
+                    }}
+                >
+                    <img
+                        style={{
+                            width: isSm ? '60px' : '80px',
+                            height: isSm ? '60px' : '80px',
+                            borderRadius: '50%'
+                        }}
+                        src='/images/apple-touch-icon.png'
+                        alt='upgrade img'
+                    />
+                </Box>
+                <DialogContent
+                    sx={{
+                        p: 0
+                    }}
+                >
+                    <DialogContentText
+                        sx={{
+                            ...TEXT_STYLE.content1,
+                            color: COLORS.contentIcon,
+                            textAlign: 'center',
+                            whiteSpace: 'pre-line',
+                            mb: '32px',
+                            mt: '15px'
+                        }}
+                    >
+                        Hiện tại website chỉ nghe được chương 1, <br />
+                        vui lòng tải app để nghe trọn bộ.
+                    </DialogContentText>
+                </DialogContent>
+                <DialogActions
+                    sx={{
+                        ...flexStyle('center', 'center')
+                    }}
+                >
+                    <Box
+                        sx={{
+                            ...flexStyle('center', 'center'),
+                            flexDirection: 'column',
+                            rowGap: '24px',
+                            width: '100%'
+                        }}
+                    >
+                        <Box
+                            sx={{
+                                width: '100%',
+                                ...flexStyle('center', 'center'),
+                                columnGap: '16px'
+                            }}
+                        >
+                            <Button
+                                onClick={() => { router.push('https://play.google.com/store/apps/details?id=com.wewe.musicsounds') }}
+                                sx={{
+                                    ...TEXT_STYLE.title1,
+                                    color: COLORS.white,
+                                    textTransform: 'none',
+                                    borderRadius: '8px',
+                                    width: isSm ? '168px' : '192px',
+                                    height: '48px',
+                                    bgcolor: COLORS.main,
+                                    width: '50%'
+                                }}
+                                autoFocus
+                            >
+                                Tải về
+                            </Button>
+                        </Box>
                     </Box>
                 </DialogActions>
             </Dialog>
