@@ -56,7 +56,7 @@ export default class API {
             content += `&access_token=${this.api_token}`
         }
         const xSignature = Sha256Encrypt(content);
-        return this.init(null, xSignature).get(`/web/audios/${id}/files`)
+        return this.init(null, xSignature).get(`/web/audios/${id}/streaming`)
     }
 
     getAudioHls = (url) => {
@@ -80,7 +80,7 @@ export default class API {
 
     removeCartItem = (playlistId) => {
         return this.init().delete(`web/carts/${playlistId}`);
-    }
+    }       
 
     payment = (method, data) => {
         return this.init().post(`/web/payment/${method}`, data);
