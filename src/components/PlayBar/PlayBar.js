@@ -85,7 +85,11 @@ export default function PlayBar() {
         async function fetchPlaylistAudios() {
             const res = await api.getPlaylistAudios(audioData?.playlist?.id);
             const data = res.data.data;
+            const order = audioData?.playlist?.order || 'asc';
             data.sort(compare);
+            if (order === 'desc') {
+                data.reverse();
+            }
             setAudiosList(data);
         };
         audio.current.volume = volume / 100;

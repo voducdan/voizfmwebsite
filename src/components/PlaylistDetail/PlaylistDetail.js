@@ -177,7 +177,11 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             }
             const res = await api.getPlaylistAudios(id);
             const data = res.data.data;
+            const order = playlistFromAPI?.order || 'asc';
             data.sort(compare);
+            if (order === 'desc') {
+                data.reverse();
+            }
             setPlaylistAudios(data);
         }
         if (id) {
