@@ -33,7 +33,7 @@ export default class API {
 
         this.client = axios.create({
             baseURL: this.base_url,
-            timeout: 10000,
+            timeout: 120000,
             headers: this.headers
         });
 
