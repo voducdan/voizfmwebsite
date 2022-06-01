@@ -154,7 +154,6 @@ export default function Control(props) {
             fetchAudioUrl(nextAudioId);
         }
         updateAudioListening(audioId, 1);
-        const audioListenings = getAudioListenings();
         if (checkUserUseVipSubcription()) {
             const audioListenings = getAudioListenings();
             const totalTime = audioListenings.reduce((a, b) => ({ duration_listening: (a.duration_listening + b.duration_listening) }), { duration_listening: 0 })['duration_listening'];
