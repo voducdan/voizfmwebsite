@@ -5,6 +5,7 @@ const Privacy = () => {
         <div>
             <Head>
                 <title>Sách nói & Podcast Chất lượng cao. 100% Bản quyền | Voiz FM</title>
+                <meta property="fb:app_id" content={process.env.NEXT_PUBLIC_FACEBOOK_APP_ID} />
                 <meta property="og:url" content="https://voiz.vn" />
                 <meta property="og:type" content="website" />
                 <meta property="og:title" content="Sách nói & Podcast Chất lượng cao. 100% Bản quyền | Voiz FM" />
