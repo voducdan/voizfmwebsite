@@ -133,6 +133,7 @@ export default function Checkout() {
                 copiedPaymentData = { ...localPaymentData }
             }
         }
+
         setPrevPaymentInfo(copiedPaymentData);
     }, []);
 
@@ -141,6 +142,10 @@ export default function Checkout() {
     }
 
     const onEditCart = () => {
+        if(paymentData.package_type === 'plan_package'){
+            navigate.push('/up-vip');
+            return;
+        }
         dispatch(setItems(paymentData));
         navigate.push('/cart');
     };
@@ -529,6 +534,25 @@ export default function Checkout() {
                                         </Box>
                                     )
                                 }
+                                {/* <Box
+                                    sx={{
+                                        ...flexStyle('space-between', 'center'),
+                                        mb: '24px'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.content1,
+                                            color: COLORS.contentIcon
+                                        }}
+                                    >Khuyến mãi</Typography>
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.title1,
+                                            color: COLORS.white
+                                        }}
+                                    >{formatPrice(prevPaymentInfo?.totalPrice)}đ</Typography>
+                                </Box> */}
                                 {/* <Box
                                     sx={{
                                         ...flexStyle('space-between', 'center'),

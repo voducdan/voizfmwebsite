@@ -1,6 +1,9 @@
 // import react
 import { useState, useEffect, useRef } from 'react';
 
+// import next router
+import { useRouter } from 'next/router';
+
 // import redux
 import { useDispatch, useSelector } from 'react-redux';
 import { selectUser } from '../../redux/user';
@@ -47,6 +50,8 @@ import { COLORS, TEXT_STYLE } from '../../utils/constants';
 import { flexStyle } from '../../utils/flexStyle';
 import formatDuration from '../../utils/formatDuration';
 import { Speed, Clock } from '../Icons';
+
+import RequireDownloadAppModal from '../../components/Shared/RequireDownloadAppModal';
 
 // import services
 import API from '../../services/api';
@@ -96,6 +101,7 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 
 export default function Control(props) {
     const api = new API();
+    const router = useRouter();
 
     const { audio, nextAudioId, prevAudioId, isSm } = props;
     const theme = useTheme();
@@ -118,6 +124,7 @@ export default function Control(props) {
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
+    const [openDonwloadAppModal, setOpenDonwloadAppModal] = useState(false);
     const media = audio.current;
 
     useEffect(() => {
@@ -147,17 +154,17 @@ export default function Control(props) {
             fetchAudioUrl(nextAudioId);
         }
         updateAudioListening(audioId, 1);
-        const audioListenings = getAudioListenings();
         if (checkUserUseVipSubcription()) {
             const audioListenings = getAudioListenings();
             const totalTime = audioListenings.reduce((a, b) => ({ duration_listening: (a.duration_listening + b.duration_listening) }), { duration_listening: 0 })['duration_listening'];
+            console.log(totalTime)
             if (totalTime % 120 === 0) {
-                trackingAudio({
+                trackingAudio([{
                     "audio_id": audioId,
-                    "duration_listening": position,
+                    "duration_listening": 120,
                     "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
                     "listen_from": "website"
-                })
+                }])
             }
         }
 
@@ -351,6 +358,11 @@ export default function Control(props) {
             console.log(err)
             const status = err?.response?.status;
             if (status === 400) {
+                const errMsg = err?.response?.data?.error;
+                if (errMsg && errMsg === 'Nghe tiếp sách này tại ứng dụng Voiz FM') {
+                    setOpenDonwloadAppModal(true);
+                    return;
+                }
                 setErrorMessage('Quý khách chưa đăng ký dịch vụ thành công. Vui lòng kiểm tra lại')
                 setOpenUpdateRequiredModal(true);
                 return;
@@ -1107,6 +1119,12 @@ export default function Control(props) {
                     </Box>
                 </DialogActions>
             </Dialog>
+            <RequireDownloadAppModal
+                isSm={isSm}
+                router={router}
+                openDonwloadAppModal={openDonwloadAppModal}
+                setOpenDonwloadAppModal={setOpenDonwloadAppModal}
+            />
         </Box>
     )
 }
