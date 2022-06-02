@@ -364,17 +364,30 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         </Box>
                 }
             ]
-            if (playlist?.promotion !== 'free') {
+            if (playlist?.promotion === 'coin' || (playlist?.promotion === 'vip' && playlist?.category?.code !== 'podcast')) {
                 const sellPrice = {
                     label: <InfoLabel title='Giá bán lẻ' />,
                     value:
-                        <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
+                        <Box>
                             {
                                 playlist?.sale_coin_price < playlist?.coin_price && (
-                                    <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.sale_coin_price * 100)}đ</Typography>
+                                    <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
+                                        {
+                                            playlist?.sale_coin_price < playlist?.coin_price && (
+                                                <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.VZ_Text_content, textDecoration: 'line-through' }}>{FormatPrice(playlist?.coin_price * 100)}đ</Typography>
+                                            )
+                                        }
+                                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.sale_coin_price * 100)}đ</Typography>
+                                    </Box>
                                 )
                             }
-                            <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price * 100)}đ</Typography>
+                            {
+                                playlist?.sale_coin_price === playlist?.coin_price && (
+                                    <Box sx={{ ...flexStyle('flex-start', 'center'), columnGap: '6px' }}>
+                                        <Typography sx={{ ...TEXT_STYLE.content2, color: COLORS.white }}>{FormatPrice(playlist?.coin_price * 100)}đ</Typography>
+                                    </Box>
+                                )
+                            }
                         </Box>
 
                 };
