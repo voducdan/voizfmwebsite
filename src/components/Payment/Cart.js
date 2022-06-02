@@ -577,7 +577,7 @@ export default function Cart() {
                                                 textAlign: 'left'
                                             }}
                                         >Thông tin đơn hàng</Typography>
-                                        <FormControl fullWidth>
+                                        {/* <FormControl fullWidth>
                                             <Typography
                                                 sx={{
                                                     ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
@@ -614,7 +614,7 @@ export default function Cart() {
                                                 <MenuItem value={20}>Tiết kiệm</MenuItem>
                                                 <MenuItem value={30}>VIP</MenuItem>
                                             </Select>
-                                        </FormControl>
+                                        </FormControl> */}
                                         <Box
                                             sx={{
                                                 mt: '24px',
