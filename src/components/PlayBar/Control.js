@@ -157,13 +157,14 @@ export default function Control(props) {
         if (checkUserUseVipSubcription()) {
             const audioListenings = getAudioListenings();
             const totalTime = audioListenings.reduce((a, b) => ({ duration_listening: (a.duration_listening + b.duration_listening) }), { duration_listening: 0 })['duration_listening'];
+            console.log(totalTime)
             if (totalTime % 120 === 0) {
-                trackingAudio({
+                trackingAudio([{
                     "audio_id": audioId,
-                    "duration_listening": position,
+                    "duration_listening": 120,
                     "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
                     "listen_from": "website"
-                })
+                }])
             }
         }
 
