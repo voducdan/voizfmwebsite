@@ -341,13 +341,14 @@ export default function Login() {
     }
     const responseGoogleSuccess = async (response) => {
         try {
-            const { profileObj, tokenId } = response;
+            console.log(response)
+            const { profileObj, googleId } = response;
             const payload = {
                 "first_name": profileObj.givenName,
                 "last_name": profileObj.familyName,
                 "email": profileObj.email,
                 "birthday": profileObj.birthday || null,
-                "oauth2_id": tokenId,
+                "oauth2_id": googleId,
                 "avatar_url": profileObj.imageUrl
             }
             const res = await api.loginGoogle(payload);

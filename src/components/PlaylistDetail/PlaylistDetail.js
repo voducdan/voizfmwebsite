@@ -144,6 +144,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const [sortAsc, setSortAsc] = useState(false);
     const [audioId, setudioId] = useState(null);
     const [hoverRating, setHoverRating] = useState(false);
+    const [hasLoadMoreAudio, setHasLoadMoreAudio] = useState(true);
+    const [audioPage, setAudioPage] = useState(1);
 
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
     const coverImgHeight = isSm ? 182 : 300;
@@ -165,31 +167,15 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             setRecommendedPlaylist(data.slice(0, 6));
         }
 
-        async function fetchPlaylistAudios() {
-            function compare(a, b) {
-                if (a.position < b.position) {
-                    return -1;
-                }
-                if (a.position > b.position) {
-                    return 1;
-                }
-                return 0;
-            }
-            const res = await api.getPlaylistAudios(id);
-            const data = res.data.data;
-            const order = playlistFromAPI?.order || 'asc';
-            data.sort(compare);
-            if (order === 'desc') {
-                data.reverse();
-            }
-            setPlaylistAudios(data);
+        function fetchPlaylistAudios(id) {
+            fetchAudios(id, 1);
         }
         if (id) {
             dispatch(setFooter(false));
             setUrl(window.location.href);
             fetchPlaylist();
             fetchRecommendedPlaylist();
-            fetchPlaylistAudios();
+            fetchPlaylistAudios(id);
             setPlaylistInfo(createPlaylistInfo());
         }
     }, [id]);
@@ -244,7 +230,40 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         }
     }, [audioHls, audioData]);
 
+    useEffect(() => {
+        if (id) {
+            fetchAudios(id, audioPage)
+        }
+    }, [audioPage]);
 
+
+    const fetchAudios = async (id, page) => {
+        function compare(a, b) {
+            if (a.position < b.position) {
+                return -1;
+            }
+            if (a.position > b.position) {
+                return 1;
+            }
+            return 0;
+        }
+        const res = await api.getPlaylistAudios(id, page);
+        const data = res.data.data;
+        const order = playlistFromAPI?.order || 'asc';
+        data.sort(compare);
+        if (order === 'desc') {
+            data.reverse();
+        }
+        setPlaylistAudios([...playlistAudios, ...data]);
+        if (data.length < 10) {
+            setHasLoadMoreAudio(false);
+        }
+    }
+
+    const handleLoadMoreAudio = () => {
+        const newAudioPage = audioPage + 1;
+        setAudioPage(newAudioPage);
+    }
 
     const handleSortAudioList = () => {
         let copiedPlaylistAudios = [...playlistAudios];
@@ -1233,7 +1252,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                         >
                             <List
                                 sx={{
-                                    width: '100%'
+                                    width: '100%',
+                                    textAlign: 'center'
                                 }}
                             >
                                 {playlistAudios.map((value, idx) => {
@@ -1282,6 +1302,28 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                                         </ListItem>
                                     );
                                 })}
+                                {
+                                    hasLoadMoreAudio && (
+                                        <Button
+                                            onClick={handleLoadMoreAudio}
+                                            sx={{
+                                                textTransform: 'none',
+                                                ...TEXT_STYLE.title2,
+                                                color: COLORS.white,
+                                                bgcolor: COLORS.main,
+                                                width: '170px',
+                                                height: '40px',
+                                                borderRadius: '4px',
+                                                mt: '10px',
+                                                ':hover': {
+                                                    bgcolor: COLORS.main
+                                                }
+                                            }}
+                                        >
+                                            Tải thêm
+                                        </Button>
+                                    )
+                                }
                             </List>
                         </Box>
                     </Box>
@@ -1298,7 +1340,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 }}
             >
                 {
-                    (['vip', 'coin'].includes(playlist?.promotion) && !playlist?.is_purchased) && (
+                    ((['vip', 'coin'].includes(playlist?.promotion) && !playlist?.is_purchased) && playlist?.category?.code !== 'podcast') && (
                         <Tooltip open={addToCartError} title={<div style={{ whiteSpace: 'pre-line', color: COLORS.error }}>{addToCartErrorMessage}</div>}>
                             <Button
                                 onClick={() => {
