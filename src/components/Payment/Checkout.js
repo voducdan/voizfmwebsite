@@ -154,7 +154,7 @@ export default function Checkout() {
         try {
             const packageIds = prevPaymentInfo.selectedItem.map(i => i.id);
             const payload = {
-                "discount_code": prevPaymentInfo.discountCode || '',
+                "coupon_code": prevPaymentInfo.discountCode.toLowerCase() || '',
                 "package_type": prevPaymentInfo.package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
@@ -534,10 +534,10 @@ export default function Checkout() {
                                         </Box>
                                     )
                                 }
-                                {/* <Box
+                                <Box
                                     sx={{
                                         ...flexStyle('space-between', 'center'),
-                                        mb: '24px'
+                                        mt: '24px'
                                     }}
                                 >
                                     <Typography
@@ -551,32 +551,13 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >{formatPrice(prevPaymentInfo?.totalPrice)}đ</Typography>
-                                </Box> */}
-                                {/* <Box
-                                    sx={{
-                                        ...flexStyle('space-between', 'center'),
-                                        mb: '24px'
-                                    }}
-                                >
-                                    <Typography
-                                        sx={{
-                                            ...TEXT_STYLE.content1,
-                                            color: COLORS.contentIcon
-                                        }}
-                                    >Khuyến mãi</Typography>
-                                    <Typography
-                                        sx={{
-                                            ...TEXT_STYLE.title1,
-                                            color: COLORS.white
-                                        }}
-                                    >{formatPrice(prevPaymentInfo?.totalPrice - prevPaymentInfo?.finalPrice)}đ</Typography>
-                                </Box> */}
+                                    >0đ</Typography>
+                                </Box>
                                 <Box
                                     sx={{
                                         ...flexStyle('space-between', 'center'),
                                         mb: '24px',
-                                        mt: isSm ? '35px' : '32px'
+                                        mt: isSm ? '35px' : '24px'
                                     }}
                                 >
                                     <Typography

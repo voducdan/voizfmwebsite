@@ -282,7 +282,7 @@ export default function Cart() {
             const packageIds = selectedItem.map(i => i.id);
             const discountData = {
                 package_id: packageIds,
-                coupon_code: discountCode,
+                coupon_code: discountCode.toLowerCase(),
                 package_type: 'playlist'
             }
             const res = await api.checkDiscountCode(discountData);
@@ -715,8 +715,27 @@ export default function Cart() {
                             <Box>
                                 <Box
                                     sx={{
+                                        ...flexStyle('space-between', 'center'),
+                                        mt: '24px'
+                                    }}
+                                >
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.content1,
+                                            color: COLORS.contentIcon
+                                        }}
+                                    >Khuyến mãi</Typography>
+                                    <Typography
+                                        sx={{
+                                            ...TEXT_STYLE.title1,
+                                            color: COLORS.white
+                                        }}
+                                    >0đ</Typography>
+                                </Box>
+                                <Box
+                                    sx={{
                                         ...flexStyle('space-between', 'flex-start'),
-                                        mt: isSm ? '35px' : '32px'
+                                        mt: isSm ? '35px' : '14px'
                                     }}
                                 >
                                     <Typography

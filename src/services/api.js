@@ -209,8 +209,10 @@ export default class API {
         return this.init().get(`/playlists/analyses?${queryString}`);
     }
 
-    getPlaylistAudios = (id) => {
-        return this.init().get(`/playlists/${id}/audios`);
+    getPlaylistAudios = (id, page = 1) => {
+        const params = { page };
+        const queryString = this.buildQueryString(params);
+        return this.init().get(`/playlists/${id}/audios?${queryString}`);
     }
 
     getRequestedBook = () => {
