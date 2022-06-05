@@ -69,6 +69,7 @@ export default function Cart() {
     const [checkAllControl, setCheckAllControl] = useState(false);
     const [confirmDeleteCartItemModal, setConfirmDeleteCartItemModal] = useState(false);
     const [fetchCartDone, setFetchCartDone] = useState(false);
+    const [saleAmount, setSaleAmount] = useState(0);
 
     const dispatch = useDispatch();
 
@@ -220,7 +221,8 @@ export default function Cart() {
             discountCode: discountCode,
             package_type: 'playlist',
             totalPrice: totalPrice,
-            finalPrice: totalPrice
+            finalPrice: finalPrice,
+            saleAmount: saleAmount,
         };
         dispatch(setItems(paymentData));
         navigate.push('/checkout');
@@ -282,11 +284,15 @@ export default function Cart() {
             const packageIds = selectedItem.map(i => i.id);
             const discountData = {
                 package_id: packageIds,
-                coupon_code: discountCode.toLowerCase(),
+                coupon_code: discountCode,
                 package_type: 'playlist'
             }
             const res = await api.checkDiscountCode(discountData);
-            const data = await res.data;
+            const data = await res.data.data;
+            const { amount, sale_amount } = data;
+            setSaleAmount(sale_amount - amount);
+            setTotalPrice(sale_amount);
+            setFinalPrice(amount);
             setIsDiscountCodeValid(true);
         }
         catch (err) {
@@ -730,7 +736,7 @@ export default function Cart() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >0đ</Typography>
+                                    >{formatPrice(saleAmount)}đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
