@@ -142,7 +142,7 @@ export default function Checkout() {
     }
 
     const onEditCart = () => {
-        if(paymentData.package_type === 'plan_package'){
+        if (paymentData.package_type === 'plan_package') {
             navigate.push('/up-vip');
             return;
         }
@@ -154,7 +154,7 @@ export default function Checkout() {
         try {
             const packageIds = prevPaymentInfo.selectedItem.map(i => i.id);
             const payload = {
-                "coupon_code": prevPaymentInfo.discountCode.toLowerCase() || '',
+                "coupon_code": prevPaymentInfo.discountCode || '',
                 "package_type": prevPaymentInfo.package_type,
                 "package_id": packageIds,
                 "platform_type": "website",
@@ -204,7 +204,15 @@ export default function Checkout() {
                 package_type: 'plan_package'
             }
             const res = await api.checkDiscountCode(discountData);
-            const data = await res.data;
+            const data = await res.data.data;
+            const { amount, sale_amount } = data;
+            const copiedPrevPaymentInfo = { ...prevPaymentInfo };
+            copiedPrevPaymentInfo['discountCode'] = discountCode;
+            copiedPrevPaymentInfo['saleAmount'] = sale_amount - amount;
+            copiedPrevPaymentInfo['totalPrice'] = sale_amount;
+            copiedPrevPaymentInfo['finalPrice'] = amount;
+            console.log(copiedPrevPaymentInfo)
+            setPrevPaymentInfo({...copiedPrevPaymentInfo});
             setIsDiscountCodeValid(true);
         }
         catch (err) {
@@ -551,7 +559,7 @@ export default function Checkout() {
                                             ...TEXT_STYLE.title1,
                                             color: COLORS.white
                                         }}
-                                    >0đ</Typography>
+                                    >{prevPaymentInfo?.saleAmount ? formatPrice(prevPaymentInfo?.saleAmount) : '0'}đ</Typography>
                                 </Box>
                                 <Box
                                     sx={{
