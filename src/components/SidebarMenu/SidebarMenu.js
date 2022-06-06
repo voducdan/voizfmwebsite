@@ -124,7 +124,7 @@ export default function SidebarMenu() {
                     id: 5,
                     icon: Adward,
                     text: 'Bảng xếp hạng',
-                    url: 'playlists/rankings'
+                    url: 'play/rankings'
                 },
                 {
                     id: 6,
@@ -164,7 +164,7 @@ export default function SidebarMenu() {
                     id: 5,
                     icon: Adward,
                     text: 'Bảng xếp hạng',
-                    url: 'playlists/rankings'
+                    url: 'play/rankings'
                 }
             ];
         }

@@ -265,7 +265,7 @@ export default function Cart() {
     }
 
     const handleClickPlaylist = (id) => {
-        navigate.push(`/playlists/${id}`)
+        navigate.push(`/play/${id}`)
     }
 
     const handleClickDeleteMultipleItem = () => {

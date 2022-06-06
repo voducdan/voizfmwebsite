@@ -371,7 +371,7 @@ function AudioBook({ router }) {
                                     {playlists.map((item) => (
                                         <Link
                                             key={item.id}
-                                            href={`/playlists/${item.id}`}
+                                            href={`/play/${item.id}`}
                                         >
                                             <a
                                                 style={{ width: `calc(100% / ${isSm ? 2 : 5} - 19.2px)` }}
@@ -449,7 +449,7 @@ function AudioBook({ router }) {
                         {
                             playlistsRandom.map(i => (
                                 <Link
-                                    href={`/playlists/${i?.id}`}
+                                    href={`/play/${i?.id}`}
                                     key={i?.id}
                                 >
                                     <a

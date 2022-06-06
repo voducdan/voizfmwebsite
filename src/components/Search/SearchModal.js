@@ -251,7 +251,7 @@ export default function Search() {
                                                     }}
                                                 >
                                                     <Link
-                                                        href={`/playlists/${i?.id}`}
+                                                        href={`/play/${i?.id}`}
                                                     >
                                                         <a>
                                                             <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={i?.avatar?.thumb_url} alt={`images ${i?.name}`} ></Thumbnail>
@@ -279,7 +279,7 @@ export default function Search() {
                                             playlistRecommendation.map(i => (
                                                 <Link
                                                     className="playlist-recommendation-item"
-                                                    href={`/playlists/${i?.id}`}
+                                                    href={`/play/${i?.id}`}
                                                     style={{
                                                         textDecoration: 'none'
                                                     }}
@@ -328,7 +328,7 @@ export default function Search() {
                             playlistResults.map(i => (
                                 <Link
                                     key={i?.id}
-                                    href={`/playlists/${i?.id}`}
+                                    href={`/play/${i?.id}`}
                                     style={{
                                         textDecoration: 'none'
                                     }}

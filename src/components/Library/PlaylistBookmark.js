@@ -185,7 +185,7 @@ const ChannelBookmark = (props) => {
                         }}
                     >
                         <Link
-                            href={`/playlists/${item.id}`}
+                            href={`/play/${item.id}`}
                         >
                             <a>
                                 <Thumbnail
