@@ -506,7 +506,7 @@ export default function DiscoveryDetail({ discovery }) {
                                 style={{
                                     textDecoration: 'none'
                                 }}
-                                href={`/playlists/${i?.playlist?.id}`}
+                                href={`/play/${i?.playlist?.id}`}
                             >
                                 <Button
                                     sx={{

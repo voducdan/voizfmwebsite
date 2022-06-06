@@ -203,7 +203,7 @@ export default function Channel() {
                                         }}
                                     >
                                         <Link
-                                            href={`/playlists/${item?.id}`}
+                                            href={`/play/${item?.id}`}
                                         >
                                             <a>
                                                 <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.name}`} ></Thumbnail>

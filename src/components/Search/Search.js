@@ -123,7 +123,7 @@ const SearchResult = (props) => {
                                 }}
                             >
                                 <Link
-                                    href={`/playlists/${i?.playlist_id}/?audioId=${i?.id}`}
+                                    href={`/play/${i?.playlist_id}/?audioId=${i?.id}`}
                                     style={{ textDecoration: 'none', height: '100%', width: '100%' }}
                                 >
                                     <Card

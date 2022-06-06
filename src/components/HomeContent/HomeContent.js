@@ -292,7 +292,7 @@ export default function HomeContent() {
                 <Swiper slidesPerView={NUMBER_ITEMS_PER_LINE} spaceBetween={SPACE_BETWEEN} style={{ marginTop: 35, height: `${getPlaylistImgWidth()}px` }}>
                     {randomPlaylists.map(item => (
                         <SwiperSlide key={item?.id}>
-                            <Link href={`/playlists/${item?.id}`}>
+                            <Link href={`/play/${item?.id}`}>
                                 <a>
                                     <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                 </a>
@@ -316,7 +316,7 @@ export default function HomeContent() {
                         >
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
-                                    <Link href={`/playlists/${item?.id}`}>
+                                    <Link href={`/play/${item?.id}`}>
                                         <a>
                                             <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                         </a>
@@ -365,7 +365,7 @@ export default function HomeContent() {
                 >
                     {newContents.map((item) => (
                         <SwiperSlide key={item.id} >
-                            <Link href={`/playlists/${item?.id}`}>
+                            <Link href={`/play/${item?.id}`}>
                                 <a>
                                     <Thumbnail style={{ borderRadius: '6px', width: '100%', height: '100%' }} avtSrc={item.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                 </a>
@@ -448,7 +448,7 @@ export default function HomeContent() {
                         >
                             {data.data.map((item) => (
                                 <SwiperSlide key={item?.id}>
-                                    <Link href={`/playlists/${item?.id}`}>
+                                    <Link href={`/play/${item?.id}`}>
                                         <a>
                                             <Thumbnail style={{ width: '100%', height: '100%', borderRadius: 3 }} avtSrc={item?.avatar?.thumb_url} alt={`images ${item?.id}`} promotion={item?.promotion || ''} />
                                         </a>

@@ -325,7 +325,7 @@ export default function PlaylistRanking() {
                                     >{(idx + 1) <= 9 ? `0${idx + 1}` : (idx + 1)}</Typography>
                                 </Box>
                                 <Link
-                                    href={`/playlists/${i?.id}`}
+                                    href={`/play/${i?.id}`}
                                     style={{ textDecoration: 'none' }}
                                 >
                                     <Box

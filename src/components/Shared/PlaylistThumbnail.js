@@ -83,7 +83,7 @@ export default function PlaylistThumnail(props) {
                 }}
             >
                 <Link
-                    href={isAudio ? `/playlists/${playlistId}?audioId=${id}` : `/playlists/${id}`}
+                    href={isAudio ? `/play/${playlistId}?audioId=${id}` : `/play/${id}`}
                 >
                     <img
                         style={{
@@ -133,7 +133,7 @@ export default function PlaylistThumnail(props) {
                     }}
                 >
                     <Link
-                        href={isAudio ? `/playlists/${playlistId}?audioId=${id}` : `/playlists/${id}`}
+                        href={isAudio ? `/play/${playlistId}?audioId=${id}` : `/play/${id}`}
                         style={{ textDecoration: 'none' }}
                     >
                         <Box
