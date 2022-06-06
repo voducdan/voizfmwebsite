@@ -283,8 +283,9 @@ export default function HomeContent() {
 
     return (
         <Main>
-            <HomeCarousel></HomeCarousel>
+            {/* <HomeCarousel></HomeCarousel> */}
             <Box sx={{
+                pt: '40px',
                 m: isSm ? '40px 20px' : '56px 48px',
             }}>
                 {<Title content="Gợi ý cho người chưa bắt đầu" isSm={isSm} />}
