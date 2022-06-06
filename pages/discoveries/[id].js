@@ -6,7 +6,8 @@ import API from '../../src/services/api';
 
 const DiscoveryDetailPage = ({ discovery }) => {
     return (
-        <DiscoveryDetail discovery={discovery} />
+        // <DiscoveryDetail discovery={discovery} />
+        ''
     )
 }
 

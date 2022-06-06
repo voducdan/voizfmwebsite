@@ -108,12 +108,12 @@ export default function SidebarMenu() {
                     text: 'Up VIP',
                     url: 'up-vip'
                 },
-                {
-                    id: 3,
-                    icon: Discover,
-                    text: 'Cộng đồng',
-                    url: 'discoveries'
-                },
+                // {
+                //     id: 3,
+                //     icon: Discover,
+                //     text: 'Cộng đồng',
+                //     url: 'discoveries'
+                // },
                 {
                     id: 4,
                     icon: Library,
@@ -148,12 +148,12 @@ export default function SidebarMenu() {
                     text: 'Up VIP',
                     url: 'up-vip'
                 },
-                {
-                    id: 3,
-                    icon: Discover,
-                    text: 'Cộng đồng',
-                    url: 'discoveries'
-                },
+                // {
+                //     id: 3,
+                //     icon: Discover,
+                //     text: 'Cộng đồng',
+                //     url: 'discoveries'
+                // },
                 {
                     id: 4,
                     icon: Library,
