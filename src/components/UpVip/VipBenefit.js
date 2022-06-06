@@ -235,7 +235,7 @@ export default function VipBenefit() {
                                     ...(isSm ? TEXT_STYLE.title4 : h3),
                                     color: COLORS.second
                                 }}
-                            >-10%</Typography>
+                            >-25%</Typography>
                             <Typography
                                 sx={{
                                     ...(isSm ? TEXT_STYLE.title1 : h4),
