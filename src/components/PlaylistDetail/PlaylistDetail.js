@@ -608,13 +608,17 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     position: 'absolute',
                     height: `${coverImgHeight}px`,
                     width: '100%',
-                    top: 0
+                    top: 0,
+                    opacity: 0.5,
+                    background: COLORS.bg1,
+                    filter: 'blur(5px)',
                 }}
             >
                 <img style={{
                     width: '100%',
                     height: '100%',
                     left: 0,
+                    objectFit: 'cover'
                 }} alt="cover img alt" src={playlist?.avatar?.original_url}></img>
             </Box>
             <Box
