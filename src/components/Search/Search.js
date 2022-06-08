@@ -74,7 +74,7 @@ const SearchResult = (props) => {
                     {searchResults.map((item) => (
                         <Link
                             key={item.id}
-                            href={`/${type}/${item.id}`}
+                            href={`/play/${item.id}`}
                         >
                             <a
                                 style={{
