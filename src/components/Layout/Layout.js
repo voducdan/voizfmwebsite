@@ -95,7 +95,6 @@ function Layout(props) {
         const el = document.getElementById(anchorSearchElId);
         setAnchorEl(el);
     }
-
     return (
         <Box>
             <Head>
@@ -124,43 +123,57 @@ function Layout(props) {
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
             </Head>
-            <Login />
-            <Header />
             {
-                openSearchModal && (
-                    <SearchModal />
+                location.asPath === '/privacy' && (
+                    <Box>
+                        {children}
+                    </Box>
                 )
             }
-            <SidebarMenu />
+            {
+                location.asPath !== '/privacy' && (
+                    <Box>
+                        <Login />
+                        <Header />
+                        {
+                            openSearchModal && (
+                                <SearchModal />
+                            )
+                        }
+                        <SidebarMenu />
 
-            <Box
-                sx={{
-                    flexGrow: 1,
-                    height: `calc(100% - ${HEADER_HEIGHT})`,
-                    marginTop: !isSm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
-                    width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
-                    ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
-                }}
-            >
-                {children}
-            </Box>
-            {
-                openPlaybar && (
-                    <PlayBar />
+                        <Box
+                            sx={{
+                                flexGrow: 1,
+                                height: `calc(100% - ${HEADER_HEIGHT})`,
+                                marginTop: !isSm ? HEADER_HEIGHT : HEADER_HEIGHT_MB,
+                                width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : '100%',
+                                ...((openSidebar && !isSm) && { marginLeft: `${DRAWER_WIDTH}px` }),
+                            }}
+                        >
+                            {children}
+                        </Box>
+                        {
+                            openPlaybar && (
+                                <PlayBar />
+                            )
+                        }
+                        {
+                            openAudioDetail && (
+                                <AudioPlay audioFromApi={audio} />
+                            )
+                        }
+                        {includeFooter && <Footer isSm={isSm} />}
+                    </Box>
                 )
             }
-            {
-                openAudioDetail && (
-                    <AudioPlay audioFromApi={audio} />
-                )
-            }
-            {includeFooter && <Footer isSm={isSm} />}
+
         </Box>
     )
 }
 export default ({ children }) => (
     <Provider store={store}>
-        <Layout children={children}>
-        </Layout>
+            <Layout children={children}>
+            </Layout>
     </Provider>
 )
