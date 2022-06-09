@@ -81,7 +81,7 @@ export default function Footer({ isSm }) {
                 }}>
                     CÔNG TY TNHH CÔNG NGHỆ WEWE
                 </Typography>
-                {infoBox(Phone, '0399 967 500')}
+                {infoBox(Phone, '0345 510 055')}
                 {infoBox(Email, 'support@wewe.vn')}
                 {infoBox(Location, '44 Lê Văn Duyệt, P1, Q. Bình Thạnh, TP. HCM')}
             </Box>
