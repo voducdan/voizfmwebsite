@@ -124,14 +124,14 @@ function Layout(props) {
                 <meta property="og:image:height" content="630" />
             </Head>
             {
-                location.asPath === '/privacy' && (
+                (location.asPath === '/privacy' || location.asPath === '/term') && (
                     <Box>
                         {children}
                     </Box>
                 )
             }
             {
-                location.asPath !== '/privacy' && (
+                (location.asPath !== '/privacy' && location.asPath !== '/term') && (
                     <Box>
                         <Login />
                         <Header />
@@ -173,7 +173,7 @@ function Layout(props) {
 }
 export default ({ children }) => (
     <Provider store={store}>
-            <Layout children={children}>
-            </Layout>
+        <Layout children={children}>
+        </Layout>
     </Provider>
 )
