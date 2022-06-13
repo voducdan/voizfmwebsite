@@ -299,10 +299,11 @@ function AudioBook({ router }) {
     return (
         <Box
             sx={{
+                pt: '10px',
                 width: '100%'
             }}
         >
-            <HomeCarousel windowWidth={windowSize.width} />
+            {/* <HomeCarousel windowWidth={windowSize.width} /> */}
             <Box
                 sx={{
                     p: `0 ${SIDE_PADDING}px`
