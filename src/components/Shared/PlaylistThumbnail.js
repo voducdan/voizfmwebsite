@@ -27,6 +27,7 @@ import useWindowSize from '../../utils/useWindowSize';
 export default function PlaylistThumnail(props) {
     const {
         id,
+        lastDuration,
         src,
         name,
         authors,
@@ -44,7 +45,7 @@ export default function PlaylistThumnail(props) {
     const windowSize = useWindowSize();
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
     const clientWidth = width ? width : (isSm || hasDelete) ? '100%' : '45%';
-
+    const lastDurationParams = lastDuration !== undefined ? `&lastDuration=${lastDuration}` : '';
     const authorsString = (authors) => {
         if (Array.isArray(authors)) {
             if (authors.length > 0) {
@@ -83,7 +84,7 @@ export default function PlaylistThumnail(props) {
                 }}
             >
                 <Link
-                    href={isAudio ? `/play/${playlistId}?audioId=${id}` : `/play/${id}`}
+                    href={isAudio ? `/play/${playlistId}?audioId=${id}${lastDurationParams}` : `/play/${id}`}
                 >
                     <img
                         style={{
@@ -133,7 +134,7 @@ export default function PlaylistThumnail(props) {
                     }}
                 >
                     <Link
-                        href={isAudio ? `/play/${playlistId}?audioId=${id}` : `/play/${id}`}
+                        href={isAudio ? `/play/${playlistId}?audioId=${id}${lastDurationParams}` : `/play/${id}`}
                         style={{ textDecoration: 'none' }}
                     >
                         <Box

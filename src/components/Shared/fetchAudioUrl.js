@@ -12,7 +12,7 @@ const fetchAudioUrl = async (
     setOpenUpdateRequiredModal,
     setOpenUnauthorizedModal,
     setOpenDonwloadAppModal,
-    setOpenSnackbar
+    setOpenSnackbar,
 ) => {
     const api = new API();
     try {
@@ -22,6 +22,7 @@ const fetchAudioUrl = async (
         const audioDataFromApi = await resAudio.data.data;
         dispatch(setAudioHls(data.url));
         dispatch(setAudioData(audioDataFromApi));
+        await api.addListeningPlaylists(id, 0, audioDataFromApi?.playlist?.id);
     }
     catch (err) {
         console.log(err)

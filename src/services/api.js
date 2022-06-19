@@ -165,7 +165,7 @@ export default class API {
     getListeningPlaylists = (page = 1, limit = 9999999) => {
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
-        return this.init().get(`/playlists/listenings?$${queryString}`);
+        return this.init().get(`/playlists/listenings?${queryString}`);
     }
 
     addListeningPlaylists = (audioId, lastDuration, playlistId) => {

@@ -516,8 +516,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
             if (playlistAudios.length > 0) {
                 if (user) {
                     await api.trackingAudio(audioListenings);
-                    await api.addListeningPlaylists(playlistAudios[0].id, 0, playlist.id);
-
                     const audioListenning = {
                         "audio_id": playlistAudios[0].id,
                         "duration_listening": 0,
@@ -533,7 +531,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     setErrorMessage,
                     setOpenUpdateRequiredModal,
                     setOpenUnauthorizedModal,
-                    setOpenSnackbar
+                    setOpenSnackbar,
+                    playlist.id
                 );
                 return;
             }
