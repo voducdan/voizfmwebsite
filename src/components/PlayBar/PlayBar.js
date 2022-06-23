@@ -39,6 +39,7 @@ import ExpandLessIcon from '@mui/icons-material/ExpandLess';
 import Control from './Control';
 import AudioList from '../../components/AudioPlay/AudioListModals';
 import handleAddToCart from '../../components/Shared/handleAddToCart';
+import RequireDownloadAppModal from '../../components/Shared/RequireDownloadAppModal';
 
 // import utils
 import { flexStyle } from '../../utils/flexStyle';
@@ -67,6 +68,7 @@ export default function PlayBar() {
     const [prevAudioId, setPrevAudioId] = useState(undefined);
     const [openUpdateRequiredModal, setOpenUpdateRequiredModal] = useState(false);
     const [openUnauthorizedModal, setOpenUnauthorizedModal] = useState(false);
+    const [openDonwloadAppModal, setOpenDonwloadAppModal] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
 
     const dispatch = useDispatch();
@@ -400,6 +402,7 @@ export default function PlayBar() {
                 setErrorMessage={setErrorMessage}
                 setOpenUpdateRequiredModal={setOpenUpdateRequiredModal}
                 setOpenUnauthorizedModal={setOpenUnauthorizedModal}
+                setOpenDonwloadAppModal={setOpenDonwloadAppModal}
                 setOpenSnackbar={setOpenSnackbar}
             />
             <Dialog
@@ -611,6 +614,12 @@ export default function PlayBar() {
                     </Box>
                 </DialogActions>
             </Dialog>
+            <RequireDownloadAppModal
+                isSm={isSm}
+                router={router}
+                openDonwloadAppModal={openDonwloadAppModal}
+                setOpenDonwloadAppModal={setOpenDonwloadAppModal}
+            />
         </Box>
     )
 }

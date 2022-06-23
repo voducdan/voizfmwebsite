@@ -80,7 +80,7 @@ export default class API {
 
     removeCartItem = (playlistId) => {
         return this.init().delete(`web/carts/${playlistId}`);
-    }       
+    }
 
     payment = (method, data) => {
         return this.init().post(`/web/payment/${method}`, data);
@@ -88,6 +88,12 @@ export default class API {
 
     getComboPackage = () => {
         return this.init().get(`/combo_packages`)
+    }
+
+    getComboPackagePlaylists = (id) => {
+        const params = { limit: 99999 };
+        const queryString = this.buildQueryString(params)
+        return this.init().get(`/combo_packages/${id}/playlists?${queryString}`);
     }
 
     getVipPackage = () => {
@@ -122,13 +128,13 @@ export default class API {
         return this.init().post(`/discoveries/${discoveryId}/likes`)
     }
 
-    getPlaylistHistory = (page = 1, limit = 99999) => {
+    getPlaylistHistory = (page = 1, limit = 10) => {
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
         return this.init().get(`/profiles/playlist_histories?${queryString}`)
     }
 
-    getAudioHistory = (page = 1, limit = 99999) => {
+    getAudioHistory = (page = 1, limit = 10) => {
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
         return this.init().get(`/profiles/audio_histories?${queryString}`)
@@ -162,7 +168,7 @@ export default class API {
         return this.init().get('/profiles/combo_packages');
     }
 
-    getListeningPlaylists = (page = 1, limit = 9999999) => {
+    getListeningPlaylists = (page = 1, limit = 10) => {
         const params = { page, limit };
         const queryString = this.buildQueryString(params);
         return this.init().get(`/playlists/listenings?${queryString}`);

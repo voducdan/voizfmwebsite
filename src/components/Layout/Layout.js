@@ -96,7 +96,13 @@ function Layout(props) {
         setAnchorEl(el);
     }
     return (
-        <Box>
+        <Box
+            sx={{
+                ...(openPlaybar && {
+                    mb: isSm ? '300px' : '120px',
+                })
+            }}
+        >
             <Head>
                 <meta charSet="utf-8" />
                 <link rel="icon" sizes="32x32" href="/images/favicon-32x32.png" />
@@ -112,16 +118,6 @@ function Layout(props) {
                 <link rel="manifest" href="/manifest.json" />
 
                 <title>Sách nói & Podcast Chất lượng cao. 100% Bản quyền | Voiz FM</title>
-                <meta property="og:url" content="https://voiz.vn" />
-                <meta property="og:type" content="website" />
-                <meta property="og:title" content="Sách nói & Podcast Chất lượng cao. 100% Bản quyền | Voiz FM" />
-                <meta
-                    property="og:description"
-                    content="Sách nói bán chạy. Đọc truyện đêm khuya. Tin tức hàng ngày. Podcast hữu ích. Cập nhật thường xuyên."
-                />
-                <meta property="og:image" content="https://voiz.vn/images/logo_voiz.jpg" />
-                <meta property="og:image:width" content="1200" />
-                <meta property="og:image:height" content="630" />
             </Head>
             {
                 (location.asPath === '/privacy' || location.asPath === '/term') && (

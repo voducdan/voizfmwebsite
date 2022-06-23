@@ -114,7 +114,7 @@ export default function Control(props) {
     const audioData = useSelector(selectAudioData);
     const [position, setPosition] = useState(positionFromLastDuration);
     const [paused, setPaused] = useState(false);
-    const [timer, setTimer] = useState(0);
+    const [timer, setTimer] = useState(null);
     const [intervalId, setIntervalId] = useState(null);
     const [countDownTimerStr, setCountDownTimer] = useState('');
     const [openTimer, setOpenTimer] = useState(false);
@@ -193,7 +193,7 @@ export default function Control(props) {
                         }).catch(error => {
                             console.log(error)
                             dispatch(togglePlayAudio());
-                            setPaused(true);
+                            // setPaused(true);
                         });
                     }
                 });
@@ -223,14 +223,11 @@ export default function Control(props) {
     }, [paused]);
 
     useEffect(() => {
-        if (timer === 0) {
+        if (timer === null) {
             return;
         }
-        if (!paused) {
-            setPaused(true);
-        }
         setTimeout(() => {
-            setPaused(false);
+            setPaused(true);
         }, timer * 1000 * 60);
         countDownTimer();
     }, [timer]);

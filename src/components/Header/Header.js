@@ -11,7 +11,7 @@ import { useSelector, useDispatch } from 'react-redux';
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
 import { handleOpenLogin } from '../../redux/openLogin';
 import { setAnchorEl, handleStartSearch, handleStopSearch, setPlaylistResult } from '../../redux/OpenSearch';
-import { selectCart, selectAddToCartFlag, setAddToCartFlag } from '../../redux/payment';
+import { selectCart, selectAddToCartFlag, selectNumItemsInCart, setAddToCartFlag, setNumItemsInCart } from '../../redux/payment';
 import { setUser, selectUser } from '../../redux/user';
 import { selectToken, removeToken } from '../../redux/token';
 
@@ -155,9 +155,9 @@ function Header({ router }) {
     const cart = useSelector(selectCart);
     const token = useSelector(selectToken);
     const addToCartFlag = useSelector(selectAddToCartFlag);
+    const numItemsInCart = useSelector(selectNumItemsInCart);
     const user = useSelector(selectUser);
     const [avtSrc, setAvtSrc] = useState(null);
-    const [numItemsInCart, setNumItemsInCart] = useState(0);
     const [searchKeyword, setSearchKeyword] = useState('');
     const [searchOnMb, setSearchOnMb] = useState(false);
     const [searchOnPC, setSearchOnPC] = useState(false);
@@ -226,11 +226,11 @@ function Header({ router }) {
             const res = await api.getNumItemsInCart();
             const data = await res.data.data;
             if (!data.error) {
-                setNumItemsInCart(data.badge);
+                dispatch(setNumItemsInCart(data.badge));
             }
         }
         catch (err) {
-            setNumItemsInCart(0)
+            dispatch(setNumItemsInCart(0));
         }
     };
 
