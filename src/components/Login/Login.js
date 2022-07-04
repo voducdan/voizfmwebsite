@@ -355,6 +355,9 @@ export default function Login() {
         }
         catch (err) {
             console.log(err)
+            if (err?.error && err?.error === 'popup_closed_by_user') {
+                return;
+            }
             setHasError(true);
             setError('Đã xảy ra lỗi khi đăng nhập bằng Facebook, vui lòng thử lại sau!');
             return;
