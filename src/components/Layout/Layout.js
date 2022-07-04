@@ -3,6 +3,8 @@ import Head from 'next/head';
 
 import { useEffect, useState } from 'react';
 
+import Cookies from 'universal-cookie';
+
 import { useSelector, useDispatch } from 'react-redux';
 
 import { setOpen, selectOpenSidebar } from '../../redux/openSidebar';
@@ -33,6 +35,7 @@ import useWindowSize from '../../utils/useWindowSize';
 import { SCREEN_BREAKPOINTS, HEADER_HEIGHT, HEADER_HEIGHT_MB, DRAWER_WIDTH } from '../../utils/constants';
 
 import API from '../../services/api';
+import { getToken } from '../../services/authentication';
 import { removeAudioListenings, getAudioListenings } from '../../services/audioListenning';
 
 function Layout(props) {
@@ -51,6 +54,7 @@ function Layout(props) {
     const openAudioDetail = useSelector(selectOpenAudioDetail);
     const openSearchModal = Boolean(anchorEl);
     const dispatch = useDispatch();
+    const cookies = new Cookies();
 
     useEffect(() => {
         async function sendTrackingAudio(audioListenings) {
@@ -66,6 +70,11 @@ function Layout(props) {
             sendTrackingAudio(audioListenings);
             removeAudioListenings();
         }
+
+        // set cookies if localstorage exists
+        const tokenFromLocalStorage = getToken();
+        cookies.set('token', tokenFromLocalStorage);
+
     }, []);
 
     useEffect(() => {

@@ -12,7 +12,7 @@ const fetchAudioUrl = async (
     setOpenUpdateRequiredModal,
     setOpenUnauthorizedModal,
     setOpenDonwloadAppModal,
-    setOpenSnackbar,
+    setOpenSnackbar
 ) => {
     const api = new API();
     try {

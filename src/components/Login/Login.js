@@ -354,6 +354,7 @@ export default function Login() {
             setIsFacebook(true);
         }
         catch (err) {
+            console.log(err)
             setHasError(true);
             setError('Đã xảy ra lỗi khi đăng nhập bằng Facebook, vui lòng thử lại sau!');
             return;
@@ -410,6 +411,9 @@ export default function Login() {
 
     const responseGoogleFalure = (err) => {
         console.log(err)
+        if (err?.error && err?.error === 'popup_closed_by_user') {
+            return;
+        }
         setHasError(true);
         setError('Đã xảy ra lỗi khi đăng nhập bằng google, vui lòng thử lại sau!');
         return;

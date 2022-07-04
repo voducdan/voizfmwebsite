@@ -191,6 +191,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                 setErrorMessage,
                 setOpenUpdateRequiredModal,
                 setOpenUnauthorizedModal,
+                setOpenDonwloadAppModal,
                 setOpenSnackbar
             );
 
@@ -478,7 +479,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const handlePlayOneAudio = async (audioId, idx) => {
         if (user) {
             await api.trackingAudio(audioListenings);
-            await api.addListeningPlaylists(audioId, 0, playlist.id);
 
             const audioListenning = {
                 "audio_id": audioId,
@@ -531,8 +531,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
                     setErrorMessage,
                     setOpenUpdateRequiredModal,
                     setOpenUnauthorizedModal,
-                    setOpenSnackbar,
-                    playlist.id
+                    setOpenDonwloadAppModal,
+                    setOpenSnackbar
                 );
                 return;
             }
