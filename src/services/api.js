@@ -184,7 +184,7 @@ export default class API {
     }
 
     deleteListeningPlaylist = (id) => {
-        return this.init().delete(`/playlists/listenings?id=${id}`);
+        return this.init().delete(`/playlists/listenings/${id}`);
     }
 
     getCategories = (code) => {
