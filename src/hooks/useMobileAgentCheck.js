@@ -8,7 +8,7 @@ export const useMobileAgentCheck = () => {
   useEffect(() => {
     if (navigator) {
       setIsAndroid(
-        /Android|webOS|BlackBerry|IEMobile|Opera Mini/i.test(navigator.userAgent),
+        /Android/i.test(navigator.userAgent),
       );
       setIsIOS(
         /iPhone|iPad|iPod/i.test(navigator.userAgent),
