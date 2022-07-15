@@ -338,7 +338,7 @@ export default function Listening() {
                                     }}
                                 >
                                     <PlaylistThumnail
-                                        id={i?.playlist?.id}
+                                        id={i?.last_audio_id}
                                         lastDuration={i?.last_duration}
                                         name={i?.playlist?.name}
                                         src={i?.playlist?.avatar?.thumb_url}

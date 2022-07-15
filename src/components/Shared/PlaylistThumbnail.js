@@ -222,7 +222,7 @@ export default function PlaylistThumnail(props) {
                     }
                     {
                         hasDelete && (
-                            <IconButton onClick={handleConfirmDeleteModalOpen} id={id} aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content, p: '0 5px 5px 5px' }}>
+                            <IconButton onClick={handleConfirmDeleteModalOpen} id={playlistId} aria-label="delete" size="small" sx={{ color: COLORS.VZ_Text_content, p: '0 5px 5px 5px' }}>
                                 <Trash />
                             </IconButton>
                         )
