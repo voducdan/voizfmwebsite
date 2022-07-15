@@ -41,6 +41,7 @@ export default function AudioList(props) {
         setErrorMessage,
         setOpenUpdateRequiredModal,
         setOpenUnauthorizedModal,
+        setOpenDonwloadAppModal,
         setOpenSnackbar
     } = props;
     const user = useSelector(selectUser);
@@ -60,6 +61,7 @@ export default function AudioList(props) {
             setErrorMessage,
             setOpenUpdateRequiredModal,
             setOpenUnauthorizedModal,
+            setOpenDonwloadAppModal,
             setOpenSnackbar
         );
     }

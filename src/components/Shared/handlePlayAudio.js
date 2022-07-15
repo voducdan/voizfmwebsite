@@ -4,9 +4,6 @@ import { setFooter } from '../../redux/footer';
 
 import fetchAudioUrl from './fetchAudioUrl';
 
-// import service
-import API from '../../services/api';
-
 const handlePlayAudio = async (
     dispatch,
     user,
@@ -19,14 +16,10 @@ const handlePlayAudio = async (
     setOpenDonwloadAppModal,
     setOpenSnackbar
 ) => {
-    const api = new API();
     try {
         if (!user && promotion !== 'free') {
             dispatch(setOpenLogin(true));
             return;
-        }
-        if (user) {
-            await api.addListeningPlaylists(audioId, 0, playlistId);
         }
         dispatch(setFooter(false));
         fetchAudioUrl(
@@ -36,7 +29,7 @@ const handlePlayAudio = async (
             setOpenUpdateRequiredModal,
             setOpenUnauthorizedModal,
             setOpenDonwloadAppModal,
-            setOpenSnackbar
+            setOpenSnackbar,
         );
     }
     catch (err) {

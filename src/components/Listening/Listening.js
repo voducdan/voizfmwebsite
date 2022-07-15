@@ -99,7 +99,7 @@ const AudioDuration = (props) => {
 export default function Listening() {
     const api = new API();
     const windowSize = useWindowSize();
-    const [audioPage, setAudioPage] = useState(0);
+    const [audioPage, setAudioPage] = useState(1);
     const [listeningPlaylists, setListeningPlaylists] = useState([]);
     const [deleteList, setDeleteList] = useState([]);
     const [isDeleteMode, setIsDeleteMode] = useState(false);
@@ -109,20 +109,30 @@ export default function Listening() {
     const [confirmDeleteModalText, setConfirmDeleteModalText] = useState('');
     const [openSnackbar, setOpenSnackbar] = useState(false);
     const [errorMessage, setErrorMessage] = useState('');
+    const [hasLoadMoreAudio, setHasLoadMoreAudio] = useState(true);
+
     const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
-
     useEffect(() => {
-        async function fetchListeningPlaylists() {
-            const res = await api.getListeningPlaylists();
-            const data = await res.data.data;
-            const initDeleteList = data.map(i => ({ id: i.playlist.id, checked: false }));
-            setListeningPlaylists(data);
-            setDeleteList(initDeleteList);
-        }
+        fetchListeningPlaylists(audioPage);
+    }, [audioPage]);
 
-        fetchListeningPlaylists()
-    }, []);
+    const handleLoadMoreAudio = () => {
+        const newAudioPage = audioPage + 1;
+        setAudioPage(newAudioPage);
+    }
+
+    const fetchListeningPlaylists = async (audioPage) => {
+        const res = await api.getListeningPlaylists(audioPage);
+        const data = await res.data.data;
+        const expandedListeningList = [...listeningPlaylists, ...data];
+        const initDeleteList = expandedListeningList.map(i => ({ id: i.playlist.id, checked: false }));
+        setListeningPlaylists(expandedListeningList);
+        setDeleteList(initDeleteList);
+        if (data.length < 10) {
+            setHasLoadMoreAudio(false);
+        }
+    }
 
     const handleGoDelete = () => {
         const tmpIsDeleteMode = !isDeleteMode;
@@ -328,7 +338,8 @@ export default function Listening() {
                                     }}
                                 >
                                     <PlaylistThumnail
-                                        id={i?.last_audio_id}
+                                        id={i?.playlist?.id}
+                                        lastDuration={i?.last_duration}
                                         name={i?.playlist?.name}
                                         src={i?.playlist?.avatar?.thumb_url}
                                         authors={i?.playlist?.authors}
@@ -350,6 +361,34 @@ export default function Listening() {
                         ))
                     }
                 </TabPanel>
+                {
+                    hasLoadMoreAudio && (
+                        <Box
+                            sx={{
+                                ...flexStyle('center', 'center')
+                            }}
+                        >
+                            <Button
+                                onClick={handleLoadMoreAudio}
+                                sx={{
+                                    textTransform: 'none',
+                                    ...TEXT_STYLE.title2,
+                                    color: COLORS.white,
+                                    bgcolor: COLORS.main,
+                                    width: '170px',
+                                    height: '40px',
+                                    borderRadius: '4px',
+                                    mt: '40px',
+                                    ':hover': {
+                                        bgcolor: COLORS.main
+                                    }
+                                }}
+                            >
+                                Tải thêm
+                            </Button>
+                        </Box>
+                    )
+                }
                 <Dialog
                     open={confirmDeleteModal}
                     onClose={handleConfirmDeleteModalClose}

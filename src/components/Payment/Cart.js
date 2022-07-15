@@ -195,12 +195,16 @@ export default function Cart() {
         }
         setCheckAllControl(checked);
         setCheckControl(checkAll);
+        setCheckDiscountCode(false);
+        setSaleAmount(0);
     }
     const handleSelectCartItem = (event, id) => {
         const checked = event.target.checked;
         const copyCheckedControl = { ...checkControl };
         copyCheckedControl[id] = checked;
         setCheckControl(copyCheckedControl);
+        setCheckDiscountCode(false);
+        setSaleAmount(0);
         if (checked) {
             const item = cart.filter(i => i.id === id);
             const currentSelect = [...selectedItem, ...item];

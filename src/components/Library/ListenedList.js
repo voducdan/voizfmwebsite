@@ -9,7 +9,8 @@ import {
     Box,
     Tabs,
     Tab,
-    Typography
+    Typography,
+    Button
 } from '@mui/material';
 
 // import others components
@@ -129,32 +130,57 @@ export default function PlaylistHistory() {
     const [playlistHistories, setPlaylistHistories] = useState([]);
     const [audiotHistories, setAudioHistories] = useState([]);
     const [value, setValue] = useState(0);
+    const [audioPage, setAudioPage] = useState(1);
+    const [playlistPage, setPlaylistPage] = useState(1);
+    const [hasLoadMoreAudio, setHasLoadMoreAudio] = useState(true);
+    const [hasLoadMorePlaylist, setHasLoadMorePlaylist] = useState(true);
+
 
     useEffect(() => {
-        async function fetchPlaylistHistories() {
-            try {
-                const res = await api.getPlaylistHistory();
-                const data = await res.data.data;
-                setPlaylistHistories(data);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
-        async function fetchAudioHistories() {
-            try {
-                const res = await api.getAudioHistory();
-                const data = await res.data.data;
-                setAudioHistories(data);
-            }
-            catch (err) {
-                console.log(err)
-            }
-        }
+        fetchPlaylistHistories(playlistPage);
+    }, [playlistPage]);
 
-        fetchAudioHistories()
-        fetchPlaylistHistories()
-    }, [])
+    useEffect(() => {
+        fetchAudioHistories(audioPage);
+    }, [audioPage]);
+
+    const fetchAudioHistories = async (audioPage) => {
+        try {
+            const res = await api.getAudioHistory(playlistPage);
+            const data = await res.data.data;
+            setAudioHistories([...audiotHistories, ...data]);
+            if (data.length < 10) {
+                setHasLoadMoreAudio(false);
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const fetchPlaylistHistories = async (playlistPage) => {
+        try {
+            const res = await api.getPlaylistHistory(playlistPage);
+            const data = await res.data.data;
+            setPlaylistHistories([...playlistHistories, ...data]);
+            if (data.length < 10) {
+                setHasLoadMorePlaylist(false);
+            }
+        }
+        catch (err) {
+            console.log(err)
+        }
+    }
+
+    const handleLoadMoreAudio = () => {
+        const newAudioPage = audioPage + 1;
+        setAudioPage(newAudioPage);
+    }
+
+    const handleLoadMorePlaylist = () => {
+        const newPlaylistPage = playlistPage + 1;
+        setPlaylistPage(newPlaylistPage);
+    }
 
     const handleChange = (event, newValue) => {
         setValue(newValue);
@@ -226,6 +252,63 @@ export default function PlaylistHistory() {
                     ))
                 }
             </TabPanel>
+            {
+                hasLoadMorePlaylist && (
+                    <Box
+                        sx={{
+                            ...flexStyle('center', 'center')
+                        }}
+                    >
+                        <Button
+                            onClick={handleLoadMorePlaylist}
+                            sx={{
+                                textTransform: 'none',
+                                ...TEXT_STYLE.title2,
+                                color: COLORS.white,
+                                bgcolor: COLORS.main,
+                                width: '170px',
+                                height: '40px',
+                                borderRadius: '4px',
+                                mt: '40px',
+                                ':hover': {
+                                    bgcolor: COLORS.main
+                                }
+                            }}
+                        >
+                            Tải thêm
+                        </Button>
+                    </Box>
+                )
+            }
+            {
+                hasLoadMoreAudio && (
+                    <Box
+                        sx={{
+                            ...flexStyle('center', 'center'),
+                            width: '100%'
+                        }}
+                    >
+                        <Button
+                            onClick={handleLoadMoreAudio}
+                            sx={{
+                                textTransform: 'none',
+                                ...TEXT_STYLE.title2,
+                                color: COLORS.white,
+                                bgcolor: COLORS.main,
+                                width: '170px',
+                                height: '40px',
+                                borderRadius: '4px',
+                                mt: '40px',
+                                ':hover': {
+                                    bgcolor: COLORS.main
+                                }
+                            }}
+                        >
+                            Tải thêm
+                        </Button>
+                    </Box>
+                )
+            }
         </Box>
     )
 }

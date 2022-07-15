@@ -18,7 +18,7 @@ const Term = () => {
                     property="og:description"
                     content="Sách nói bán chạy. Đọc truyện đêm khuya. Tin tức hàng ngày. Podcast hữu ích. Cập nhật thường xuyên."
                 />
-                <meta property="og:image" content="https://voiz.vn/images/logo_voiz.jpg" />
+                <meta property="og:image" content="/images/apple-touch-icon.png" />
                 <meta property="og:image:width" content="1200" />
                 <meta property="og:image:height" content="630" />
             </Head>
