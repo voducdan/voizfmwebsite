@@ -13,8 +13,6 @@ import API from "../../src/services/api";
 
 const PlaylistDetailPage = ({ playlist, params }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
-  console.log("params: ", params);
-
   
   return playlist ? (
     <Provider store={store}>
