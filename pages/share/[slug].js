@@ -15,7 +15,6 @@ import { SearchTypeQuery, SharedType, SharedTypeInUrl } from "../../src/constant
 
 const SharedPage = ({ data }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
-
   
   return data ? (
     <Provider store={store}>
@@ -26,6 +25,7 @@ const SharedPage = ({ data }) => {
         <meta property="og:title" content={data?.name} />
         <meta property="og:description" content={data?.description} />
         <meta property="og:image" content={data?.avatar?.original_url} />
+        <meta property="og:image:secure_url" content={data?.avatar?.original_url} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
       </Head>
