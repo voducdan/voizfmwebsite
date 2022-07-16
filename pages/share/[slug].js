@@ -18,8 +18,9 @@ import {
 } from "../../src/constants/shareType.constant";
 import { APP_BASE_LINK } from "../../src/constants/link.constant";
 
-const SharedPage = ({ data }) => {
+const SharedPage = ({ data, newUrl }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
+  console.log("newUrl: ", newUrl);
 
   return data ? (
     <Provider store={store}>
@@ -80,21 +81,22 @@ export async function getServerSideProps(context) {
     switch (t) {
       case SharedType.Playlist:
         newUrl = isMobile
-          ? `${APP_BASE_LINK}?${SharedType.Playlist}&id=${id}`
+          ? `${APP_BASE_LINK}share?type=${SharedType.Playlist}&id=${id}`
           : `/${SharedTypeInUrl.Playlist}/${id}`;
         break;
       case SharedType.Audio:
         newUrl = isMobile
-          ? `${APP_BASE_LINK}?${SharedType.Audio}&id=${audioId}`
+          ? `${APP_BASE_LINK}share?type=${SharedType.Audio}&id=${audioId}`
           : `/${SharedTypeInUrl.Playlist}/${id}?audioId=${audioId}`;
         break;
       case SharedType.Channel:
         newUrl = isMobile
-          ? `${APP_BASE_LINK}?${SharedType.Channel}&id=${id}`
+          ? `${APP_BASE_LINK}share?type=${SharedType.Channel}&id=${id}`
           : `/${SharedTypeInUrl.Channel}/${id}`;
         break;
     }
   }
+
   return {
     props: {
       data,
