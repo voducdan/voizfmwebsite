@@ -18,9 +18,8 @@ import {
 } from "../../src/constants/shareType.constant";
 import { APP_BASE_LINK } from "../../src/constants/link.constant";
 
-const SharedPage = ({ data, newUrl }) => {
+const SharedPage = ({ data }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
-  console.log("newUrl: ", newUrl);
 
   return data ? (
     <Provider store={store}>
@@ -48,7 +47,7 @@ export async function getServerSideProps(context) {
   const api = new API(token);
 
   const userAgent = get(context.req.headers, "user-agent", "");
-  const isMobile = !!userAgent.match(
+  const isMobile = true || !!userAgent.match(
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
   );
   let data = null;
@@ -65,7 +64,7 @@ export async function getServerSideProps(context) {
       break;
   }
   try {
-    const res = await api.getSearchResults(searchQueryType, slug);
+    const res = await api.getSearchResults(searchQueryType, slug[0]);
     data = get(res.data, "data[0]");
   } catch (err) {
     console.log(err.message);
@@ -100,6 +99,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       data,
+      test: newUrl,
     },
     redirect: {
       destination: newUrl,
