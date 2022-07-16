@@ -47,7 +47,7 @@ export async function getServerSideProps(context) {
   const api = new API(token);
 
   const userAgent = get(context.req.headers, "user-agent", "");
-  const isMobile = true || !!userAgent.match(
+  const isMobile = !!userAgent.match(
     /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
   );
   let data = null;
@@ -99,7 +99,6 @@ export async function getServerSideProps(context) {
   return {
     props: {
       data,
-      test: newUrl,
     },
     redirect: {
       destination: newUrl,
