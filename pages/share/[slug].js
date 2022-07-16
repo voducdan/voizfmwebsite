@@ -24,7 +24,7 @@ const SharedPage = ({ data }) => {
         <meta property="og:type" content="website" />
         <meta property="og:title" content={data?.name} />
         <meta property="og:description" content={data?.description} />
-        <meta property="og:image" content={data?.avatar?.original_url} />
+        {/* <meta property="og:image" content={data?.avatar?.original_url} /> */}
         <meta property="og:image:url" content={data?.avatar?.original_url} />
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
