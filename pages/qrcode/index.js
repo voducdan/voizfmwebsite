@@ -42,8 +42,7 @@ export async function getServerSideProps(context) {
   const { type, id } = context.query;
   const { token } = context.req.cookies;
   const api = new API(token);
-
-  const userAgent = get(context.req.headers, "user-agent", "");
+  
   let data = null;
   let res = null;
   let newUrl = "/";
