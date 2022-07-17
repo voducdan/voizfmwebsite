@@ -70,9 +70,9 @@ export default function AudioPlay({ audioFromApi }) {
 
   useEffect(() => {
     if (audio) {
-      const { id, slug, playlist } = audio;
+      const { id, playlist } = audio;
       const playlistSlug = get(playlist, "slug", "");
-      const newUrl = getSharedLink(playlistSlug, SharedType.Audio, slug);
+      const newUrl = getSharedLink(playlistSlug, SharedType.Audio);
       setId(id);
       setUrl(newUrl);
     }
