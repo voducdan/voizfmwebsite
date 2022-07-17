@@ -44,12 +44,9 @@ export async function getServerSideProps(context) {
   const api = new API(token);
 
   const userAgent = get(context.req.headers, "user-agent", "");
-  const isMobile = !!userAgent.match(
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
-  );
   let data = null;
   let res = null;
-  let newUrl = isMobile ? APP_BASE_LINK : "/";
+  let newUrl = "/";
 
   try {
     switch (type) {
