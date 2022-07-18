@@ -104,6 +104,7 @@ export async function getServerSideProps(context) {
         newUrl = isMobile
           ? getShareLinkToApp(SharedType.Audio, id)
           : `/${SharedTypeInUrl.Playlist}/${get(data, 'playlist.id', '')}?audioId=${id}`;
+        data = get(data, 'avatar.original_url') ? data : get(data, 'playlist');
         break;
       case SharedType.Channel:
         newUrl = isMobile
