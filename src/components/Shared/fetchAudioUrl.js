@@ -11,7 +11,7 @@ const fetchAudioUrl = async (
     setErrorMessage,
     setOpenUpdateRequiredModal,
     setOpenUnauthorizedModal,
-    setOpenDonwloadAppModal,
+    setOpenDownloadAppModal,
     setOpenSnackbar
 ) => {
     const api = new API();
@@ -30,7 +30,7 @@ const fetchAudioUrl = async (
         if (status === 400) {
             const errMsg = err?.response?.data?.error;
             if (errMsg && errMsg === 'Nghe tiếp sách này tại ứng dụng Voiz FM') {
-                setOpenDonwloadAppModal(true);
+                setOpenDownloadAppModal(true);
                 return;
             }
             setErrorMessage('Quý khách chưa đăng ký dịch vụ thành công. Vui lòng kiểm tra lại')
