@@ -7,6 +7,8 @@ import store from "../../src/redux/store";
 
 // import components
 import Home from "../../src/pages/Home/Home";
+import PlaylistDetail from "../../src/components/PlaylistDetail/PlaylistDetail";
+import ChannelDetail from "../../src/components/ChannelDetail/ChannelDetail";
 
 // import service
 import API from "../../src/services/api";
@@ -16,9 +18,18 @@ import {
   SharedTypeInUrl,
 } from "../../src/constants/shareType.constant";
 import { APP_BASE_LINK } from "../../src/constants/link.constant";
+import { useRouter } from "next/router";
+import { useEffect } from "react";
+import { getShareLinkToApp } from "../../src/helper/link.helper";
 
-const SharedPage = ({ data }) => {
+const SharedPage = ({ data, newUrl }) => {
+  const router = useRouter();
   const url = typeof window !== "undefined" ? window.location.href : "";
+
+  useEffect(() => {
+    router.push(newUrl);
+  }, []);
+  
 
   return data ? (
     <Provider store={store}>
@@ -97,10 +108,7 @@ export async function getServerSideProps(context) {
   return {
     props: {
       data,
-    },
-    redirect: {
-      destination: newUrl,
-      permanent: false,
+      newUrl,
     },
   };
 }
