@@ -12,7 +12,7 @@ import ChannelDetail from "../../src/components/ChannelDetail/ChannelDetail";
 
 // import service
 import API from "../../src/services/api";
-import { get } from "lodash";
+import { get, startsWith } from "lodash";
 import {
   SharedType,
   SharedTypeInUrl,
@@ -21,10 +21,25 @@ import { APP_BASE_LINK } from "../../src/constants/link.constant";
 import { useRouter } from "next/router";
 import { useEffect } from "react";
 import { getShareLinkToApp } from "../../src/helper/link.helper";
+import { useState } from "react";
 
 const SharedPage = ({ data, newUrl }) => {
   const router = useRouter();
   const url = typeof window !== "undefined" ? window.location.href : "";
+  const [isRedirected, setIsRedirected] = useState(false);
+
+  useEffect(() => {
+    if (!isRedirected) {
+      router.push(newUrl);
+      setIsRedirected(true)
+    }    
+  }, []);  
+
+  useEffect(() => {
+    if (isRedirected && startsWith(newUrl, APP_BASE_LINK)) {
+      router.push('/', undefined, { shallow: true });
+    }
+  }, [isRedirected]);
 
   useEffect(() => {
     router.push(newUrl);
@@ -58,7 +73,7 @@ export async function getServerSideProps(context) {
 
   const userAgent = get(context.req.headers, "user-agent", "");
   const isMobile = !!userAgent.match(
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mozilla/i
   );
   let data = null;
   let res = null;
