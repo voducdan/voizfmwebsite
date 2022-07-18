@@ -39,12 +39,7 @@ const SharedPage = ({ data, newUrl }) => {
     if (isRedirected && startsWith(newUrl, APP_BASE_LINK)) {
       router.push('/', undefined, { shallow: true });
     }
-  }, [isRedirected]);
-
-  useEffect(() => {
-    router.push(newUrl);
-  }, []);
-  
+  }, [isRedirected]);  
 
   return data ? (
     <Provider store={store}>
@@ -73,7 +68,7 @@ export async function getServerSideProps(context) {
 
   const userAgent = get(context.req.headers, "user-agent", "");
   const isMobile = !!userAgent.match(
-    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini|Mozilla/i
+    /Android|webOS|iPhone|iPad|iPod|BlackBerry|IEMobile|Opera Mini/i
   );
   let data = null;
   let res = null;
