@@ -3,17 +3,16 @@ import Head from "next/head";
 
 // import reduc
 import { Provider } from "react-redux";
-import store from "../../src/redux/store";
+import store from "../../../src/redux/store";
 
 // import components
-import Home from "../../src/pages/Home/Home";
+import Home from "../../../src/pages/Home/Home";
 
 // import service
-import API from "../../src/services/api";
+import API from "../../../src/services/api";
 import { get } from "lodash";
-import { SharedType } from "../../src/constants/shareType.constant";
-import { APP_BASE_LINK } from "../../src/constants/link.constant";
-import { getSharedLink } from "../../src/helper/link.helper";
+import { SharedType } from "../../../src/constants/shareType.constant";
+import { getSharedLink } from "../../../src/helper/link.helper";
 
 const QrCodePage = ({ data }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
