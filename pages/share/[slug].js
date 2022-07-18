@@ -28,18 +28,22 @@ const SharedPage = ({ data, newUrl }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
   const [isRedirected, setIsRedirected] = useState(false);
 
-  useEffect(() => {
-    if (!isRedirected) {
-      router.push(newUrl);
-      setIsRedirected(true)
-    }    
-  }, []);  
+  // useEffect(() => {
+  //   if (!isRedirected) {
+  //     router.push(newUrl);
+  //     setIsRedirected(true)
+  //   }    
+  // }, []);  
+
+  // useEffect(() => {
+  //   if (isRedirected && startsWith(newUrl, APP_BASE_LINK)) {
+  //     router.push('/', undefined, { shallow: true });
+  //   }
+  // }, [isRedirected]);
 
   useEffect(() => {
-    if (isRedirected && startsWith(newUrl, APP_BASE_LINK)) {
-      router.push('/', undefined, { shallow: true });
-    }
-  }, [isRedirected]);  
+    router.push(newUrl);
+  }, []);
 
   return data ? (
     <Provider store={store}>
