@@ -7,8 +7,6 @@ import store from "../../src/redux/store";
 
 // import components
 import Home from "../../src/pages/Home/Home";
-import PlaylistDetail from "../../src/components/PlaylistDetail/PlaylistDetail";
-import ChannelDetail from "../../src/components/ChannelDetail/ChannelDetail";
 
 // import service
 import API from "../../src/services/api";
