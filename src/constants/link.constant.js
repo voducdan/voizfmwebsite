@@ -1,0 +1,1 @@
+export const APP_BASE_LINK = 'com.wewe://';
