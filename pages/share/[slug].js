@@ -30,16 +30,16 @@ const SharedPage = ({ data, newUrl }) => {
 
   useEffect(() => {
     if (!isRedirected) {
-      router.push(newUrl);
-      setIsRedirected(true)
-    }    
-  }, []);  
+      document.location = newUrl;
+      setIsRedirected(true);
+    }
+  }, []);
 
   useEffect(() => {
     if (isRedirected && startsWith(newUrl, APP_BASE_LINK)) {
-      router.push('/', undefined, { shallow: true });
+      router.push("/", undefined, { shallow: true });
     }
-  }, [isRedirected]);  
+  }, [isRedirected]);
 
   return data ? (
     <Provider store={store}>
@@ -93,7 +93,7 @@ export async function getServerSideProps(context) {
     console.log(err.message);
   }
 
-  const id = get(data, 'id', '');
+  const id = get(data, "id", "");
 
   if (data && id) {
     switch (t) {
@@ -105,7 +105,11 @@ export async function getServerSideProps(context) {
       case SharedType.Audio:
         newUrl = isMobile
           ? getShareLinkToApp(SharedType.Audio, id)
-          : `/${SharedTypeInUrl.Playlist}/${get(data, 'playlist.id', '')}?audioId=${id}`;
+          : `/${SharedTypeInUrl.Playlist}/${get(
+              data,
+              "playlist.id",
+              ""
+            )}?audioId=${id}`;
         break;
       case SharedType.Channel:
         newUrl = isMobile
