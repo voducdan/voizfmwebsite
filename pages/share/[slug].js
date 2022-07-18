@@ -30,7 +30,8 @@ const SharedPage = ({ data, newUrl }) => {
 
   useEffect(() => {
     if (!isRedirected) {
-      router.push(newUrl);
+      // router.push(newUrl);
+      document.location = newUrl;
       setIsRedirected(true)
     }    
   }, []);  
@@ -39,7 +40,7 @@ const SharedPage = ({ data, newUrl }) => {
     if (isRedirected && startsWith(newUrl, APP_BASE_LINK)) {
       router.push('/', undefined, { shallow: true });
     }
-  }, [isRedirected]);  
+  }, [isRedirected]);
 
   return data ? (
     <Provider store={store}>
