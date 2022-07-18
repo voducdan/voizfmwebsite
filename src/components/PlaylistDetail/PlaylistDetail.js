@@ -203,6 +203,8 @@ export default function PlatlistDetail({ playlistFromAPI }) {
 
   useEffect(() => {
     const { id, audioId } = router.query;
+    setId(id);
+    
     if (audioId) {
       setAudioId(audioId);
       dispatch(setFooter(false));
@@ -212,10 +214,10 @@ export default function PlatlistDetail({ playlistFromAPI }) {
         setErrorMessage,
         setOpenUpdateRequiredModal,
         setOpenUnauthorizedModal,
+        setOpenDownloadAppModal,
         setOpenSnackbar
       );
     }
-    setId(id);
   }, [router.query]);
 
   useEffect(() => {
@@ -608,6 +610,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
           setErrorMessage,
           setOpenUpdateRequiredModal,
           setOpenUnauthorizedModal,
+          setOpenDownloadAppModal,
           setOpenSnackbar
         );
         return;
@@ -667,9 +670,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     );
   };
 
-  return audioId ? (
-    ""
-  ) : (
+  return (
     <Box
       sx={{
         ...flexStyle("center", "center"),
