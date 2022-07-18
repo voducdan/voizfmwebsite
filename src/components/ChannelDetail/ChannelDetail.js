@@ -107,7 +107,6 @@ export default function ChannelDetail({ channelFromAPI }) {
   const [audio, setAudio] = useState(null);
   const [hasLoadMoreAudio, setHasLoadMoreAudio] = useState(true);
   const [audioPage, setAudioPage] = useState(1);
-  console.log("channel: ", channel);
 
   const dispatch = useDispatch();
 

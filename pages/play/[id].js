@@ -11,7 +11,7 @@ import PlaylistDetail from "../../src/components/PlaylistDetail/PlaylistDetail";
 // import service
 import API from "../../src/services/api";
 
-const PlaylistDetailPage = ({ playlist, params }) => {
+const PlaylistDetailPage = ({ playlist }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
   
   return playlist ? (
@@ -45,7 +45,7 @@ export async function getServerSideProps(context) {
     console.log(err.message);
   }
   return {
-    props: { playlist, params: context.query },
+    props: { playlist },
   };
 }
 
