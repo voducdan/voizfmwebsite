@@ -30,7 +30,6 @@ const SharedPage = ({ data, newUrl }) => {
 
   useEffect(() => {
     if (!isRedirected) {
-      // router.push(newUrl);
       document.location = newUrl;
       setIsRedirected(true)
     }    
