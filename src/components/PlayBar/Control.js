@@ -102,7 +102,8 @@ const StyledBadge = styled(Badge)(({ theme }) => ({
 export default function Control(props) {
     const api = new API();
     const router = useRouter();
-
+    const { lastDuration } = router.query;
+    const positionFromLastDuration = lastDuration !== undefined ? Number(lastDuration) : 0;
     const { audio, nextAudioId, prevAudioId, isSm } = props;
     const theme = useTheme();
     const playBtn = useRef(null);
@@ -111,9 +112,9 @@ export default function Control(props) {
     const audioUrl = useSelector(selectAudioHls);
     const token = useSelector(selectToken);
     const audioData = useSelector(selectAudioData);
-    const [position, setPosition] = useState(0);
+    const [position, setPosition] = useState(positionFromLastDuration);
     const [paused, setPaused] = useState(false);
-    const [timer, setTimer] = useState(0);
+    const [timer, setTimer] = useState(null);
     const [intervalId, setIntervalId] = useState(null);
     const [countDownTimerStr, setCountDownTimer] = useState('');
     const [openTimer, setOpenTimer] = useState(false);
@@ -142,6 +143,11 @@ export default function Control(props) {
     }, []);
 
     useEffect(() => {
+        const { lastDuration } = router.query;
+        if (lastDuration !== undefined) {
+            const positionFromLastDuration = Number(lastDuration);
+            media.currentTime = positionFromLastDuration;
+        }
         media.addEventListener('timeupdate', (e) => {
             const currentTime = Math.floor(e.target.currentTime);
             setPosition(currentTime);
@@ -157,7 +163,18 @@ export default function Control(props) {
         if (checkUserUseVipSubcription()) {
             const audioListenings = getAudioListenings();
             const totalTime = audioListenings.reduce((a, b) => ({ duration_listening: (a.duration_listening + b.duration_listening) }), { duration_listening: 0 })['duration_listening'];
-            console.log(totalTime)
+            const remainingSeconds = user?.user_resource?.remaining_seconds || 0;
+            if (totalTime > remainingSeconds) {
+                media.pause();
+                setPaused(true);
+                trackingAudio([{
+                    "audio_id": audioId,
+                    "duration_listening": totalTime,
+                    "listen_at": format(new Date(), 'yyyy-MM-dd hh:mm:ss'),
+                    "listen_from": "website"
+                }]);
+                return;
+            }
             if (totalTime % 120 === 0) {
                 trackingAudio([{
                     "audio_id": audioId,
@@ -188,7 +205,7 @@ export default function Control(props) {
                         }).catch(error => {
                             console.log(error)
                             dispatch(togglePlayAudio());
-                            setPaused(true);
+                            // setPaused(true);
                         });
                     }
                 });
@@ -218,14 +235,11 @@ export default function Control(props) {
     }, [paused]);
 
     useEffect(() => {
-        if (timer === 0) {
+        if (timer === null) {
             return;
         }
-        if (!paused) {
-            setPaused(true);
-        }
         setTimeout(() => {
-            setPaused(false);
+            setPaused(true);
         }, timer * 1000 * 60);
         countDownTimer();
     }, [timer]);

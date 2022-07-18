@@ -10,7 +10,9 @@ import Cookies from 'universal-cookie';
 // import redux reducer, actions
 import { useSelector, useDispatch } from 'react-redux';
 import { selectOpenLogin, handleCloseLogin, setOpenLogin } from '../../redux/openLogin';
-import { setToken } from '../../redux/token';
+import { setToken, selectToken } from '../../redux/token';
+import { setNumItemsInCart } from '../../redux/payment';
+
 
 // import MUI component
 import {
@@ -50,6 +52,7 @@ import { flexStyle } from '../../utils/flexStyle';
 
 // import services
 import API from '../../services/api';
+import * as AuthService from '../../services/authentication'
 
 const flexCenter = {
     display: 'flex',
@@ -103,6 +106,7 @@ export default function Login() {
     const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
 
     const openLogin = useSelector(selectOpenLogin);
+    const token = useSelector(selectToken);
     const [isPhoneValid, setIsPhoneValid] = useState(false);
     const [isOTPValid, setIsOTPValid] = useState(false);
     const [step, setStep] = useState(1);
@@ -136,6 +140,10 @@ export default function Login() {
 
     }, [userInfo]);
 
+    useEffect(() => {
+        fetchNumItemsInCart();
+    }, [token]);
+
     const onClose = () => {
         dispatch(handleCloseLogin());
         setIsPhoneValid(false);
@@ -168,12 +176,18 @@ export default function Login() {
         // Post phone to server here
         setIsWaitFormRenewOtp(false);
         try {
-            const res = await api.getOTP(phoneNumber, countryCode);
-            const data = await res.data;
-            if (data.error) {
-                setHasError(true);
-                setError(data.error);
-                return;
+            if (isGoogle || isFacebook) {
+                const apiWithInitToken = new API(accessToken);
+                await apiWithInitToken.getOTPOnUpdateProfile(phoneNumber, countryCode);
+            }
+            else {
+                const res = await api.getOTP(phoneNumber, countryCode);
+                const data = await res.data;
+                if (data.error) {
+                    setHasError(true);
+                    setError(data.error);
+                    return;
+                }
             }
             setStep(2);
             let start = 59;
@@ -209,7 +223,16 @@ export default function Login() {
 
     const onEnterOTP = async () => {
         try {
-            const res = await api.loginByPhone(phoneNumber, countryCode, otp);
+            let res = null;
+            if (isGoogle || isFacebook) {
+                const apiWithInitToken = new API(accessToken);
+                res = await apiWithInitToken.updatePhoneNumber(phoneNumber, countryCode, otp);
+                await api.verifyAccount({ 'uuid': uuid });
+            }
+            else {
+                res = await api.loginByPhone(phoneNumber, countryCode, otp);
+            }
+
             const data = await res.data;
             if (data.error) {
                 setHasError(true);
@@ -225,22 +248,19 @@ export default function Login() {
                 "email": null,
                 "oauth2_id": data.data.oauth2_id
             }
-            const accessToken = data.data.access_token;
-            setUserInfo({ ...user });
-            setAccessToken(accessToken);
+            const accessTokenFromRes = data.data.access_token;
             if (data.data['verification']) {
-                dispatch(setToken(accessToken));
-                cookies.set('token', accessToken);
+                dispatch(setToken(accessTokenFromRes));
+                cookies.set('token', accessTokenFromRes);
                 setStep(4);
                 return;
             }
-            if (isGoogle || isFacebook) {
-                handleSkipPhone();
-                return;
-            }
+            setUserInfo({ ...user });
+            setAccessToken(accessTokenFromRes);
             setStep(3);
         }
         catch (err) {
+            console.log(err)
             setIsOTPWrong(true);
             setOtpRetries(otpRetries + 1);
             if (otpRetries === 2) {
@@ -334,14 +354,11 @@ export default function Login() {
             setIsFacebook(true);
         }
         catch (err) {
-            setHasError(true);
-            setError('Đã xảy ra lỗi khi đăng nhập bằng Facebook, vui lòng thử lại sau!');
-            return;
+            console.log(err);
         }
     }
     const responseGoogleSuccess = async (response) => {
         try {
-            console.log(response)
             const { profileObj, googleId } = response;
             const payload = {
                 "first_name": profileObj.givenName,
@@ -391,10 +408,26 @@ export default function Login() {
 
     const responseGoogleFalure = (err) => {
         console.log(err)
+        if (err?.error && err?.error === 'popup_closed_by_user') {
+            return;
+        }
         setHasError(true);
         setError('Đã xảy ra lỗi khi đăng nhập bằng google, vui lòng thử lại sau!');
         return;
     }
+
+    const fetchNumItemsInCart = async () => {
+        try {
+            const res = await api.getNumItemsInCart();
+            const data = await res.data.data;
+            if (!data.error) {
+                dispatch(setNumItemsInCart(data.badge));
+            }
+        }
+        catch (err) {
+            dispatch(setNumItemsInCart(0));
+        }
+    };
 
     const handleSkipPhone = async () => {
         try {

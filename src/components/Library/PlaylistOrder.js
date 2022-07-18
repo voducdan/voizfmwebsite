@@ -1,6 +1,9 @@
 // import react
 import { useState, useEffect } from 'react';
 
+// import next link
+import Link from 'next/link';
+
 // import MUI component
 import {
     Box,
@@ -12,7 +15,8 @@ import {
 import PlaylistThumnail from '../../components/Shared/PlaylistThumbnail';
 import VipComboItem from '../../components/Shared/VipComboItem';
 import {
-    GraphicEQ
+    GraphicEQ,
+    LongRightArrow
 } from '../../components/Icons/index';
 
 // import utils
@@ -100,7 +104,10 @@ export default function PlaylistOrder() {
 
     const [playlistOrders, setPlaylistOrders] = useState([]);
     const [comboOrders, setComboOrders] = useState([]);
+    const [comboPlaylists, setComboPlaylists] = useState([]);
     const [value, setValue] = useState(0);
+    const [showComboDetail, setShowComboDetail] = useState(false);
+    const [comboName, setComboName] = useState('');
 
     useEffect(() => {
         async function fetchPlaylistOrders() {
@@ -131,6 +138,19 @@ export default function PlaylistOrder() {
     const handleChange = (_, newValue) => {
         setValue(newValue);
     };
+
+    const handleClickCombo = async (id, name) => {
+        try {
+            const res = await api.getComboPackagePlaylists(id);
+            const data = await res.data.data;
+            setComboPlaylists([...data]);
+        }
+        catch (err) {
+            console.log(err)
+        }
+        setComboName(name);
+        setShowComboDetail(true);
+    }
 
     return (
         <Box sx={{ width: '100%' }}>
@@ -163,33 +183,110 @@ export default function PlaylistOrder() {
                 </Tabs>
             </Box>
             <TabPanel value={value} index={0} isSm={isSm}>
-                <Box
-                    sx={{
-                        ...flexStyle('flex-start', 'center'),
-                        columnGap: '16px',
-                        rowGap: '16px',
-                        flexWrap: 'wrap'
-                    }}
-                >
-                    {
-                        comboOrders.map(i => (
+                {
+                    !showComboDetail && (
+                        <Box
+                            sx={{
+                                ...flexStyle('flex-start', 'center'),
+                                columnGap: '16px',
+                                rowGap: '16px',
+                                flexWrap: 'wrap'
+                            }}
+                        >
+
+                            {
+                                comboOrders.map(i => (
+                                    <Box
+                                        key={i?.id}
+                                        onClick={() => { handleClickCombo(i?.id, i?.name) }}
+                                        sx={{
+                                            width: 'calc(100% / 3 - 11px)',
+                                            cursor: 'pointer'
+                                        }}
+                                    >
+                                        <VipComboItem
+                                            isPurchased={true}
+                                            name={i?.name}
+                                            description={i?.description}
+                                            price={i?.price}
+                                            src={i?.avatar.thumb_url}
+                                            isSm={isSm}
+                                        />
+                                    </Box>
+                                ))
+                            }
+                        </Box>
+                    )
+                }
+                {
+                    showComboDetail && (
+                        <Box>
                             <Box
                                 sx={{
-                                    width: 'calc(100% / 3 - 11px)'
+                                    ...flexStyle('flex-start', 'center'),
+                                    columnGap: '10px',
+                                    mb: '32px'
                                 }}
                             >
-                                <VipComboItem
-                                    isPurchased={true}
-                                    name={i.name}
-                                    description={i.description}
-                                    price={i.price}
-                                    src={i.avatar.thumb_url}
-                                    isSm={isSm}
-                                />
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h3,
+                                        color: COLORS.contentIcon
+                                    }}
+                                >Gói combo</Typography>
+                                <LongRightArrow />
+                                <Typography
+                                    sx={{
+                                        ...TEXT_STYLE.h3,
+                                        color: COLORS.white
+                                    }}
+                                >{comboName}</Typography>
                             </Box>
-                        ))
-                    }
-                </Box>
+                            <Box
+                                sx={{
+                                    ...flexStyle('flex-start', 'center'),
+                                    columnGap: '23px',
+                                    rowGap: '23px',
+                                    flexWrap: 'wrap'
+                                }}
+                            >
+                                {
+                                    comboPlaylists.map(i => (
+                                        <Box
+                                            sx={{
+                                                width: '186px',
+                                                height: '186px',
+                                                position: 'relative',
+                                                '&::before': {
+                                                    content: i?.promotion.includes('vip') ? "url('/images/dvip.png')" : i?.promotion === 'coin' ? "url('/images/dcoin.png')" : "url('/images/dfree.png')",
+                                                    position: 'absolute',
+                                                    right: 0,
+                                                    top: 0,
+                                                    zIndex: 8
+                                                }
+                                            }}
+                                        >
+                                            <Link
+                                                href={`/play/${i?.id}`}
+                                            >
+                                                <img
+                                                    style={{
+                                                        width: '186px',
+                                                        height: '186px',
+                                                        cursor: 'pointer'
+                                                    }}
+                                                    src={i?.avatar?.thumb_url}
+                                                    alt={`images ${i?.name}`}
+                                                />
+                                            </Link>
+                                        </Box>
+                                    ))
+                                }
+                            </Box>
+                        </Box>
+                    )
+                }
+
             </TabPanel>
             <TabPanel value={value} index={1} isSm={isSm}>
                 {

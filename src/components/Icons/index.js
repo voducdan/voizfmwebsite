@@ -63,6 +63,7 @@ import Pencil1 from './Pencil1';
 import Send from './Send';
 import AccountCircle from './AccountCircle';
 import Trash from './Trash';
+import LongRightArrow from './LongRightArrow';
 
 export {
     Bookmark,
@@ -129,5 +130,6 @@ export {
     Pencil1,
     Send,
     AccountCircle,
-    Trash
+    Trash,
+    LongRightArrow
 }
