@@ -132,7 +132,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
   const audioData = useSelector(selectAudioData);
   const openAudioDetail = useSelector(selectOpenAudioDetail);
   const [url, setUrl] = useState("");
-  // console.log("url: ", url);
   const [id, setId] = useState(null);
   const [playlist, setPlaylist] = useState({});
   const [playlistInfo, setPlaylistInfo] = useState([]);
@@ -165,7 +164,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
   const [hoverRating, setHoverRating] = useState(false);
   const [hasLoadMoreAudio, setHasLoadMoreAudio] = useState(true);
   const [audioPage, setAudioPage] = useState(1);
-  // console.log("playlist: ", playlist);
 
   const isSm = windowSize.width > SCREEN_BREAKPOINTS.sm ? false : true;
   const coverImgHeight = isSm ? 182 : 300;
@@ -202,7 +200,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
       setPlaylistInfo(createPlaylistInfo());
     }
   }, [id]);
-  // console.log("window.location: ", window.location.origin, get(playlist, 'slug', ''));
 
   useEffect(() => {
     const { id, audioId } = router.query;
@@ -225,7 +222,6 @@ export default function PlatlistDetail({ playlistFromAPI }) {
     const p = createPlaylistInfo();
     setPlaylistInfo(p);
     const newUrl = getSharedLink(get(playlist, 'slug', ''), SharedType.Playlist);
-    // console.log("newUrl: ", newUrl);
     setUrl(newUrl);
   }, [playlist]);
 
