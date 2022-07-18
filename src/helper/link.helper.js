@@ -1,3 +1,5 @@
+import { APP_BASE_LINK } from "../constants/link.constant";
+
 export const getSharedLink = (slug, type, optional = { withHost: true }) => {
   const host = optional.withHost && window ? window.location.origin : '';
   return slug && type
