@@ -108,6 +108,7 @@ export async function getServerSideProps(context) {
               "playlist.id",
               ""
             )}?audioId=${id}`;
+        data = get(data, 'avatar.original_url') ? data : get(data, 'playlist');
         break;
       case SharedType.Channel:
         newUrl = isMobile
