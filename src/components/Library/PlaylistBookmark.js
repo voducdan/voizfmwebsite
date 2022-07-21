@@ -245,7 +245,7 @@ export default function PlaylistBookmark() {
   const [value, setValue] = useState(0);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
-  const [hasLoadMoreChannel, setHasLoadMoreAudio] = useState(true);
+  const [hasLoadMoreChannel, setHasLoadMoreChannel] = useState(true);
   const [hasLoadMorePlaylist, setHasLoadMorePlaylist] = useState(true);
 
   const fetchPlaylistBookmarks = async () => {
@@ -254,6 +254,9 @@ export default function PlaylistBookmark() {
       const data = await res.data.data;
       data.forEach((i) => (i["is_bookmark"] = true));
       setPlaylistBookmarks(data);
+      if (isEmpty(data)) {
+        setHasLoadMorePlaylist(false);
+      }
     } catch (err) {
       console.log(err);
     }
@@ -264,6 +267,9 @@ export default function PlaylistBookmark() {
       const data = await res.data.data;
       data.forEach((i) => (i["is_bookmark"] = true));
       setChannelBookmarks(data);
+      if (isEmpty(data)) {
+        setHasLoadMoreChannel(false);
+      }
     } catch (err) {
       console.log(err);
     }

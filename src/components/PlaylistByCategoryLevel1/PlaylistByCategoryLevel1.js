@@ -32,6 +32,7 @@ import { flexStyle } from '../../utils/flexStyle'
 
 // import service
 import API from '../../services/api';
+import { isEmpty } from 'lodash';
 
 const Title = (props) => {
     const { isSm, content, haveArrow } = props
@@ -168,7 +169,7 @@ function AudioBook({ router }) {
     const SPACE_BETWEEN = isSm ? 16 : 24;
     const NUMBER_ITEMS_PER_LINE = isSm ? 2.5 : 5;
     const SIDE_PADDING = isSm ? 19 : 48;
-    const [categories, setCategoryies] = useState([]);
+    const [categories, setCategories] = useState([]);
     const [categoryCode, setCategoryCode] = useState(null)
     const [categoryName, setCategoryName] = useState(null);
     const [playlists, setPlaylists] = useState([]);
@@ -182,7 +183,7 @@ function AudioBook({ router }) {
         async function fetchCategories() {
             const res = await api.getCategories(code);
             const data = await res.data.data;
-            setCategoryies(data)
+            setCategories(data)
         };
 
         async function fetchPlaylistsRandom() {
@@ -228,7 +229,7 @@ function AudioBook({ router }) {
                 try {
                     const res = await api.getCategoryPlaylists(categoryCode, 35);
                     const results = await res.data.data;
-                    if (results.length < 35) {
+                    if (isEmpty(results)) {
                         setHasLoadMore(false);
                     }
                     setPlaylists(results);
@@ -276,7 +277,7 @@ function AudioBook({ router }) {
         const ignore_ids = playlistsRandom.map(i => i.id).join(',')
         const res = await api.getCategoryPlaylists(code, NUM_PLAYLIST_RANDOM, ignore_ids, 'latest', 1);
         const data = await res.data.data;
-        if (data.length < NUM_PLAYLIST_RANDOM) {
+        if (isEmpty(data)) {
             setHasLoadMoreRandom(false);
         }
         setPlaylistsRandom([...playlistsRandom, ...data]);
@@ -287,7 +288,7 @@ function AudioBook({ router }) {
             const ignore_ids = [... new Set(playlists.map(i => i.id))];
             const res = await api.getCategoryPlaylists(categoryCode, 35, ignore_ids);
             const results = await res.data.data;
-            if (results.length < 35) {
+            if (isEmpty(results)) {
                 setHasLoadMore(false);
             }
             setPlaylists([...playlists, ...results]);
