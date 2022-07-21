@@ -136,7 +136,7 @@ export default function Listening() {
     }));
     setListeningPlaylists(expandedListeningList);
     setDeleteList(initDeleteList);
-    if (data.length < 10) {
+    if (isEmpty(data)) {
       setHasLoadMoreAudio(false);
     }
   };

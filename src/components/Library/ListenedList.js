@@ -8,7 +8,7 @@ import { useDispatch } from "react-redux";
 import { Box, Tabs, Tab, Typography, Button } from "@mui/material";
 
 // import others components
-import PlaylistThumnail from "../../components/Shared/PlaylistThumbnail";
+import PlaylistThumbnail from "../../components/Shared/PlaylistThumbnail";
 import { GraphicEQ, AccessTime } from "../../components/Icons/index";
 
 // import utils
@@ -144,7 +144,7 @@ export default function PlaylistHistory() {
       const res = await api.getAudioHistory(audioPage, LIMIT_PER_PAGE);
       const data = await res.data.data;
       setAudioHistories([...audioHistories, ...data]);
-      if (data.length < 10) {
+      if (isEmpty(data)) {
         setHasLoadMoreAudio(false);
       }
     } catch (err) {
@@ -157,7 +157,7 @@ export default function PlaylistHistory() {
       const res = await api.getPlaylistHistory(playlistPage, LIMIT_PER_PAGE);
       const data = await res.data.data;
       setPlaylistHistories([...playlistHistories, ...data]);
-      if (data.length < 10) {
+      if (isEmpty(data)) {
         setHasLoadMorePlaylist(false);
       }
     } catch (err) {
@@ -215,7 +215,7 @@ export default function PlaylistHistory() {
       </Box>
       <TabPanel value={value} index={0} isSm={isSm}>
         {playlistHistories.map((i) => (
-          <PlaylistThumnail
+          <PlaylistThumbnail
             key={i?.id}
             id={i?.id}
             name={i.name}
@@ -234,7 +234,7 @@ export default function PlaylistHistory() {
       </TabPanel>
       <TabPanel value={value} index={1} isSm={isSm}>
         {audioHistories.map((i) => (
-          <PlaylistThumnail
+          <PlaylistThumbnail
             key={i?.id}
             id={i?.id}
             name={i.name}

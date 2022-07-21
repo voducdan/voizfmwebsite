@@ -28,6 +28,7 @@ import useWindowSize from '../../utils/useWindowSize';
 
 // import service
 import API from '../../services/api';
+import { isEmpty } from 'lodash';
 
 const PlaylistAudioCount = (props) => {
     const { audioCount, isSm } = props;
@@ -61,7 +62,7 @@ export default function Voicer() {
     const [page, setPage] = useState(1);
     const [hasLoadMore, setHasLoadMore] = useState(false);
 
-    const [voicerPlaylists, setvoicerPlaylists] = useState([]);
+    const [voicerPlaylists, setVoicerPlaylists] = useState([]);
 
     useEffect(() => {
         if (id) {
@@ -73,14 +74,14 @@ export default function Voicer() {
         try {
             const res = await api.getVoicerPlaylists(id, page);
             const data = await res.data.data;
-            if (data.length < 10) {
+            if (isEmpty(data)) {
                 setHasLoadMore(false);
             }
             else {
                 setHasLoadMore(true);
             }
             const allPlaylists = [...voicerPlaylists, ...data];
-            setvoicerPlaylists(allPlaylists);
+            setVoicerPlaylists(allPlaylists);
         }
         catch (err) {
             console.log(err);

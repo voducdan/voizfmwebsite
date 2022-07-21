@@ -100,7 +100,7 @@ import {
   getAudioListenings,
 } from "../../services/audioListenning";
 
-import { get } from 'lodash';
+import { get, isEmpty } from 'lodash';
 import { SharedType } from "../../constants/shareType.constant";
 import { getSharedLink } from "../../helper/link.helper";
 
@@ -277,7 +277,7 @@ export default function PlatlistDetail({ playlistFromAPI }) {
       data.reverse();
     }
     setPlaylistAudios([...playlistAudios, ...data]);
-    if (data.length < 10) {
+    if (isEmpty(data)) {
       setHasLoadMoreAudio(false);
     }
   };
