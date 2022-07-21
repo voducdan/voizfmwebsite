@@ -120,13 +120,9 @@ export default function ChannelDetail({ channelFromAPI }) {
       const data = await res.data.data;
       setPlaylists(data);
     }
-    function fetchAudios(id) {
-      getAudios(id, 1);
-    }
 
     if (id) {
       fetchPlaylists();
-      fetchAudios(id);
     }
   }, []);
 
