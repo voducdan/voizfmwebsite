@@ -8,3 +8,5 @@ export const getSharedLink = (slug, type, optional = { withHost: true }) => {
 }
 
 export const getShareLinkToApp = (type, id) => type && id ? `${APP_BASE_LINK}share?type=${type}&id=${id}` : '';
+
+export const getNavigationBarItemObject = (name, url) => name && url ? ({ name, url }) : undefined;

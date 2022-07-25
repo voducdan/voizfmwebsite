@@ -10,9 +10,21 @@ import PlaylistDetail from "../../src/components/PlaylistDetail/PlaylistDetail";
 
 // import service
 import API from "../../src/services/api";
+import { Box, Typography } from "@mui/material";
+import { COLORS, FONT_FAMILY, TEXT_STYLE } from "../../src/utils/constants";
+import { get, replace } from "lodash";
+import NavigationBar from "../../src/components/NavigationBar";
+import { getNavigationBarItemObject } from "../../src/helper/link.helper";
 
 const PlaylistDetailPage = ({ playlist }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
+  const categoryPathName = replace(get(playlist, 'category.code', ''), '_', '-');
+  const playlistDetailHistories = [    
+    getNavigationBarItemObject("Trang chủ", "/"),
+    getNavigationBarItemObject(`${get(playlist, 'category.name', '')}`, `/${categoryPathName}`),
+    getNavigationBarItemObject(`${get(playlist, 'name', '')}`, `/play/${get(playlist, 'id', '')}`),
+  ];
+
   return playlist ? (
     <Provider store={store}>
       <Head>
@@ -25,6 +37,13 @@ const PlaylistDetailPage = ({ playlist }) => {
         <meta property="og:image:width" content="1200" />
         <meta property="og:image:height" content="630" />
       </Head>
+      <Box>
+        <NavigationBar
+          histories={playlistDetailHistories}
+          paddingX={"24"}
+          paddingTop={25}
+        />
+      </Box>
       <PlaylistDetail playlistFromAPI={playlist} />
     </Provider>
   ) : (

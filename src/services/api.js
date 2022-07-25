@@ -196,7 +196,7 @@ export default class API {
     limit = 10,
     ignore_ids = "",
     sort = "latest",
-    have_author = 0
+    have_author = 1
   ) => {
     const params = { limit, ignore_ids, sort, have_author };
     const queryString = this.buildQueryString(params);

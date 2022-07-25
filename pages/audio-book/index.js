@@ -3,7 +3,7 @@ import PlaylistByCategoryLevel1 from '../../src/components/PlaylistByCategoryLev
 
 const AudioBookPage = () => {
     return (
-        <PlaylistByCategoryLevel1 />
+        <PlaylistByCategoryLevel1 pageTitle="Sách nói" />
     )
 }
 
