@@ -43,7 +43,10 @@ import { flexStyle } from "../../utils/flexStyle";
 // import services
 import API from "../../services/api";
 
-import { CATEGORIES_LEVEL1, CATEGORIES_LEVEL2 } from "../../constants/categories.constant.js";
+import {
+  CATEGORIES_LEVEL1,
+  CATEGORIES_LEVEL2,
+} from "../../constants/categories.constant.js";
 import FooterLongDescriptionAndCategoryList from "./FooterLongDescriptionAndCategoryList/index.js";
 
 SwiperCore.use([Navigation, Autoplay, Pagination]);
@@ -318,19 +321,47 @@ export default function HomeContent() {
         <Swiper
           slidesPerView={NUMBER_ITEMS_PER_LINE}
           spaceBetween={SPACE_BETWEEN}
-          style={{ marginTop: 35, height: `${getPlaylistImgWidth()}px` }}
+          style={{
+            marginTop: 35,
+            height: `${getPlaylistImgWidth()}px`,
+            minHeight: "300px",
+          }}
         >
           {randomPlaylists.map((item) => (
             <SwiperSlide key={item?.id}>
               <Link href={`/play/${item?.id}`}>
-                <a>
+                <Box sx={{ cursor: "pointer" }}>
                   <Thumbnail
-                    style={{ width: "100%", height: "100%", borderRadius: 3 }}
+                    style={{
+                      width: "100%",
+                      borderRadius: "4px 4px 0 0",
+                      height: "250px",
+                    }}
                     avtSrc={item?.avatar?.thumb_url}
                     alt={`images ${item?.id}`}
                     promotion={item?.promotion || ""}
+                    name={item?.name || ""}
                   />
-                </a>
+                  <Typography
+                    sx={{
+                      ...TEXT_STYLE.h3,
+                      fontFamily: FONT_FAMILY,
+                      color: COLORS.white,
+                      height: "18px",
+                      width: "auto",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      padding: "16px",
+                      backgroundColor: "#000000",
+                      marginTop: "-5px",
+                      backgroundColor: COLORS.bg3,
+                      borderRadius: "0 0 4px 4px",
+                    }}
+                  >
+                    {item?.name || ""}
+                  </Typography>
+                </Box>
               </Link>
             </SwiperSlide>
           ))}
@@ -362,19 +393,44 @@ export default function HomeContent() {
             style={{
               marginTop: !isSm ? 35 : 20,
               height: `${getPlaylistImgWidth()}px`,
+              minHeight: "300px",
             }}
           >
             {data.data.map((item) => (
               <SwiperSlide key={item?.id}>
                 <Link href={`/play/${item?.id}`}>
-                  <a>
+                  <Box sx={{ cursor: "pointer" }}>
                     <Thumbnail
-                      style={{ width: "100%", height: "100%", borderRadius: 3 }}
+                      style={{
+                        width: "100%",
+                        borderRadius: "4px 4px 0 0",
+                        height: "250px",
+                      }}
                       avtSrc={item?.avatar?.thumb_url}
                       alt={`images ${item?.id}`}
                       promotion={item?.promotion || ""}
+                      name={item?.name || ""}
                     />
-                  </a>
+                    <Typography
+                      sx={{
+                        ...TEXT_STYLE.h3,
+                        fontFamily: FONT_FAMILY,
+                        color: COLORS.white,
+                        height: "18px",
+                        width: "auto",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        padding: "16px",
+                        backgroundColor: "#000000",
+                        marginTop: "-5px",
+                        backgroundColor: COLORS.bg3,
+                        borderRadius: "0 0 4px 4px",
+                      }}
+                    >
+                      {item?.name || ""}
+                    </Typography>
+                  </Box>
                 </Link>
               </SwiperSlide>
             ))}
@@ -418,23 +474,44 @@ export default function HomeContent() {
           slidesPerGroup={3}
           style={{
             height: `${getPlaylistImgWidth()}px`,
+            minHeight: "300px",
           }}
         >
           {newContents.map((item) => (
             <SwiperSlide key={item.id}>
               <Link href={`/play/${item?.id}`}>
-                <a>
+                <Box sx={{ cursor: "pointer" }}>
                   <Thumbnail
                     style={{
-                      borderRadius: "6px",
                       width: "100%",
-                      height: "100%",
+                      borderRadius: "6px 6px 0 0",
+                      height: "250px",
                     }}
-                    avtSrc={item.avatar?.thumb_url}
+                    avtSrc={item?.avatar?.thumb_url}
                     alt={`images ${item?.id}`}
                     promotion={item?.promotion || ""}
+                    name={item?.name || ""}
                   />
-                </a>
+                  <Typography
+                    sx={{
+                      ...TEXT_STYLE.h3,
+                      fontFamily: FONT_FAMILY,
+                      color: COLORS.white,
+                      height: "18px",
+                      width: "auto",
+                      whiteSpace: "nowrap",
+                      overflow: "hidden",
+                      textOverflow: "ellipsis",
+                      padding: "16px",
+                      backgroundColor: "#000000",
+                      marginTop: "-5px",
+                      backgroundColor: COLORS.bg3,
+                      borderRadius: "0 0 6px 6px",
+                    }}
+                  >
+                    {item?.name || ""}
+                  </Typography>
+                </Box>
               </Link>
             </SwiperSlide>
           ))}
@@ -546,19 +623,44 @@ export default function HomeContent() {
             style={{
               marginTop: !isSm ? 35 : 20,
               height: `${getPlaylistImgWidth()}px`,
+              minHeight: "300px",
             }}
           >
             {data.data.map((item) => (
               <SwiperSlide key={item?.id}>
                 <Link href={`/play/${item?.id}`}>
-                  <a>
+                  <Box sx={{ cursor: "pointer" }}>
                     <Thumbnail
-                      style={{ width: "100%", height: "100%", borderRadius: 3 }}
+                      style={{
+                        width: "100%",
+                        borderRadius: "6px 6px 0 0",
+                        height: "250px",
+                      }}
                       avtSrc={item?.avatar?.thumb_url}
                       alt={`images ${item?.id}`}
                       promotion={item?.promotion || ""}
+                      name={item?.name || ""}
                     />
-                  </a>
+                    <Typography
+                      sx={{
+                        ...TEXT_STYLE.h3,
+                        fontFamily: FONT_FAMILY,
+                        color: COLORS.white,
+                        height: "18px",
+                        width: "auto",
+                        whiteSpace: "nowrap",
+                        overflow: "hidden",
+                        textOverflow: "ellipsis",
+                        padding: "16px",
+                        backgroundColor: "#000000",
+                        marginTop: "-5px",
+                        backgroundColor: COLORS.bg3,
+                        borderRadius: "0 0 6px 6px",
+                      }}
+                    >
+                      {item?.name || ""}
+                    </Typography>
+                  </Box>
                 </Link>
               </SwiperSlide>
             ))}
