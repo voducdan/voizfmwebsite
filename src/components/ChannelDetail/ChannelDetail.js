@@ -55,8 +55,9 @@ import ShareModal from "../../components/Shared/ShareModal";
 // import service
 import API from "../../services/api";
 import { getSharedLink } from "../../helper/link.helper";
-import { get } from "lodash";
+import { get, isEmpty } from "lodash";
 import { SharedType } from "../../constants/shareType.constant";
+import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant";
 
 const PlaylistAudioCount = (props) => {
   const { audioCount, isSm } = props;
@@ -107,28 +108,28 @@ export default function ChannelDetail({ channelFromAPI }) {
   const [audio, setAudio] = useState(null);
   const [hasLoadMoreAudio, setHasLoadMoreAudio] = useState(true);
   const [audioPage, setAudioPage] = useState(1);
+  const [playlistPage, setPlaylistPage] = useState(1);
+  const [hasLoadMorePlaylist, setHasLoadMorePlaylist] = useState(true);
 
   const dispatch = useDispatch();
+  const fetchPlaylists = async () => {
+    const res = await api.getChannelPlaylists(
+      id,
+      playlistPage,
+      LIMIT_PER_PAGE
+    );
+    const data = await res.data.data;
+    setPlaylists([...playlists, ...data]);
+    if (isEmpty(data)) {
+      setHasLoadMorePlaylist(false);
+    }
+  }
 
   useEffect(() => {
-    async function fetchPlaylists() {
-      const res = await api.getChannelPlaylists(
-        id,
-        1,
-        channel?.channel_counter?.playlists_count
-      );
-      const data = await res.data.data;
-      setPlaylists(data);
-    }
-    function fetchAudios(id) {
-      getAudios(id, 1);
-    }
-
     if (id) {
       fetchPlaylists();
-      fetchAudios(id);
     }
-  }, []);
+  }, [playlistPage]);
 
   useEffect(() => {
     if (channel) {
@@ -147,7 +148,7 @@ export default function ChannelDetail({ channelFromAPI }) {
     const res = await api.getChannelAudio(id, page);
     const data = await res.data.data;
     setAudios([...audios, ...data]);
-    if (data.length < 10) {
+    if (isEmpty(data)) {
       setHasLoadMoreAudio(false);
     }
   };
@@ -155,6 +156,11 @@ export default function ChannelDetail({ channelFromAPI }) {
   const handleLoadMoreAudio = () => {
     const newAudioPage = audioPage + 1;
     setAudioPage(newAudioPage);
+  };
+
+  const handleLoadMorePlaylist = () => {
+    const newPlaylistPage = playlistPage + 1;
+    setPlaylistPage(newPlaylistPage);
   };
 
   const handleBookmark = () => {
@@ -505,8 +511,34 @@ export default function ChannelDetail({ channelFromAPI }) {
                   }
                 />
               ))}
-            </Box>
           </Box>
+          {hasLoadMorePlaylist && !isEmpty(playlists) && (
+                <Box
+                  sx={{
+                    ...flexStyle("center", "center"),
+                  }}
+                >
+                  <Button
+                    onClick={handleLoadMorePlaylist}
+                    sx={{
+                      textTransform: "none",
+                      ...TEXT_STYLE.title2,
+                      color: COLORS.white,
+                      bgcolor: COLORS.main,
+                      width: "170px",
+                      height: "40px",
+                      borderRadius: "4px",
+                      mt: "30px",
+                      ":hover": {
+                        bgcolor: COLORS.main,
+                      },
+                    }}
+                  >
+                    Tải thêm
+                  </Button>
+                </Box>
+                )}
+            </Box>
         </Box>
         <Box
           sx={{
