@@ -33,10 +33,13 @@ import { flexStyle } from "../../utils/flexStyle";
 
 // import service
 import API from "../../services/api";
-import { isEmpty } from "lodash";
+import { find, get, isEmpty, join } from "lodash";
 import NavigationBar from "../NavigationBar";
 import { getNavigationBarItemObject } from "../../helper/link.helper";
 import FooterLongDescriptionAndCategoryList from "../HomeContent/FooterLongDescriptionAndCategoryList";
+import { useSelector } from "react-redux";
+import { getFooterCategoryList } from "../../redux/footerCategoryList";
+import { getPlaylistImgWidth } from "../../helper/image.helper";
 
 const Title = (props) => {
   const { isSm, content, haveArrow } = props;
@@ -176,14 +179,18 @@ const RandomPlayList = (props) => {
 
 const NUM_PLAYLIST_RANDOM = 12;
 
-function AudioBook({ router, pageTitle }) {
+function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
   const api = new API();
   const pathname = router.pathname;
+  const { subCategory } = router.query;
+  const footerCategoryList = useSelector(getFooterCategoryList);
+
   const windowSize = useWindowSize();
   const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
   const SPACE_BETWEEN = isSm ? 16 : 24;
   const NUMBER_ITEMS_PER_LINE = isSm ? 2.5 : 5;
   const SIDE_PADDING = isSm ? 19 : 48;
+
   const [categories, setCategories] = useState([]);
   const [categoryCode, setCategoryCode] = useState(null);
   const [categoryName, setCategoryName] = useState(null);
@@ -212,8 +219,10 @@ function AudioBook({ router, pageTitle }) {
       const data = await res.data.data;
       setPlaylistsRandom(data);
     }
-    fetchPlaylistsRandom();
-    fetchCategories();
+    if (!subCategory) {
+      fetchPlaylistsRandom();
+      fetchCategories();
+    }
   }, [pathname]);
 
   useEffect(() => {
@@ -241,16 +250,19 @@ function AudioBook({ router, pageTitle }) {
       }
     }
 
-    initPlaylist();
+    if (!subCategory) {
+      initPlaylist();
+    }
   }, [categories]);
 
   useEffect(() => {
     async function fetchPlaylists() {
-      if (categoryCode === null || categoryCode === "") {
+      const code = subCategory || categoryCode;
+      if (code === null || code === "") {
         return;
       } else {
         try {
-          const res = await api.getCategoryPlaylists(categoryCode, 35);
+          const res = await api.getCategoryPlaylists(code, 10);
           const results = await res.data.data;
           if (isEmpty(results)) {
             setHasLoadMore(false);
@@ -264,18 +276,10 @@ function AudioBook({ router, pageTitle }) {
 
     setHasLoadMore(true);
     fetchPlaylists();
-  }, [categoryCode]);
-
-  const getPlaylistImgWidth = () => {
-    const width = windowSize.width;
-    let innerWidth = width - SIDE_PADDING * 2;
-    const spaceToBeSubstrcted =
-      ((NUMBER_ITEMS_PER_LINE - 1) * SPACE_BETWEEN) / NUMBER_ITEMS_PER_LINE;
-    if (!isSm) {
-      innerWidth -= DRAWER_WIDTH;
+    if (subCategory) {
+      getCategoryNameFromSubcategoryCode();
     }
-    return innerWidth / NUMBER_ITEMS_PER_LINE - spaceToBeSubstrcted;
-  };
+  }, [categoryCode, subCategory]);
 
   const getInnerWidth = () => {
     const width = windowSize.width;
@@ -316,8 +320,9 @@ function AudioBook({ router, pageTitle }) {
 
   const handleLoadMorePlaylist = async () => {
     try {
-      const ignore_ids = [...new Set(playlists.map((i) => i.id))];
-      const res = await api.getCategoryPlaylists(categoryCode, 35, ignore_ids);
+      const ignore_ids = join([...new Set(playlists.map((i) => i.id))], ',');
+      const code = subCategory || categoryCode;
+      const res = await api.getCategoryPlaylists(code, 10, ignore_ids);
       const results = await res.data.data;
       if (isEmpty(results)) {
         setHasLoadMore(false);
@@ -325,6 +330,18 @@ function AudioBook({ router, pageTitle }) {
       setPlaylists([...playlists, ...results]);
     } catch (err) {
       console.log(err);
+    }
+  };
+
+  const getCategoryNameFromSubcategoryCode = () => {
+    if (subCategory) {
+      const selectedCategoryInfo = find(footerCategoryList, footerCateGoryItem => footerCateGoryItem.name === pageTitle);
+      const categoryNameFromSubcategoryCode = get(
+        find(selectedCategoryInfo?.data || [], d => d.code === subCategory),
+        'name',
+        ''
+      );
+      setCategoryName(categoryNameFromSubcategoryCode);
     }
   };
 
@@ -340,7 +357,7 @@ function AudioBook({ router, pageTitle }) {
         width: "100%",
       }}
     >
-      {!!pageTitle && (
+      {!!pageTitle && isDisplayTitle && (
         <Box>
           <Typography
             sx={{
@@ -364,7 +381,7 @@ function AudioBook({ router, pageTitle }) {
           p: `0 ${SIDE_PADDING}px`,
         }}
       >
-        {categories.length >= 2 && (
+        {categories.length >= 2 && !subCategory && (
           <CategoryBarWithoutSwiper
             categoryList={categories}
             isSm={isSm}
@@ -372,7 +389,7 @@ function AudioBook({ router, pageTitle }) {
             onSelectCategory={onSelectCategory}
           />
         )}
-        {categories.length === 1 && initPlaylists.length === 0 && (
+        {categories.length === 1 && initPlaylists.length === 0 && !subCategory && (
           <Box
             sx={{
               mt: "56px",
@@ -389,10 +406,10 @@ function AudioBook({ router, pageTitle }) {
             </Typography>
           </Box>
         )}
-        {categories.length >= 2 && (
+        {categories.length >= 2 && !subCategory && (
           <Divider sx={{ borderColor: COLORS.bg2, mt: "24px" }} />
         )}
-        {(categoryCode === null || categoryCode === "") &&
+        {(categoryCode === null || categoryCode === "") && !subCategory &&
           initPlaylists.length > 0 && (
             <Box
               sx={{
@@ -404,12 +421,12 @@ function AudioBook({ router, pageTitle }) {
                   key={i.name}
                   i={i}
                   isSm={isSm}
-                  playlistImgWidth={getPlaylistImgWidth()}
+                  playlistImgWidth={getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}
                 />
               ))}
             </Box>
           )}
-        {categoryCode !== null && categoryCode !== "" && (
+        {((categoryCode !== null && categoryCode !== "") || !isEmpty(subCategory)) && (
           <Box>
             <Box
               sx={{
@@ -434,7 +451,7 @@ function AudioBook({ router, pageTitle }) {
                       <Thumbnail
                         style={{
                           width: "100%",
-                          height: `${getPlaylistImgWidth()}px`,
+                          height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
                           borderRadius: 3,
                         }}
                         avtSrc={item.avatar.thumb_url}
@@ -476,7 +493,7 @@ function AudioBook({ router, pageTitle }) {
         )}
       </Box>
       {!["/children-book", "/summary-book"].includes(pathname) &&
-        categoryCode === null && (
+        categoryCode === null && isEmpty(subCategory) && (
           <Box
             sx={{
               width: "100%",
@@ -488,7 +505,7 @@ function AudioBook({ router, pageTitle }) {
             />
           </Box>
         )}
-      {categoryCode === null && (
+      {categoryCode === null && isEmpty(subCategory) && (
         <Box
           sx={{
             p: `0 ${SIDE_PADDING}px`,

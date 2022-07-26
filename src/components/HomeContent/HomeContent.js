@@ -47,6 +47,7 @@ import {
   CATEGORIES_LEVEL2,
 } from "../../constants/categories.constant.js";
 import FooterLongDescriptionAndCategoryList from "./FooterLongDescriptionAndCategoryList/index.js";
+import { getPlaylistImgWidth } from "../../helper/image.helper.js";
 
 SwiperCore.use([Navigation, Autoplay, Pagination]);
 
@@ -236,17 +237,6 @@ export default function HomeContent() {
     setPlaylistsBycategory([...tmpPlaylists]);
   };
 
-  const getPlaylistImgWidth = () => {
-    const width = windowSize.width;
-    let innerWidth = width - SIDE_PADDING * 2;
-    const spaceToBeSubstrcted =
-      ((NUMBER_ITEMS_PER_LINE - 1) * SPACE_BETWEEN) / NUMBER_ITEMS_PER_LINE;
-    if (!isSm) {
-      innerWidth -= DRAWER_WIDTH;
-    }
-    return innerWidth / NUMBER_ITEMS_PER_LINE - spaceToBeSubstrcted;
-  };
-
   const handleClickNewContentPaginationBullet = (e) => {
     const id = Number(e.target.id);
     const actualPaginationBullet = document.querySelector(
@@ -322,7 +312,7 @@ export default function HomeContent() {
           spaceBetween={SPACE_BETWEEN}
           style={{
             marginTop: 35,
-            height: `${getPlaylistImgWidth()}px`,
+            height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
             minHeight: "300px",
           }}
         >
@@ -334,7 +324,7 @@ export default function HomeContent() {
                     style={{
                       width: "100%",
                       borderRadius: "4px 4px 0 0",
-                      height: "250px",
+                      height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
                     }}
                     avtSrc={item?.avatar?.thumb_url}
                     alt={`images ${item?.id}`}
@@ -343,7 +333,7 @@ export default function HomeContent() {
                   />
                   <Typography
                     sx={{
-                      ...TEXT_STYLE.h3,
+                      ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
                       fontFamily: FONT_FAMILY,
                       color: COLORS.white,
                       height: "18px",
@@ -391,7 +381,7 @@ export default function HomeContent() {
             spaceBetween={SPACE_BETWEEN}
             style={{
               marginTop: !isSm ? 35 : 20,
-              height: `${getPlaylistImgWidth()}px`,
+              height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
               minHeight: "300px",
             }}
           >
@@ -403,7 +393,7 @@ export default function HomeContent() {
                       style={{
                         width: "100%",
                         borderRadius: "4px 4px 0 0",
-                        height: "250px",
+                        height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
                       }}
                       avtSrc={item?.avatar?.thumb_url}
                       alt={`images ${item?.id}`}
@@ -412,7 +402,7 @@ export default function HomeContent() {
                     />
                     <Typography
                       sx={{
-                        ...TEXT_STYLE.h3,
+                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
                         fontFamily: FONT_FAMILY,
                         color: COLORS.white,
                         height: "18px",
@@ -472,7 +462,7 @@ export default function HomeContent() {
           spaceBetween={SPACE_BETWEEN}
           slidesPerGroup={3}
           style={{
-            height: `${getPlaylistImgWidth()}px`,
+            height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
             minHeight: "300px",
           }}
         >
@@ -484,7 +474,7 @@ export default function HomeContent() {
                     style={{
                       width: "100%",
                       borderRadius: "6px 6px 0 0",
-                      height: "250px",
+                      height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
                     }}
                     avtSrc={item?.avatar?.thumb_url}
                     alt={`images ${item?.id}`}
@@ -493,7 +483,7 @@ export default function HomeContent() {
                   />
                   <Typography
                     sx={{
-                      ...TEXT_STYLE.h3,
+                      ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
                       fontFamily: FONT_FAMILY,
                       color: COLORS.white,
                       height: "18px",
@@ -621,7 +611,7 @@ export default function HomeContent() {
             spaceBetween={SPACE_BETWEEN}
             style={{
               marginTop: !isSm ? 35 : 20,
-              height: `${getPlaylistImgWidth()}px`,
+              height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
               minHeight: "300px",
             }}
           >
@@ -633,7 +623,7 @@ export default function HomeContent() {
                       style={{
                         width: "100%",
                         borderRadius: "6px 6px 0 0",
-                        height: "250px",
+                        height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
                       }}
                       avtSrc={item?.avatar?.thumb_url}
                       alt={`images ${item?.id}`}
@@ -642,7 +632,7 @@ export default function HomeContent() {
                     />
                     <Typography
                       sx={{
-                        ...TEXT_STYLE.h3,
+                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
                         fontFamily: FONT_FAMILY,
                         color: COLORS.white,
                         height: "18px",

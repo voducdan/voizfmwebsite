@@ -1,12 +1,13 @@
 import React from "react";
 import { Typography, Box, Link, Button } from "@mui/material";
-import { CATEGORIES_FOOTER } from "../../../constants/categories.constant";
 import { COLORS, FONT_COLOR, TEXT_STYLE } from "../../../utils/constants";
 import { map, get } from "lodash";
 import ShowMoreText from "react-show-more-text";
 import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
 import ExpandLessIcon from "@mui/icons-material/ExpandLess";
 import { flexStyle } from "../../../utils/flexStyle";
+import { useSelector } from "react-redux";
+import { getFooterCategoryList } from "../../../redux/footerCategoryList";
 
 const LONG_DESCRIPTION_TITLE =
   "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
@@ -16,7 +17,6 @@ Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor i
 Do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
 Do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
-
 
 const ShowMoreTextBtn = (content) => (
   <Button
@@ -33,9 +33,9 @@ const ShowMoreTextBtn = (content) => (
   </Button>
 );
 
-const CategoryTextLink = ({ text }) => (
+const CategoryTextLink = ({ text, url }) => (
   <Link
-    href="#"
+    href={url}
     sx={{
       ...TEXT_STYLE.content2,
       color: FONT_COLOR,
@@ -51,6 +51,10 @@ const CategoryTextLink = ({ text }) => (
 );
 
 const FooterCategoryList = ({ isSm }) => {
+  const footerCategoryList = useSelector(getFooterCategoryList);
+  const { podcast, audio_book, story_book, summary_book, children_book } =
+    footerCategoryList;
+
   return (
     <Box sx={{ paddingTop: "56px" }}>
       <Typography
@@ -76,11 +80,14 @@ const FooterCategoryList = ({ isSm }) => {
               marginBottom: "8px",
             }}
           >
-            {CATEGORIES_FOOTER.audioBook.title}
+            {audio_book.name}
           </Typography>
-          {map(CATEGORIES_FOOTER.audioBook.categories, (category) => (
+          {map(audio_book.data, (audioBook) => (
             <span>
-              <CategoryTextLink text={get(category, "name", "")} />{" "}
+              <CategoryTextLink
+                url={`/audio-book?subCategory=${get(audioBook, "code", "")}`}
+                text={get(audioBook, "name", "")}
+              />
               <span className="Footer-link-separate"> | </span>
             </span>
           ))}
@@ -93,11 +100,34 @@ const FooterCategoryList = ({ isSm }) => {
               marginBottom: "8px",
             }}
           >
-            {CATEGORIES_FOOTER.storyBook.title}
+            {story_book.name}
           </Typography>
-          {map(CATEGORIES_FOOTER.storyBook.categories, (category) => (
+          {map(story_book.data, (storyBook) => (
             <span>
-              <CategoryTextLink text={get(category, "name", "")} />{" "}
+              <CategoryTextLink
+                url={`/story-book?subCategory=${get(storyBook, "code", "")}`}
+                text={get(storyBook, "name", "")}
+              />
+              <span className="Footer-link-separate"> | </span>
+            </span>
+          ))}
+
+          <Typography
+            sx={{
+              ...TEXT_STYLE.h3,
+              color: COLORS.white,
+              marginBottom: "8px",
+              marginTop: "16px",
+            }}
+          >
+            {podcast.name}
+          </Typography>
+          {map(podcast.data, (podcastItem) => (
+            <span>
+              <CategoryTextLink
+                url={`/podcast?subCategory=${get(podcastItem, "code", "")}`}
+                text={get(podcastItem, "name", "")}
+              />
               <span className="Footer-link-separate"> | </span>
             </span>
           ))}
@@ -110,11 +140,18 @@ const FooterCategoryList = ({ isSm }) => {
               marginBottom: "8px",
             }}
           >
-            {CATEGORIES_FOOTER.summaryBook.title}
+            {summary_book.name}
           </Typography>
-          {map(CATEGORIES_FOOTER.summaryBook.categories, (category) => (
+          {map(summary_book.data, (summaryBook) => (
             <span>
-              <CategoryTextLink text={get(category, "name", "")} />{" "}
+              <CategoryTextLink
+                url={`/summary-book?subCategory=${get(
+                  summaryBook,
+                  "code",
+                  ""
+                )}`}
+                text={get(summaryBook, "name", "")}
+              />
               <span className="Footer-link-separate"> | </span>
             </span>
           ))}
@@ -127,11 +164,18 @@ const FooterCategoryList = ({ isSm }) => {
               marginBottom: "8px",
             }}
           >
-            {CATEGORIES_FOOTER.childrenBook.title}
+            {children_book.name}
           </Typography>
-          {map(CATEGORIES_FOOTER.childrenBook.categories, (category) => (
+          {map(children_book.data, (childrenBook) => (
             <span>
-              <CategoryTextLink text={get(category, "name", "")} />{" "}
+              <CategoryTextLink
+                url={`/children-book?subCategory=${get(
+                  childrenBook,
+                  "code",
+                  ""
+                )}`}
+                text={get(childrenBook, "name", "")}
+              />
               <span className="Footer-link-separate"> | </span>
             </span>
           ))}
@@ -143,11 +187,12 @@ const FooterCategoryList = ({ isSm }) => {
 
 const FooterLongDescriptionAndCategoryList = ({ isSm }) => {
   return (
-    
-    <Box sx={{
-      padding: "56px 47px",
-      borderBottom: "1px solid #292B32"
-    }}>
+    <Box
+      sx={{
+        padding: "56px 47px",
+        borderBottom: "1px solid #292B32",
+      }}
+    >
       <Typography
         sx={{
           ...TEXT_STYLE.h2,
@@ -159,11 +204,12 @@ const FooterLongDescriptionAndCategoryList = ({ isSm }) => {
       </Typography>
 
       <Box
-          sx={{
-            padding: "32px",
-            backgroundColor: "#292B32",
-            borderRadius: "6px",
-          }}>
+        sx={{
+          padding: "32px",
+          backgroundColor: "#292B32",
+          borderRadius: "6px",
+        }}
+      >
         <ShowMoreText
           lines={6}
           more={ShowMoreTextBtn("Xem thêm")}
@@ -186,9 +232,9 @@ const FooterLongDescriptionAndCategoryList = ({ isSm }) => {
         </ShowMoreText>
       </Box>
 
-      <FooterCategoryList isSm={isSm}/>
+      <FooterCategoryList isSm={isSm} />
     </Box>
-  )
-}
+  );
+};
 
 export default FooterLongDescriptionAndCategoryList;
