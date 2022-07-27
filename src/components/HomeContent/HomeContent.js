@@ -151,16 +151,11 @@ export default function HomeContent() {
   const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
   const [randomPlaylists, setRandomPlaylists] = useState([]);
-  const [playlistsBycategory, setPlaylistsBycategory] = useState([]);
-  const [playlistsBycategoryLevel2, setPlaylistsBycategoryLevel2] = useState(
-    []
-  );
+  const [playlistsByCategory, setPlaylistsByCategory] = useState([]);
+  const [playlistsByCategoryLevel2, setPlaylistsByCategoryLevel2] = useState([]);
   const [newContents, setNewContents] = useState([]);
-  const [featuredsAuthors, setFeaturedAuthors] = useState([]);
-  const [activeNewContentPagination, setActiveNewContentPagination] =
-    useState(0);
-  const [showNewContentNavigationBtn, setShowNewContentNavigationBtn] =
-    useState(false);
+  const [activeNewContentPagination, setActiveNewContentPagination] = useState(0);
+  const [showNewContentNavigationBtn, setShowNewContentNavigationBtn] = useState(false);
 
   const navigationNewContentPrevRef = useRef(null);
   const navigationNewContentNextRef = useRef(null);
@@ -205,7 +200,7 @@ export default function HomeContent() {
         playlistsByOneCategory["categories"] = await res[1].data.data;
         playlists.push(playlistsByOneCategory);
       }
-      setPlaylistsBycategory(playlists);
+      setPlaylistsByCategory(playlists);
     }
 
     async function fetchCategoryLevel2Playlists() {
@@ -220,7 +215,7 @@ export default function HomeContent() {
         playlistsByOneCategory["data"] = data;
         playlists.push(playlistsByOneCategory);
       }
-      setPlaylistsBycategoryLevel2(playlists);
+      setPlaylistsByCategoryLevel2(playlists);
     }
 
     fetchNewContent();
@@ -230,12 +225,12 @@ export default function HomeContent() {
   }, []);
 
   const onSelectCategory = async (parent, code) => {
-    const tmpPlaylists = playlistsBycategory;
-    const parentIdx = playlistsBycategory.findIndex((i) => i.code === parent);
+    const tmpPlaylists = playlistsByCategory;
+    const parentIdx = playlistsByCategory.findIndex((i) => i.code === parent);
     const res = await api.getCategoryPlaylists(code);
     const data = await res.data.data;
     tmpPlaylists[parentIdx]["data"] = data;
-    setPlaylistsBycategory([...tmpPlaylists]);
+    setPlaylistsByCategory([...tmpPlaylists]);
   };
 
   const handleClickNewContentPaginationBullet = (e) => {
@@ -258,7 +253,6 @@ export default function HomeContent() {
       <Box
         sx={{
           ...flexStyle("flex-start", "center"),
-          // marginBottom: "24px",
           padding: isSm ? "25px 15px" : "35px 47px",
         }}
       >
@@ -266,13 +260,10 @@ export default function HomeContent() {
           <img
             style={{
               width: isSm ? "65px" : "95px",
-              // marginRight: "16px",
-              // height: isSm ? 35 : 45,
               width: "56px",
               height: "56px",
               marginRight: "24px",
               borderRadius: "6px",
-              cursor: "pointer",
             }}
             alt={"pp"}
             src={"/images/ic_book.svg"}
@@ -313,8 +304,14 @@ export default function HomeContent() {
           spaceBetween={SPACE_BETWEEN}
           style={{
             marginTop: 35,
-            height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
-            minHeight: "300px",
+            height: `${getPlaylistImgWidth(
+              windowSize,
+              NUMBER_ITEMS_PER_LINE,
+              SPACE_BETWEEN,
+              DRAWER_WIDTH,
+              SIDE_PADDING
+            )}px`,
+            minHeight: "275px",
           }}
         >
           {randomPlaylists.map((item) => (
@@ -325,7 +322,13 @@ export default function HomeContent() {
                     style={{
                       width: "100%",
                       borderRadius: "4px 4px 0 0",
-                      height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
+                      height: `${getPlaylistImgWidth(
+                        windowSize,
+                        NUMBER_ITEMS_PER_LINE,
+                        SPACE_BETWEEN,
+                        DRAWER_WIDTH,
+                        SIDE_PADDING
+                      )}px`,
                     }}
                     avtSrc={item?.avatar?.thumb_url}
                     alt={`images ${item?.id}`}
@@ -357,7 +360,7 @@ export default function HomeContent() {
           ))}
         </Swiper>
       </Box>
-      {playlistsBycategory.map((data) => (
+      {playlistsByCategory.map((data) => (
         <Box
           sx={{
             margin: isSm
@@ -382,8 +385,14 @@ export default function HomeContent() {
             spaceBetween={SPACE_BETWEEN}
             style={{
               marginTop: !isSm ? 35 : 20,
-              height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
-              minHeight: "300px",
+              height: `${getPlaylistImgWidth(
+                windowSize,
+                NUMBER_ITEMS_PER_LINE,
+                SPACE_BETWEEN,
+                DRAWER_WIDTH,
+                SIDE_PADDING
+              )}px`,
+              minHeight: "275px",
             }}
           >
             {data.data.map((item) => (
@@ -394,7 +403,13 @@ export default function HomeContent() {
                       style={{
                         width: "100%",
                         borderRadius: "4px 4px 0 0",
-                        height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
+                        height: `${getPlaylistImgWidth(
+                          windowSize,
+                          NUMBER_ITEMS_PER_LINE,
+                          SPACE_BETWEEN,
+                          DRAWER_WIDTH,
+                          SIDE_PADDING
+                        )}px`,
                       }}
                       avtSrc={item?.avatar?.thumb_url}
                       alt={`images ${item?.id}`}
@@ -438,6 +453,7 @@ export default function HomeContent() {
           p: isSm ? "32px 20px 23px 20px" : "32px 48px 23px 48px",
           backgroundColor: COLORS.bg2,
           position: "relative",
+          marginBottom: "48px"
         }}
       >
         <CustomPaginationBullet
@@ -463,8 +479,13 @@ export default function HomeContent() {
           spaceBetween={SPACE_BETWEEN}
           slidesPerGroup={3}
           style={{
-            height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
-            minHeight: "300px",
+            height: `${getPlaylistImgWidth(
+              windowSize,
+              NUMBER_ITEMS_PER_LINE,
+              SPACE_BETWEEN,
+              DRAWER_WIDTH,
+              SIDE_PADDING
+            )}px`,
           }}
         >
           {newContents.map((item) => (
@@ -475,32 +496,19 @@ export default function HomeContent() {
                     style={{
                       width: "100%",
                       borderRadius: "6px 6px 0 0",
-                      height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
+                      height: `${getPlaylistImgWidth(
+                        windowSize,
+                        NUMBER_ITEMS_PER_LINE,
+                        SPACE_BETWEEN,
+                        DRAWER_WIDTH,
+                        SIDE_PADDING
+                      )}px`,
                     }}
                     avtSrc={item?.avatar?.thumb_url}
                     alt={`images ${item?.id}`}
                     promotion={item?.promotion || ""}
                     name={item?.name || ""}
                   />
-                  <Typography
-                    sx={{
-                      ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.h3),
-                      fontFamily: FONT_FAMILY,
-                      color: COLORS.white,
-                      height: "18px",
-                      width: "auto",
-                      whiteSpace: "nowrap",
-                      overflow: "hidden",
-                      textOverflow: "ellipsis",
-                      padding: "16px",
-                      backgroundColor: "#000000",
-                      marginTop: "-5px",
-                      backgroundColor: COLORS.bg3,
-                      borderRadius: "0 0 6px 6px",
-                    }}
-                  >
-                    {item?.name || ""}
-                  </Typography>
                 </Box>
               </Link>
             </SwiperSlide>
@@ -531,73 +539,7 @@ export default function HomeContent() {
         </div>
       </Box>
 
-      <Box
-        sx={{
-          m: isSm ? "40px 20px" : "60px 48px",
-        }}
-      >
-        {<Title content="Tác giả nổi bật" isSm={isSm} />}
-        <Swiper
-          slidesPerView={NUMBER_ITEMS_PER_LINE}
-          spaceBetween={SPACE_BETWEEN}
-        >
-          {featuredsAuthors.map((item) => (
-            <SwiperSlide
-              style={{
-                ...flexStyle("center", "center"),
-                flexDirection: "column",
-              }}
-              key={item.id}
-            >
-              <Link
-                href={`/authors/${item?.id}`}
-                style={{ textDecoration: "none" }}
-              >
-                <Box
-                  sx={{
-                    textAlign: "center",
-                    cursor: "pointer",
-                  }}
-                >
-                  <Thumbnail
-                    style={{ borderRadius: "50%", width: "80%", height: "80%" }}
-                    avtSrc={item?.avatar?.thumb_url}
-                    alt={`images ${item?.id}`}
-                    promotion={item?.promotion || ""}
-                  />
-                  <Typography
-                    sx={{
-                      ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title3),
-                      color: COLORS.white,
-                      letterSpacing: 0,
-                      marginTop: "22px",
-                    }}
-                  >
-                    {item?.name}
-                  </Typography>
-                  <Typography
-                    sx={{
-                      ...(!isSm
-                        ? TEXT_STYLE.VZ_Caption_2
-                        : TEXT_STYLE.caption10Regular),
-                      color: COLORS.VZ_Text_content,
-                      display: "-webkit-box",
-                      marginTop: "8px",
-                      textOverflow: "ellipsis",
-                      WebkitLineClamp: 2,
-                      WebkitBoxOrient: "vertical",
-                      overflow: "hidden",
-                    }}
-                  >
-                    {item?.description}
-                  </Typography>
-                </Box>
-              </Link>
-            </SwiperSlide>
-          ))}
-        </Swiper>
-      </Box>
-      {playlistsBycategoryLevel2.map((data) => (
+      {playlistsByCategoryLevel2.map((data) => (
         <Box
           sx={{
             margin: isSm
@@ -612,8 +554,14 @@ export default function HomeContent() {
             spaceBetween={SPACE_BETWEEN}
             style={{
               marginTop: !isSm ? 35 : 20,
-              height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
-              minHeight: "300px",
+              height: `${getPlaylistImgWidth(
+                windowSize,
+                NUMBER_ITEMS_PER_LINE,
+                SPACE_BETWEEN,
+                DRAWER_WIDTH,
+                SIDE_PADDING
+              )}px`,
+              minHeight: "275px",
             }}
           >
             {data.data.map((item) => (
@@ -624,7 +572,13 @@ export default function HomeContent() {
                       style={{
                         width: "100%",
                         borderRadius: "6px 6px 0 0",
-                        height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
+                        height: `${getPlaylistImgWidth(
+                          windowSize,
+                          NUMBER_ITEMS_PER_LINE,
+                          SPACE_BETWEEN,
+                          DRAWER_WIDTH,
+                          SIDE_PADDING
+                        )}px`,
                       }}
                       avtSrc={item?.avatar?.thumb_url}
                       alt={`images ${item?.id}`}
