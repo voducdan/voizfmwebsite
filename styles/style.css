@@ -1,21 +1,33 @@
 @font-face {
-    font-family: 'SF UI Display';
-    font-style: normal;
-    font-weight: normal;
-    src: local('SF UI Display'), url('./font/sf-ui-display.woff2') format('woff');
+  font-family: "SF UI Display";
+  font-style: normal;
+  font-weight: normal;
+  src: local("SF UI Display"), url("./font/sf-ui-display.woff2") format("woff");
 }
 
 .swiper-wrapper {
-    justify-content: flex-start;
-    align-items: center
+  justify-content: flex-start;
+  align-items: center;
 }
 
 .random-playlist-link-mb {
-    width: 100%;
-    text-decoration: none;
+  width: 100%;
+  text-decoration: none;
 }
 
 .random-playlist-link-desktop {
-    width: calc(50% - 14px);
-    text-decoration: none
+  width: calc(50% - 14px);
+  text-decoration: none;
+}
+
+.author-detail-info-swiper,
+.home-page .swiper-horizontal {
+  height: auto !important;
+  min-height: 100% !important;
+}
+
+.author-detail-info-swiper .swiper-slide {
+  width: auto !important;
+  margin-right: 24px !important;
+  height: auto !important;
 }

@@ -48,7 +48,10 @@ import {
   CATEGORIES_LEVEL2,
 } from "../../constants/categories.constant.js";
 import FooterLongDescriptionAndCategoryList from "./FooterLongDescriptionAndCategoryList/index.js";
-import { getFeaturedAuthorWidth, getPlaylistImgWidth } from "../../helper/image.helper.js";
+import {
+  getFeaturedAuthorWidth,
+  getPlaylistImgWidth,
+} from "../../helper/image.helper.js";
 import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant.js";
 import { isEmpty } from "lodash";
 import ReactShowMoreText from "react-show-more-text";
@@ -155,11 +158,15 @@ export default function HomeContent() {
 
   const [randomPlaylists, setRandomPlaylists] = useState([]);
   const [playlistsByCategory, setPlaylistsByCategory] = useState([]);
-  const [playlistsByCategoryLevel2, setPlaylistsByCategoryLevel2] = useState([]);
+  const [playlistsByCategoryLevel2, setPlaylistsByCategoryLevel2] = useState(
+    []
+  );
   const [newContents, setNewContents] = useState([]);
-  const [activeNewContentPagination, setActiveNewContentPagination] = useState(0);
-  const [showNewContentNavigationBtn, setShowNewContentNavigationBtn] = useState(false);
-  const [featuredAuthors, setFeaturedAuthors] = useState([]);  
+  const [activeNewContentPagination, setActiveNewContentPagination] =
+    useState(0);
+  const [showNewContentNavigationBtn, setShowNewContentNavigationBtn] =
+    useState(false);
+  const [featuredAuthors, setFeaturedAuthors] = useState([]);
 
   const navigationNewContentPrevRef = useRef(null);
   const navigationNewContentNextRef = useRef(null);
@@ -224,8 +231,7 @@ export default function HomeContent() {
 
     async function fetchFeaturedAuthors() {
       const res = await api.getFeaturedAuthors(1, LIMIT_PER_PAGE);
-      const slicedData = res.data.data.slice(0, 5);
-      setFeaturedAuthors(slicedData);
+      setFeaturedAuthors(res.data.data);
     }
 
     fetchNewContent();
@@ -260,7 +266,7 @@ export default function HomeContent() {
   };
 
   return (
-    <Main>
+    <Main className="home-page">
       <Box
         sx={{
           ...flexStyle("flex-start", "center"),
@@ -322,7 +328,7 @@ export default function HomeContent() {
               DRAWER_WIDTH,
               SIDE_PADDING
             )}px`,
-            minHeight: (isSm ? "180px" : "275px"),
+            minHeight: isSm ? "180px" : "275px",
           }}
         >
           {randomPlaylists.map((item) => (
@@ -359,7 +365,7 @@ export default function HomeContent() {
                       padding: "16px",
                       backgroundColor: "#000000",
                       marginTop: "-5px",
-                      backgroundColor: COLORS.bg3,
+                      backgroundColor: COLORS.bg2,
                       borderRadius: "0 0 4px 4px",
                     }}
                   >
@@ -403,7 +409,7 @@ export default function HomeContent() {
                 DRAWER_WIDTH,
                 SIDE_PADDING
               )}px`,
-              minHeight: (isSm ? "180px" : "275px"),
+              minHeight: isSm ? "180px" : "275px",
             }}
           >
             {data.data.map((item) => (
@@ -440,7 +446,7 @@ export default function HomeContent() {
                         padding: "16px",
                         backgroundColor: "#000000",
                         marginTop: "-5px",
-                        backgroundColor: COLORS.bg3,
+                        backgroundColor: COLORS.bg2,
                         borderRadius: "0 0 4px 4px",
                       }}
                     >
@@ -464,7 +470,7 @@ export default function HomeContent() {
           p: isSm ? "32px 20px 23px 20px" : "32px 48px 23px 48px",
           backgroundColor: COLORS.bg2,
           position: "relative",
-          marginBottom: "48px"
+          marginBottom: "48px",
         }}
       >
         <CustomPaginationBullet
@@ -506,7 +512,7 @@ export default function HomeContent() {
                   <Thumbnail
                     style={{
                       width: "100%",
-                      borderRadius: "6px 6px 0 0",
+                      borderRadius: "4px",
                       height: `${getPlaylistImgWidth(
                         windowSize,
                         NUMBER_ITEMS_PER_LINE,
@@ -551,113 +557,113 @@ export default function HomeContent() {
       </Box>
 
       <Box
-        id="author-detail-info"
         sx={{
-          width: "100%",
-          // bgcolor: COLORS.bg2,
-          ...(!isSm && {
-            borderRadius: "10px",
-          }),
+          margin: `0 ${SIDE_PADDING}px 40px ${SIDE_PADDING}px`,
         }}
+        key={"author"}
       >
-        <Box
+        <Typography
           sx={{
-            p: isSm ? "40px 16px" : "48px 30px",
-            boxSizing: "border-box",
-            width: "100%",
-            marginBottom: "48px",
+            ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
+            color: COLORS.white,
+            marginBottom: "32px",
           }}
         >
-          <Typography
-            sx={{
-              ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
-              color: COLORS.white,
-              marginBottom: "32px",
-            }}
-          >
-            Tác giả nổi bật
-          </Typography>
-          <Box
-            sx={{
-              ...flexStyle("space-between", "stretch"),
-              flexWrap: "wrap",
-              columnGap: "20px",
-              rowGap: isSm ? "43px" : "35px",
-            }}
-          >
-            {featuredAuthors.map((i) => (
-              <Box
-                key={i?.id}
-                sx={{
-                  width: `200px`,
-                  minWidth: "100px",
-                }}
-              >
-                <Link
-                  href={`/authors/${i?.id}`}
-                  style={{
-                    textDecoration: "none",
+          Tác giả nổi bật
+        </Typography>
+        <Swiper
+          id="author-detail-info"
+          className="author-detail-info-swiper"
+          slidesPerView={NUMBER_ITEMS_PER_LINE}
+          spaceBetween={SPACE_BETWEEN}
+          style={{
+            // marginTop: !isSm ? 35 : 20,
+            height: `${getPlaylistImgWidth(
+              windowSize,
+              NUMBER_ITEMS_PER_LINE,
+              SPACE_BETWEEN,
+              DRAWER_WIDTH,
+              SIDE_PADDING
+            )}px`,
+            minHeight: isSm ? "180px" : "275px",
+          }}
+        >
+          {featuredAuthors.map((i) => (
+            <SwiperSlide key={i?.id} style={{ width: "100%" }}>
+              <Link href={`/play/${i?.id}`}>
+                <Box
+                  key={i?.id}
+                  sx={{
+                    width: `200px`,
+                    minWidth: "100px",
                   }}
                 >
-                  <Box
-                    sx={{
-                      ...flexStyle("center", "center"),
-                      flexDirection: "column",
-                      rowGap: "8px",
-                      cursor: "pointer",
+                  <Link
+                    href={`/authors/${i?.id}`}
+                    style={{
+                      textDecoration: "none",
                     }}
                   >
-                    <Avatar
-                      style={{
-                        width: "150px",
-                        height: "150px",
-                        minHeight: "100px",
-                        border: `2px solid ${COLORS.second}`,
-                      }}
-                      src={i?.avatar?.thumb_url}
-                      alt={`image ${i?.name}`}
-                    />
                     <Box
                       sx={{
-                        textAlign: "center",
-                        width: "100%",
+                        ...flexStyle("center", "center"),
+                        flexDirection: "column",
+                        rowGap: "8px",
+                        cursor: "pointer",
                       }}
                     >
-                      <Typography
-                        sx={{
-                          ...TEXT_STYLE.title1,
-                          color: COLORS.white,
+                      <Avatar
+                        style={{
+                          width: "150px",
+                          height: "150px",
+                          minHeight: "100px",
+                          border: `2px solid ${COLORS.second}`,
                         }}
-                      >
-                        {i?.name || ""}
-                      </Typography>
-
-                      <ReactShowMoreText
-                        lines={2}
-                        more={undefined}
-                        less={undefined}
-                        className="truncated-text-content3"
-                        anchorClass="my-anchor-css-class my-anchor-css-class-hidden"
-                        expanded={false}
-                        truncatedEndingComponent={"..."}
+                        src={i?.avatar?.thumb_url}
+                        alt={`image ${i?.name}`}
+                      />
+                      <Box
+                        sx={{
+                          textAlign: "center",
+                          width: "100%",
+                        }}
                       >
                         <Typography
                           sx={{
-                            ...TEXT_STYLE.content3,
-                            color: COLORS.VZ_Text_content,
-                            maxWidth: "90%",
+                            ...TEXT_STYLE.title1,
+                            color: COLORS.white,
                           }}
                         >
-                          {i?.description || ""}
+                          {i?.name || ""}
                         </Typography>
-                      </ReactShowMoreText>
+
+                        <ReactShowMoreText
+                          lines={2}
+                          more={undefined}
+                          less={undefined}
+                          className="truncated-text-content3"
+                          anchorClass="my-anchor-css-class my-anchor-css-class-hidden"
+                          expanded={false}
+                          truncatedEndingComponent={"..."}
+                        >
+                          <Typography
+                            sx={{
+                              ...TEXT_STYLE.content3,
+                              color: COLORS.VZ_Text_content,
+                              maxWidth: "90%",
+                            }}
+                          >
+                            {i?.description || ""}
+                          </Typography>
+                        </ReactShowMoreText>
+                      </Box>
                     </Box>
-                  </Box>
-                </Link>
-              </Box>
-            ))}
-          </Box>
-        </Box>
+                  </Link>
+                </Box>
+              </Link>
+            </SwiperSlide>
+          ))}
+        </Swiper>
       </Box>
 
       {playlistsByCategoryLevel2.map((data) => (
@@ -682,7 +688,7 @@ export default function HomeContent() {
                 DRAWER_WIDTH,
                 SIDE_PADDING
               )}px`,
-              minHeight: (isSm ? "180px" : "275px"),
+              minHeight: isSm ? "180px" : "275px",
             }}
           >
             {data.data.map((item) => (
@@ -719,7 +725,7 @@ export default function HomeContent() {
                         padding: "16px",
                         backgroundColor: "#000000",
                         marginTop: "-5px",
-                        backgroundColor: COLORS.bg3,
+                        backgroundColor: COLORS.bg2,
                         borderRadius: "0 0 6px 6px",
                       }}
                     >
