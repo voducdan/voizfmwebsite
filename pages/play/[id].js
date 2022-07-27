@@ -39,20 +39,10 @@ const PlaylistDetailPage = ({ playlist }) => {
         <meta property="og:image:height" content="630" />
       </Head>
       <Box>
-        <Typography
-          sx={{
-            ...(TEXT_STYLE.h2),
-            color: COLORS.white,
-            marginBottom: "8px",
-            padding: "25px 24px 0"
-          }}
-        >
-          {categoryName}
-        </Typography>
         <NavigationBar
           histories={playlistDetailHistories}
           paddingX={"24"}
-          // paddingTop={25}
+          paddingTop={25}
         />
       </Box>
       <PlaylistDetail playlistFromAPI={playlist} />

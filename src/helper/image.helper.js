@@ -11,3 +11,13 @@ export const getPlaylistImgWidth = (windowSize, itemPerLineCounter, spaceBetween
   }
   return innerWidth / itemPerLineCounter - spaceToBeSubtracted;
 };
+
+export const getFeaturedAuthorWidth = (numItemsPerLine, columnGap, isSm) => {
+  const el = document.getElementById("author-detail-info");
+  const innerWidth = el.clientWidth;
+  const padding = isSm ? 36 : 64;
+  const widthPerItems =
+    (innerWidth - padding) / numItemsPerLine -
+    ((numItemsPerLine - 1) * columnGap) / numItemsPerLine;
+  return widthPerItems;
+};
