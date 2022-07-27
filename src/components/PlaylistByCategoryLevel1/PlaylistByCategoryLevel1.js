@@ -276,10 +276,14 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
 
     setHasLoadMore(true);
     fetchPlaylists();
+  }, [categoryCode, subCategory]);
+
+  useEffect(() => {
     if (subCategory) {
       getCategoryNameFromSubcategoryCode();
     }
-  }, [categoryCode, subCategory]);
+  }, [subCategory, JSON.stringify(footerCategoryList)])
+  
 
   const getInnerWidth = () => {
     const width = windowSize.width;
@@ -344,9 +348,7 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
         "name",
         ""
       );
-
-      console.log("footerCategoryList: ", footerCategoryList);
-      console.log("categoryNameFromSubcategoryCode: ", categoryNameFromSubcategoryCode, selectedCategoryInfo);
+      
       setCategoryName(categoryNameFromSubcategoryCode);
     }
   };
