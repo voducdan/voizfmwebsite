@@ -19,9 +19,10 @@ import { getNavigationBarItemObject } from "../../src/helper/link.helper";
 const PlaylistDetailPage = ({ playlist }) => {
   const url = typeof window !== "undefined" ? window.location.href : "";
   const categoryPathName = replace(get(playlist, 'category.code', ''), '_', '-');
+  const categoryName = get(playlist, 'category.name', '');
   const playlistDetailHistories = [    
     getNavigationBarItemObject("Trang chủ", "/"),
-    getNavigationBarItemObject(`${get(playlist, 'category.name', '')}`, `/${categoryPathName}`),
+    getNavigationBarItemObject(`${categoryName}`, `/${categoryPathName}`),
     getNavigationBarItemObject(`${get(playlist, 'name', '')}`, `/play/${get(playlist, 'id', '')}`),
   ];
 
@@ -38,10 +39,20 @@ const PlaylistDetailPage = ({ playlist }) => {
         <meta property="og:image:height" content="630" />
       </Head>
       <Box>
+        <Typography
+          sx={{
+            ...(TEXT_STYLE.h2),
+            color: COLORS.white,
+            marginBottom: "8px",
+            padding: "25px 24px 0"
+          }}
+        >
+          {categoryName}
+        </Typography>
         <NavigationBar
           histories={playlistDetailHistories}
           paddingX={"24"}
-          paddingTop={25}
+          // paddingTop={25}
         />
       </Box>
       <PlaylistDetail playlistFromAPI={playlist} />

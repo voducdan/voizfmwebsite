@@ -31,6 +31,7 @@ export default function Thumbnail(props) {
       <img
         style={{
           ...style,
+          objectFit: "cover",
         }}
         src={avtSrc}
         alt={alt}
