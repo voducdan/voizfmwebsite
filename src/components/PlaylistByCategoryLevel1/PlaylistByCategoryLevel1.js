@@ -344,6 +344,8 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
         "name",
         ""
       );
+
+      console.log("footerCategoryList: ", footerCategoryList);
       console.log("categoryNameFromSubcategoryCode: ", categoryNameFromSubcategoryCode, selectedCategoryInfo);
       setCategoryName(categoryNameFromSubcategoryCode);
     }
