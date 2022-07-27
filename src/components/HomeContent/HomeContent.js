@@ -51,6 +51,7 @@ import FooterLongDescriptionAndCategoryList from "./FooterLongDescriptionAndCate
 import { getFeaturedAuthorWidth, getPlaylistImgWidth } from "../../helper/image.helper.js";
 import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant.js";
 import { isEmpty } from "lodash";
+import ReactShowMoreText from "react-show-more-text";
 
 SwiperCore.use([Navigation, Autoplay, Pagination]);
 
@@ -553,7 +554,7 @@ export default function HomeContent() {
         id="author-detail-info"
         sx={{
           width: "100%",
-          bgcolor: COLORS.bg2,
+          // bgcolor: COLORS.bg2,
           ...(!isSm && {
             borderRadius: "10px",
           }),
@@ -578,7 +579,7 @@ export default function HomeContent() {
           </Typography>
           <Box
             sx={{
-              ...flexStyle("center", "stretch"),
+              ...flexStyle("space-between", "stretch"),
               flexWrap: "wrap",
               columnGap: "20px",
               rowGap: isSm ? "43px" : "35px",
@@ -588,7 +589,7 @@ export default function HomeContent() {
               <Box
                 key={i?.id}
                 sx={{
-                  width: `calc(100% / 5.5)`,
+                  width: `200px`,
                   minWidth: "100px",
                 }}
               >
@@ -608,8 +609,8 @@ export default function HomeContent() {
                   >
                     <Avatar
                       style={{
-                        width: "100%",
-                        height: `${getFeaturedAuthorWidth(5.25, 10, isSm)}px`,
+                        width: "150px",
+                        height: "150px",
                         minHeight: "100px",
                         border: `2px solid ${COLORS.second}`,
                       }}
@@ -619,16 +620,37 @@ export default function HomeContent() {
                     <Box
                       sx={{
                         textAlign: "center",
+                        width: "100%",
                       }}
                     >
                       <Typography
                         sx={{
-                          ...TEXT_STYLE.title3,
+                          ...TEXT_STYLE.title1,
                           color: COLORS.white,
                         }}
                       >
-                        {i?.name}
+                        {i?.name || ""}
                       </Typography>
+
+                      <ReactShowMoreText
+                        lines={2}
+                        more={undefined}
+                        less={undefined}
+                        className="truncated-text-content3"
+                        anchorClass="my-anchor-css-class my-anchor-css-class-hidden"
+                        expanded={false}
+                        truncatedEndingComponent={"..."}
+                      >
+                        <Typography
+                          sx={{
+                            ...TEXT_STYLE.content3,
+                            color: COLORS.VZ_Text_content,
+                            maxWidth: "90%",
+                          }}
+                        >
+                          {i?.description || ""}
+                        </Typography>
+                      </ReactShowMoreText>
                     </Box>
                   </Box>
                 </Link>
