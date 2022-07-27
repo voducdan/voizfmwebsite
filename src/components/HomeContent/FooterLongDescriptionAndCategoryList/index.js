@@ -189,7 +189,7 @@ const FooterLongDescriptionAndCategoryList = ({ isSm }) => {
   return (
     <Box
       sx={{
-        padding: "56px 47px",
+        padding: (isSm ? "56px 15px" : "56px 47px"),
         borderBottom: "1px solid #292B32",
       }}
     >

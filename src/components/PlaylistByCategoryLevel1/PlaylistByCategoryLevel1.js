@@ -42,12 +42,12 @@ import { getFooterCategoryList } from "../../redux/footerCategoryList";
 import { getPlaylistImgWidth } from "../../helper/image.helper";
 
 const Title = (props) => {
-  const { isSm, content, haveArrow } = props;
+  const { isSm, content, haveArrow, marginBottom } = props;
   return (
     <Box
       sx={{
         ...flexStyle("flex-start", "center"),
-        marginBottom: "24px",
+        marginBottom: marginBottom ? marginBottom : "24px",
       }}
     >
       <Typography
@@ -320,7 +320,7 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
 
   const handleLoadMorePlaylist = async () => {
     try {
-      const ignore_ids = join([...new Set(playlists.map((i) => i.id))], ',');
+      const ignore_ids = join([...new Set(playlists.map((i) => i.id))], ",");
       const code = subCategory || categoryCode;
       const res = await api.getCategoryPlaylists(code, 10, ignore_ids);
       const results = await res.data.data;
@@ -335,11 +335,14 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
 
   const getCategoryNameFromSubcategoryCode = () => {
     if (subCategory) {
-      const selectedCategoryInfo = find(footerCategoryList, footerCateGoryItem => footerCateGoryItem.name === pageTitle);
+      const selectedCategoryInfo = find(
+        footerCategoryList,
+        (footerCateGoryItem) => footerCateGoryItem.name === pageTitle
+      );
       const categoryNameFromSubcategoryCode = get(
-        find(selectedCategoryInfo?.data || [], d => d.code === subCategory),
-        'name',
-        ''
+        find(selectedCategoryInfo?.data || [], (d) => d.code === subCategory),
+        "name",
+        ""
       );
       setCategoryName(categoryNameFromSubcategoryCode);
     }
@@ -400,16 +403,22 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
               sx={{
                 ...(isSm ? TEXT_STYLE.h3 : TEXT_STYLE.h2),
                 color: COLORS.white,
+                marginBottom: "8px",
               }}
             >
               {categories[0]?.name}
             </Typography>
+            
+            {!isDisplayTitle && (
+              <NavigationBar histories={audioBookHistories} />
+            )}
           </Box>
         )}
         {categories.length >= 2 && !subCategory && (
           <Divider sx={{ borderColor: COLORS.bg2, mt: "24px" }} />
         )}
-        {(categoryCode === null || categoryCode === "") && !subCategory &&
+        {(categoryCode === null || categoryCode === "") &&
+          !subCategory &&
           initPlaylists.length > 0 && (
             <Box
               sx={{
@@ -421,19 +430,37 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
                   key={i.name}
                   i={i}
                   isSm={isSm}
-                  playlistImgWidth={getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}
+                  playlistImgWidth={getPlaylistImgWidth(
+                    windowSize,
+                    NUMBER_ITEMS_PER_LINE,
+                    SPACE_BETWEEN,
+                    DRAWER_WIDTH,
+                    SIDE_PADDING
+                  )}
                 />
               ))}
             </Box>
           )}
-        {((categoryCode !== null && categoryCode !== "") || !isEmpty(subCategory)) && (
+        {((categoryCode !== null && categoryCode !== "") ||
+          !isEmpty(subCategory)) && (
           <Box>
             <Box
               sx={{
                 mt: "48px",
               }}
             >
-              {<Title content={categoryName} isSm={isSm} haveArrow={false} />}
+              {
+                <Title
+                  content={categoryName}
+                  isSm={isSm}
+                  haveArrow={false}
+                  marginBottom="8px"
+                />
+              }
+
+              {!isDisplayTitle && (
+                <NavigationBar histories={audioBookHistories} />
+              )}
               <Box
                 sx={{
                   ...flexStyle("flex-start", "center"),
@@ -451,7 +478,13 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
                       <Thumbnail
                         style={{
                           width: "100%",
-                          height: `${getPlaylistImgWidth(windowSize, NUMBER_ITEMS_PER_LINE, SPACE_BETWEEN, DRAWER_WIDTH, SIDE_PADDING)}px`,
+                          height: `${getPlaylistImgWidth(
+                            windowSize,
+                            NUMBER_ITEMS_PER_LINE,
+                            SPACE_BETWEEN,
+                            DRAWER_WIDTH,
+                            SIDE_PADDING
+                          )}px`,
                           borderRadius: 3,
                         }}
                         avtSrc={item.avatar.thumb_url}
@@ -493,7 +526,8 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
         )}
       </Box>
       {!["/children-book", "/summary-book"].includes(pathname) &&
-        categoryCode === null && isEmpty(subCategory) && (
+        categoryCode === null &&
+        isEmpty(subCategory) && (
           <Box
             sx={{
               width: "100%",
