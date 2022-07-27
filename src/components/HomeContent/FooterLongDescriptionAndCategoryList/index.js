@@ -72,7 +72,7 @@ const FooterCategoryList = ({ isSm }) => {
           justifyContent: "space-between",
         }}
       >
-        <Box sx={{ width: isSm ? "100%" : "256px", marginTop: "16px" }}>
+        <Box sx={{ width: isSm ? "100%" : "240px", marginTop: "16px" }}>
           <Typography
             sx={{
               ...TEXT_STYLE.h3,

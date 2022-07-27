@@ -4,6 +4,7 @@ import { COLORS, TEXT_STYLE } from "../../utils/constants";
 import { flexStyle } from "../../utils/flexStyle";
 import CloseIcon from '@mui/icons-material/Close';
 import { CloseCircleIcon } from "../Icons/CloseCircleIcon";
+import Link from "next/link";
 
 const InstallAppPopup = ({ visible, onClose, isSm }) => {
   return (
@@ -18,7 +19,7 @@ const InstallAppPopup = ({ visible, onClose, isSm }) => {
           margin: 0,
           width: !isSm ? "512px" : "100%",
           paddingTop: isSm ? "51px" : "40px",
-          paddingBottom: isSm ? "65px" : "58px",
+          paddingBottom: isSm ? "65px" : "30px",
           boxSizing: "border-box",
           display: 'flex',
           alignItems: 'center',
@@ -77,8 +78,16 @@ const InstallAppPopup = ({ visible, onClose, isSm }) => {
           Tải ứng dụng
         </Typography>
         <Box sx={{ ...flexStyle(isSm ? "center" : "justify-between", "center"), flexWrap: "wrap", width: "100%" }}>
-          <img src="/images/app_store_install.png" alt="" className="install-btn" />
-          <img src="/images/google_play_install.png" alt="" className="install-btn" />
+          <Link href="https://apps.apple.com/us/app/voiz-fm-s%C3%A1ch-n%C3%B3i-podcast/id1447395824">
+            <a target="_blank" rel="noopener noreferrer">
+              <img src="/images/app_store_install.png" alt="" className="install-btn" />
+            </a>
+          </Link>
+          <Link href="https://play.google.com/store/apps/details?id=com.wewe.musicsounds">
+            <a target="_blank" rel="noopener noreferrer">
+              <img src="/images/google_play_install.png" alt="" className="install-btn" />
+            </a>
+          </Link>
         </Box>
       </Box>
     </Dialog>
