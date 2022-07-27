@@ -24,6 +24,7 @@ import useWindowSize from "../../utils/useWindowSize";
 import API from "../../services/api";
 import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant";
 import { isEmpty } from "lodash";
+import { getFeaturedAuthorWidth } from "../../helper/image.helper";
 
 const PlaylistAudioCount = (props) => {
   const { audioCount, isSm } = props;
@@ -108,19 +109,6 @@ export default function Author({ author }) {
     const { id } = router.query;
     setId(id);
   }, [router.query]);
-
-  const getFeaturedAuthorWidth = () => {
-    const el = document.getElementById("author-detail-info");
-    const innerWidth = el.clientWidth;
-    // (innerWidth - ) padding*2 / NUM_ITEMS_PER_LINE - (((NUM_ITEMS_PER_LINE - 1) * columnGap) / NUM_ITEMS_PER_LINE)
-    const padding = isSm ? 36 : 64;
-    const numItemsPerLine = 3;
-    const columnGap = 20;
-    const widthPerItems =
-      (innerWidth - padding) / numItemsPerLine -
-      ((numItemsPerLine - 1) * columnGap) / numItemsPerLine;
-    return widthPerItems;
-  };
 
   const handleLoadMorePlaylist = () => {
     const newPlaylistPage = playlistPage + 1;
@@ -373,7 +361,7 @@ export default function Author({ author }) {
                         <Avatar
                           style={{
                             width: "100%",
-                            height: `${getFeaturedAuthorWidth()}px`,
+                            height: `${getFeaturedAuthorWidth(3, 20, isSm)}px`,
                             border: `2px solid ${COLORS.second}`,
                           }}
                           src={i?.avatar?.thumb_url}
