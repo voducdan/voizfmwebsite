@@ -576,7 +576,6 @@ export default function HomeContent() {
           slidesPerView={NUMBER_ITEMS_PER_LINE}
           spaceBetween={SPACE_BETWEEN}
           style={{
-            // marginTop: !isSm ? 35 : 20,
             height: `${getPlaylistImgWidth(
               windowSize,
               NUMBER_ITEMS_PER_LINE,
@@ -631,6 +630,8 @@ export default function HomeContent() {
                           sx={{
                             ...TEXT_STYLE.title1,
                             color: COLORS.white,
+                            marginTop: "24px",
+                            marginBottom: "8px",
                           }}
                         >
                           {i?.name || ""}
