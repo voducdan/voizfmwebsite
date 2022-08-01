@@ -240,8 +240,8 @@ export default function PlaylistBookmark() {
 
   const [playlistBookmarks, setPlaylistBookmarks] = useState([]);
   const [channelBookmarks, setChannelBookmarks] = useState([]);
-  const [playlistPage, setPlaylistPage] = useState(0);
-  const [channelPage, setChannelPage] = useState(0);
+  const [playlistPage, setPlaylistPage] = useState(1);
+  const [channelPage, setChannelPage] = useState(1);
   const [value, setValue] = useState(0);
   const [openSnackbar, setOpenSnackbar] = useState(false);
   const [errorMessage, setErrorMessage] = useState("");
@@ -253,7 +253,7 @@ export default function PlaylistBookmark() {
       const res = await api.getPlaylistBookmarks(playlistPage, LIMIT_PER_PAGE);
       const data = await res.data.data;
       data.forEach((i) => (i["is_bookmark"] = true));
-      setPlaylistBookmarks(data);
+      setPlaylistBookmarks([...playlistBookmarks, ...data]);
       if (isEmpty(data)) {
         setHasLoadMorePlaylist(false);
       }
@@ -266,7 +266,7 @@ export default function PlaylistBookmark() {
       const res = await api.getChannelBookmarks(channelPage, LIMIT_PER_PAGE);
       const data = await res.data.data;
       data.forEach((i) => (i["is_bookmark"] = true));
-      setChannelBookmarks(data);
+      setChannelBookmarks([...channelBookmarks, ...data]);
       if (isEmpty(data)) {
         setHasLoadMoreChannel(false);
       }
@@ -416,7 +416,7 @@ export default function PlaylistBookmark() {
           }}
         >
           <Button
-            onClick={handleLoadMorePlaylist}
+            onClick={() => setPlaylistPage(playlistPage + 1)}
             sx={{
               textTransform: "none",
               ...TEXT_STYLE.title2,
@@ -443,7 +443,7 @@ export default function PlaylistBookmark() {
           }}
         >
           <Button
-            onClick={handleLoadMoreAudio}
+            onClick={() => setChannelPage(channelPage + 1)}
             sx={{
               textTransform: "none",
               ...TEXT_STYLE.title2,
