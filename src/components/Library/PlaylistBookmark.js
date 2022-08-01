@@ -416,7 +416,7 @@ export default function PlaylistBookmark() {
           }}
         >
           <Button
-            onClick={handleLoadMorePlaylist}
+            onClick={() => setPlaylistPage(playlistPage + 1)}
             sx={{
               textTransform: "none",
               ...TEXT_STYLE.title2,
@@ -443,7 +443,7 @@ export default function PlaylistBookmark() {
           }}
         >
           <Button
-            onClick={handleLoadMoreAudio}
+            onClick={() => setChannelPage(channelPage + 1)}
             sx={{
               textTransform: "none",
               ...TEXT_STYLE.title2,
