@@ -599,7 +599,7 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
         </Box>
       )}
       <PublisherComponent isSm={isSm} />
-      <FooterLongDescriptionAndCategoryList isSm={isSm} />
+      <FooterLongDescriptionAndCategoryList isSm={isSm} pageTitle={pageTitle} />
     </Box>
   );
 }
