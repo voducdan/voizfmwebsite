@@ -55,6 +55,7 @@ import {
 import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant.js";
 import { isEmpty } from "lodash";
 import ReactShowMoreText from "react-show-more-text";
+import { PageTitles } from "../../constants/pageTitle.constant.js";
 
 SwiperCore.use([Navigation, Autoplay, Pagination]);
 
@@ -740,7 +741,7 @@ export default function HomeContent() {
         </Box>
       ))}
       <PublisherComponent isSm={isSm} />
-      <FooterLongDescriptionAndCategoryList isSm={isSm} />
+      <FooterLongDescriptionAndCategoryList isSm={isSm} pageTitle={PageTitles.HOME} />
     </Main>
   );
 }

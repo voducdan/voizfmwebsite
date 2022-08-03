@@ -43,6 +43,36 @@ html {
   margin: 0 12px 12px;
 }
 
+.text-link-in-long-description {
+  color: #ffffff !important;
+  text-decoration: none;
+}
+
+.text-link-in-long-description:hover {
+  text-decoration: underline !important;
+}
+
+.text-link-in-long-description--bold {
+  font-weight: 800;
+}
+
+.mb-35 {
+  margin-bottom: 35px;
+}
+
+.mb-20 {
+  margin-bottom: 20px;
+}
+
+.px-3 {
+  padding-left: 3px;
+  padding-right: 3px;
+}
+
+.pr-3 {
+  padding-right: 3px;
+}
+
 @keyframes App-logo-spin {
   from {
     transform: rotate(0deg);
