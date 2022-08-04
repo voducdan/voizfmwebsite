@@ -243,7 +243,7 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
       break;
     case PageTitles.PODCAST:
       descriptionInfo = LongDescription.PodcastPage;
-      linesCounterInShowMoreText = 4;
+      linesCounterInShowMoreText = 3;
       break;
   }
 
@@ -280,7 +280,7 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
               lines={linesCounterInShowMoreText}
               more={ShowMoreTextBtn("Xem thêm")}
               less={ShowMoreTextBtn("Thu gọn")}
-              className="truncated-text"
+              className="truncated-text truncated-text-long-description"
               anchorClass="my-anchor-css-class long-description-text"
               expanded={false}
               truncatedEndingComponent={"... "}
