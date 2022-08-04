@@ -263,8 +263,7 @@ export const LongDescription = {
           thức và góc nhìn thú vị có lẽ những điểm cộng lớn nhất cho hình thức
           nghe này. Sự sáng tạo và linh hoạt trong cách xây dựng nội dung, hình
           thức truyền tải giúp podcast ngày càng được người nghe dành nhiều sự
-          yêu thích hơn. Cùng với sự phát triển của công nghệ, ebook – sách điện
-          tử và audio book –
+          yêu thích hơn.
         </div>
         <div>
           Tại Voiz FM hiện có nhiều nội dung podcast đa dạng chủ để cho người
