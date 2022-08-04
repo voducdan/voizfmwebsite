@@ -15,6 +15,14 @@
   color: #B8B8B8;
 }
 
+.truncated-text-long-description {
+  color: #ACACAC !important;
+}
+
+.truncated-text-long-description > span > span > span:last-child > span > span:first-child {
+  display: none !important;
+}
+
 .truncated-text .my-anchor-css-class {
   text-decoration: none;
 }

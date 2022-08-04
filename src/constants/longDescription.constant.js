@@ -7,7 +7,7 @@ export const LongDescription = {
           Voiz FM chính thức tham gia thị trường
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/audio-book"
             target="_blank"
           >
@@ -16,7 +16,7 @@ export const LongDescription = {
           và
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/podcast"
             target="_blank"
           >
@@ -43,7 +43,7 @@ export const LongDescription = {
         <div>
           <a
             className="text-link-in-long-description pr-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/audio-book"
             target="_blank"
           >
@@ -55,7 +55,7 @@ export const LongDescription = {
           thích nhất tại Voiz FM:
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/453"
             target="_blank"
           >
@@ -64,7 +64,7 @@ export const LongDescription = {
           ,
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/513"
             target="_blank"
           >
@@ -75,7 +75,7 @@ export const LongDescription = {
         <div>
           <a
             className="text-link-in-long-description pr-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/story-book"
             target="_blank"
           >
@@ -85,7 +85,7 @@ export const LongDescription = {
           viễn tưởng,... Một số truyện nói nổi tiếng như Tam quốc diễn nghĩa,
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/1961"
             target="_blank"
           >
@@ -94,7 +94,7 @@ export const LongDescription = {
           ,
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/174"
             target="_blank"
           >
@@ -105,7 +105,7 @@ export const LongDescription = {
         <div>
           <a
             className="text-link-in-long-description pr-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/podcast"
             target="_blank"
           >
@@ -116,7 +116,7 @@ export const LongDescription = {
         <div>
           <a
             className="text-link-in-long-description pr-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/summary-book"
             target="_blank"
           >
@@ -127,7 +127,7 @@ export const LongDescription = {
           chuộng như
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/2186"
             target="_blank"
           >
@@ -136,7 +136,7 @@ export const LongDescription = {
           ,
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/2184"
             target="_blank"
           >
@@ -147,7 +147,7 @@ export const LongDescription = {
         <div className="mb-20">
           <a
             className="text-link-in-long-description pr-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/children-book"
             target="_blank"
           >
@@ -156,7 +156,7 @@ export const LongDescription = {
           Nhiều nội dung thiếu nhi được yêu thích như Cô bé bán diêm,
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/2015"
             target="_blank"
           >
@@ -165,7 +165,7 @@ export const LongDescription = {
           ,
           <a
             className="text-link-in-long-description px-3"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/1939"
             target="_blank"
           >
@@ -201,7 +201,7 @@ export const LongDescription = {
           book –
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/audio-book"
             target="_blank"
           >
@@ -224,7 +224,7 @@ export const LongDescription = {
           Voiz FM hiện nay:
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/453"
             target="_blank"
           >
@@ -233,7 +233,7 @@ export const LongDescription = {
           ,
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/513"
             target="_blank"
           >
@@ -252,7 +252,7 @@ export const LongDescription = {
           Những năm gần đây, nghe
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/audio-book"
             target="_blank"
           >
@@ -263,8 +263,7 @@ export const LongDescription = {
           thức và góc nhìn thú vị có lẽ những điểm cộng lớn nhất cho hình thức
           nghe này. Sự sáng tạo và linh hoạt trong cách xây dựng nội dung, hình
           thức truyền tải giúp podcast ngày càng được người nghe dành nhiều sự
-          yêu thích hơn. Cùng với sự phát triển của công nghệ, ebook – sách điện
-          tử và audio book –
+          yêu thích hơn.
         </div>
         <div>
           Tại Voiz FM hiện có nhiều nội dung podcast đa dạng chủ để cho người
@@ -272,7 +271,7 @@ export const LongDescription = {
           ngữ,...Một số podcast được yêu thích tại Voiz FM hiện nay:
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/103"
             target="_blank"
           >
@@ -281,7 +280,7 @@ export const LongDescription = {
           ,
           <a
             className="text-link-in-long-description px-3 text-link-in-long-description--bold"
-            rel="noopener noreferrer"
+            rel="nofollow noopener noreferrer"
             href="https://voiz.vn/play/1735"
             target="_blank"
           >
