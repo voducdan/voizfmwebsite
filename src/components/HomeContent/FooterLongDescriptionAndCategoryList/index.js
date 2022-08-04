@@ -290,9 +290,7 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
                   ...TEXT_STYLE.content2,
                   color: COLORS.VZ_Text_content,
                   marginBottom: "16px",
-                  maxWidth: "90%",
                 }}
-                className
               >
                 {desc}
               </Typography>
