@@ -2,6 +2,7 @@ import '../styles/App.css'
 import '../styles/index.css'
 import '../styles/PlaylistDetail.css'
 import '../styles/style.css'
+import '../styles/CustomStyleComponent/InputPhoneNumber.css'
 import '../styles/swiperPaginationStyle.css'
 import '../node_modules/swiper/swiper.scss'; // core Swiper
 import '../node_modules/swiper/modules/navigation/navigation.scss'; // Navigation module
