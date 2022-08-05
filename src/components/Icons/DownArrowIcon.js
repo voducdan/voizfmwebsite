@@ -11,9 +11,9 @@ export default function DownArrowIcon({ stroke = '#B8B8B8', width = "12", height
       <path
         d="M0.666016 1.33398L5.99935 6.66732L11.3327 1.33398"
         stroke={stroke}
-        stroke-miterlimit="10"
-        stroke-linecap="round"
-        stroke-linejoin="round"
+        strokeMiterlimit="10"
+        strokeLinecap="round"
+        strokeLinejoin="round"
       />
     </svg>
   );
