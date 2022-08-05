@@ -2,38 +2,12 @@ import React from "react";
 import { Typography, Box, Link, Button } from "@mui/material";
 import { COLORS, FONT_COLOR, TEXT_STYLE } from "../../../utils/constants";
 import { map, get, isEmpty } from "lodash";
-import ShowMoreText from "react-show-more-text";
-import ExpandMoreIcon from "@mui/icons-material/ExpandMore";
-import ExpandLessIcon from "@mui/icons-material/ExpandLess";
-import { flexStyle } from "../../../utils/flexStyle";
 import { useSelector } from "react-redux";
 import { getFooterCategoryList } from "../../../redux/footerCategoryList";
 import { LongDescription } from "../../../constants/longDescription.constant";
 import { PageTitles } from "../../../constants/pageTitle.constant";
-
-const LONG_DESCRIPTION_TITLE =
-  "Lorem ipsum dolor sit amet, consectetur adipiscing elit";
-const LONG_DESCRIPTION = `Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Lorem ipsum dolor sit amet, consectetur adipiscing elit, sed do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.
-Do eiusmod tempor incididunt ut labore et dolore magna aliqua. Ut enim ad minim veniam, quis nostrud exercitation ullamco laboris nisi ut aliquip ex ea commodo consequat. Duis aute irure dolor in reprehenderit in voluptate velit esse cillum dolore eu fugiat nulla pariatur. Excepteur sint occaecat cupidatat non proident, sunt in culpa qui officia deserunt mollit anim id est laborum.`;
-
-const ShowMoreTextBtn = (content) => (
-  <Button
-    endIcon={content === "Xem thêm" ? <ExpandMoreIcon /> : <ExpandLessIcon />}
-    sx={{
-      color: COLORS.second,
-      ...TEXT_STYLE.VZ_Caption_2,
-      textTransform: "none",
-      ...flexStyle("center", "center"),
-      width: "100%",
-    }}
-  >
-    {content}
-  </Button>
-);
+import ReadMore from "../../ReadMore";
+import ChevronDownIcon from "../../Icons/ChevronDownIcon";
 
 const CategoryTextLink = ({ text, url }) => (
   <Link
@@ -231,7 +205,6 @@ const FooterCategoryList = ({ isSm }) => {
 
 const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
   let descriptionInfo;
-  let linesCounterInShowMoreText = 6;
 
   switch (pageTitle) {
     case PageTitles.HOME:
@@ -239,16 +212,14 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
       break;
     case PageTitles.AUDIO_BOOK:
       descriptionInfo = LongDescription.AudioBookPage;
-      linesCounterInShowMoreText = 5;
       break;
     case PageTitles.PODCAST:
       descriptionInfo = LongDescription.PodcastPage;
-      linesCounterInShowMoreText = 3;
       break;
   }
 
-  const desc = get(descriptionInfo, 'desc', '');
-  const title = get(descriptionInfo, 'title', '');
+  const desc = get(descriptionInfo, "desc", "");
+  const title = get(descriptionInfo, "title", "");
 
   return (
     <Box
@@ -258,7 +229,7 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
       }}
     >
       {!!descriptionInfo && (
-        <>          
+        <>
           <Typography
             sx={{
               ...TEXT_STYLE.h2,
@@ -276,14 +247,19 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
               borderRadius: "6px",
             }}
           >
-            <ShowMoreText
-              lines={linesCounterInShowMoreText}
-              more={ShowMoreTextBtn("Xem thêm")}
-              less={ShowMoreTextBtn("Thu gọn")}
-              className="truncated-text truncated-text-long-description"
-              anchorClass="my-anchor-css-class long-description-text"
-              expanded={false}
-              truncatedEndingComponent={"... "}
+            <ReadMore
+              moreBtn={
+                <div className="flex items-center mt-10">
+                  <span className="mr-5 line-height-0" style={{ ...TEXT_STYLE.content2, color: COLORS.white }}>Xem thêm</span>
+                  <ChevronDownIcon stroke="#ffffff" />
+                </div>
+              }
+              lessBtn={
+                <div className="flex items-center mt-10">
+                  <span className="mr-5 line-height-0" style={{ ...TEXT_STYLE.content2, color: COLORS.white }}>Thu gọn</span>
+                  <ChevronDownIcon stroke="#ffffff" />
+                </div>
+              }
             >
               <Typography
                 sx={{
@@ -294,7 +270,7 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
               >
                 {desc}
               </Typography>
-            </ShowMoreText>
+            </ReadMore>
           </Box>
         </>
       )}
