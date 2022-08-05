@@ -1,12 +1,12 @@
 html {
-  font-family: 'SF UI Display';
-  background-color: #1F2129;
+  font-family: "SF UI Display";
+  background-color: #1f2129;
 }
 
 .App {
   width: 100%;
   height: 100%;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .App-logo {
@@ -36,7 +36,7 @@ html {
 }
 
 .Footer-link-separate {
-  color: #ACACAC;
+  color: #acacac;
 }
 
 .install-btn {
@@ -102,9 +102,6 @@ html {
   -webkit-line-clamp: 4;
   overflow: hidden;
   -webkit-box-orient: vertical;
-  /* WebkitLineClamp: 4, */
-  /* overflow: "hidden", */
-  /* WebkitBoxOrient: "vertical", */
 }
 
 .read-more-btn * {

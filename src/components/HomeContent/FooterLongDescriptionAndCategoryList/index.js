@@ -249,22 +249,22 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
           >
             <ReadMore
               moreBtn={
-                <div className="flex items-center mt-10">
+                <Box className="flex items-center mt-10">
                   <span className="mr-5 line-height-0" style={{ ...TEXT_STYLE.content2, color: COLORS.white }}>Xem thêm</span>
                   <ChevronDownIcon stroke="#ffffff" />
-                </div>
+                </Box>
               }
               lessBtn={
-                <div className="flex items-center mt-10">
+                <Box className="flex items-center mt-10">
                   <span className="mr-5 line-height-0" style={{ ...TEXT_STYLE.content2, color: COLORS.white }}>Thu gọn</span>
                   <ChevronDownIcon stroke="#ffffff" />
-                </div>
+                </Box>
               }
             >
               <Typography
                 sx={{
                   ...TEXT_STYLE.content2,
-                  color: COLORS.VZ_Text_content,
+                  color: FONT_COLOR,
                   marginBottom: "16px",
                 }}
               >
