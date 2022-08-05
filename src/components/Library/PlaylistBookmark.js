@@ -280,13 +280,13 @@ export default function PlaylistBookmark() {
   };
 
   useEffect(() => {
-    if (value === 0) {
-      fetchPlaylistBookmarks();
-    }
-    if (value === 1) {
-      fetchChannelBookmarks();
-    }
-  }, [value, playlistPage, channelPage]);
+    fetchChannelBookmarks();
+  }, [channelPage])
+  
+
+  useEffect(() => {
+    fetchPlaylistBookmarks();
+  }, [playlistPage]);
 
   const handleBookmark = (id) => {
     async function bookmarkPlaylist() {
