@@ -37,7 +37,7 @@ const VipPackageBenefitItem = (props) => {
         columnGap: isSm ? "6px" : "20px",
       }}
     >
-      <CheckIcon sx={{ color: "#5EC174" }} />
+      <CheckIcon sx={{ color: "#5EC174", width: isSm ? "12px" : "auto" }} />
       <Typography
         sx={{
           ...(isSm ? TEXT_STYLE.caption10Regular : TEXT_STYLE.content1),
@@ -321,7 +321,7 @@ export default function VipPackage() {
             ...flexStyle("center", "center"),
             width: "100%",
             "& > :not(style)": {
-              width: isSm ? "calc(100% / 3)" : "calc(100% / 4)",
+              width: "calc(100% / 3)",
               maxHeight: 378,
             },
           }}
@@ -371,19 +371,23 @@ export default function VipPackage() {
           textAlign: "center",
         }}
       >
-        {/* <Typography
-                    sx={{
-                        ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
-                        color: COLORS.white
-                    }}
-                >Nghe thoải mái *, trừ dần theo thực tế sử dụng</Typography>
-                <Typography
-                    sx={{
-                        ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
-                        color: COLORS.VZ_Text_content,
-                        mt: '8px'
-                    }}
-                >Không tự động gia hạn, phù hợp cho người mới bắt đầu</Typography> */}
+        <Typography
+          sx={{
+            ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
+            color: COLORS.white,
+          }}
+        >
+          Nghe thoải mái *, trừ dần theo thực tế sử dụng
+        </Typography>
+        <Typography
+          sx={{
+            ...(isSm ? TEXT_STYLE.content2 : TEXT_STYLE.content1),
+            color: COLORS.VZ_Text_content,
+            mt: "8px",
+          }}
+        >
+          Không tự động gia hạn, phù hợp cho người mới bắt đầu
+        </Typography>
         <a href="http://m.me/VoizFM" target="_blank">
           <Typography
             sx={{
