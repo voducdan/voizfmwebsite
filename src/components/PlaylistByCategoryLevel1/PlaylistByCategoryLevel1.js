@@ -348,7 +348,6 @@ function AudioBook({ router, pageTitle, isDisplayTitle = true }) {
         "name",
         ""
       );
-      
       setCategoryName(categoryNameFromSubcategoryCode);
     }
   };

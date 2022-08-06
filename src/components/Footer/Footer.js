@@ -98,7 +98,7 @@ export default function Footer({ isSm }) {
           position: "relative",
         }}>
           {infoBox(Location, "44 Lê Văn Duyệt, P1, Q. Bình Thạnh, TP. HCM")}
-          <img style={{ width: "100px", position: "absolute", right: isSm ? "15px" : "47px", bottom: isSm ? "-40px" : 0 }} alt="" src="/images/bo-cong-thuong.png"></img>
+          <img style={{ width: "100px", position: "absolute", right: isSm ? "15px" : "47px", bottom: isSm ? "-40px" : 0 }} alt="" src="/images/bo-cong-thuong.png" />
         </Box>
       </Box>
     </Box>

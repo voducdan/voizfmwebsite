@@ -317,7 +317,7 @@ export default function PlaylistBookmark() {
 
   const handleBookmarkChannel = (id) => {
     async function bookmarkChannel() {
-      try {        
+      try {
         if (!checkIsLoggedIn()) return;
         const res = await api.bookmarkChannel(id);
         const data = await res.data;
