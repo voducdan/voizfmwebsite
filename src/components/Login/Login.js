@@ -1052,6 +1052,7 @@ export default function Login() {
               flexDirection: "column",
               width: "100%",
               p: 0,
+              display: isSm ? "none" : "block",
             }}
           >
             <Button
