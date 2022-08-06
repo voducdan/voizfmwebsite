@@ -8,6 +8,7 @@ import { LongDescription } from "../../../constants/longDescription.constant";
 import { PageTitles } from "../../../constants/pageTitle.constant";
 import ReadMore from "../../ReadMore";
 import ChevronDownIcon from "../../Icons/ChevronDownIcon";
+import ChevronUpIcon from "../../Icons/ChevronUpIcon";
 
 const CategoryTextLink = ({ text, url }) => (
   <Link
@@ -251,13 +252,13 @@ const FooterLongDescriptionAndCategoryList = ({ isSm, pageTitle }) => {
               moreBtn={
                 <Box className="flex items-center mt-10">
                   <span className="mr-5 line-height-0" style={{ ...TEXT_STYLE.content2, color: COLORS.white }}>Xem thêm</span>
-                  <ChevronDownIcon stroke="#ffffff" />
+                  <ChevronDownIcon stroke="#ffffff" width="20" />
                 </Box>
               }
               lessBtn={
                 <Box className="flex items-center mt-10">
                   <span className="mr-5 line-height-0" style={{ ...TEXT_STYLE.content2, color: COLORS.white }}>Thu gọn</span>
-                  <ChevronDownIcon stroke="#ffffff" />
+                  <ChevronUpIcon stroke="#ffffff" width="20" />
                 </Box>
               }
             >

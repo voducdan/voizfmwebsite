@@ -292,7 +292,7 @@ export default function PlaylistBookmark() {
   const handleBookmark = (id) => {
     async function bookmarkPlaylist() {
       try {
-        checkIsLoggedIn();
+        if (!checkIsLoggedIn()) return;
         const res = await api.bookmarkPlaylist(id);
         const data = await res.data;
         if (data.error) {
@@ -317,8 +317,8 @@ export default function PlaylistBookmark() {
 
   const handleBookmarkChannel = (id) => {
     async function bookmarkChannel() {
-      try {        
-        checkIsLoggedIn();
+      try {
+        if (!checkIsLoggedIn()) return;
         const res = await api.bookmarkChannel(id);
         const data = await res.data;
         if (data.error) {
