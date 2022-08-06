@@ -45,6 +45,7 @@ import useWindowSize from "../../utils/useWindowSize";
 import API from "../../services/api";
 import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant.js";
 import { isEmpty } from "lodash";
+import { checkIsLoggedIn } from "../../helper/login.helper.js";
 
 SwiperCore.use([Navigation]);
 
@@ -234,8 +235,8 @@ function a11yProps(index) {
 
 export default function PlaylistBookmark() {
   const api = new API();
+
   const windowSize = useWindowSize();
-  const pageLimit = 9999;
   const isSm = windowSize.width <= SCREEN_BREAKPOINTS.sm ? true : false;
 
   const [playlistBookmarks, setPlaylistBookmarks] = useState([]);
@@ -280,17 +281,18 @@ export default function PlaylistBookmark() {
   };
 
   useEffect(() => {
-    if (value === 0) {
-      fetchPlaylistBookmarks();
-    }
-    if (value === 1) {
-      fetchChannelBookmarks();
-    }
-  }, [value, playlistPage, channelPage]);
+    fetchChannelBookmarks();
+  }, [channelPage])
+  
+
+  useEffect(() => {
+    fetchPlaylistBookmarks();
+  }, [playlistPage]);
 
   const handleBookmark = (id) => {
     async function bookmarkPlaylist() {
       try {
+        if (!checkIsLoggedIn()) return;
         const res = await api.bookmarkPlaylist(id);
         const data = await res.data;
         if (data.error) {
@@ -316,6 +318,7 @@ export default function PlaylistBookmark() {
   const handleBookmarkChannel = (id) => {
     async function bookmarkChannel() {
       try {
+        if (!checkIsLoggedIn()) return;
         const res = await api.bookmarkChannel(id);
         const data = await res.data;
         if (data.error) {

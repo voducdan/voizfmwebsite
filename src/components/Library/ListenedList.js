@@ -128,16 +128,12 @@ export default function PlaylistHistory() {
   const [hasLoadMorePlaylist, setHasLoadMorePlaylist] = useState(true);
 
   useEffect(() => {
-    if (value === 0) {
-      fetchPlaylistHistories(playlistPage);
-    }
-  }, [value, playlistPage]);
+    fetchPlaylistHistories(playlistPage);
+  }, [playlistPage]);
 
   useEffect(() => {
-    if (value === 1) {
-      fetchAudioHistories(audioPage);
-    }
-  }, [value, audioPage]);
+    fetchAudioHistories(audioPage);
+  }, [audioPage]);
 
   const fetchAudioHistories = async (audioPage) => {
     try {
