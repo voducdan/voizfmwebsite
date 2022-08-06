@@ -1,12 +1,12 @@
 html {
-  font-family: 'SF UI Display';
-  background-color: #1F2129;
+  font-family: "SF UI Display";
+  background-color: #1f2129;
 }
 
 .App {
   width: 100%;
   height: 100%;
-  overflow:hidden;
+  overflow: hidden;
 }
 
 .App-logo {
@@ -36,7 +36,7 @@ html {
 }
 
 .Footer-link-separate {
-  color: #ACACAC;
+  color: #acacac;
 }
 
 .install-btn {
@@ -64,6 +64,14 @@ html {
   margin-bottom: 20px;
 }
 
+.mr-5 {
+  margin-right: 5px;
+}
+
+.mt-10 {
+  margin-top: 10px;
+}
+
 .px-3 {
   padding-left: 3px;
   padding-right: 3px;
@@ -75,6 +83,29 @@ html {
 
 .pr-10 {
   padding-right: 10px;
+}
+
+.flex {
+  display: flex;
+}
+
+.items-center {
+  align-items: center;
+}
+
+.line-height-0 {
+  line-height: 0 !important;
+}
+
+.read-more-hidden {
+  display: -webkit-box;
+  -webkit-line-clamp: 4;
+  overflow: hidden;
+  -webkit-box-orient: vertical;
+}
+
+.read-more-btn * {
+  text-transform: initial !important;
 }
 
 @keyframes App-logo-spin {
