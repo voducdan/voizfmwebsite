@@ -42,6 +42,7 @@ import { flexStyle } from "../../utils/flexStyle";
 
 // import services
 import API from "../../services/api";
+
 import {
   CATEGORIES_LEVEL1,
   CATEGORIES_LEVEL2,
