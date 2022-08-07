@@ -201,7 +201,7 @@ const VipPackagePaper = (props) => {
             <VipPackageBenefitItem
               isSm={isSm}
               key={2}
-              benefit={"Tiết kiệm 33%"}
+              benefit={"Tiết kiệm 41%"}
               idx={2}
             />
           </Box>
