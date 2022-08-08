@@ -25,7 +25,7 @@ import formatPrice from "../../utils/formatPrice";
 
 // import services
 import API from "../../services/api";
-import { findIndex, reduce, size } from "lodash";
+import { capitalize, findIndex, lowerCase, reduce, size, startCase, toLower } from "lodash";
 import { VipPackages } from "../../constants/vipPackages.constant";
 
 const VipPackageBenefitItem = (props) => {
@@ -62,6 +62,7 @@ const VipPackagePaper = (props) => {
     selectedPackage,
     handleSelectPackage,
   } = props;
+
   return (
     <Paper
       onClick={() => {
@@ -85,7 +86,7 @@ const VipPackagePaper = (props) => {
             mt: "26px",
           }}
         >
-          {data.name}
+          {capitalize(data.name.toLowerCase())}
         </Typography>
       )}
       <Typography
