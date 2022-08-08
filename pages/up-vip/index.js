@@ -5,11 +5,6 @@ import store from "../../src/redux/store";
 // import components
 import UpVip from "../../src/components/UpVip/UpVip";
 import Cookies from "universal-cookie";
-<<<<<<< HEAD
-
-const UpVipPage = () => {
-  return <UpVip />;
-=======
 import { selectUser } from "../../src/redux/user";
 import { useEffect } from "react";
 import { handleOpenVipUserPopup } from "../../src/redux/openVipUserPopup";
@@ -30,7 +25,6 @@ const UpVipPage = () => {
   }, [isVip]);
   
   return !isVip ? <UpVip /> : "";
->>>>>>> 5e6e58b (bugFix: fix checkout package)
 };
 
 export const getServerSideProps = (context) => {

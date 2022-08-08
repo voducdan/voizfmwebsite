@@ -25,7 +25,7 @@ import formatPrice from "../../utils/formatPrice";
 
 // import services
 import API from "../../services/api";
-import { capitalize, find, findIndex, get, lowerCase, map, reduce, size, startCase, toLower } from "lodash";
+import { capitalize, findIndex, lowerCase, reduce, size, startCase, toLower } from "lodash";
 import { VipPackages } from "../../constants/vipPackages.constant";
 
 const VipPackageBenefitItem = (props) => {
