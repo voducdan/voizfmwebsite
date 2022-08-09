@@ -24,15 +24,11 @@ import {
   Typography,
   Divider,
   FormControl,
-  Select,
-  MenuItem,
   TextField,
   Stack,
   Button,
   IconButton,
   DialogContent,
-  DialogContentText,
-  DialogActions,
   InputAdornment,
 } from "@mui/material";
 import CloseIcon from "@mui/icons-material/Close";
@@ -67,11 +63,10 @@ import { flexStyle } from "../../utils/flexStyle";
 // import services
 import API from "../../services/api";
 import * as AuthService from "../../services/authentication";
-import { floor, size } from "lodash";
+import { floor, replace, size } from "lodash";
 import InputPhoneNumber from "./InputPhoneNumber/InputPhoneNumber";
 import { flexCenter } from "../../constants/styles.constant";
 import { onlyNumberRegex } from "../../constants/regex.constant";
-import { setUser } from "../../redux/user";
 
 const loginInfo = (content) => (
   <Box
@@ -144,7 +139,7 @@ export default function Login() {
   const [isOTPWrong, setIsOTPWrong] = useState(false);
   const [otpRetries, setOtpRetries] = useState(0);
   const [intervalId, setIntervalId] = useState(0);
-  const [isUserInforValidated, setIsUserInfoValidated] = useState(false);
+  const [isUserInfoValidated, setIsUserInfoValidated] = useState(false);
   const [isWaitFormRenewOtp, setIsWaitFormRenewOtp] = useState(false);
 
   const dispatch = useDispatch();
@@ -171,21 +166,19 @@ export default function Login() {
       setHasError(false);
     }
   }, [hasError, error]);
-  
 
   const onClose = () => {
     dispatch(handleCloseLogin());
     setIsPhoneValid(false);
     setIsOTPValid(false);
     setStep(1);
-    clearInterval(intervalId);    
+    clearInterval(intervalId);
     setOtpCountDown("");
     setPhoneNumber("");
     setOtp("");
-    setIsOTPWrong(false)
+    setIsOTPWrong(false);
     setOtpRetries(0);
   };
-
 
   const onPhoneChange = (event) => {
     const value = event.target.value;
@@ -195,7 +188,8 @@ export default function Login() {
 
   const onOTPChange = (event) => {
     const value = event.target.value;
-    const isValidValue = value && ((size(value) > 6) || !onlyNumberRegex.test(value));
+    const isValidValue =
+      value && (size(value) > 6 || !onlyNumberRegex.test(value));
     if (isValidValue) return;
     setIsOTPValid(validateOTP(value));
     setOtp(value);
@@ -227,7 +221,11 @@ export default function Login() {
       const x = setInterval(() => {
         const minutes = floor(overallTime / 60);
         const seconds = overallTime % 60;
-        setOtpCountDown(`${minutes < 10 ? "0" + minutes : minutes}:${seconds < 10 ? "0" + seconds : seconds}`);
+        setOtpCountDown(
+          `${minutes < 10 ? "0" + minutes : minutes}:${
+            seconds < 10 ? "0" + seconds : seconds
+          }`
+        );
         overallTime -= 1;
         if (overallTime === -1) {
           setIsOTPWrong(false);
@@ -330,19 +328,23 @@ export default function Login() {
     } catch (err) {
       setHasError(true);
       const errList = err.response.data.error;
+
       if (errList instanceof Object) {
         let errMessage = "";
         for (let e in errList) {
           const key = Object.keys(errList[e])[0];
           const value = errList[e][key];
-          errMessage += `${
-            key
-              ? key.replace(
-                  /(^\w|\s\w)(\S*)/g,
-                  (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
-                )
-              : ""
-          } ${value} \n`;
+          const formattedKeyString = key
+            ? key.replace(
+                /(^\w|\s\w)(\S*)/g,
+                (_, m1, m2) => m1.toUpperCase() + m2.toLowerCase()
+              )
+            : "";
+          errMessage += `${formattedKeyString} ${replace(
+            value,
+            formattedKeyString,
+            ""
+          )} \n`;
         }
         setError(errMessage || "Đã xảy ra lỗi, vui lòng thử lại!");
         return;
@@ -367,10 +369,10 @@ export default function Login() {
   const responseFacebook = async (response) => {
     try {
       const { name } = response;
-      const splitedName = name.split(" ");
+      const splittedName = name.split(" ");
       const payload = {
-        first_name: splitedName.slice(0, 1).join(),
-        last_name: splitedName.slice(1).join(" "),
+        first_name: splittedName.slice(0, 1).join(),
+        last_name: splittedName.slice(1).join(" "),
         email: response.email,
         birthday: response.birthday || null,
         oauth2_id: response.userID,
@@ -379,7 +381,7 @@ export default function Login() {
       const res = await api.loginFacebook(payload);
       const data = await res.data;
       setAccessToken(data.data.access_token);
-      if (data.verification || phoneNumber) {
+      if (!data.verification || phoneNumber) {
         try {
           await api.verifyAccount({ uuid: data.data.uuid });
         } catch (err) {
@@ -398,7 +400,7 @@ export default function Login() {
       console.log(err);
     }
   };
-  
+
   const responseGoogleSuccess = async (response) => {
     try {
       const { profileObj, googleId } = response;
@@ -469,15 +471,15 @@ export default function Login() {
   };
 
   const handleSkipPhone = async () => {
+    setStep(null);
+    dispatch(handleCloseLogin());
+    dispatch(setToken(accessToken));
+    cookies.set("token", accessToken);
     try {
       await api.verifyAccount({ uuid: uuid });
     } catch (err) {
       console.log(err);
     }
-    dispatch(setToken(accessToken));
-    cookies.set("token", accessToken);
-    setStep(null);
-    dispatch(handleCloseLogin());
   };
 
   const handleReviewOtp = () => {
@@ -769,7 +771,9 @@ export default function Login() {
                 width: "auto",
               }}
             >
-              Bạn đã đăng nhập thành công,<br />hãy trải nghiệm ứng dụng ngay bây giờ{" "}
+              Bạn đã đăng nhập thành công,
+              <br />
+              hãy trải nghiệm ứng dụng ngay bây giờ{" "}
             </Typography>
           </Box>
         </FormControl>
@@ -883,7 +887,7 @@ export default function Login() {
               </Box>
               <CustomDisabledButton
                 onClick={onUpdateProfile}
-                disabled={!isUserInforValidated}
+                disabled={!isUserInfoValidated}
                 style={{
                   width: "100%",
                   textTransform: "none",
@@ -1033,6 +1037,7 @@ export default function Login() {
               width: "100%",
               ...flexStyle("center", "center"),
               p: 0,
+              marginBottom: "20px",
             }}
           >
             <InputPhoneNumber
@@ -1045,28 +1050,6 @@ export default function Login() {
               onEnterPhone={onEnterPhone}
             />
           </DialogContent>
-          <DialogActions
-            sx={{
-              whiteSpace: "pre-line",
-              ...flexStyle("center", "center"),
-              flexDirection: "column",
-              width: "100%",
-              p: 0,
-              display: isSm ? "none" : "block",
-            }}
-          >
-            <Button
-              onClick={handleSkipPhone}
-              sx={{
-                ...TEXT_STYLE.content1,
-                color: COLORS.contentIcon,
-                textTransform: "none",
-                mb: "39px",
-              }}
-            >
-              Bỏ qua
-            </Button>
-          </DialogActions>
         </Dialog>
       </Dialog>
     </div>

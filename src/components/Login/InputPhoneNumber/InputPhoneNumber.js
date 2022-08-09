@@ -122,7 +122,7 @@ const InputPhoneNumber = ({
           textTransform: "none",
           marginBottom: !isSm ? "20px" : "30px",
           height: "48px",
-          ...(!isSm ? TEXT_STYLE.title1 : TEXT_STYLE.title2),
+          ...(isSm ? TEXT_STYLE.title2 : TEXT_STYLE.title1),
         }}
         content={"Tiếp tục"}
       />

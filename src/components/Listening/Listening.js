@@ -38,6 +38,7 @@ import API from "../../services/api";
 
 import { LIMIT_PER_PAGE } from "../../constants/apiParam.constant";
 import { isEmpty } from "lodash";
+import { checkIsLoggedIn } from "../../helper/login.helper";
 
 function TabPanel(props) {
   const { children, isSm } = props;
@@ -145,8 +146,12 @@ export default function Listening() {
     const tmpIsDeleteMode = !isDeleteMode;
     setIsDeleteMode(tmpIsDeleteMode);
   };
-
+  
   const handleSubmitDelete = () => {
+    if (!checkIsLoggedIn()) {
+      setConfirmDeleteModal(false);
+      return;
+    }
     let remainItems = null;
     let initDeleteList = null;
     if (singleItemIdToDelete) {
@@ -160,17 +165,17 @@ export default function Listening() {
       handleApiDelete([singleItemIdToDelete]);
       setSingleItemIdToDelete(null);
     } else {
-      const selectdItems = deleteList
+      const selectedItems = deleteList
         .filter((i) => i.checked === true)
         .map((i) => i.id);
       remainItems = listeningPlaylists.filter(
-        (i) => !selectdItems.includes(i.playlist.id)
+        (i) => !selectedItems.includes(i.playlist.id)
       );
       initDeleteList = remainItems.map((i) => ({
         id: i.playlist.id,
         checked: false,
       }));
-      handleApiDelete(selectdItems);
+      handleApiDelete(selectedItems);
     }
     if (!openSnackbar) {
       setDeleteList(initDeleteList);

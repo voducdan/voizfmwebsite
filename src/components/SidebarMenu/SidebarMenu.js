@@ -62,6 +62,7 @@ import { flexStyle } from "../../utils/flexStyle";
 import useWindowSize from "../../utils/useWindowSize";
 import InstallIcon from "../Icons/InstallIcon";
 import InstallAppPopup from "../InstallAppPopup";
+import { handleCloseOpenVipUserPopup, handleOpenVipUserPopup, selectOpenVipUserPopup } from "../../redux/openVipUserPopup";
 
 const InstallApp = ({ isSm, openPlayBar, onInstallApp }) => (
   <Button
@@ -92,12 +93,12 @@ export default function SidebarMenu() {
   const sidebar = useRef(null);
   const [navigatorLink, setNavigatorLink] = useState([]);
   const [categories, setCategories] = useState([]);
-  const [openIsVip, setOpenIsVip] = useState(false);
   const [showInstallPopup, setShowInstallPopup] = useState(false);
   const openSidebar = useSelector(selectOpenSidebar);
   const token = useSelector(selectToken);
   const user = useSelector(selectUser);
   const openPlayBar = useSelector(selectOpenPlayBar);
+  const openVipUserPopup = useSelector(selectOpenVipUserPopup);
   const dispatch = useDispatch();
 
   let open = openSidebar;
@@ -227,7 +228,7 @@ export default function SidebarMenu() {
       return;
     }
     if (item[0].url === "up-vip" && user.promotion === "vip") {
-      setOpenIsVip(true);
+      dispatch(handleOpenVipUserPopup());
       return;
     }
 
@@ -418,9 +419,9 @@ export default function SidebarMenu() {
         <InstallAppPopup visible={showInstallPopup} onClose={() => setShowInstallPopup(false)} isSm={isSm} />
       </Box>
       <Dialog
-        open={openIsVip}
+        open={openVipUserPopup}
         onClose={() => {
-          setOpenIsVip(false);
+          dispatch(handleCloseOpenVipUserPopup());
         }}
         PaperProps={{
           style: {
@@ -445,7 +446,7 @@ export default function SidebarMenu() {
         >
           <Button
             onClick={() => {
-              setOpenIsVip(false);
+              dispatch(handleCloseOpenVipUserPopup());
             }}
             autoFocus
           >
