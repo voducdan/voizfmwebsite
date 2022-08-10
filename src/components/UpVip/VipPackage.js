@@ -25,7 +25,7 @@ import formatPrice from "../../utils/formatPrice";
 
 // import services
 import API from "../../services/api";
-import { capitalize, findIndex, lowerCase, reduce, size, startCase, toLower } from "lodash";
+import { capitalize, find, findIndex, get, lowerCase, map, reduce, size, startCase, toLower } from "lodash";
 import { VipPackages } from "../../constants/vipPackages.constant";
 
 const VipPackageBenefitItem = (props) => {
@@ -227,7 +227,22 @@ export default function VipPackage() {
       try {
         const res = await api.getVipPackage();
         const data = await res.data.data;
-        let packages = [...data];
+        let packages = map(data, d => {
+          if (d.code === "website_vip_1_month") {
+            const id = get(find(VipPackages, p => p.code === "website_vip_1_month"), 'id', '')
+            return { ...d, id }
+          }
+          if (d.code === "website_vip_3_month") {
+            const id = get(find(VipPackages, p => p.code === "website_vip_3_month"), 'id', '')
+            return { ...d, id }
+          }
+          if (d.code === "website_vip_12_month") {
+            const id = get(find(VipPackages, p => p.code === "website_vip_12_month"), 'id', '')
+            return { ...d, id }
+          }
+          return d;
+        });
+
         if (size(data) < 3) {
           const newPackages = reduce(
             VipPackages,
@@ -236,7 +251,7 @@ export default function VipPackage() {
                 ? [...result, item]
                 : result;
             },
-            [...data]
+            [...packages]
           );
 
           const oneMonthPackageIndex = findIndex(
@@ -276,8 +291,8 @@ export default function VipPackage() {
       selectedItem: [
         {
           type: "vip_package",
-          // id: vipPackages[selectedPackage]['id'],
-          id: 1,
+          id: vipPackages[selectedPackage]['id'],
+          // id: 1,
           name: vipPackages[selectedPackage]["name"],
           pay_price: vipPackages[selectedPackage]["price"],
         },

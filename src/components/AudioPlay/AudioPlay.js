@@ -96,7 +96,7 @@ export default function AudioPlay({ audioFromApi }) {
         position: "fixed",
         width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
         height: `calc(100vh - ${isSm ? HEADER_HEIGHT_MB : HEADER_HEIGHT} - ${
-          isSm ? "299px" : "100px"
+          isSm ? "320px" : "100px"
         })`,
         top: 0,
         overflowY: isSm ? "scroll" : "hidden",
@@ -148,7 +148,7 @@ export default function AudioPlay({ audioFromApi }) {
           columnGap: "36px",
           width: "100%",
           boxSizing: "border-box",
-          pb: isSm ? "60px" : "76px",
+          pb: isSm ? "60px" : "50px",
           zIndex: 2,
         }}
       >

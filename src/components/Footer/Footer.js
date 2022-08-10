@@ -44,6 +44,7 @@ export default function Footer({ isSm }) {
         width: openSidebar ? `calc(100% - ${DRAWER_WIDTH}px)` : "100%",
         ...(openSidebar && !isSm && { marginLeft: `${DRAWER_WIDTH}px` }),
         marginTop: "80px",
+        minHeight: isSm ? "400px" : "auto",
       }}
     >
       <Box
