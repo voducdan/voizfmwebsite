@@ -227,53 +227,27 @@ export default function VipPackage() {
       try {
         const res = await api.getVipPackage();
         const data = await res.data.data;
-        let packages = map(data, d => {
-          if (d.code === "website_vip_1_month") {
-            const id = get(find(VipPackages, p => p.code === "website_vip_1_month"), 'id', '')
-            return { ...d, id }
-          }
-          if (d.code === "website_vip_3_month") {
-            const id = get(find(VipPackages, p => p.code === "website_vip_3_month"), 'id', '')
-            return { ...d, id }
-          }
-          if (d.code === "website_vip_12_month") {
-            const id = get(find(VipPackages, p => p.code === "website_vip_12_month"), 'id', '')
-            return { ...d, id }
-          }
-          return d;
-        });
+        let packages = [...data];
 
-        if (size(data) < 3) {
-          const newPackages = reduce(
-            VipPackages,
-            (result, item) => {
-              return findIndex(result, (p) => p.code === item.code) < 0
-                ? [...result, item]
-                : result;
-            },
-            [...packages]
-          );
+        const oneMonthPackageIndex = findIndex(
+          packages,
+          (p) => p.code === "website_vip_1_month"
+        );
+        const threeMonthPackageIndex = findIndex(
+          packages,
+          (p) => p.code === "website_vip_3_month"
+        );
+        const oneYearPackageIndex = findIndex(
+          packages,
+          (p) => p.code === "website_vip_12_month"
+        );
 
-          const oneMonthPackageIndex = findIndex(
-            newPackages,
-            (p) => p.code === "website_vip_1_month"
-          );
-          const threeMonthPackageIndex = findIndex(
-            newPackages,
-            (p) => p.code === "website_vip_3_month"
-          );
-          const oneYearPackageIndex = findIndex(
-            newPackages,
-            (p) => p.code === "website_vip_12_month"
-          );
-
-          packages = [
-            newPackages[oneMonthPackageIndex],
-            newPackages[threeMonthPackageIndex],
-            newPackages[oneYearPackageIndex],
-          ];
-        }
-        setVipPackages(packages);
+        const newPackages = [
+          packages[oneMonthPackageIndex],
+          packages[threeMonthPackageIndex],
+          packages[oneYearPackageIndex],
+        ];
+        setVipPackages(newPackages);
       } catch (err) {
         console.log(err);
       }
