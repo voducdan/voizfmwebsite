@@ -238,7 +238,7 @@ export default function VipPackage() {
           }
           if (d.code === "website_vip_12_month") {
             const id = get(find(VipPackages, p => p.code === "website_vip_12_month"), 'id', '')
-            return find(VipPackages, p => p.code === "website_vip_12_month")
+            return { ...d, id }
           }
           return d;
         });

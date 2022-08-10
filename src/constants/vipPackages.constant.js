@@ -1,9 +1,9 @@
 export const VipPackages = [
   {
-    id: 19,
+    id: 100,
     code: "website_vip_12_month",
     name: "Tiết Kiệm",
-    price: 599000,
+    price: 699000,
     sale: null,
   },
   {
@@ -14,7 +14,7 @@ export const VipPackages = [
     sale: null,
   },
   {
-    id: 37,
+    id: 40,
     code: "website_vip_1_month",
     name: "Tiêu chuẩn",
     price: 99000,
